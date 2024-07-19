@@ -9,11 +9,13 @@ import Whyus from './Whyus'
 
 function Homepage() {
   return (
-    <div className='w-full'>
+    <div className='w-full h-full'>
+     
+    
       <div>
         <Header/>
       </div>
-      <div className='homepage-bg w-full h-screen flex flex-col justify-center items-start'>
+      <div className='homepage-bg w-full h-screen flex flex-1 flex-col justify-center items-start'>
 
 <div className='w-1/2 text-3xl text-white'>
   Get Freelancing Jobs Instantly Start Working for Yourself!
@@ -40,12 +42,17 @@ function Homepage() {
 <div className='text-white'>Academic writing|VC/Resume Writing|Copywriting</div>
 </div>
 <button className='bg-white text-black rounded-lg w-32 h-17'>Get Started</button>
-      </div>
+
+      </div>  
 
 <div>
-  <Projectsdiv/>
+<Projectsdiv/>
 </div>
+
+
+
 <div>
+  
   <LatestProjects/>
 </div>
 <div>

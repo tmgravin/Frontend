@@ -1,17 +1,24 @@
 import React from 'react';
+import Image from 'next/image';
+
 
 function ApplicationProcess2() {
   return (
-    <div>
-      <div className='primary-orange flex justify-center items-center'>
+    <div className='cb-shadow applicationprocess2-bgcolor'>
+      <div className='primary-orange flex justify-center items-center font-bold'>
         Jump Start Your Freelance Jobs
       </div>
       <div className=''>
         <div className='flex flex-row justify-between items-center'>
           <div className='flex flex-col items-center'>
-            <div>photo here</div>
+            <div className='text-3xl'><Image
+          src="/pngs/profile.svg"
+          alt="Example SVG Image"
+          width={50}
+          height={30}
+        /></div>
             <div>1. Register yourself</div>
-            <div>Fill in your details</div>
+            <div>Fill in your details and qualification, and sahre the skills in which you are proficient</div>
           </div>
 
           <div className='flex items-center justify-center'>
@@ -21,9 +28,14 @@ function ApplicationProcess2() {
           </div>
 
           <div className='flex flex-col items-center'>
-            <div>photo here</div>
-            <div>2. Take the survey</div>
-            <div>Answer a few questions</div>
+            <div className='text-3xl'><Image
+          src="/pngs/cv.svg"
+          alt="Example SVG Image"
+          width={50}
+          height={30}
+        /></div>
+            <div>2. Get hired</div>
+            <div> Get the most suited job for your skills</div>
           </div>
 
           <div className='flex items-center justify-center'>
@@ -33,9 +45,14 @@ function ApplicationProcess2() {
           </div>
 
           <div className='flex flex-col items-center'>
-            <div>photo here</div>
-            <div>3. Get approved</div>
-            <div>Start working on projects</div>
+            <div className='text-3xl'><div>   <Image
+          src="/pngs/payment.svg"
+          alt="Example SVG Image"
+          width={50}
+          height={30}
+        /></div></div>
+            <div>3.Earn oney with secure payment</div>
+            <div className='text-center'>Choose from several freelance jobs methods with Safepay payment protection</div>
           </div>
         </div>
       </div>
