@@ -2,6 +2,162 @@
 @tailwind components;
 @tailwind utilities;
 
+.applicationprocess2-bgcolor{
+  background-color: #F0F5FDCC;
+
+}
+.cbg-color{
+  background-color: #F7F7F7;
+}
+
+.cb-shadow {
+  box-shadow: 0px 4px 4px 0px #00000040;
+}
+.primary-green {
+  color: #084F02;
+}
+.primary-blue{
+  color: #0A4AC5;
+}
+.secondary-blue{
+  color: #0570ED;
+
+}
+.primary-navy-blue{
+  color: #13103B;
+
+}
+
+
+.primary-btn-darkblue{
+  background-color: #0A4AC5;  
+}
+
+.primary-btn-darkblue{    
+  background-color: #5A81CD;
+}
+
+.primary-btn-blue{
+ background-color: #1D89EE;
+  }
+.secondary-btn-blue{
+  background-color: #3F9CF3;
+}
+
+ 
+.primary-lightblue{
+  color:#A0E8E8
+}
+.primary-orange{
+  color:#FF7629 ;
+  
+}
+.secondary-orange{
+color: #FF850D;
+}
+
+.primary-brown{
+  color: #703100;
+
+}
+
+.primary-yellow{
+ color: #F0C17D;
+}
+
+.secondary-yellow{
+  color: #FFDBA7;
+}
+
+.primary-gray{
+  color:#4f4e4e;
+}
+
+.primary-text-gray{
+color:#7F7D7D;
+}
+
+.homepage-bg {
+  background-image: 
+    linear-gradient(101.39deg, #000000 5.69%, rgba(5, 4, 4, 0.7) 32.85%, rgba(4, 4, 4, 0.475) 46.15%, rgba(102, 102, 102, 0.3) 58.44%), /* Gradient layer */
+    url('/man-working-bg.jpeg'); /* Image layer */
+  background-size: cover;
+  background-position: center;
+  min-height: 300px; 
+}
+
+.whyus-bg {
+  background-color: #0A4AC5; /* Solid blue background color */
+  background-image: url('/woman-coffee.png'); /* Image overlay */
+  background-size: 40%; /* Scale the image to 50% of the element's size */
+  background-position: bottom center; /* Position the image at the bottom center */
+  background-repeat: no-repeat; /* Prevent the image from repeating */
+  min-height: 300px; /* Fixed height for the div */
+}
+
+
+.footer-bg {
+  background-image: 
+    url('/laptop.png'); /* Image layer */
+  background-size: cover;
+  background-position: center;
+  min-height: 300px; 
+}
+
+/* Hide default scrollbar */
+.example::-webkit-scrollbar {
+  display: none;
+}
+.example {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  position: relative;
+}
+
+/* Hide default scrollbar */
+.example::-webkit-scrollbar {
+  display: none;
+}
+.example {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  position: relative;
+}
+
+/* Hide default scrollbar */
+.example::-webkit-scrollbar {
+  display: none;
+}
+.example {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+  position: relative;
+}
+
+/* Dot container */
+.dots-container {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+/* Dot style */
+.dot {
+  width: 10px;
+  height: 10px;
+  background-color: lightgray;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.dot.active {
+  background-color: blue;
+}
+
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -59,11 +215,5 @@
   }
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
-  }
-}
+
+
