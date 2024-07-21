@@ -13,9 +13,9 @@ const LatestProjects: React.FC = () => {
    // const [projects, setProjects] = useState<Project[]>([]);
 
   const projects = [
-    { id: 1, title: 'Home Automation System', description: 'Description for project one', amount: 150 },
-    { id: 9, title: 'Smart Irrigation System', description: 'Description for project two', amount: 2000 },
-     { id: 10, title: 'Home Automation System', description: 'Description for project one', amount: 150 },
+    { id: 1, title: 'Home Automation System', description: 'Description for project one', amount: 150,deadline:'11 july 2024' },
+    { id: 9, title: 'Smart Irrigation System', description: 'Description for project two', amount: 2000,deadline:'1 july 2024' },
+     { id: 10, title: 'Home Automation System', description: 'Description for project one', amount: 150 ,deadline:'29 july 2024'},
     // { id: 11, title: 'Smart Irrigation System', description: 'Description for project two', amount: 2000 },
     // { id: 12, title: 'Smart Irrigation System', description: 'Description for project two', amount: 2000 },
     // { id: 13, title: 'Home Automation System', description: 'Description for project one', amount: 150 },
@@ -71,6 +71,11 @@ const LatestProjects: React.FC = () => {
             <div className='flex flex-row mb-2'>
               <div>Project Amount:</div>
               <div className='ml-1'>${project.amount}</div>
+            </div>
+
+            <div className='flex flex-row mb-2'>
+              <div>Deadline:</div>
+              <div className='ml-1'>${project.deadline}</div>
             </div>
             <div>
 

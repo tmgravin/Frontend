@@ -1,53 +1,293 @@
+"use client"
+import Image from 'next/image';
+import React, { useState, FormEvent, ChangeEvent } from 'react';
 
+interface SignupData {
+  email: string;
+  password: string;
+  remember?: boolean;
+}
 
-<!-- Modal toggle -->
-<button data-modal-target="authentication-modal" data-modal-toggle="authentication-modal" className="block text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800" type="button">
-  Toggle modal
-</button>
+const Header: React.FC = () => {
+  const [isSignupModalOpen, setIsSignupModalOpen] = useState<boolean>(false);
+  const [isTeacherSignup, setIsTeacherSignup] = useState<boolean | null>(null);
 
-<!-- Main modal -->
-<div id="authentication-modal" tabindex="-1" aria-hidden="true" className="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full">
-    <div className="relative p-4 w-full max-w-md max-h-full">
-        <!-- Modal content -->
-        <div className="relative bg-white rounded-lg shadow dark:bg-gray-700">
-            <!-- Modal header -->
-            <div className="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
-                <h3 className="text-xl font-semibold text-gray-900 dark:text-white">
-                    Sign in to our platform
-                </h3>
-                <button type="button" className="end-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="authentication-modal">
-                    <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-                    </svg>
-                    <span className="sr-only">Close modal</span>
-                </button>
-            </div>
-            <!-- Modal body -->
-            <div className="p-4 md:p-5">
-                <form className="space-y-4" action="#">
-                    <div>
-                        <label for="email" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your email</label>
-                        <input type="email" name="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" placeholder="name@company.com" required />
-                    </div>
-                    <div>
-                        <label for="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Your password</label>
-                        <input type="password" name="password" id="password" placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white" required />
-                    </div>
-                    <div className="flex justify-between">
-                        <div className="flex items-start">
-                            <div className="flex items-center h-5">
-                                <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800" required />
-                            </div>
-                            <label for="remember" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
-                        </div>
-                        <a href="#" className="text-sm text-blue-700 hover:underline dark:text-blue-500">Lost Password?</a>
-                    </div>
-                    <button type="submit" className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Login to your account</button>
-                    <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-                        Not registered? <a href="#" className="text-blue-700 hover:underline dark:text-blue-500">Create account</a>
-                    </div>
-                </form>
-            </div>
+  const [teacherSignupData, setTeacherSignupData] = useState<SignupData>({ email: '', password: '' });
+  const [studentSignupData, setStudentSignupData] = useState<SignupData>({ email: '', password: '' });
+
+  const [loginData, setLoginData] = useState<SignupData>({ email: '', password: '' });
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState<boolean>(false);
+  const [remember, setRemember] = useState<boolean>(false);
+
+  const toggleSignupModal = () => {
+    setIsSignupModalOpen(!isSignupModalOpen);
+    setIsTeacherSignup(null);
+  };
+
+  const toggleLoginModal = () => {
+    setIsLoginModalOpen(!isLoginModalOpen);
+  };
+
+  const handleSignupChange = (e: ChangeEvent<HTMLInputElement>, isTeacher: boolean) => {
+    const { name, value } = e.target;
+    if (isTeacher) {
+      setTeacherSignupData(prev => ({ ...prev, [name]: value }));
+    } else {
+      setStudentSignupData(prev => ({ ...prev, [name]: value }));
+    }
+  };
+
+  const handleSignupSubmit = async (e: FormEvent<HTMLFormElement>, isTeacher: boolean) => {
+    e.preventDefault();
+    const signupData = isTeacher ? teacherSignupData : studentSignupData;
+    try {
+      const response = await fetch(`/api/${isTeacher ? 'teacher-signup' : 'student-signup'}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(signupData),
+      });
+      const result = await response.json();
+      console.log(`${isTeacher ? 'Teacher' : 'Student'} Signup response:`, result);
+      toggleSignupModal();
+    } catch (error) {
+      console.error(`${isTeacher ? 'Teacher' : 'Student'} Signup error:`, error);
+    }
+  };
+
+  const handleLoginChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setLoginData(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleLoginSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(`/api/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData),
+      });
+      const result = await response.json();
+      console.log('Login response:', result);
+      toggleLoginModal();
+    } catch (error) {
+      console.error('Login error:', error);
+    }
+  };
+
+  return (
+    <div className='flex flex-row justify-between'>
+      <div>
+        <div className='text-2xl potta-one-regular primary-navy-blue'>MSP ASSIGNMENT</div>
+      </div>
+      <div className='flex flex-row justify-end items-center'>
+        <div className='px-5'>
+          FQA
         </div>
+        <div className='primary-blue px-5 cursor-pointer' onClick={toggleSignupModal}>
+          Sign up <i className="fa-solid fa-pen-to-square"></i>
+        </div>
+        <div className='primary-blue px-5 cursor-pointer' onClick={toggleLoginModal}>
+          Login <i className="fa-solid fa-right-to-bracket"></i>
+        </div>
+      </div>
+
+      {/* Backdrop Overlay with Blur */}
+      {(isSignupModalOpen || isLoginModalOpen) && (
+        <div className="fixed inset-0 z-40 bg-black bg-opacity-50 backdrop-blur-sm" aria-hidden="true"></div>
+      )}
+
+      {/* Signup Modal */}
+      {isSignupModalOpen && (
+        <div id="signup-modal" tabIndex={-1} aria-hidden="true" className="fixed inset-0 z-50 flex items-center justify-center overflow-auto">
+          <div className="relative p-4 w-full max-w-md max-h-full">
+            <div className="relative bg-white rounded-lg shadow overflow-y-auto max-h-[90vh]">
+              <div className="flex items-center justify-between p-4 md:p-5 s rounded-t dark:border-gray-600">
+                <h3 className="text-xl font-semibold ">Sign up</h3>
+                <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={toggleSignupModal}>
+                  <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                  </svg>
+                  <span className="sr-only">Close modal</span>
+                </button>
+              </div>
+              <div className="p-4 md:p-5">
+                {isTeacherSignup === null ? (
+                  <div>
+                    <button className="w-full  text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800" onClick={() => setIsTeacherSignup(true)}>
+                      Sign up as Student
+                    </button>
+                    <button className="w-full mt-5 text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800 " onClick={() => setIsTeacherSignup(false)}>
+                      Sign up as Teacher
+                    </button>
+
+                    <div className='mt-5'>
+                      <div className='flex flex-row'> Already have an account.<div className='secondary-blue'>Sign in</div></div>
+                    </div>
+                  </div>
+                ) : (
+                  <form className="space-y-4" onSubmit={(e) => handleSignupSubmit(e, isTeacherSignup)}>
+                    <div className="relative cb-shadow">
+                    
+                      <input type="email" name="email" id="signup-email" value={isTeacherSignup ? teacherSignupData.email : studentSignupData.email} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5"placeholder="Full Name" required />
+                      <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                      <i className="fa-regular fa-envelope text-gray-400"></i>
+                    </span>
+                    </div>
+                    <div className="relative cb-shadow">
+                    
+                    <input type="email" name="email" id="signup-email" value={isTeacherSignup ? teacherSignupData.email : studentSignupData.email} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5"placeholder="Address" required />
+                    <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    <i className="fa-regular fa-envelope text-gray-400"></i>
+                  </span>
+                  </div>
+                  <div className="relative cb-shadow">
+                    
+                    <input type="email" name="email" id="signup-email" value={isTeacherSignup ? teacherSignupData.email : studentSignupData.email} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5"placeholder="Phone Number" required />
+                    <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    <i className="fa-regular fa-envelope text-gray-400"></i>
+                  </span>
+                  </div>
+                  <div className="relative cb-shadow">
+                    
+                    <input type="email" name="email" id="signup-email" value={isTeacherSignup ? teacherSignupData.email : studentSignupData.email} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5"placeholder="Email address" required />
+                    <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    <i className="fa-regular fa-envelope text-gray-400"></i>
+                  </span>
+                  </div>
+                  
+                    <div className="relative cb-shadow">
+                  
+                      <input type="password" name="password" id="signup-password" value={isTeacherSignup ? teacherSignupData.password : studentSignupData.password} onChange={(e) => handleSignupChange(e, isTeacherSignup)} placeholder="Password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" required />
+                      <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                    <i className="fa-regular fa-envelope text-gray-400"></i>
+                  </span>
+                    </div>
+
+                    <div className="flex  flex-row">
+                    <input
+                      type="checkbox"
+                      id="example-checkbox"
+                      checked={remember}
+                      onChange={() => setRemember(!remember)}
+                      className="form-checkbox h-5 w-5 text-blue-600 border-blue-500 rounded"
+                    />
+                    <label htmlFor="checkbox" className="ml-2 text-gray-700">I have read and accept the <div className='secondary-blue'>Terms and Privacy Policy</div></label>
+                  </div>
+                    <button type="submit" className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800">
+                      Sign up
+                    </button>
+                    <div className='flex flex-row justify-center'>
+                      <div>Already have an account.</div><div className='secondary-blue'>Sign in</div>
+                    </div>
+                  </form>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Login Modal */}
+      {isLoginModalOpen && (
+        <div id="login-modal" tabIndex={-1} aria-hidden="true" className="fixed inset-0 z-50 flex items-center justify-center overflow-auto">
+          <div className="relative p-4 w-full max-w-md max-h-full">
+            <div className="relative bg-white rounded-lg shadow overflow-y-auto max-h-[90vh]">
+              <div className="flex justify-end px-4 md:px-5 rounded-t dark:border-gray-600">
+                <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={toggleLoginModal}>
+                  <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                  </svg>
+                  <span className="sr-only">Close modal</span>
+                </button>
+              </div>
+              <div className='flex flex-col justify-center items-center'>
+                <div className="text-xl font-semibold">Welcome to</div>
+                <div className="text-xl font-semibold primary-navy-blue">MSP Assignment</div>
+                <div>Login to continue</div>
+              </div>
+              <div className="p-4 md:p-5">
+                <form className="space-y-4" onSubmit={handleLoginSubmit}>
+                  <div className="relative cb-shadow">
+                    <input
+                      type="email"
+                      name="email"
+                      id="login-email"
+                      value={loginData.email}
+                      onChange={handleLoginChange}
+                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5"
+                      placeholder="Email address"
+                      required
+                    />
+                    <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                      <i className="fa-regular fa-envelope text-gray-400"></i>
+                    </span>
+                  </div>
+
+                  <div className='cb-shadow'>
+                    <input type="password" name="password" id="login-password" value={loginData.password} onChange={handleLoginChange} placeholder="Password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
+                  </div>
+                  <div className='flex flex-row justify-end'><div>Forget Password?</div><div className='secondary-blue'>Reset it</div></div>
+                  <div className="flex items-center">
+                    <input
+                      type="checkbox"
+                      id="example-checkbox"
+                      checked={remember}
+                      onChange={() => setRemember(!remember)}
+                      className="form-checkbox h-5 w-5 text-blue-600 border-blue-500 rounded"
+                    />
+                    <label htmlFor="example-checkbox" className="ml-2 text-gray-700">Remember me</label>
+                  </div>
+                  <button type="submit" className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800">
+                    Login as Student
+                  </button>
+                  <button type="submit" className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800">
+                    Login as Teacher
+                  </button>
+
+                  <div className="flex items-center my-4">
+                    <div className="flex-grow border-t border-black"></div>
+                    <span className="mx-4 ">or</span>
+                    <div className="flex-grow border-t border-black"></div>
+                  </div>
+
+                  <div className='flex flex-row justify-start items-start'>
+  <button type="submit" className="w-full border border-black font-medium rounded-lg text-sm flex items-center space-x-2 px-4 py-1">
+    <Image
+      src="/pngs/googleicon.svg" // Path to your image in the public directory
+      alt="facebook icon"
+      width={15} // Specify the width of the image
+     height={15} // Specify the height of the image
+    />
+    <span className='primary-text-gray'>Login with Google</span>
+  </button>
+</div>
+
+                  <div className='flex flex-row justify-start items-start'>
+  <button type="submit" className="w-full border border-black font-medium rounded-lg text-sm flex items-center space-x-2 px-4 py-1">
+    <Image
+      src="/pngs/facebookicon.svg" // Path to your image in the public directory
+      alt="facebook icon"
+      width={10} // Specify the width of the image
+     height={10} // Specify the height of the image
+    />
+    <span className='primary-text-gray'>Login with Facebook</span>
+  </button>
+</div>
+
+                  <div className='flex flex-row justify-center'><div>Don&apos;t have an account?</div><div className='secondary-blue'>Sign up</div></div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
-</div> 
+  );
+}
+
+export default Header;

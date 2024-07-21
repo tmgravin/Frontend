@@ -18,13 +18,20 @@ function ApplicationProcess2() {
           height={30}
         /></div>
             <div>1. Register yourself</div>
-            <div>Fill in your details and qualification, and sahre the skills in which you are proficient</div>
+            <div className='text-center'>Fill in your details and qualification, and sahre the skills in which you are proficient</div>
           </div>
 
           <div className='flex items-center justify-center'>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 48 24" strokeWidth={2} stroke="currentColor" className="w-24 h-6 text-gray-500">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M26 5l15 7-15 7M41 12H3" />
-            </svg>
+          
+          
+          <Image
+          src="/pngs/arrowleft.svg"
+          alt="Example SVG Image"
+          width={139}
+          height={30}
+        />
+
+
           </div>
 
           <div className='flex flex-col items-center'>
@@ -35,13 +42,17 @@ function ApplicationProcess2() {
           height={30}
         /></div>
             <div>2. Get hired</div>
-            <div> Get the most suited job for your skills</div>
+            <div className='text-center'> Get the most suited job for your skills</div>
           </div>
 
           <div className='flex items-center justify-center'>
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 48 24" strokeWidth={2} stroke="currentColor" className="w-24 h-6 text-gray-500">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M26 5l15 7-15 7M41 12H3" />
-            </svg>
+           
+          <Image
+          src="/pngs/arrowleft.svg"
+          alt="Example SVG Image"
+          width={139}
+          height={30}
+        />
           </div>
 
           <div className='flex flex-col items-center'>

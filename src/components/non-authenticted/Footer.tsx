@@ -24,16 +24,16 @@ function Footer() {
 
 
     <div className='flex flex-row py-4'>
-    <div className='text-teal-600 '><i className="fa-solid fa-circle-arrow-down"></i>  </div>icon and Fixed Price
+    <div className='px-2'><Image src="/pngs/arrowdown.svg" alt="Icon" width={24} height={24} /> </div>icon and Fixed Price
     </div>
     <div className='flex flex-row py-4'>
-    <div className='text-teal-600 '><i className="fa-solid fa-circle-arrow-down"></i>  </div>Hourly
+    <div className='px-2'><Image src="/pngs/arrowdown.svg" alt="Icon" width={24} height={24} />  </div>Hourly
     </div>
     <div className='flex flex-row py-4'>
-    <div className='text-teal-600 '><i className="fa-solid fa-circle-arrow-down"></i>  </div> Task-Based
+    <div className='px-2'><Image src="/pngs/arrowdown.svg" alt="Icon" width={24} height={24} />  </div> Task-Based
     </div>
     <div className='flex flex-row py-4'>
-    <div className='text-teal-600'><i className="fa-solid fa-circle-arrow-down"></i>  </div> Recurring Payment
+    <div className='px-2'><Image src="/pngs/arrowdown.svg" alt="Icon" width={24} height={24} /> </div> Recurring Payment
     </div>
 
 </div>
