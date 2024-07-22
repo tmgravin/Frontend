@@ -3,10 +3,10 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import LoginModal from './LoginModal';
 import SignupModal from './SignupModal';
-import Projects from '../authenticated/assignment-creator/ProjectDropdown'
-import PostAssignmentModal from '../authenticated/assignment-creator/PostAssignmentModal';
-import CreditCardVerificationModal from '../authenticated/assignment-doer/CreditCardVerificationModal';
-import UserModal from '../authenticated/usermodal/UserModal';
+import Projects from './ProjectDropdown'
+import PostAssignmentModal from './PostAssignmentModal';
+import CreditCardVerificationModal from '../assignment-doer/CreditCardVerificationModal';
+import UserModal from '../usermodal/UserModal';
 
 const Header: React.FC = () => {
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
@@ -43,13 +43,9 @@ const Header: React.FC = () => {
     e.preventDefault();
     // Handle signup logic here
   };
-  const projects = [
-    { id: 1, name: 'Project A' },
-    { id: 2, name: 'Project B' },
-    { id: 3, name: 'Project C' },
-  ];
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+ const [isModalOpen, setIsModalOpen] = useState(false);
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -75,21 +71,29 @@ const Header: React.FC = () => {
     <header>
        <div className='flex flex-row justify-between'>
       <div>
+        <div className='flex flex-row'>
+
+        
         <div className='text-2xl potta-one-regular primary-navy-blue'>MSP ASSIGNMENT</div>
+        <div
+        onClick={toggleModal}
+        className=" text-sm px-5 py-2.5 text-center cursor-pointer"
+      >
+        Post Assignment
+      </div>
+      </div>
       </div>
       <div className='flex flex-row justify-end items-center'>
      
-        {/* <div className='px-5'>
-          FQA
-        </div> */}
-        <div className='primary-blue px-5 cursor-pointer' onClick={toggleSignupModal}>
-          Sign up <i className="fa-solid fa-pen-to-square"></i>
-        </div>
-        <div className='primary-blue px-5 cursor-pointer' onClick={toggleLoginModal}>
-          Login <i className="fa-solid fa-right-to-bracket"></i>
-        </div>
-      </div>
+      <div className='px-5'>
+      {isModalOpen && <PostAssignmentModal onClose={toggleModal} />}
     
+    
+        </div>
+   
+       
+      </div>
+      <UserModal/>
       </div>
      
 
