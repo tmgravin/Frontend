@@ -23,7 +23,6 @@ export default function Projectsdiv() {
     </div>
 
 
-
     <div className='flex flex-row'>
         <div>
         <Image

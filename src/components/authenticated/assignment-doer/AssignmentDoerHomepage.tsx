@@ -1,16 +1,16 @@
 import React from 'react'
 import Header from './Header'
-import Footer from './Footer'
 import Projectsdiv from './Projectsdiv'
-import LatestProjects from './LatestProjects'
+import Projects from './Projects'
 import Applicationprocess from './Applicationprocess'
 import Applicationprocess2 from './Applicationprocess2'
+import WorkYourWay from '@/components/non-authenticted/WorkYourWay'
+import Footer from '@/components/non-authenticted/Footer'
+
 
 function Homepage() {
   return (
     <div className='w-full h-full'>
-     
-    
       <div>
         <Header/>
       </div>
@@ -40,8 +40,7 @@ function Homepage() {
 </form>
 <div className='text-white'>Academic writing|VC/Resume Writing|Copywriting</div>
 </div>
-<button className='bg-white text-black rounded-md w-32 h-10'>Get Started</button>
-
+<button className='bg-white text-black rounded-md w-30 h-18'>Get Started</button>
       </div>  
 
 <div>
@@ -49,27 +48,30 @@ function Homepage() {
 </div>
 
 
-<div>
-  <LatestProjects/>
-</div>
-
 
 <div>
   
-  <Applicationprocess2/>
+  <Projects/>
 </div>
 
-<div className='w-full justify-center items-center'>
-<button className="bg-blue-700 hover:bg-blue-100 text-black  font-bold py-2 px-4 rounded">
-  Button
+
+<div>
+  <Applicationprocess/>
+  <Applicationprocess2/>
+</div>
+<div className='flex justify-center items-center p-3'>
+<button className="primary-btn-blue hover:primary-btn-blue text-white font-bold py-2 px-4 rounded">
+   START EARNING
 </button>
 </div>
 
       <div>
-        <Footer/>
+        <WorkYourWay/>
 
       </div>
-
+<div>
+  <Footer/>
+  </div>
 
       </div>
   )

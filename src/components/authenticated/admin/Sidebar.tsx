@@ -22,17 +22,18 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelect }) => {
       <List>
         <ListItem>
           <Button onClick={() => onSelect('Page1')} fullWidth>
-            Page 1
+          Dashboard
           </Button>
         </ListItem>
         <ListItem>
           <Button onClick={() => onSelect('Page2')} fullWidth>
-            Page 2
+          Teachers
+           
           </Button>
         </ListItem>
         <ListItem>
           <Button onClick={() => onSelect('Page3')} fullWidth>
-            Page 3
+          Students
           </Button>
         </ListItem>
       </List>

@@ -2,13 +2,10 @@ import React from 'react'
 import Image from 'next/image'
 
 
-function Footer() {
+function WorkYourWay() {
   return (
     <div>
 
-<div className='flex items-center justify-center cbg-color'>
-<button className='btn-blue rounded-md p-2 m-2 text-white'>START REGISTRATION</button>
-</div>
 
 <div className='flex items-center justify-center primary-green font-bold'>
     Work Your Way
@@ -16,7 +13,7 @@ function Footer() {
 <div className='flex flex-row justify-evenly'>
     
 
-<div className='footer-bg w-1/2'>
+<div className='workyourway-bg w-1/2'>
 </div>
 
 <div className='flex flex-col items-start justify-center'>
@@ -49,4 +46,4 @@ function Footer() {
   )
 }
 
-export default Footer
+export default WorkYourWay;

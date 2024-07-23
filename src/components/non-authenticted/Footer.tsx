@@ -1,49 +1,41 @@
 import React from 'react'
-import Image from 'next/image'
-
 
 function Footer() {
   return (
-    <div>
-
-<div className='flex items-center justify-center cbg-color'>
-<button className='btn-blue rounded-md p-2 m-2 text-white'>START REGISTRATION</button>
+    <div className='flex flex-col w-full text-white  footer-bg pb-8'>
+        
+<div className=' p-4'>
+MSP Assignment
 </div>
 
-<div className='flex items-center justify-center primary-green font-bold'>
-    Work Your Way
-</div>
-<div className='flex flex-row justify-evenly'>
+<div className='flex flex-row px-2'>
+
+<div className='flex flex-col px-2'>
+  <div className='py-2'>  Help and Suppory</div> 
+  <div> Contact@mspassignment</div> 
+  <div>  connect with socil ficon iicon licon</div> 
+  <div>&copy;2024-2040 Mspassignment.com</div>
+    </div>
+
+<div className='flex flex-col px-2'>
+<div className='py-2'>Home</div> 
+  <div> Post assignment</div> 
+  <div>  About Us</div> 
+  <div>Feedback</div>
+    </div>
     
 
-<div className='footer-bg w-1/2'>
-</div>
 
-<div className='flex flex-col items-start justify-center'>
-    <div className='font-medium'>Choose from four Payment terms and create Agreements</div>
-
-
-    <div className='flex flex-row py-4'>
-    <div className='px-2'><Image src="/pngs/arrowdown.svg" alt="Icon" width={24} height={24} /> </div>icon and Fixed Price
+    <div className='flex flex-col px-2'>
+    <div className='py-2'>  Trust,Safety & Security</div> 
+  <div> Help & Support</div> 
+  <div>  Contact Us</div> 
+  <div>FQA</div>
     </div>
-    <div className='flex flex-row py-4'>
-    <div className='px-2'><Image src="/pngs/arrowdown.svg" alt="Icon" width={24} height={24} />  </div>Hourly
-    </div>
-    <div className='flex flex-row py-4'>
-    <div className='px-2'><Image src="/pngs/arrowdown.svg" alt="Icon" width={24} height={24} />  </div> Task-Based
-    </div>
-    <div className='flex flex-row py-4'>
-    <div className='px-2'><Image src="/pngs/arrowdown.svg" alt="Icon" width={24} height={24} /> </div> Recurring Payment
-    </div>
-
-</div>
 
 
 
 </div>
-
-
-
 
     </div>
   )

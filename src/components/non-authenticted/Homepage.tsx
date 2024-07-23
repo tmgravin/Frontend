@@ -1,11 +1,12 @@
 import React from 'react'
 import Header from './Header'
-import Footer from './Footer'
-import Projectsdiv from './Projectsdiv'
+import Achievements from './Achievements'
 import LatestProjects from './LatestProjects'
 import Applicationprocess from './Applicationprocess'
 import Applicationprocess2 from './Applicationprocess2'
 import Whyus from './Whyus'
+import WorkYourWay from './WorkYourWay'
+import Footer from './Footer'
 
 function Homepage() {
   return (
@@ -46,7 +47,7 @@ function Homepage() {
       </div>  
 
 <div>
-<Projectsdiv/>
+<Achievements/>
 </div>
 
 
@@ -63,12 +64,21 @@ function Homepage() {
   <Applicationprocess/>
   <Applicationprocess2/>
 </div>
+<div className='flex justify-center items-center'>
+
+<button className="primary-btn-blue hover:primary-btn-blue text-white font-bold py-2 px-4 rounded">
+   START REGISTRATION
+</button>
+</div>
+
 
       <div>
-        <Footer/>
+        <WorkYourWay/>
 
       </div>
-
+<div>
+  <Footer/>
+</div>
 
       </div>
   )

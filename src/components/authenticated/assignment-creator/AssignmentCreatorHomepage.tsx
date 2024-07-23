@@ -1,8 +1,9 @@
 import React from 'react'
 import Header from './Header'
-import Footer from './Footer'
 import LatestProjects from './LatestProjects'
 import Applicationprocess2 from './Applicationprocess2'
+import WorkYourWay from '@/components/non-authenticted/WorkYourWay'
+import Footer from '@/components/non-authenticted/Footer'
 
 function Homepage() {
   return (
@@ -12,7 +13,7 @@ function Homepage() {
       <div>
         <Header/>
       </div>
-      <div className='homepage-bg w-full h-screen flex flex-1 flex-col justify-center items-start'>
+      <div className='creator-bg w-full h-screen flex flex-1 flex-col justify-center items-start'>
 
 <div className='w-1/2 text-3xl text-white'>
   Get Freelancing Jobs Instantly Start Working for Yourself!
@@ -55,11 +56,19 @@ function Homepage() {
   <Applicationprocess2/>
 </div>
 
+<div className='flex justify-center items-center p-3'>
+<button className="primary-btn-blue hover:primary-btn-blue text-white font-bold py-2 px-4 rounded">
+   START POSTING YOUR ASSIGNMENTS
+</button>
+</div>
+
       <div>
-        <Footer/>
+       <WorkYourWay/>
 
       </div>
-
+<div>
+  <Footer/>
+</div>
 
       </div>
   )

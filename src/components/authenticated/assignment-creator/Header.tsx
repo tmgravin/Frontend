@@ -74,7 +74,7 @@ const Header: React.FC = () => {
         <div className='flex flex-row'>
 
         
-        <div className='text-2xl potta-one-regular primary-navy-blue'>MSP ASSIGNMENT</div>
+        <div className='text-2xl font-potta primary-navy-blue'>MSP ASSIGNMENT</div>
         <div
         onClick={toggleModal}
         className=" text-sm px-5 py-2.5 text-center cursor-pointer"

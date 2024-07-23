@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Potta+One&display=swap');
+
+
+
+body {
+  @apply font-poppins;
+}
+
+.potta-font {
+  @apply font-potta;
+}
+
 .applicationprocess2-bgcolor{
   background-color: #F0F5FDCC;
 
@@ -86,6 +99,17 @@ color:#7F7D7D;
   min-height: 300px; 
 }
 
+.creator-bg {
+  background-image: 
+    linear-gradient(101.39deg, #0D3802 5.69%, rgba(2, 61, 22, 0.7) 32.85%, rgba(29, 103, 3, 0.475) 46.15%, rgba(6, 97, 32, 0.3) 58.44%), /* New Gradient Layer */
+    url('/man-working-bg.jpeg'); /* Image Layer */
+  background-size: cover;
+  background-position: center;
+  min-height: 300px; 
+}
+
+
+
 .whyus-bg {
   background-color: #0A4AC5; /* Solid blue background color */
   background-image: url('/woman-coffee.png'); /* Image overlay */
@@ -96,13 +120,17 @@ color:#7F7D7D;
 }
 
 
-.footer-bg {
+.workyourway-bg {
   background-image: 
     url('/laptop.png'); /* Image layer */
   background-size: cover;
   background-position: center;
   min-height: 300px; 
 }
+.footer-bg {
+  background-color:#4E4D4D
+}
+
 
 /* Hide default scrollbar */
 .example::-webkit-scrollbar {
