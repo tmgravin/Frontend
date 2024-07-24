@@ -115,6 +115,8 @@ const Projects: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4">
+            <div className='flex justify-center items-center primary-green p-2'>Latest Assignments you can work on</div>
+
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {displayedData.map((item) => (
           <div key={item.id} className="p-4 border rounded shadow">
@@ -124,22 +126,26 @@ const Projects: React.FC = () => {
             <p className="text-sm">Deadline: {item.deadline}</p>
             <button
               onClick={() => openApplyModal(item)}
-              className="mt-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700"
+              className="mt-2 px-4 py-2 primary-btn-blue text-white rounded"
             >
               Apply Now
             </button>
           </div>
         ))}
       </div>
+      <div className='flex justify-center items-center'>
       {visibleCount < data.length && (
+       
         <button
           onClick={loadMore}
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+          className="mt-4 px-4 py-2  text-white rounded primary-btn-blue"
           disabled={loading}
         >
           {loading ? 'Loading...' : 'Load More'}
         </button>
+       
       )}
+       </div>
 
       {/* Apply Modal */}
       <Modal

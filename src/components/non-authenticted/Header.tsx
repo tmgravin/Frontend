@@ -101,7 +101,7 @@ const Header: React.FC = () => {
     <header>
       <div className="flex flex-row justify-between">
         <div>
-          <div className="text-2xl potta-font primary-navy-blue">MSP ASSIGNMENT</div>
+          <h1 className="text-2xl potta-font primary-navy-blue">MSP ASSIGNMENT</h1>
         </div>
         <div className="flex flex-row justify-end items-center">
           <div className="primary-blue px-5 cursor-pointer" onClick={toggleSignupModal}>
@@ -134,7 +134,7 @@ const Header: React.FC = () => {
         toggleModal={toggleLoginModal}
         loginData={loginData}
         handleLoginChange={handleLoginChange}
-        handleLoginSubmit={handleLoginSubmit}
+       // handleLoginSubmit={handleLoginSubmit}
         remember={remember}
         setRemember={setRemember}
       />

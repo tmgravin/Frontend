@@ -2,17 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Potta+One&display=swap');
 
 
-
-body {
-  @apply font-poppins;
-}
-
-.potta-font {
-  @apply font-potta;
+.potta-one{
+  font-family: "Potta One", system-ui;
+  font-weight: 400;
+  font-style: normal;
 }
 
 .applicationprocess2-bgcolor{
@@ -46,21 +42,19 @@ body {
   background-color: #0A4AC5;  
 }
 
-.primary-btn-darkblue{    
-  background-color: #5A81CD;
-}
 
 .primary-btn-blue{
  background-color: #1D89EE;
   }
-.secondary-btn-blue{
-  background-color: #3F9CF3;
-}
 
+ .primary-btn-blue:hover {
+    background-color: #3F9CF3;
+  }
  
 .primary-lightblue{
   color:#A0E8E8
 }
+
 .primary-orange{
   color:#FF7629 ;
   

@@ -1,12 +1,8 @@
 // Header.tsx
 "use client"
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import LoginModal from './LoginModal';
-import SignupModal from './SignupModal';
-import Projects from './ProjectDropdown'
-import PostAssignmentModal from './PostAssignmentModal';
-import CreditCardVerificationModal from '../assignment-doer/CreditCardVerificationModal';
 import UserModal from '../usermodal/UserModal';
+import Link from 'next/link';
 
 const Header: React.FC = () => {
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
@@ -43,11 +39,6 @@ const Header: React.FC = () => {
     e.preventDefault();
     // Handle signup logic here
   };
-  const projects = [
-    { id: 1, name: 'Project A' },
-    { id: 2, name: 'Project B' },
-    { id: 3, name: 'Project C' },
-  ];
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -73,15 +64,13 @@ const Header: React.FC = () => {
 
   return (
     <header>
-       <div className='flex flex-row justify-between'>
+       <div className='flex flex-row justify-between items-center'>
       <div className='flex felx-row'>
        
-        <div className='text-2xl potta-one-regular primary-navy-blue'>MSP ASSIGNMENT</div>
-        <div className='px-5'>
-      {isModalOpen && <PostAssignmentModal onClose={toggleModal} />}
-      <Projects />
-    
-        </div>
+        <div className='text-2xl potta-one-regular primary-navy-blue text-center'>MSP ASSIGNMENT</div>
+        
+        <div className='px-3 text-center'>
+          <Link href="./yourassignments ">your Assignments</Link></div> 
       </div>
       <div className='flex flex-row justify-end items-center'>
       </div>
@@ -92,28 +81,7 @@ const Header: React.FC = () => {
       {(isSignupModalOpen || isLoginModalOpen) && (
         <div className="fixed inset-0 z-40 bg-black bg-opacity-50 backdrop-blur-sm" aria-hidden="true"></div>
       )}
-      <LoginModal
-        isOpen={isLoginModalOpen}
-        toggleModal={toggleLoginModal}
-        loginData={loginData}
-        handleLoginChange={handleLoginChange}
-        handleLoginSubmit={handleLoginSubmit}
-        remember={remember}
-        setRemember={setRemember}
-      />
-      <SignupModal
-        isOpen={isSignupModalOpen}
-        toggleModal={toggleSignupModal}
-        isTeacherSignup={isTeacherSignup}
-        setIsTeacherSignup={setIsTeacherSignup}
-        teacherSignupData={teacherSignupData}
-        studentSignupData={studentSignupData}
-        handleSignupChange={handleSignupChange}
-        handleSignupSubmit={handleSignupSubmit}
-        remember={remember}
-        setRemember={setRemember}
-      />
-     
+  
     </header>
   );
 };

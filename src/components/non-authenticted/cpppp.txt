@@ -94,3 +94,74 @@ const LatestProjects: React.FC = () => {
   );
 };
 export default LatestProjects;
+
+
+// UserMenu.tsx
+import React, { useState, MouseEvent } from 'react';
+import {
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography
+} from '@mui/material';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import { useRouter } from 'next/navigation';
+
+
+const username = "bishnu";
+const role='asdasdasd'
+
+const UserModal: React.FC = () => {
+    const router = useRouter();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const handleMenuClick = (event: MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
+  const handleMenuClose = () => setAnchorEl(null);
+  const handleLogout=()=>{
+    //logout function
+
+        router.push(`./homepage`)
+  }
+const handleSetting=()=>{
+   // router.push(`./homepage/setting/${id}`)
+   router.push(`./setting`)
+
+}
+  const openMenu = Boolean(anchorEl);
+
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+    <div className='flex flex-col items-center justify-center'>
+    <Typography variant="h6" sx={{ mr: 2 }}>
+        {username}
+      </Typography>
+      <Typography variant="h6" sx={{ mr: 2 }}>
+        {role}
+      </Typography>
+    </div>
+      <IconButton onClick={handleMenuClick}>
+      
+        <AccountCircleIcon fontSize="large" />
+      </IconButton>
+      <Menu
+        anchorEl={anchorEl}
+        open={openMenu}
+        onClose={handleMenuClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <MenuItem onClick={handleSetting}>Settings</MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
+      </Menu>
+    </Box>
+  );
+};
+
+export default UserModal;

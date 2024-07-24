@@ -1,9 +1,6 @@
 // Header.tsx
 "use client"
 import React, { useState, ChangeEvent, FormEvent } from 'react';
-import LoginModal from './LoginModal';
-import SignupModal from './SignupModal';
-import Projects from './ProjectDropdown'
 import PostAssignmentModal from './PostAssignmentModal';
 import CreditCardVerificationModal from '../assignment-doer/CreditCardVerificationModal';
 import UserModal from '../usermodal/UserModal';
@@ -75,12 +72,14 @@ const Header: React.FC = () => {
 
         
         <div className='text-2xl font-potta primary-navy-blue'>MSP ASSIGNMENT</div>
+       
         <div
         onClick={toggleModal}
         className=" text-sm px-5 py-2.5 text-center cursor-pointer"
       >
         Post Assignment
       </div>
+      <div>Your Assignments</div>
       </div>
       </div>
       <div className='flex flex-row justify-end items-center'>
@@ -101,27 +100,8 @@ const Header: React.FC = () => {
       {(isSignupModalOpen || isLoginModalOpen) && (
         <div className="fixed inset-0 z-40 bg-black bg-opacity-50 backdrop-blur-sm" aria-hidden="true"></div>
       )}
-      <LoginModal
-        isOpen={isLoginModalOpen}
-        toggleModal={toggleLoginModal}
-        loginData={loginData}
-        handleLoginChange={handleLoginChange}
-        handleLoginSubmit={handleLoginSubmit}
-        remember={remember}
-        setRemember={setRemember}
-      />
-      <SignupModal
-        isOpen={isSignupModalOpen}
-        toggleModal={toggleSignupModal}
-        isTeacherSignup={isTeacherSignup}
-        setIsTeacherSignup={setIsTeacherSignup}
-        teacherSignupData={teacherSignupData}
-        studentSignupData={studentSignupData}
-        handleSignupChange={handleSignupChange}
-        handleSignupSubmit={handleSignupSubmit}
-        remember={remember}
-        setRemember={setRemember}
-      />
+
+
      
     </header>
   );

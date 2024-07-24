@@ -1,6 +1,5 @@
 import React from 'react'
 import Header from './Header'
-import Projectsdiv from './Projectsdiv'
 import Projects from './Projects'
 import Applicationprocess from './Applicationprocess'
 import Applicationprocess2 from './Applicationprocess2'
@@ -42,11 +41,6 @@ function Homepage() {
 </div>
 <button className='bg-white text-black rounded-md w-30 h-18'>Get Started</button>
       </div>  
-
-<div>
-<Projectsdiv/>
-</div>
-
 
 
 <div>
