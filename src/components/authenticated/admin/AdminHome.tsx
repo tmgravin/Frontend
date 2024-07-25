@@ -1,32 +1,55 @@
 import React from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
-import { TableDemo } from './contents/Dashboard';
-
+import StudentComponent from './Students';
+import TeacherComponent from './Teachers';
+import ProjectsTableComponent from './Projects';
+import Dashboard from './Dashboard';
+import Image from 'next/image';
+import UserModal from '../usermodal/UserModal';
 const AdminHome: React.FC = () => {
   return (
   
-    <div style={{ display: 'flex' }}>
+    <div style={{ display: 'flex ' }}>
       <Tabs.Root defaultValue="dashboard" orientation="vertical" style={{ display: 'flex', width: '100%' }}>
         <Tabs.List style={tabsListStyle}>
+        <Tabs.Trigger value="" style={tabStyle}><UserModal/></Tabs.Trigger>
+          <Tabs.Trigger value="">
+            <div>
+          <Image
+          src="/admin-icons/adminmenuimg.png" 
+          alt="Total Teachers"
+          width={250}
+          height={150}
+          className="mb-4"
+        />
+            </div>
+          </Tabs.Trigger>
           <Tabs.Trigger value="dashboard" style={tabStyle}>Dashboard</Tabs.Trigger>
           <Tabs.Trigger value="students" style={tabStyle}>Students</Tabs.Trigger>
           <Tabs.Trigger value="teachers" style={tabStyle}>Teachers</Tabs.Trigger>
+          <Tabs.Trigger value="projects" style={tabStyle}>Projects</Tabs.Trigger>
+
+          
         </Tabs.List>
 
         <div style={contentContainerStyle}>
           <Tabs.Content value="dashboard">
             <h2>Dashboard</h2>
-            <p>Dashboard content goes here.
-              <TableDemo/>
-            </p>
+           <Dashboard/>
+            
+           
           </Tabs.Content>
           <Tabs.Content value="students">
             <h2>Students</h2>
-            <p>Students content goes here.</p>
+          <StudentComponent/>
           </Tabs.Content>
           <Tabs.Content value="teachers">
             <h2>Teachers</h2>
-            <p>Teachers content goes here.</p>
+           <TeacherComponent/>
+          </Tabs.Content>
+          <Tabs.Content value="projects">
+            <h2>Projects</h2>
+          <ProjectsTableComponent/>
           </Tabs.Content>
         </div>
       </Tabs.Root>
@@ -34,7 +57,6 @@ const AdminHome: React.FC = () => {
   );
 };
 
-// Add some basic styling for the tabs
 const tabsListStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',

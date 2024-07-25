@@ -5,6 +5,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ResultModal from './ResultModal';
+
 interface PostAssignmentModalProps {
   onClose: () => void;
 }
@@ -31,7 +32,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
 
   const handleScopeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    setScope((prevScope) => 
+    setScope((prevScope) =>
       prevScope.includes(value) ? prevScope.filter((scope) => scope !== value) : [...prevScope, value]
     );
   };
@@ -93,7 +94,27 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="absolute inset-0 bg-gray-600 opacity-50" onClick={onClose}></div>
-      <div className="bg-white rounded-lg shadow-lg p-6 z-50 w-full max-w-md max-h-[90vh] overflow-y-auto">
+      <div className="bg-white rounded-lg shadow-lg p-6 z-50 w-full max-w-md max-h-[90vh] overflow-y-auto relative">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
+          aria-label="Close"
+        >
+          <svg
+            className="w-6 h-6"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth="2"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
         <h2 className="text-2xl font-bold mb-4">Post a New Assignment</h2>
         <form onSubmit={handleSubmit}>
           {/* Form Fields */}
@@ -110,7 +131,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
               required
             />
           </div>
-      
+
           <div className="mb-4">
             <label htmlFor="deadline" className="block text-sm font-medium text-gray-700">
               Deadline
@@ -200,7 +221,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
             <label htmlFor="budgetType" className="block text-sm font-medium text-gray-700">
               Budget Type
             </label>
-            <div className="mt-1 flex flex-row items-center border-2 cb-shadow  p-10">
+            <div className="mt-1 flex flex-row items-center border-2 cb-shadow p-10">
               <label className="flex items-center cb-shadow ">
                 <input
                   type="radio"
@@ -276,11 +297,11 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
           </div>
 
           <div className="mb-4">
-          <label htmlFor="attachment" className="block text-sm font-medium text-gray-700">
-    
-    <span className="text-blue-500 border border-blue-500 rounded-md">
-    <i className="fa-solid fa-paperclip text-blue-500 mr-2"></i>Attach file or photo</span>
-</label>
+            <label htmlFor="attachment" className="block text-sm font-medium text-gray-700">
+              <span className="text-blue-500 border border-blue-500 rounded-md p-2">
+                <i className="fa-solid fa-paperclip text-blue-500 mr-2"></i>Attach file or photo
+              </span>
+            </label>
             <input
               id="attachment"
               type="file"
@@ -288,7 +309,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
               className="mt-1 block w-full border border-gray-300 rounded-md p-2"
             />
           </div>
-<div>max</div>
+          
           <div className="mb-4">
             <label htmlFor="paymentVerified" className="flex items-center">
               <input

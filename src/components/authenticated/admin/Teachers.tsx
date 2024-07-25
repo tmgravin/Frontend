@@ -1,0 +1,215 @@
+// TableComponent.tsx
+"use client"
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import ReactPaginate from 'react-paginate';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+  phone: string;
+  registrationDate: string;
+  address: string;
+}
+
+const TeacherComponent: React.FC = () => {
+  const [users, setUsers] = useState<User[]>([
+
+    {
+        id: 1,
+        name: 'John Doe',
+        email: 'johndoe@example.com',
+        phone: '123-456-7890',
+        registrationDate: '2023-01-01',
+        address: '123 Main St, Anytown, USA'
+      },
+      {
+        id: 2,
+        name: 'Jane Smith',
+        email: 'janesmith@example.com',
+        phone: '987-654-3210',
+        registrationDate: '2023-02-15',
+        address: '456 Oak St, Anytown, USA'
+      },
+      {
+        id: 3,
+        name: 'Alice Johnson',
+        email: 'alicejohnson@example.com',
+        phone: '555-123-4567',
+        registrationDate: '2023-03-20',
+        address: '789 Pine St, Anytown, USA'
+      },
+      {
+        id: 4,
+        name: 'Bob Brown',
+        email: 'bobbrown@example.com',
+        phone: '555-765-4321',
+        registrationDate: '2023-04-10',
+        address: '101 Maple St, Anytown, USA'
+      },
+      {
+        id: 5,
+        name: 'Charlie Davis',
+        email: 'charliedavis@example.com',
+        phone: '555-246-8101',
+        registrationDate: '2023-05-05',
+        address: '202 Elm St, Anytown, USA'
+      },
+      {
+        id: 6,
+        name: 'David Evans',
+        email: 'davidevans@example.com',
+        phone: '555-987-6543',
+        registrationDate: '2023-06-12',
+        address: '303 Birch St, Anytown, USA'
+      },
+      {
+        id: 7,
+        name: 'Eve Foster',
+        email: 'evefoster@example.com',
+        phone: '555-654-3210',
+        registrationDate: '2023-07-08',
+        address: '404 Cedar St, Anytown, USA'
+      },
+      {
+        id: 8,
+        name: 'Frank Green',
+        email: 'frankgreen@example.com',
+        phone: '555-321-6540',
+        registrationDate: '2023-08-19',
+        address: '505 Walnut St, Anytown, USA'
+      },
+      {
+        id: 9,
+        name: 'Grace Harris',
+        email: 'graceharris@example.com',
+        phone: '555-147-2580',
+        registrationDate: '2023-09-23',
+        address: '606 Chestnut St, Anytown, USA'
+      },
+      {
+        id: 10,
+        name: 'Henry Irwin',
+        email: 'henryirwin@example.com',
+        phone: '555-369-2581',
+        registrationDate: '2023-10-17',
+        address: '707 Spruce St, Anytown, USA'
+      }
+  ]);
+  const [search, setSearch] = useState('');
+  const [currentPage, setCurrentPage] = useState(0);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // Replace with your actual API endpoint
+      const response = await axios.get('/api/users');
+      setUsers(response.data);
+      setFilteredUsers(response.data);
+    };
+
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    setFilteredUsers(
+      users.filter(user =>
+        user.name.toLowerCase().includes(search.toLowerCase()) ||
+        user.email.toLowerCase().includes(search.toLowerCase()) ||
+        user.phone.includes(search)
+      )
+    );
+  }, [search, users]);
+
+  const handlePageClick = (data: { selected: number }) => {
+    setCurrentPage(data.selected);
+  };
+
+  const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setItemsPerPage(Number(e.target.value));
+    setCurrentPage(0); // Reset to first page when items per page changes
+  };
+
+  const currentItems = filteredUsers.slice(
+    currentPage * itemsPerPage,
+    (currentPage + 1) * itemsPerPage
+  );
+
+  return (
+    <div className="p-6">
+      <h2 className="text-2xl font-bold mb-4">Teachers Details</h2>
+      <div className="flex justify-between items-center mb-4">
+        <input
+          type="text"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="Search..."
+          className="border border-gray-300 rounded-md p-2"
+        />
+        <div>
+          <label htmlFor="itemsPerPage" className="mr-2">Items per page:</label>
+          <select
+            id="itemsPerPage"
+            value={itemsPerPage}
+            onChange={handleItemsPerPageChange}
+            className="border border-gray-300 rounded-md p-2"
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+          </select>
+        </div>
+      </div>
+      <table className="min-w-full bg-white border">
+        <thead>
+          <tr>
+            <th className="border px-4 py-2">ID</th>
+            <th className="border px-4 py-2">Name</th>
+            <th className="border px-4 py-2">Email</th>
+            <th className="border px-4 py-2">Phone</th>
+            <th className="border px-4 py-2">Registration Date</th>
+            <th className="border px-4 py-2">Address</th>
+            <th className="border px-4 py-2">Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {currentItems.map(user => (
+            <tr key={user.id}>
+              <td className="border px-4 py-2">{user.id}</td>
+              <td className="border px-4 py-2">{user.name}</td>
+              <td className="border px-4 py-2">{user.email}</td>
+              <td className="border px-4 py-2">{user.phone}</td>
+              <td className="border px-4 py-2">{user.registrationDate}</td>
+              <td className="border px-4 py-2">{user.address}</td>
+              <td className="border px-4 py-2">
+                <button className="bg-blue-500 text-white px-4 py-2 rounded-md">
+                  Action
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <ReactPaginate
+        previousLabel={"Previous"}
+        nextLabel={"Next"}
+        breakLabel={"..."}
+        breakClassName={"break-me"}
+        pageCount={Math.ceil(filteredUsers.length / itemsPerPage)}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={5}
+        onPageChange={handlePageClick}
+        containerClassName={"flex justify-center items-center mt-4"}
+        pageClassName={"mx-1"}
+        pageLinkClassName={"px-3 py-1 border rounded"}
+        activeClassName={"bg-blue-500 text-white"}
+        previousLinkClassName={"px-3 py-1 border rounded"}
+        nextLinkClassName={"px-3 py-1 border rounded"}
+      />
+    </div>
+  );
+};
+
+export default TeacherComponent;
