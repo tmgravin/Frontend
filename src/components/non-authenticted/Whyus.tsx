@@ -1,6 +1,10 @@
 import React from 'react';
 
-function Whyus() {
+interface WhyusProps {
+  onGetStartedClick: () => void; // Add prop for the button click handler
+}
+
+const Whyus: React.FC<WhyusProps> = ({ onGetStartedClick }) => {
   return (
     <div className='whyus-bg w-full h-screen text-white flex flex-col items-center'>
       <div className='text-white text-4xl mb-8'>
@@ -46,12 +50,12 @@ function Whyus() {
           </div>
 
           <div className='pl-8'> 
-          <div className='m-2 text-left '>
-            <button type="button" className="text-black bg-white hover:bg-gray-200 focus:outline-none rounded-md text-sm px-5 py-2.5 text-center ">
-             Get started
-            </button>
-          </div>      
-   </div>
+            <div className='m-2 text-left'>
+              <button type="button" onClick={onGetStartedClick} className="text-black bg-white hover:bg-gray-200 focus:outline-none rounded-md text-sm px-5 py-2.5 text-center">
+                Get started
+              </button>
+            </div>      
+          </div>
         </div>
       </div>
     </div>

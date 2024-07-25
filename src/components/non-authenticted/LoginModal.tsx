@@ -1,7 +1,7 @@
-"use client";
 import React, { ChangeEvent, useState } from 'react';
 import Image from 'next/image';
 import axios from 'axios';
+import ResetPasswordModal from './ResetPasswordModal'; // Import the new modal
 
 interface SignupData {
   email: string;
@@ -27,6 +27,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
   setRemember
 }) => {
   const [role, setRole] = useState<string | null>(null);
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false); // State for reset password modal
 
   if (!isOpen) return null;
 
@@ -43,6 +44,8 @@ const LoginModal: React.FC<LoginModalProps> = ({
       // Handle login error here (e.g., show error message)
     }
   };
+
+  const toggleResetModal = () => setIsResetModalOpen(!isResetModalOpen); // Toggle function for reset modal
 
   return (
     <div id="login-modal" tabIndex={-1} aria-hidden="true" className="fixed inset-0 z-50 flex items-center justify-center overflow-auto">
@@ -82,7 +85,10 @@ const LoginModal: React.FC<LoginModalProps> = ({
               <div className='cb-shadow'>
                 <input type="password" name="password" id="login-password" value={loginData.password} onChange={handleLoginChange} placeholder="Password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
               </div>
-              <div className='flex flex-row justify-end'><div>Forget Password?</div><div className='secondary-blue'>Reset it</div></div>
+              <div className='flex flex-row justify-end'>
+                <div>Forget Password?</div>
+                <div className='secondary-blue cursor-pointer' onClick={toggleResetModal}>Reset it</div>
+              </div>
               <div className="flex items-center">
                 <input
                   type="checkbox"
@@ -140,11 +146,14 @@ const LoginModal: React.FC<LoginModalProps> = ({
                 </button>
               </div>
 
-              <div className='flex flex-row justify-center'><div>Don&apos;t have an account?<button className='secondary-blue' onClick={toggleModal}> Sign up</button></div></div>
+              <div className='flex flex-row justify-center'>
+                <div>Don&apos;t have an account?<button className='secondary-blue' onClick={toggleModal}> Sign up</button></div>
+              </div>
             </form>
           </div>
         </div>
       </div>
+      <ResetPasswordModal isOpen={isResetModalOpen} toggleModal={toggleResetModal} /> {/* Add the reset password modal */}
     </div>
   );
 };

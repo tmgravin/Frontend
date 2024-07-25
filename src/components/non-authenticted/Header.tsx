@@ -99,7 +99,7 @@ const Header: React.FC = () => {
 
   return (
     <header>
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row justify-between px-2">
         <div>
           <h1 className="text-2xl potta-font primary-navy-blue">MSP ASSIGNMENT</h1>
         </div>

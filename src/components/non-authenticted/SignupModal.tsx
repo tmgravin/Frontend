@@ -139,8 +139,8 @@ const SignupModal: React.FC<SignupModalProps> = ({
                   <button type="submit" className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800">
                     Sign up
                   </button>
-                  <div className='flex flex-row justify-center'>
-                    <div>Already have an account?<button className='secondary-blue' onClick={() => setIsLoginModalOpen(true)}> Sign in</button></div>
+                  <div className='flex justify-center itmes-center '>
+                    <div className='flex text-center items-center justify-center'>Already have an account?<button className='secondary-blue' onClick={() => setIsLoginModalOpen(true)}> Sign in</button></div>
                   </div>
                 </form>
               )}

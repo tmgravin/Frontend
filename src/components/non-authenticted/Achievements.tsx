@@ -3,7 +3,7 @@ import Image from 'next/image'
 
 export default function Achievements() {
   return (
-    <div className='flex flex-row justify-evenly'>
+    <div className='flex flex-row justify-evenly p-2'>
 
     <div className='flex flex-row'>
         <div>
@@ -30,7 +30,7 @@ export default function Achievements() {
           src="/pngs/freelancers.svg" // Path to your image in the public directory
           alt="freenalcers icon"
           width={50} // Specify the width of the image
-          height={50} // Specify the height of the image
+          height={30} // Specify the height of the image
         />
         </div>
     <div className='flex flex-col'>
@@ -48,7 +48,7 @@ export default function Achievements() {
           src="/pngs/paid.svg" // Path to your image in the public directory
           alt="paying icon"
           width={50} // Specify the width of the image
-          height={50} // Specify the height of the image
+          height={30} // Specify the height of the image
         />
         </div>
     <div className='flex flex-col'>
@@ -66,7 +66,7 @@ export default function Achievements() {
           src="/pngs/Loyalty_customer.svg" // Path to your image in the public directory
           alt="customer icon"
           width={50} // Specify the width of the image
-          height={50} // Specify the height of the image
+          height={30} // Specify the height of the image
         />
         </div>
     <div className='flex flex-col'>

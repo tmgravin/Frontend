@@ -3,11 +3,11 @@ import Image from 'next/image'
 
 
 function WorkYourWay() {
-  return (
-    <div>
+  return ( 
+    <div className='pt-6'>
 
 
-<div className='flex items-center justify-center primary-green font-bold'>
+<div className='flex items-center justify-center primary-green font-bold '>
     Work Your Way
 </div>
 <div className='flex flex-row justify-evenly'>

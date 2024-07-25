@@ -17,7 +17,7 @@ function ApplicationProcess2() {
           width={50}
           height={30}
         /></div>
-            <div className='font-bold p-3'>1.Upload Assignment</div>
+            <div className='font-bold p-3 text-center'>1.Upload Assignment</div>
             <div className='text-center'>Fill in your details and qualification, and sahre the skills in which you are proficient</div>
           </div>
 
@@ -27,7 +27,7 @@ function ApplicationProcess2() {
           <Image
           src="/pngs/arrowleft.svg"
           alt="Example SVG Image"
-          width={139}
+          width={50}
           height={30}
         />
 
@@ -41,7 +41,7 @@ function ApplicationProcess2() {
           width={50}
           height={30}
         /></div>
-            <div className='font-bold p-3' >2.Hire Assignment Doer</div>
+            <div className='font-bold p-3 text-center' >2.Hire Assignment Doer</div>
             <div className='text-center'> Get the most suited job for your skills</div>
           </div>
 
@@ -50,7 +50,7 @@ function ApplicationProcess2() {
           <Image
           src="/pngs/arrowleft.svg"
           alt="Example SVG Image"
-          width={139}
+          width={50}
           height={30}
         />
           </div>
@@ -62,7 +62,7 @@ function ApplicationProcess2() {
           width={50}
           height={30}
         /></div></div>
-            <div className='font-bold p-3'>3.Get assignment done with secure payment</div>
+            <div className='font-bold p-3 text-center'>3.Get assignment done with secure payment</div>
             <div className='text-center'>Choose from several freelance jobs methods with Safepay payment protection</div>
           </div>
         </div>

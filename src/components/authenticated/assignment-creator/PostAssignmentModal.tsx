@@ -276,9 +276,11 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
           </div>
 
           <div className="mb-4">
-            <label htmlFor="attachment" className="block text-sm font-medium text-gray-700">
-              Attachment (optional)
-            </label>
+          <label htmlFor="attachment" className="block text-sm font-medium text-gray-700">
+    
+    <span className="text-blue-500 border border-blue-500 rounded-md">
+    <i className="fa-solid fa-paperclip text-blue-500 mr-2"></i>Attach file or photo</span>
+</label>
             <input
               id="attachment"
               type="file"
@@ -286,7 +288,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
               className="mt-1 block w-full border border-gray-300 rounded-md p-2"
             />
           </div>
-
+<div>max</div>
           <div className="mb-4">
             <label htmlFor="paymentVerified" className="flex items-center">
               <input

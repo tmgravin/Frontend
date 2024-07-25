@@ -61,16 +61,22 @@ const LatestProjects: React.FC = () => {
           </div>
         ))}
       </div>
-      {visibleCount < data.length && (
+      
+     
+       <div className='flex justify-center items-center'>  
+       {visibleCount < data.length && (
         <button
           onClick={loadMore}
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+          className="mt-4 px-4 py-2 primary-btn-blue text-white rounded"
           disabled={loading}
         >
           {loading ? 'Loading...' : 'Load More'}
         </button>
       )}
+
+       </div>
     </div>
+   
   );
 };
 

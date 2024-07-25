@@ -4,7 +4,7 @@ function ApplicationProcess() {
   return (
     <div className="bg-gray-100 p-10">
       <div className='flex primary-green items-center justify-center font-bold p-5'>Simple Application Process</div>
-      <div className="w-full max-w-xl mx-auto">
+      <div className="w-full  mx-auto">
         <div className="flex items-center justify-between">
           {/* Step 1 */}
           <div className="relative flex items-center">
