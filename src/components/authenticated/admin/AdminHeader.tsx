@@ -1,11 +1,12 @@
 import React from 'react'
-import UserModal from '../usermodal/UserModal'
 
 function AdminHeader() {
   return (
-    <div className='flex flex-col w-full h-full'>
+    <div className='flex w-full justify-center items-center bg-blue-700 h-10'>
     
-   <div className='flex justify-end'> <UserModal/></div>
+    <div className=' text-white'>MSP Academy</div>
+
+
     </div>
   )
 }

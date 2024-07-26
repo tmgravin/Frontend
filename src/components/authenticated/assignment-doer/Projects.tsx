@@ -1,9 +1,11 @@
-"use client";
+"use client"
+
 import React, { useState, useEffect } from 'react';
 import { Modal, Box, Button, TextField, Typography, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import ReadMoreModal from './ReadMoreModal'; // Import ReadMoreModal
 
-interface DataItem {
+export interface DataItem {
   id: number;
   title: string;
   description: string;
@@ -15,14 +17,15 @@ const Projects: React.FC = () => {
   const [data, setData] = useState<DataItem[]>([
     { id: 1, title: 'Project 1', description: 'Description 1', amount: 1000, deadline: '2024-07-30' },
     { id: 2, title: 'Project 2', description: 'Description 2', amount: 2000, deadline: '2024-08-15' },
-    { id: 3, title: 'Project 3', description: 'Description 3', amount: 3000, deadline: '2024-09-01' },
-    { id: 4, title: 'Project 4', description: 'Description 4', amount: 4000, deadline: '2024-07-25' },
-    { id: 5, title: 'Project 5', description: 'Description 5', amount: 5000, deadline: '2024-08-05' },
-    { id: 6, title: 'Project 6', description: 'Description 6', amount: 6000, deadline: '2024-09-10' },
-    { id: 7, title: 'Project 7', description: 'Description 7', amount: 7000, deadline: '2024-07-29' },
-    { id: 8, title: 'Project 8', description: 'Description 8', amount: 8000, deadline: '2024-08-20' },
-    { id: 9, title: 'Project 9', description: 'Description 9', amount: 9000, deadline: '2024-09-15' },
-    { id: 10, title: 'Project 10', description: 'Description 10', amount: 10000, deadline: '2024-10-01' },
+    { id: 1, title: 'Project 1', description: 'Description 1', amount: 1000, deadline: '2024-07-30' },
+    { id: 2, title: 'Project 2', description: 'Description 2', amount: 2000, deadline: '2024-08-15' },
+    { id: 1, title: 'Project 1', description: 'Description 1', amount: 1000, deadline: '2024-07-30' },
+    { id: 2, title: 'Project 2', description: 'Description 2', amount: 2000, deadline: '2024-08-15' },
+    { id: 1, title: 'Project 1', description: 'Description 1', amount: 1000, deadline: '2024-07-30' },
+    { id: 2, title: 'Project 2', description: 'Description 2', amount: 2000, deadline: '2024-08-15' },
+    { id: 1, title: 'Project 1', description: 'Description 1', amount: 1000, deadline: '2024-07-30' },
+    { id: 2, title: 'Project 2', description: 'Description 2', amount: 2000, deadline: '2024-08-15' },
+    // ... (other projects)
   ]);
   const [visibleCount, setVisibleCount] = useState(8);
   const [loading, setLoading] = useState(false);
@@ -43,13 +46,13 @@ const Projects: React.FC = () => {
     accountNumber: '',
     ifscCode: '',
   });
+  const [isReadMoreModalOpen, setIsReadMoreModalOpen] = useState(false); 
 
   useEffect(() => {
-    // Fetch data from API
     const fetchData = async () => {
       setLoading(true);
       try {
-        const response = await fetch('/api/projects'); // Replace with your API endpoint
+        const response = await fetch('/api/projects');
         const result = await response.json();
         setData(result);
       } catch (error) {
@@ -83,6 +86,16 @@ const Projects: React.FC = () => {
     setIsBankModalOpen(false);
   };
 
+  const openReadMoreModal = (project: DataItem) => {
+    setSelectedProject(project);
+    setIsReadMoreModalOpen(true);
+  };
+
+  const closeReadMoreModal = () => {
+    setIsReadMoreModalOpen(false);
+    setSelectedProject(null);
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, files } = e.target;
     if (name === 'coverLetter' || name === 'cv') {
@@ -94,7 +107,6 @@ const Projects: React.FC = () => {
 
   const handleFormSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Process the form data
     console.log('Form Data:', formData);
     closeApplyModal();
   };
@@ -106,7 +118,6 @@ const Projects: React.FC = () => {
 
   const handleBankSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Process bank details
     console.log('Bank Details:', bankDetails);
     closeBankModal();
   };
@@ -115,13 +126,20 @@ const Projects: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4">
-            <div className='flex justify-center items-center primary-green p-2'>Latest Assignments you can work on</div>
-
+      <div className='flex justify-center items-center primary-green p-2'>Latest Assignments you can work on</div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {displayedData.map((item) => (
           <div key={item.id} className="p-4 border rounded shadow">
             <h2 className="text-xl font-bold">{item.title}</h2>
-            <p>{item.description}</p>
+            <div className="flex items-center">
+              <p className="flex-grow">{item.description}</p>
+              <button
+                onClick={() => openReadMoreModal(item)}
+                className="ml-4 px-4 py-2 text-blue-500 hover:underline"
+              >
+                Read More
+              </button>
+            </div>
             <p className="text-sm">Project Amount: {item.amount}</p>
             <p className="text-sm">Deadline: {item.deadline}</p>
             <button
@@ -134,18 +152,16 @@ const Projects: React.FC = () => {
         ))}
       </div>
       <div className='flex justify-center items-center'>
-      {visibleCount < data.length && (
-       
-        <button
-          onClick={loadMore}
-          className="mt-4 px-4 py-2  text-white rounded primary-btn-blue"
-          disabled={loading}
-        >
-          {loading ? 'Loading...' : 'Load More'}
-        </button>
-       
-      )}
-       </div>
+        {visibleCount < data.length && (
+          <button
+            onClick={loadMore}
+            className="mt-4 px-4 py-2  text-white rounded primary-btn-blue"
+            disabled={loading}
+          >
+            {loading ? 'Loading...' : 'Load More'}
+          </button>
+        )}
+      </div>
 
       {/* Apply Modal */}
       <Modal
@@ -169,81 +185,68 @@ const Projects: React.FC = () => {
               Apply for {selectedProject?.title}
             </Typography>
             <form onSubmit={handleFormSubmit}>
-              <div className="mb-4">
-                <TextField
-                  label="First Name"
-                  name="firstName"
-                  value={formData.firstName}
-                  onChange={handleInputChange}
-                  fullWidth
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <TextField
-                  label="Last Name"
-                  name="lastName"
-                  value={formData.lastName}
-                  onChange={handleInputChange}
-                  fullWidth
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <TextField
-                  label="Email"
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  fullWidth
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <TextField
-                  label="Contact"
-                  type="tel"
-                  name="contact"
-                  value={formData.contact}
-                  onChange={handleInputChange}
-                  fullWidth
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <input
-                  type="file"
-                  name="coverLetter"
-                  onChange={handleInputChange}
-                  required
-                />
-                <label htmlFor="coverLetter">Cover Letter</label>
-              </div>
-              <div className="mb-4">
-                <input
-                  type="file"
-                  name="cv"
-                  onChange={handleInputChange}
-                  required
-                />
-                <label htmlFor="cv">CV</label>
-              </div>
-              <div className="flex justify-end mb-4">
-                <Button
-                  type="button"
-                  variant="contained"
-                  color="primary"
-                  onClick={openBankModal}
-                >
-                  Add Bank Details
-                </Button>
-              </div>
-              <div className="flex justify-end">
-                <Button type="submit" variant="contained" color="primary">
-                  Submit
-                </Button>
-              </div>
+              <TextField
+                name="firstName"
+                label="First Name"
+                value={formData.firstName}
+                onChange={handleInputChange}
+                fullWidth
+                margin="normal"
+                required
+              />
+              <TextField
+                name="lastName"
+                label="Last Name"
+                value={formData.lastName}
+                onChange={handleInputChange}
+                fullWidth
+                margin="normal"
+                required
+              />
+              <TextField
+                name="email"
+                label="Email"
+                value={formData.email}
+                onChange={handleInputChange}
+                fullWidth
+                margin="normal"
+                required
+                type="email"
+              />
+              <TextField
+                name="contact"
+                label="Contact"
+                value={formData.contact}
+                onChange={handleInputChange}
+                fullWidth
+                margin="normal"
+                required
+                type="tel"
+              />
+              <TextField
+                name="coverLetter"
+                label="Cover Letter"
+                type="file"
+                onChange={handleInputChange}
+                fullWidth
+                margin="normal"
+              />
+              <TextField
+                name="cv"
+                label="CV"
+                type="file"
+                onChange={handleInputChange}
+                fullWidth
+                margin="normal"
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className="mt-4"
+              >
+                Submit
+              </Button>
             </form>
           </Box>
         </Box>
@@ -253,8 +256,8 @@ const Projects: React.FC = () => {
       <Modal
         open={isBankModalOpen}
         onClose={closeBankModal}
-        aria-labelledby="bank-details-modal-title"
-        aria-describedby="bank-details-modal-description"
+        aria-labelledby="bank-modal-title"
+        aria-describedby="bank-modal-description"
       >
         <Box className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
           <Box className="bg-white p-6 rounded shadow-md w-full max-w-md max-h-[90vh] overflow-y-auto relative">
@@ -267,59 +270,66 @@ const Projects: React.FC = () => {
             >
               <CloseIcon />
             </IconButton>
-            <Typography variant="h6" id="bank-details-modal-title" className="mb-4">
-              Add Bank Details
+            <Typography variant="h6" id="bank-modal-title" className="mb-4">
+              Bank Details
             </Typography>
             <form onSubmit={handleBankSubmit}>
-              <div className="mb-4">
-                <TextField
-                  label="Account Holder Name"
-                  name="accountHolderName"
-                  value={bankDetails.accountHolderName}
-                  onChange={handleBankDetailsChange}
-                  fullWidth
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <TextField
-                  label="Bank Name"
-                  name="bankName"
-                  value={bankDetails.bankName}
-                  onChange={handleBankDetailsChange}
-                  fullWidth
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <TextField
-                  label="Account Number"
-                  name="accountNumber"
-                  value={bankDetails.accountNumber}
-                  onChange={handleBankDetailsChange}
-                  fullWidth
-                  required
-                />
-              </div>
-              <div className="mb-4">
-                <TextField
-                  label="IFSC Code"
-                  name="ifscCode"
-                  value={bankDetails.ifscCode}
-                  onChange={handleBankDetailsChange}
-                  fullWidth
-                  required
-                />
-              </div>
-              <div className="flex justify-end">
-                <Button type="submit" variant="contained" color="primary">
-                  Submit
-                </Button>
-              </div>
+              <TextField
+                name="accountHolderName"
+                label="Account Holder Name"
+                value={bankDetails.accountHolderName}
+                onChange={handleBankDetailsChange}
+                fullWidth
+                margin="normal"
+                required
+              />
+              <TextField
+                name="bankName"
+                label="Bank Name"
+                value={bankDetails.bankName}
+                onChange={handleBankDetailsChange}
+                fullWidth
+                margin="normal"
+                required
+              />
+              <TextField
+                name="accountNumber"
+                label="Account Number"
+                value={bankDetails.accountNumber}
+                onChange={handleBankDetailsChange}
+                fullWidth
+                margin="normal"
+                required
+              />
+              <TextField
+                name="ifscCode"
+                label="IFSC Code"
+                value={bankDetails.ifscCode}
+                onChange={handleBankDetailsChange}
+                fullWidth
+                margin="normal"
+                required
+              />
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                className="mt-4"
+              >
+                Submit
+              </Button>
             </form>
           </Box>
         </Box>
       </Modal>
+
+      {/* Read More Modal */}
+      <ReadMoreModal
+        project={selectedProject}
+        onClose={closeReadMoreModal}
+        open={isReadMoreModalOpen}
+        onApply={openApplyModal} // Pass the callback here
+      />
     </div>
   );
 };

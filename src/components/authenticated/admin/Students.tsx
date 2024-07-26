@@ -1,10 +1,10 @@
-// TableComponent.tsx
 "use client"
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
+import StudentInfoModal from './InfoModals/StudentInfoModal'; // Adjust the import path as necessary
 
-interface User {
+ export interface User {
   id: number;
   name: string;
   email: string;
@@ -15,97 +15,96 @@ interface User {
 
 const StudentComponent: React.FC = () => {
   const [users, setUsers] = useState<User[]>([
-
-
     {
-        id: 1,
-        name: 'John Doe',
-        email: 'johndoe@example.com',
-        phone: '123-456-7890',
-        registrationDate: '2023-01-01',
-        address: '123 Main St, Anytown, USA'
-      },
-      {
-        id: 2,
-        name: 'Jane Smith',
-        email: 'janesmith@example.com',
-        phone: '987-654-3210',
-        registrationDate: '2023-02-15',
-        address: '456 Oak St, Anytown, USA'
-      },
-      {
-        id: 3,
-        name: 'Alice Johnson',
-        email: 'alicejohnson@example.com',
-        phone: '555-123-4567',
-        registrationDate: '2023-03-20',
-        address: '789 Pine St, Anytown, USA'
-      },
-      {
-        id: 4,
-        name: 'Bob Brown',
-        email: 'bobbrown@example.com',
-        phone: '555-765-4321',
-        registrationDate: '2023-04-10',
-        address: '101 Maple St, Anytown, USA'
-      },
-      {
-        id: 5,
-        name: 'Charlie Davis',
-        email: 'charliedavis@example.com',
-        phone: '555-246-8101',
-        registrationDate: '2023-05-05',
-        address: '202 Elm St, Anytown, USA'
-      },
-      {
-        id: 6,
-        name: 'David Evans',
-        email: 'davidevans@example.com',
-        phone: '555-987-6543',
-        registrationDate: '2023-06-12',
-        address: '303 Birch St, Anytown, USA'
-      },
-      {
-        id: 7,
-        name: 'Eve Foster',
-        email: 'evefoster@example.com',
-        phone: '555-654-3210',
-        registrationDate: '2023-07-08',
-        address: '404 Cedar St, Anytown, USA'
-      },
-      {
-        id: 8,
-        name: 'Frank Green',
-        email: 'frankgreen@example.com',
-        phone: '555-321-6540',
-        registrationDate: '2023-08-19',
-        address: '505 Walnut St, Anytown, USA'
-      },
-      {
-        id: 9,
-        name: 'Grace Harris',
-        email: 'graceharris@example.com',
-        phone: '555-147-2580',
-        registrationDate: '2023-09-23',
-        address: '606 Chestnut St, Anytown, USA'
-      },
-      {
-        id: 10,
-        name: 'Henry Irwin',
-        email: 'henryirwin@example.com',
-        phone: '555-369-2581',
-        registrationDate: '2023-10-17',
-        address: '707 Spruce St, Anytown, USA'
-      }
+      id: 1,
+      name: 'John Doe',
+      email: 'johndoe@example.com',
+      phone: '123-456-7890',
+      registrationDate: '2023-01-01',
+      address: '123 Main St, Anytown, USA'
+    },
+    {
+      id: 2,
+      name: 'Jane Smith',
+      email: 'janesmith@example.com',
+      phone: '987-654-3210',
+      registrationDate: '2023-02-15',
+      address: '456 Oak St, Anytown, USA'
+    },
+    {
+      id: 3,
+      name: 'Alice Johnson',
+      email: 'alicejohnson@example.com',
+      phone: '555-123-4567',
+      registrationDate: '2023-03-20',
+      address: '789 Pine St, Anytown, USA'
+    },
+    {
+      id: 4,
+      name: 'Bob Brown',
+      email: 'bobbrown@example.com',
+      phone: '555-765-4321',
+      registrationDate: '2023-04-10',
+      address: '101 Maple St, Anytown, USA'
+    },
+    {
+      id: 5,
+      name: 'Charlie Davis',
+      email: 'charliedavis@example.com',
+      phone: '555-246-8101',
+      registrationDate: '2023-05-05',
+      address: '202 Elm St, Anytown, USA'
+    },
+    {
+      id: 6,
+      name: 'David Evans',
+      email: 'davidevans@example.com',
+      phone: '555-987-6543',
+      registrationDate: '2023-06-12',
+      address: '303 Birch St, Anytown, USA'
+    },
+    {
+      id: 7,
+      name: 'Eve Foster',
+      email: 'evefoster@example.com',
+      phone: '555-654-3210',
+      registrationDate: '2023-07-08',
+      address: '404 Cedar St, Anytown, USA'
+    },
+    {
+      id: 8,
+      name: 'Frank Green',
+      email: 'frankgreen@example.com',
+      phone: '555-321-6540',
+      registrationDate: '2023-08-19',
+      address: '505 Walnut St, Anytown, USA'
+    },
+    {
+      id: 9,
+      name: 'Grace Harris',
+      email: 'graceharris@example.com',
+      phone: '555-147-2580',
+      registrationDate: '2023-09-23',
+      address: '606 Chestnut St, Anytown, USA'
+    },
+    {
+      id: 10,
+      name: 'Henry Irwin',
+      email: 'henryirwin@example.com',
+      phone: '555-369-2581',
+      registrationDate: '2023-10-17',
+      address: '707 Spruce St, Anytown, USA'
+    }
   ]);
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
-      // Replace with your actual API endpoint
       const response = await axios.get('/api/users');
       setUsers(response.data);
       setFilteredUsers(response.data);
@@ -131,6 +130,16 @@ const StudentComponent: React.FC = () => {
   const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setItemsPerPage(Number(e.target.value));
     setCurrentPage(0); // Reset to first page when items per page changes
+  };
+
+  const handleActionClick = (user: User) => {
+    setSelectedUser(user);
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setSelectedUser(null);
   };
 
   const currentItems = filteredUsers.slice(
@@ -185,8 +194,11 @@ const StudentComponent: React.FC = () => {
               <td className="border px-4 py-2">{user.registrationDate}</td>
               <td className="border px-4 py-2">{user.address}</td>
               <td className="border px-4 py-2">
-                <button className="bg-blue-500 text-white px-4 py-2 rounded-md">
-                  Action
+                <button
+                  onClick={() => handleActionClick(user)}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                >
+                  View Details
                 </button>
               </td>
             </tr>
@@ -209,6 +221,7 @@ const StudentComponent: React.FC = () => {
         previousLinkClassName={"px-3 py-1 border rounded"}
         nextLinkClassName={"px-3 py-1 border rounded"}
       />
+      <StudentInfoModal user={selectedUser} open={isModalOpen} onClose={handleModalClose} />
     </div>
   );
 };

@@ -1,29 +1,30 @@
-// TableComponent.tsx
 "use client"
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
+import ProjectInfoModal from './InfoModals/ProjectInfoModal';
 
-interface Project {
+export interface Project {
   doerId: number;
   doerName: string;
   creatorId: number;
   creatorName: string;
   projectTitle: string;
-  projectName: string;
+  projectId: string;
   deadline: string;
   status: string;
 }
 
 const ProjectsTableComponent: React.FC = () => {
   const [projects, setProjects] = useState<Project[]>([
+    // Sample data
     {
       doerId: 1,
       doerName: 'John Doe',
       creatorId: 101,
       creatorName: 'Jane Smith',
       projectTitle: 'Website Redesign',
-      projectName: 'Corporate Site',
+      projectId: '12',
       deadline: '2023-12-01',
       status: 'In Progress'
     },
@@ -33,7 +34,7 @@ const ProjectsTableComponent: React.FC = () => {
       creatorId: 102,
       creatorName: 'Bob Brown',
       projectTitle: 'Mobile App',
-      projectName: 'Fitness Tracker',
+      projectId: '123',
       deadline: '2023-11-15',
       status: 'Completed'
     },
@@ -43,7 +44,7 @@ const ProjectsTableComponent: React.FC = () => {
       creatorId: 103,
       creatorName: 'Eve Foster',
       projectTitle: 'Marketing Campaign',
-      projectName: 'Product Launch',
+      projectId: '4234',
       deadline: '2023-10-20',
       status: 'Pending'
     },
@@ -53,6 +54,8 @@ const ProjectsTableComponent: React.FC = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [filteredProjects, setFilteredProjects] = useState<Project[]>(projects);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     setFilteredProjects(
@@ -60,7 +63,7 @@ const ProjectsTableComponent: React.FC = () => {
         project.doerName.toLowerCase().includes(search.toLowerCase()) ||
         project.creatorName.toLowerCase().includes(search.toLowerCase()) ||
         project.projectTitle.toLowerCase().includes(search.toLowerCase()) ||
-        project.projectName.toLowerCase().includes(search.toLowerCase()) ||
+        project.projectId.toLowerCase().includes(search.toLowerCase()) ||
         project.status.toLowerCase().includes(search.toLowerCase())
       )
     );
@@ -73,6 +76,16 @@ const ProjectsTableComponent: React.FC = () => {
   const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setItemsPerPage(Number(e.target.value));
     setCurrentPage(0); // Reset to first page when items per page changes
+  };
+
+  const handleActionClick = (project: Project) => {
+    setSelectedProject(project);
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    setIsModalOpen(false);
+    setSelectedProject(null);
   };
 
   const currentItems = filteredProjects.slice(
@@ -127,12 +140,15 @@ const ProjectsTableComponent: React.FC = () => {
               <td className="border px-4 py-2">{project.creatorId}</td>
               <td className="border px-4 py-2">{project.creatorName}</td>
               <td className="border px-4 py-2">{project.projectTitle}</td>
-              <td className="border px-4 py-2">{project.projectName}</td>
+              <td className="border px-4 py-2">{project.projectId}</td>
               <td className="border px-4 py-2">{project.deadline}</td>
               <td className="border px-4 py-2">{project.status}</td>
               <td className="border px-4 py-2">
-                <button className="bg-blue-500 text-white px-4 py-2 rounded-md">
-                  Action
+                <button
+                  onClick={() => handleActionClick(project)}
+                  className="bg-blue-500 text-white px-4 py-2 rounded-md"
+                >
+                  View Details
                 </button>
               </td>
             </tr>
@@ -154,6 +170,11 @@ const ProjectsTableComponent: React.FC = () => {
         activeClassName={"bg-blue-500 text-white"}
         previousLinkClassName={"px-3 py-1 border rounded"}
         nextLinkClassName={"px-3 py-1 border rounded"}
+      />
+      <ProjectInfoModal
+        project={selectedProject}
+        onClose={handleModalClose}
+        open={isModalOpen}
       />
     </div>
   );

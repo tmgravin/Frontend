@@ -56,6 +56,8 @@ const CompletedAssignments: React.FC = () => {
         {displayedData.map((item, index) => (
           <div key={index} className="p-4 border rounded shadow">
             <h2 className="text-xl font-bold">{item.title}</h2>
+            <h2 >Completed by:</h2>
+
             <p>{item.description}</p>
             <p className="text-sm">Project Amount: {item.amount}</p>
             <p className="text-sm">Deadline: {item.deadline}</p>
