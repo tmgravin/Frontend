@@ -52,6 +52,10 @@ const StudentInfoModal: React.FC<UserModalProps> = ({ user, onClose, open }) => 
           <Typography id="user-modal-description" className="mb-2">
             <strong>Address:</strong> {user.address}
           </Typography>
+          <Typography id="user-modal-description" className="mb-2">
+          <p className="text-sm">Total Spent: $1000</p>
+          </Typography>
+
         
           <Box className="mt-4">
             <UsersAssignment />

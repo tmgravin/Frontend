@@ -25,8 +25,8 @@ const CompletedAssignments: React.FC = () => {
   ]);
   const [visibleCount, setVisibleCount] = useState(8);
   const [loading, setLoading] = useState(false);
-
-
+  const [selectedFiles, setSelectedFiles] = useState<{ [key: string]: File | null }>({});
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -47,6 +47,38 @@ const CompletedAssignments: React.FC = () => {
     setVisibleCount((prevCount) => prevCount + 4);
   };
 
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+    if (e.target.files && e.target.files.length > 0) {
+      setSelectedFiles({
+        ...selectedFiles,
+        [index]: e.target.files[0],
+      });
+    }
+  };
+
+  const handleUpload = async (index: number) => {
+    const file = selectedFiles[index];
+    if (!file) return;
+
+    setUploading(true);
+
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      await axios.post(`/api/upload/${index}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      alert('File uploaded successfully');
+    } catch (error) {
+      console.error('Error uploading file:', error);
+    }
+
+    setUploading(false);
+  };
+
   const displayedData = data.slice(0, visibleCount);
 
   return (
@@ -59,21 +91,32 @@ const CompletedAssignments: React.FC = () => {
             <p>{item.description}</p>
             <p className="text-sm">Project Amount: {item.amount}</p>
             <p className="text-sm">Deadline: {item.deadline}</p>
-         
+            <p className="text-sm">Upload Assignment:</p>
+            <input
+              type="file"
+              onChange={(e) => handleFileChange(e, index)}
+              className="mb-2"
+            />
+            <button
+              onClick={() => handleUpload(index)}
+              className="mt-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700"
+              disabled={uploading}
+            >
+              {uploading ? 'Uploading...' : 'Upload'}
+            </button>
           </div>
         ))}
       </div>
       <div className='flex items-center justify-center'>
-      {visibleCount < data.length && (
-        <button
-          onClick={loadMore}
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-          disabled={loading}
-        >
-          {loading ? 'Loading...' : 'Load More'}
-        </button>
-        
-      )}
+        {visibleCount < data.length && (
+          <button
+            onClick={loadMore}
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+            disabled={loading}
+          >
+            {loading ? 'Loading...' : 'Load More'}
+          </button>
+        )}
       </div>
     </div>
   );

@@ -21,6 +21,7 @@ const TeacherInfoModal: React.FC<UserModalProps> = ({ user, onClose, open }) => 
     >
       <Box className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
         <Box className="bg-white p-6 rounded shadow-md w-full max-w-md relative">
+       
           <IconButton
             edge="end"
             color="inherit"
@@ -31,10 +32,12 @@ const TeacherInfoModal: React.FC<UserModalProps> = ({ user, onClose, open }) => 
             <CloseIcon />
           </IconButton>
           <Typography variant="h6" id="user-modal-title" className="mb-4">
-            User Details
+            Teacher Details
           </Typography>
+
+          <p>Profile Picture here</p>
           <Typography id="user-modal-description" className="mb-2">
-            <strong>ID:</strong> {user.id}
+            <strong>Doer ID:</strong> {user.id}
           </Typography>
           <Typography id="user-modal-description" className="mb-2">
             <strong>Name:</strong> {user.name}
@@ -56,6 +59,12 @@ const TeacherInfoModal: React.FC<UserModalProps> = ({ user, onClose, open }) => 
           </Typography>
           <Typography id="user-modal-description" className="mb-2">
             <strong>Cover letter:</strong> 
+          </Typography>
+          <Typography id="user-modal-description" className="mb-2">
+            <strong>Total Earning:</strong> 
+          </Typography>
+          <Typography id="user-modal-description" className="mb-2">
+            <strong>Paymetn Verified:</strong> 
           </Typography>
         </Box>
       </Box>

@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from 'react';
-import { Box, Button, TextField, Typography, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
 
 const BankDetails: React.FC = () => {
   // State for bank details
@@ -12,10 +11,7 @@ const BankDetails: React.FC = () => {
     creditCardNumber: '',
     registeredPhoneNumber: '',
     expiryDate: ''
-  },);
-
-  // State for editing mode
-  const [isEditing, setIsEditing] = useState(false);
+  });
 
   // State for editing values
   const [editValues, setEditValues] = useState({
@@ -52,11 +48,13 @@ const BankDetails: React.FC = () => {
     setEditValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleEditToggle = () => {
+  const handleEditToggle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
     setOpenEditDialog(!openEditDialog);
   };
 
-  const handleSave = async () => {
+  const handleSave = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
     try {
       const response = await fetch('/api/bank-details', { // Replace with your API endpoint
         method: 'PUT',
@@ -68,7 +66,7 @@ const BankDetails: React.FC = () => {
       if (response.ok) {
         console.log('Bank details updated successfully');
         setBankDetails(editValues);
-        handleEditToggle();
+        handleEditToggle(e);
       } else {
         console.error('Failed to update bank details');
       }
@@ -79,125 +77,131 @@ const BankDetails: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4 max-w-md">
-      <Typography variant="h4" gutterBottom>
-        Bank Details
-      </Typography>
+      <h2 className="text-2xl mb-4">Bank Details</h2>
 
-      <Box component="form" noValidate autoComplete="off">
+      <form noValidate autoComplete="off">
+        <div className='flex flex-row'>
         <div className="mb-4">
-          <Typography variant="h6">First Name</Typography>
-          <Typography>{bankDetails.firstName}</Typography>
+          <label className="block text-gray-700">
+           Account Holder First Name
+          </label>
+          <p>{bankDetails.firstName}</p>
         </div>
-        <div className="mb-4">
-          <Typography variant="h6">Last Name</Typography>
-          <Typography>{bankDetails.lastName}</Typography>
+        <div className="mb-4 px-5">
+          <label className="block text-gray-700">
+          Account Holder Last Name
+          </label>
+          <p>{bankDetails.lastName}</p>
         </div>
-        <div className="mb-4">
-          <Typography variant="h6">Account Number</Typography>
-          <Typography>{bankDetails.accountNumber}</Typography>
-        </div>
-        <div className="mb-4">
-          <Typography variant="h6">Bank Name</Typography>
-          <Typography>{bankDetails.bankName}</Typography>
-        </div>
-        <div className="mb-4">
-          <Typography variant="h6">Credit Card Number</Typography>
-          <Typography>{bankDetails.creditCardNumber}</Typography>
-        </div>
-        <div className="mb-4">
-          <Typography variant="h6">Registered Phone Number</Typography>
-          <Typography>{bankDetails.registeredPhoneNumber}</Typography>
-        </div>
-        <div className="mb-4">
-          <Typography variant="h6">Expiry Date</Typography>
-          <Typography>{bankDetails.expiryDate}</Typography>
-        </div>
+       </div>
 
-        <Button
+       <div className='flex flex-row'>
+        <div className="mb-4">
+          <label className="block text-gray-700">
+            Account Number
+          </label>
+          <p>{bankDetails.accountNumber}</p>
+        </div>
+        <div className="mb-4 px-5">
+          <label className="block text-gray-700">
+            Bank Name
+          </label>
+          <p>{bankDetails.bankName}</p>
+        </div>
+        </div>
+        {/* <div className="mb-4">
+          <label className="block text-gray-700">
+            Credit Card Number
+          </label>
+          <p>{bankDetails.creditCardNumber}</p>
+        </div> */}
+        <div className="mb-4">
+          <label className="block text-gray-700">
+            Registered Phone Number
+          </label>
+          <p>{bankDetails.registeredPhoneNumber}</p>
+        </div>
+      
+
+        <button
           onClick={handleEditToggle}
-          variant="contained"
-          color="primary"
+          className="px-4 py-2 primary-btn-blue text-white rounded"
         >
           Edit Bank Details
-        </Button>
-      </Box>
+        </button>
+      </form>
 
       {/* Edit Bank Details Dialog */}
-      <Dialog open={openEditDialog} onClose={handleEditToggle}>
-        <DialogTitle>Edit Bank Details</DialogTitle>
-        <DialogContent>
-          <TextField
-            label="First Name"
-            name="firstName"
-            value={editValues.firstName}
-            onChange={handleEditChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Last Name"
-            name="lastName"
-            value={editValues.lastName}
-            onChange={handleEditChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Account Number"
-            name="accountNumber"
-            value={editValues.accountNumber}
-            onChange={handleEditChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Bank Name"
-            name="bankName"
-            value={editValues.bankName}
-            onChange={handleEditChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Credit Card Number"
-            name="creditCardNumber"
-            value={editValues.creditCardNumber}
-            onChange={handleEditChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Registered Phone Number"
-            name="registeredPhoneNumber"
-            value={editValues.registeredPhoneNumber}
-            onChange={handleEditChange}
-            fullWidth
-            margin="normal"
-          />
-          <TextField
-            label="Expiry Date"
-            name="expiryDate"
-            value={editValues.expiryDate}
-            onChange={handleEditChange}
-            fullWidth
-            margin="normal"
-            type="date"
-            InputLabelProps={{ shrink: true }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleEditToggle} color="primary">
-            Cancel
-          </Button>
-          <Button
-            onClick={handleSave}
-            variant="contained"
-            color="primary"
-          >
-            Save
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {openEditDialog && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="bg-white p-6 rounded shadow-lg">
+            <h3 className="text-xl mb-4">Edit Bank Details</h3>
+            <input
+              type="text"
+              name="firstName"
+              value={editValues.firstName}
+              onChange={handleEditChange}
+              className="w-full p-2 border border-gray-300 rounded mb-4"
+              placeholder="First Name"
+            />
+            <input
+              type="text"
+              name="lastName"
+              value={editValues.lastName}
+              onChange={handleEditChange}
+              className="w-full p-2 border border-gray-300 rounded mb-4"
+              placeholder="Last Name"
+            />
+            <input
+              type="text"
+              name="accountNumber"
+              value={editValues.accountNumber}
+              onChange={handleEditChange}
+              className="w-full p-2 border border-gray-300 rounded mb-4"
+              placeholder="Account Number"
+            />
+            <input
+              type="text"
+              name="bankName"
+              value={editValues.bankName}
+              onChange={handleEditChange}
+              className="w-full p-2 border border-gray-300 rounded mb-4"
+              placeholder="Bank Name"
+            />
+            <input
+              type="text"
+              name="creditCardNumber"
+              value={editValues.creditCardNumber}
+              onChange={handleEditChange}
+              className="w-full p-2 border border-gray-300 rounded mb-4"
+              placeholder="Credit Card Number"
+            />
+            <input
+              type="text"
+              name="registeredPhoneNumber"
+              value={editValues.registeredPhoneNumber}
+              onChange={handleEditChange}
+              className="w-full p-2 border border-gray-300 rounded mb-4"
+              placeholder="Registered Phone Number"
+            />
+          
+            <div className="flex justify-end">
+              <button
+                onClick={handleEditToggle}
+                className="px-4 py-2 bg-gray-300 text-black rounded mr-2"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleSave}
+                className="px-4 py-2 bg-blue-500 text-white rounded"
+              >
+                Save
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

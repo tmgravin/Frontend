@@ -1,10 +1,11 @@
-"use client"
+"use client";
 
 import React, { useState } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ResultModal from './ResultModal';
+import Image from 'next/image';
 
 interface PostAssignmentModalProps {
   onClose: () => void;
@@ -23,6 +24,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
   const [scope, setScope] = useState<string[]>([]);
   const [resultModalVisible, setResultModalVisible] = useState(false);
   const [resultMessage, setResultMessage] = useState('');
+  const [catagory, setCatagory] = useState('');
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -53,6 +55,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
     formData.append('scope', JSON.stringify(scope));
     formData.append('budgetType', budgetType);
     formData.append('budget', budget);
+    formData.append('catagory', catagory);
     formData.append('paymentVerified', paymentVerified.toString());
     if (attachment) {
       formData.append('attachment', attachment);
@@ -82,6 +85,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
     setScope([]);
     setBudgetType('');
     setBudget('');
+    setCatagory("");
     setAttachment(null);
     setPaymentVerified(false);
   };
@@ -94,7 +98,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
       <div className="absolute inset-0 bg-gray-600 opacity-50" onClick={onClose}></div>
-      <div className="bg-white rounded-lg shadow-lg p-6 z-50 w-full max-w-md max-h-[90vh] overflow-y-auto relative">
+      <div className="bg-white rounded-lg shadow-lg p-6 z-50 w-full max-w-lg max-h-[90vh] overflow-y-auto relative">
         <button
           onClick={onClose}
           className="absolute top-4 right-4 text-gray-500 hover:text-gray-700"
@@ -163,6 +167,24 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
               <option value="expert">Expert</option>
             </select>
           </div>
+          <div className="mb-4">
+            <label htmlFor="catagory" className="block text-sm font-medium text-gray-700">
+              Job Category
+            </label>
+            <select
+              id="catagory"
+              value={experience}
+              onChange={(e) => setExperience(e.target.value)}
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              required
+            >
+              <option value="">Select Catagory</option>
+              <option value="sctm">STEM-SCIENCE,TECHNOLOGY AND MATHEMATICS</option>
+              <option value="writing">WRITING</option>
+              <option value="projects">PROJECTS</option>
+              <option value="others">OTHERS</option>
+            </select>
+          </div>
 
           <div className="mb-4">
             <label htmlFor="skills" className="block text-sm font-medium text-gray-700">
@@ -221,57 +243,81 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
             <label htmlFor="budgetType" className="block text-sm font-medium text-gray-700">
               Budget Type
             </label>
-            <div className="mt-1 flex flex-row items-center border-2 cb-shadow p-10">
-              <label className="flex items-center cb-shadow ">
+            <div className="mt-1 flex flex-row items-center justify-center border-2 p-4 relative">
+              <label className="flex flex-col items-center relative">
                 <input
                   type="radio"
                   name="budgetType"
                   value="hourly"
                   checked={budgetType === 'hourly'}
                   onChange={(e) => setBudgetType(e.target.value)}
-                  className="mr-2"
+                  className="absolute top-0 left-0"
+                />
+                <Image
+                  src="/postassignment-svg/hourlyrate.svg"
+                  alt="Hourly Rate"
+                  width={30}
+                  height={30}
                 />
                 Hourly Rate
               </label>
-              <label className="flex items-center cb-shadow mx-3">
+              <label className="flex flex-col items-center relative mx-3">
                 <input
                   type="radio"
                   name="budgetType"
                   value="fixed"
                   checked={budgetType === 'fixed'}
                   onChange={(e) => setBudgetType(e.target.value)}
-                  className="mr-2"
+                  className="absolute top-0 left-0"
                 />
-                Fixed Rate
-              </label>
-              <label className="flex items-center cb-shadow  mx-3">
-                <input
-                  type="radio"
-                  name="budgetType"
-                  value="task"
-                  checked={budgetType === 'task'}
-                  onChange={(e) => setBudgetType(e.target.value)}
-                  className="mr-2"
+                <Image
+                  src="/postassignment-svg/fixedprice.svg"
+                  alt="Fixed Rate"
+                  width={30}
+                  height={30}
                 />
-                Task-Based
+                Fixed Price
               </label>
-              <label className="flex items-center cb-shadow ">
+              <label className="flex flex-col items-center justify-center relative mx-3">
                 <input
                   type="radio"
                   name="budgetType"
                   value="recurring"
                   checked={budgetType === 'recurring'}
                   onChange={(e) => setBudgetType(e.target.value)}
-                  className="mr-2"
+                  className="absolute top-0 left-0"
+                />
+                <Image
+                  src="/postassignment-svg/recuringpayment.svg"
+                  alt="Recurring Payment"
+                  width={30}
+                  height={30}
                 />
                 Recurring Payment
+              </label>
+              <label className="flex flex-col items-center justify-center relative">
+                <input
+                  type="radio"
+                  name="budgetType"
+                  value="task-based"
+                  checked={budgetType === 'task-based'}
+                  onChange={(e) => setBudgetType(e.target.value)}
+                  className="absolute top-0 left-0"
+                />
+                <Image
+                  src="/postassignment-svg/taskbased.svg"
+                  alt="Task Based"
+                  width={30}
+                  height={30}
+                />
+                Task Based
               </label>
             </div>
           </div>
 
           <div className="mb-4">
             <label htmlFor="budget" className="block text-sm font-medium text-gray-700">
-              Budget of Project
+              Budget
             </label>
             <input
               id="budget"
@@ -284,6 +330,19 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
           </div>
 
           <div className="mb-4">
+            <label htmlFor="attachment" className="block text-sm font-medium text-gray-700">
+              Attachment
+            </label>
+            <input
+              id="attachment"
+              type="file"
+              onChange={handleFileChange}
+              className="mt-1 block w-full"
+              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+            />
+          </div>
+
+          <div className="mb-4">
             <label htmlFor="description" className="block text-sm font-medium text-gray-700">
               Description
             </label>
@@ -292,56 +351,42 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              rows={4}
               required
             ></textarea>
           </div>
 
           <div className="mb-4">
-            <label htmlFor="attachment" className="block text-sm font-medium text-gray-700">
-              <span className="text-blue-500 border border-blue-500 rounded-md p-2">
-                <i className="fa-solid fa-paperclip text-blue-500 mr-2"></i>Attach file or photo
-              </span>
-            </label>
-            <input
-              id="attachment"
-              type="file"
-              onChange={handleFileChange}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-            />
-          </div>
-          
-          <div className="mb-4">
-            <label htmlFor="paymentVerified" className="flex items-center">
+            <label className="flex items-center">
               <input
-                id="paymentVerified"
                 type="checkbox"
                 checked={paymentVerified}
-                onChange={() => setPaymentVerified(!paymentVerified)}
+                onChange={(e) => setPaymentVerified(e.target.checked)}
                 className="mr-2"
               />
               Payment Verified
             </label>
           </div>
 
-          <button
-            type="submit"
-            className="bg-blue-500 text-white px-4 py-2 rounded-md"
-          >
-            Post Assignment
-          </button>
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Post Assignment
+            </button>
+          </div>
         </form>
-
-        {/* ToastContainer is added to the component tree */}
-        <ToastContainer />
       </div>
 
-      {/* Conditional rendering of the ResultModal */}
       {resultModalVisible && (
         <ResultModal
           message={resultMessage}
           onClose={handleCloseResultModal}
         />
       )}
+
+      <ToastContainer />
     </div>
   );
 };

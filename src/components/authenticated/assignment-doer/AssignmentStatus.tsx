@@ -8,25 +8,24 @@ interface DataItem {
   description: string;
   amount: number;
   deadline: string;
+  status: 'Accepted' | 'Rejected';
 }
 
 const AssignmentStatus: React.FC = () => {
   const [data, setData] = useState<DataItem[]>([
-    { title: 'Project 1', description: 'Description 1', amount: 1000, deadline: '2024-07-30' },
-    { title: 'Project 2', description: 'Description 2', amount: 2000, deadline: '2024-08-15' },
-    { title: 'Project 3', description: 'Description 3', amount: 3000, deadline: '2024-09-01' },
-    { title: 'Project 4', description: 'Description 4', amount: 4000, deadline: '2024-07-25' },
-    { title: 'Project 5', description: 'Description 5', amount: 5000, deadline: '2024-08-05' },
-    { title: 'Project 6', description: 'Description 6', amount: 6000, deadline: '2024-09-10' },
-    { title: 'Project 7', description: 'Description 7', amount: 7000, deadline: '2024-07-29' },
-    { title: 'Project 8', description: 'Description 8', amount: 8000, deadline: '2024-08-20' },
-    { title: 'Project 9', description: 'Description 9', amount: 9000, deadline: '2024-09-15' },
-    { title: 'Project 10', description: 'Description 10', amount: 10000, deadline: '2024-10-01' },
+    { title: 'Project 1', description: 'Description 1', amount: 1000, deadline: '2024-07-30', status: 'Accepted' },
+    { title: 'Project 2', description: 'Description 2', amount: 2000, deadline: '2024-08-15', status: 'Rejected' },
+    { title: 'Project 3', description: 'Description 3', amount: 3000, deadline: '2024-09-01', status: 'Accepted' },
+    { title: 'Project 4', description: 'Description 4', amount: 4000, deadline: '2024-07-25', status: 'Rejected' },
+    { title: 'Project 5', description: 'Description 5', amount: 5000, deadline: '2024-08-05', status: 'Accepted' },
+    { title: 'Project 6', description: 'Description 6', amount: 6000, deadline: '2024-09-10', status: 'Rejected' },
+    { title: 'Project 7', description: 'Description 7', amount: 7000, deadline: '2024-07-29', status: 'Accepted' },
+    { title: 'Project 8', description: 'Description 8', amount: 8000, deadline: '2024-08-20', status: 'Rejected' },
+    { title: 'Project 9', description: 'Description 9', amount: 9000, deadline: '2024-09-15', status: 'Accepted' },
+    { title: 'Project 10', description: 'Description 10', amount: 10000, deadline: '2024-10-01', status: 'Rejected' },
   ]);
   const [visibleCount, setVisibleCount] = useState(8);
   const [loading, setLoading] = useState(false);
-
-
 
   useEffect(() => {
     fetchData();
@@ -59,21 +58,20 @@ const AssignmentStatus: React.FC = () => {
             <p>{item.description}</p>
             <p className="text-sm">Project Amount: {item.amount}</p>
             <p className="text-sm">Deadline: {item.deadline}</p>
-         
+            <p className={`text-sm font-bold ${item.status === 'Accepted' ? 'text-green-500' : 'text-red-500'}`}>Status: {item.status}</p>
           </div>
         ))}
       </div>
       <div className='flex items-center justify-center'>
-      {visibleCount < data.length && (
-        <button
-          onClick={loadMore}
-          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
-          disabled={loading}
-        >
-          {loading ? 'Loading...' : 'Load More'}
-        </button>
-        
-      )}
+        {visibleCount < data.length && (
+          <button
+            onClick={loadMore}
+            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+            disabled={loading}
+          >
+            {loading ? 'Loading...' : 'Load More'}
+          </button>
+        )}
       </div>
     </div>
   );

@@ -3,7 +3,7 @@
 
 import React from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
-import AssignmentStatus from './AssignmentStatus';
+import AssignmentStatus from './PendingForApproval';
 import CompletedAssignments from './CompletedAssignments';
 
 interface CustomTabModalProps {

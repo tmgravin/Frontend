@@ -83,7 +83,7 @@ const UsersAssignment: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4 cb-shadow cbg-color py-5">
-      <div className='flex justify-center items-center primary-green p-2'>Users Assignments</div>
+      <div className='flex justify-center items-center primary-green p-2'>Assignments Posted By User</div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {displayedData.map((item, index) => (
           <div key={index} className="p-4 border rounded shadow">
@@ -99,6 +99,8 @@ const UsersAssignment: React.FC = () => {
             </p>
             <p className="text-sm">Project Amount: {item.amount}</p>
             <p className="text-sm">Deadline: {item.deadline}</p>
+            
+
           </div>
         ))}
       </div>
