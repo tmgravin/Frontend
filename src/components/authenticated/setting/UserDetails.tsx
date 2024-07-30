@@ -1,13 +1,15 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Image from 'next/image';
 
+// Updated Profile interface
 interface Profile {
   name: string;
   email: string;
   address: string;
   contact: string;
-  profilePicture: string; // URL or path to the profile picture
+  profilePicture?: string; // Made optional
 }
 
 const UserDetails: React.FC = () => {
@@ -17,32 +19,14 @@ const UserDetails: React.FC = () => {
     email: '',
     address: '',
     contact: '',
-    profilePicture:'',
+    profilePicture: ''
   });
 
-  // State for editing modes
-  const [isEditing, setIsEditing] = useState<{
-    name: boolean;
-    email: boolean;
-    address: boolean;
-    contact: boolean;
-    picture: boolean;
-  }>({
-    name: false,
-    email: false,
-    address: false,
-    contact: false,
-    picture: false
-  });
+  // State for editing mode
+  const [isEditing, setIsEditing] = useState(false);
 
   // State for field values
-  const [fieldValues, setFieldValues] = useState<Profile>({
-    name: profile.name,
-    email: profile.email,
-    address: profile.address,
-    contact: profile.contact,
-    profilePicture: profile.profilePicture
-  });
+  const [fieldValues, setFieldValues] = useState<Profile>(profile);
 
   // State for change password dialog
   const [openPasswordDialog, setOpenPasswordDialog] = useState(false);
@@ -59,13 +43,7 @@ const UserDetails: React.FC = () => {
         const response = await axios.get('/api/profile'); // Replace with your API endpoint
         const result: Profile = response.data;
         setProfile(result);
-        setFieldValues({
-          name: result.name,
-          email: result.email,
-          address: result.address,
-          contact: result.contact,
-          profilePicture: result.profilePicture
-        });
+        setFieldValues(result);
       } catch (error) {
         console.error('Error fetching profile data:', error);
       }
@@ -79,26 +57,19 @@ const UserDetails: React.FC = () => {
     setFieldValues((prev) => ({ ...prev, [field]: value }));
   };
 
-  const handleEditToggle = (field: keyof Profile, e?: React.MouseEvent) => {
-    if (e) e.preventDefault();
-    setIsEditing((prev) => ({ ...prev, [field]: !prev[field] }));
-  };
-
-  const handleSave = async (field: keyof Profile, e?: React.MouseEvent) => {
-    if (e) e.preventDefault();
+  const handleSaveAll = async (e: React.MouseEvent) => {
+    e.preventDefault();
     try {
-      const response = await axios.put(`/api/profile/${field}`, { // Replace with your API endpoint
-        [field]: fieldValues[field]
-      });
+      const response = await axios.put('/api/profile', fieldValues); // Replace with your API endpoint
       if (response.status === 200) {
-        console.log(`${field} updated successfully`);
-        setProfile((prev) => ({ ...prev, [field]: fieldValues[field] }));
-        handleEditToggle(field);
+        console.log('Profile updated successfully');
+        setProfile(fieldValues);
+        setIsEditing(false);
       } else {
-        console.error(`Failed to update ${field}`);
+        console.error('Failed to update profile');
       }
     } catch (error) {
-      console.error(`Error updating ${field}:`, error);
+      console.error('Error updating profile:', error);
     }
   };
 
@@ -110,12 +81,16 @@ const UserDetails: React.FC = () => {
       const formData = new FormData();
       formData.append('profilePicture', selectedFile);
 
-      const response = await axios.put('/api/profile/picture', formData); // Replace with your API endpoint
+      const response = await axios.put('/api/profile/picture', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }); // Replace with your API endpoint
       if (response.status === 200) {
         console.log('Profile picture updated successfully');
-        setProfile((prev) => ({ ...prev, profilePicture: URL.createObjectURL(selectedFile) }));
-        setFieldValues((prev) => ({ ...prev, profilePicture: URL.createObjectURL(selectedFile) }));
-        setIsEditing((prev) => ({ ...prev, picture: false }));
+        const pictureUrl = URL.createObjectURL(selectedFile);
+        setProfile((prev) => ({ ...prev, profilePicture: pictureUrl }));
+        setFieldValues((prev) => ({ ...prev, profilePicture: pictureUrl }));
         setSelectedFile(null);
       } else {
         console.error('Failed to update profile picture');
@@ -168,22 +143,21 @@ const UserDetails: React.FC = () => {
 
       {/* Profile Picture */}
       <div className="flex items-center justify-center mb-4">
-  
-        <img
-          src={fieldValues.profilePicture || '/default-profile.png'} // Default profile picture if none provided
+        <Image
+          src={profile.profilePicture || '/default-profile.png'} // Default profile picture if none provided
           alt="Profile Picture"
+          width={96} // Set width and height for optimization
+          height={96}
           className="w-24 h-24 rounded-full"
         />
-            <p>user roles</p>
-     
         <div className="ml-4">
           <button
-            onClick={(e) => handleEditToggle('picture', e)}
+            onClick={() => setIsEditing(true)}
             className="text-blue-500"
           >
             <i className="fas fa-camera"></i>
           </button>
-          {isEditing.picture && (
+          {isEditing && (
             <div className="mt-2">
               <input
                 type="file"
@@ -198,7 +172,7 @@ const UserDetails: React.FC = () => {
                 Save Picture
               </button>
               <button
-                onClick={(e) => handleEditToggle('picture', e)}
+                onClick={() => setIsEditing(false)}
                 className="px-4 py-2 bg-gray-300 text-black rounded ml-2"
               >
                 Cancel
@@ -209,165 +183,50 @@ const UserDetails: React.FC = () => {
       </div>
 
       <form noValidate autoComplete="off">
-        <div className="mb-4">
-          <label className="block text-gray-700">
-            Full Name
-          </label>
-          <input
-            type="text"
-            name="name"
-            value={fieldValues.name}
-            onChange={(e) => handleFieldChange(e, 'name')}
-            className="w-full p-2 border border-gray-300 rounded"
-            disabled={!isEditing.name}
-          />
-          <div className="flex justify-end mt-2">
-            {isEditing.name ? (
-              <>
-                <button
-                  onClick={(e) => handleSave('name', e)}
-                  className="px-4 py-2 bg-blue-500 text-white rounded mr-2"
-                >
-                  Save
-                </button>
-                <button
-                  onClick={(e) => handleEditToggle('name', e)}
-                  className="px-4 py-2 bg-gray-300 text-black rounded"
-                >
-                  Cancel
-                </button>
-              </>
-            ) : (
-              <button
-                onClick={(e) => handleEditToggle('name', e)}
-                className="px-4 py-2 bg-blue-500 text-white rounded"
-              >
-                <i className="fas fa-edit"></i>
-              </button>
-            )}
+        {['name', 'email', 'address', 'contact'].map((field) => (
+          <div className="mb-4" key={field}>
+            <label className="block text-gray-700 capitalize">{field}</label>
+            <input
+              type="text"
+              name={field}
+              value={fieldValues[field as keyof Profile]}
+              onChange={(e) => handleFieldChange(e, field as keyof Profile)}
+              className="w-full p-2 border border-gray-300 rounded"
+              disabled={!isEditing}
+            />
           </div>
-        </div>
+        ))}
 
-        <div className="mb-4">
-          <label className="block text-gray-700">
-            Email Address
-          </label>
-          <input
-            type="email"
-            name="email"
-            value={fieldValues.email}
-            onChange={(e) => handleFieldChange(e, 'email')}
-            className="w-full p-2 border border-gray-300 rounded"
-            disabled={!isEditing.email}
-          />
+        {isEditing ? (
           <div className="flex justify-end mt-2">
-            {isEditing.email ? (
-              <>
-                <button
-                  onClick={(e) => handleSave('email', e)}
-                  className="px-4 py-2 bg-blue-500 text-white rounded mr-2"
-                >
-                  Save
-                </button>
-                <button
-                  onClick={(e) => handleEditToggle('email', e)}
-                  className="px-4 py-2 bg-gray-300 text-black rounded"
-                >
-                  Cancel
-                </button>
-              </>
-            ) : (
-              <button
-                onClick={(e) => handleEditToggle('email', e)}
-                className="px-4 py-2 bg-blue-500 text-white rounded"
-              >
-                <i className="fas fa-edit"></i>
-              </button>
-            )}
+            <button
+              onClick={handleSaveAll}
+              className="px-4 py-2 bg-blue-500 text-white rounded mr-2"
+            >
+              Save All
+            </button>
+            <button
+              onClick={() => setIsEditing(false)}
+              className="px-4 py-2 bg-gray-300 text-black rounded"
+            >
+              Cancel
+            </button>
           </div>
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-gray-700">
-            Address
-          </label>
-          <input
-            type="text"
-            name="address"
-            value={fieldValues.address}
-            onChange={(e) => handleFieldChange(e, 'address')}
-            className="w-full p-2 border border-gray-300 rounded"
-            disabled={!isEditing.address}
-          />
-          <div className="flex justify-end mt-2">
-            {isEditing.address ? (
-              <>
-                <button
-                  onClick={(e) => handleSave('address', e)}
-                  className="px-4 py-2 bg-blue-500 text-white rounded mr-2"
-                >
-                  Save
-                </button>
-                <button
-                  onClick={(e) => handleEditToggle('address', e)}
-                  className="px-4 py-2 bg-gray-300 text-black rounded"
-                >
-                  Cancel
-                </button>
-              </>
-            ) : (
-              <button
-                onClick={(e) => handleEditToggle('address', e)}
-                className="px-4 py-2 bg-blue-500 text-white rounded"
-              >
-                <i className="fas fa-edit"></i>
-              </button>
-            )}
-          </div>
-        </div>
-
-        <div className="mb-4">
-          <label className="block text-gray-700">
-            Contact
-          </label>
-          <input
-            type="text"
-            name="contact"
-            value={fieldValues.contact}
-            onChange={(e) => handleFieldChange(e, 'contact')}
-            className="w-full p-2 border border-gray-300 rounded"
-            disabled={!isEditing.contact}
-          />
-          <div className="flex justify-end mt-2">
-            {isEditing.contact ? (
-              <>
-                <button
-                  onClick={(e) => handleSave('contact', e)}
-                  className="px-4 py-2 bg-blue-500 text-white rounded mr-2"
-                >
-                  Save
-                </button>
-                <button
-                  onClick={(e) => handleEditToggle('contact', e)}
-                  className="px-4 py-2 bg-gray-300 text-black rounded"
-                >
-                  Cancel
-                </button>
-              </>
-            ) : (
-              <button
-                onClick={(e) => handleEditToggle('contact', e)}
-                className="px-4 py-2 bg-blue-500 text-white rounded"
-              >
-                <i className="fas fa-edit"></i>
-              </button>
-            )}
-          </div>
-        </div>
+        ) : (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              setIsEditing(true);
+            }}
+            className="px-4 py-2 bg-blue-500 text-white rounded"
+          >
+            <i className="fas fa-edit"></i> Edit All
+          </button>
+        )}
 
         <button
           onClick={handleOpenPasswordDialog}
-          className="px-4 py-2 primary-btn-blue text-white rounded mt-4"
+          className="px-4 py-2 bg-blue-500 text-white rounded mt-4"
         >
           Change Password
         </button>
