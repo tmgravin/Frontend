@@ -1,4 +1,3 @@
-// src/LatestProjects.tsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReadMoreModal from './ReadMoreModal';
@@ -8,20 +7,218 @@ export interface DataItem {
   description: string;
   amount: number;
   deadline: string;
+  postedAt: string;
+  experienceYear: number;
+  skills: string[];
+  tools: string[];
+  scope: string;
+  duration: string;
+  experienceLevel: string;
+  budgetFrom: number;
+  budgetTo: number;
 }
 
 const LatestProjects: React.FC = () => {
   const [data, setData] = useState<DataItem[]>([
-    { title: 'Project 1', description: 'Description 1', amount: 1000, deadline: '2024-07-30' },
-    { title: 'Project 2', description: 'Description 2', amount: 2000, deadline: '2024-08-15' },
-    { title: 'Project 3', description: 'Description 3', amount: 3000, deadline: '2024-09-01' },
-    { title: 'Project 4', description: 'Description 4', amount: 4000, deadline: '2024-07-25' },
-    { title: 'Project 5', description: 'Description 5', amount: 5000, deadline: '2024-08-05' },
-    { title: 'Project 6', description: 'Description 6', amount: 6000, deadline: '2024-09-10' },
-    { title: 'Project 7', description: 'Description 7', amount: 7000, deadline: '2024-07-29' },
-    { title: 'Project 8', description: 'Description 8', amount: 8000, deadline: '2024-08-20' },
-    { title: 'Project 9', description: 'Description 9', amount: 9000, deadline: '2024-09-15' },
-    { title: 'Project 10', description: 'Description 10', amount: 10000, deadline: '2024-10-01' },
+    {
+      title: 'Project 1',
+      description: 'Description 1',
+      amount: 1000,
+      deadline: '2024-07-30',
+      postedAt: '2024-07-15',
+      experienceYear: 2,
+      skills: ['UI/UX', 'Graphic Designing'],
+      tools: ['Figma', 'Photoshop'],
+      scope: 'Large',
+      duration: '1 to 3 months',
+      experienceLevel: 'Intermediate',
+      budgetFrom: 15,
+      budgetTo: 25,
+    },
+    {
+      title: 'Project 1',
+      description: 'Description 1',
+      amount: 1000,
+      deadline: '2024-07-30',
+      postedAt: '2024-07-15',
+      experienceYear: 2,
+      skills: ['UI/UX', 'Graphic Designing'],
+      tools: ['Figma', 'Photoshop'],
+      scope: 'Large',
+      duration: '1 to 3 months',
+      experienceLevel: 'Intermediate',
+      budgetFrom: 15,
+      budgetTo: 25,
+    },  {
+      title: 'Project 1',
+      description: 'Description 1',
+      amount: 1000,
+      deadline: '2024-07-30',
+      postedAt: '2024-07-15',
+      experienceYear: 2,
+      skills: ['UI/UX', 'Graphic Designing'],
+      tools: ['Figma', 'Photoshop'],
+      scope: 'Large',
+      duration: '1 to 3 months',
+      experienceLevel: 'Intermediate',
+      budgetFrom: 15,
+      budgetTo: 25,
+    },  {
+      title: 'Project 1',
+      description: 'Description 1',
+      amount: 1000,
+      deadline: '2024-07-30',
+      postedAt: '2024-07-15',
+      experienceYear: 2,
+      skills: ['UI/UX', 'Graphic Designing'],
+      tools: ['Figma', 'Photoshop'],
+      scope: 'Large',
+      duration: '1 to 3 months',
+      experienceLevel: 'Intermediate',
+      budgetFrom: 15,
+      budgetTo: 25,
+    },  {
+      title: 'Project 1',
+      description: 'Description 1',
+      amount: 1000,
+      deadline: '2024-07-30',
+      postedAt: '2024-07-15',
+      experienceYear: 2,
+      skills: ['UI/UX', 'Graphic Designing'],
+      tools: ['Figma', 'Photoshop'],
+      scope: 'Large',
+      duration: '1 to 3 months',
+      experienceLevel: 'Intermediate',
+      budgetFrom: 15,
+      budgetTo: 25,
+    },  {
+      title: 'Project 1',
+      description: 'Description 1',
+      amount: 1000,
+      deadline: '2024-07-30',
+      postedAt: '2024-07-15',
+      experienceYear: 2,
+      skills: ['UI/UX', 'Graphic Designing'],
+      tools: ['Figma', 'Photoshop'],
+      scope: 'Large',
+      duration: '1 to 3 months',
+      experienceLevel: 'Intermediate',
+      budgetFrom: 15,
+      budgetTo: 25,
+    },  {
+      title: 'Project 1',
+      description: 'Description 1',
+      amount: 1000,
+      deadline: '2024-07-30',
+      postedAt: '2024-07-15',
+      experienceYear: 2,
+      skills: ['UI/UX', 'Graphic Designing'],
+      tools: ['Figma', 'Photoshop'],
+      scope: 'Large',
+      duration: '1 to 3 months',
+      experienceLevel: 'Intermediate',
+      budgetFrom: 15,
+      budgetTo: 25,
+    },  {
+      title: 'Project 1',
+      description: 'Description 1',
+      amount: 1000,
+      deadline: '2024-07-30',
+      postedAt: '2024-07-15',
+      experienceYear: 2,
+      skills: ['UI/UX', 'Graphic Designing'],
+      tools: ['Figma', 'Photoshop'],
+      scope: 'Large',
+      duration: '1 to 3 months',
+      experienceLevel: 'Intermediate',
+      budgetFrom: 15,
+      budgetTo: 25,
+    },  {
+      title: 'Project 1',
+      description: 'Description 1',
+      amount: 1000,
+      deadline: '2024-07-30',
+      postedAt: '2024-07-15',
+      experienceYear: 2,
+      skills: ['UI/UX', 'Graphic Designing'],
+      tools: ['Figma', 'Photoshop'],
+      scope: 'Large',
+      duration: '1 to 3 months',
+      experienceLevel: 'Intermediate',
+      budgetFrom: 15,
+      budgetTo: 25,
+    },  {
+      title: 'Project 1',
+      description: 'Description 1',
+      amount: 1000,
+      deadline: '2024-07-30',
+      postedAt: '2024-07-15',
+      experienceYear: 2,
+      skills: ['UI/UX', 'Graphic Designing'],
+      tools: ['Figma', 'Photoshop'],
+      scope: 'Large',
+      duration: '1 to 3 months',
+      experienceLevel: 'Intermediate',
+      budgetFrom: 15,
+      budgetTo: 25,
+    },  {
+      title: 'Project 1',
+      description: 'Description 1',
+      amount: 1000,
+      deadline: '2024-07-30',
+      postedAt: '2024-07-15',
+      experienceYear: 2,
+      skills: ['UI/UX', 'Graphic Designing'],
+      tools: ['Figma', 'Photoshop'],
+      scope: 'Large',
+      duration: '1 to 3 months',
+      experienceLevel: 'Intermediate',
+      budgetFrom: 15,
+      budgetTo: 25,
+    },  {
+      title: 'Project 1',
+      description: 'Description 1',
+      amount: 1000,
+      deadline: '2024-07-30',
+      postedAt: '2024-07-15',
+      experienceYear: 2,
+      skills: ['UI/UX', 'Graphic Designing'],
+      tools: ['Figma', 'Photoshop'],
+      scope: 'Large',
+      duration: '1 to 3 months',
+      experienceLevel: 'Intermediate',
+      budgetFrom: 15,
+      budgetTo: 25,
+    },  {
+      title: 'Project 1',
+      description: 'Description 1',
+      amount: 1000,
+      deadline: '2024-07-30',
+      postedAt: '2024-07-15',
+      experienceYear: 2,
+      skills: ['UI/UX', 'Graphic Designing'],
+      tools: ['Figma', 'Photoshop'],
+      scope: 'Large',
+      duration: '1 to 3 months',
+      experienceLevel: 'Intermediate',
+      budgetFrom: 15,
+      budgetTo: 25,
+    },  {
+      title: 'Project 1',
+      description: 'Description 1',
+      amount: 1000,
+      deadline: '2024-07-30',
+      postedAt: '2024-07-15',
+      experienceYear: 2,
+      skills: ['UI/UX', 'Graphic Designing'],
+      tools: ['Figma', 'Photoshop'],
+      scope: 'Large',
+      duration: '1 to 3 months',
+      experienceLevel: 'Intermediate',
+      budgetFrom: 15,
+      budgetTo: 25,
+    },
+    // Add more projects as needed
   ]);
   const [visibleCount, setVisibleCount] = useState(8);
   const [loading, setLoading] = useState(false);
@@ -56,9 +253,7 @@ const LatestProjects: React.FC = () => {
     setSelectedProject(project);
   };
 
-  const handleEditDetails = (project: DataItem) => {
-    setEditProject(project);
-  };
+ 
 
   const handleClose = () => {
     setSelectedProject(null);
@@ -116,9 +311,7 @@ const LatestProjects: React.FC = () => {
       <ReadMoreModal 
         project={selectedProject} 
         onClose={handleClose} 
-        onEdit={() => handleEditDetails(selectedProject!)} 
       />
-    
     </div>
   );
 };

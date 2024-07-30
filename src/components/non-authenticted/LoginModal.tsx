@@ -2,6 +2,7 @@ import React, { ChangeEvent, useState } from 'react';
 import Image from 'next/image';
 import axios from 'axios';
 import ResetPasswordModal from './ResetPasswordModal'; // Import the new modal
+import { useRouter } from 'next/navigation';
 
 interface SignupData {
   email: string;
@@ -26,19 +27,26 @@ const LoginModal: React.FC<LoginModalProps> = ({
   remember,
   setRemember
 }) => {
+  const  router=useRouter()
   const [role, setRole] = useState<string | null>(null);
   const [isResetModalOpen, setIsResetModalOpen] = useState(false); // State for reset password modal
 
   if (!isOpen) return null;
 
   const handleLogin = async (userRole: string) => {
+    console.log(loginData)
+   
     try {
-      const response = await axios.post('/api/login', {
+
+      const response = await axios.post( `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/login`, {
         ...loginData,
         role: userRole
       });
       console.log(response.data);
-      // Handle successful login here (e.g., redirect, show success message)
+      // if(response.status==200){
+      //   router.push(`/${userRole}/homepage`)
+      // }
+      router.push(`/${userRole}homepage`)
     } catch (error) {
       console.error('Login failed', error);
       // Handle login error here (e.g., show error message)

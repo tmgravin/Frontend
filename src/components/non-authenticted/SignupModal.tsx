@@ -62,7 +62,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
     const dataToSend = { ...signupData, role };
 
     try {
-      const response = await axios.post('/api/signup', dataToSend);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/login`, dataToSend);
       if (response.status === 200) {
         setSuccessMessage("Signup successful!");
         setError(null);
