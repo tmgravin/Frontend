@@ -1,7 +1,7 @@
 import React from 'react';
 import * as Tabs from '@radix-ui/react-tabs';
-import StudentComponent from './Students';
-import TeacherComponent from './Teachers';
+import StudentComponent from './Creators';
+import TeacherComponent from './Doers';
 import ProjectsTableComponent from './Projects';
 import Dashboard from './Dashboard';
 import Image from 'next/image';
@@ -17,7 +17,7 @@ const AdminHome: React.FC = () => {
             <div>
           <Image
           src="/admin-icons/adminmenuimg.png" 
-          alt="Total Teachers"
+          alt="Total doers"
           width={250}
           height={150}
           className="mb-4"
@@ -25,8 +25,8 @@ const AdminHome: React.FC = () => {
             </div>
           </Tabs.Trigger>
           <Tabs.Trigger value="dashboard" style={tabStyle}>Dashboard</Tabs.Trigger>
-          <Tabs.Trigger value="students" style={tabStyle}>Students</Tabs.Trigger>
-          <Tabs.Trigger value="teachers" style={tabStyle}>Teachers</Tabs.Trigger>
+          <Tabs.Trigger value="craetors" style={tabStyle}>Creators</Tabs.Trigger>
+          <Tabs.Trigger value="doers" style={tabStyle}>Doers</Tabs.Trigger>
           <Tabs.Trigger value="projects" style={tabStyle}>Projects</Tabs.Trigger>
 
           
@@ -39,12 +39,12 @@ const AdminHome: React.FC = () => {
             
            
           </Tabs.Content>
-          <Tabs.Content value="students">
-            <h2>Students</h2>
+          <Tabs.Content value="craetors">
+            <h2>Creators</h2>
           <StudentComponent/>
           </Tabs.Content>
-          <Tabs.Content value="teachers">
-            <h2>Teachers</h2>
+          <Tabs.Content value="doers">
+            <h2>Doers</h2>
            <TeacherComponent/>
           </Tabs.Content>
           <Tabs.Content value="projects">

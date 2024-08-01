@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useState } from 'react';
 import Image from 'next/image';
 import axios from 'axios';
-import ResetPasswordModal from './ResetPasswordModal'; // Import the new modal
+import ResetPasswordModal from './ResetPasswordModal'; 
 import { useRouter } from 'next/navigation';
 
 interface SignupData {
@@ -27,52 +27,91 @@ const LoginModal: React.FC<LoginModalProps> = ({
   remember,
   setRemember
 }) => {
-  const  router=useRouter()
-  const [role, setRole] = useState<string | null>(null);
-  const [isResetModalOpen, setIsResetModalOpen] = useState(false); // State for reset password modal
+  const router = useRouter();
+  const [userRole, setUserRole] = useState<string | null>(null);
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
   const handleLogin = async (userRole: string) => {
-    console.log(loginData)
-   
+    console.log(loginData);
     try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/login`,
+        {
+          ...loginData,
+          userType: userRole,
+        }
+      );
 
-      const response = await axios.post( `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/login`, {
-        ...loginData,
-        role: userRole
-      });
       console.log(response.data);
-      // if(response.status==200){
-      //   router.push(`/${userRole}/homepage`)
-      // }
-      router.push(`/${userRole}homepage`)
+
+      if (response.status === 200) {
+        setSuccessMessage('Login successful!');
+        setTimeout(() => {
+          setSuccessMessage(null); // Clear the success message after 3 seconds
+          if (response.data.userType === 'ASSIGNMENT_CREATOR') {
+            router.push(`/assignment-creator`);
+          } else if (response.data.userType === 'ASSIGNMENT_DOER') {
+            router.push(`/assignment-doer`);
+          }
+        }, 3000);
+      }
     } catch (error) {
       console.error('Login failed', error);
       // Handle login error here (e.g., show error message)
     }
   };
 
-  const toggleResetModal = () => setIsResetModalOpen(!isResetModalOpen); // Toggle function for reset modal
+  const toggleResetModal = () => setIsResetModalOpen(!isResetModalOpen);
 
   return (
-    <div id="login-modal" tabIndex={-1} aria-hidden="true" className="fixed inset-0 z-50 flex items-center justify-center overflow-auto">
+    <div
+      id="login-modal"
+      tabIndex={-1}
+      aria-hidden="true"
+      className="fixed inset-0 z-50 flex items-center justify-center overflow-auto"
+    >
       <div className="relative p-4 w-full max-w-md max-h-full">
         <div className="relative bg-white rounded-lg shadow overflow-y-auto max-h-[90vh]">
           <div className="flex justify-end px-4 md:px-5 rounded-t dark:border-gray-600">
-            <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={toggleModal}>
-              <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+            <button
+              type="button"
+              className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
+              onClick={toggleModal}
+            >
+              <svg
+                className="w-3 h-3"
+                aria-hidden="true"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 14 14"
+              >
+                <path
+                  stroke="currentColor"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"
+                />
               </svg>
               <span className="sr-only">Close modal</span>
             </button>
           </div>
-          <div className='flex flex-col justify-center items-center'>
+          <div className="flex flex-col justify-center items-center">
             <div className="text-xl font-semibold">Welcome to</div>
-            <div className="text-xl font-semibold primary-navy-blue">MSP Assignment</div>
+            <div className="text-xl font-semibold primary-navy-blue">
+              MSP Assignment
+            </div>
             <div>Login to continue</div>
           </div>
           <div className="p-4 md:p-5">
+            {successMessage && (
+              <div className="bg-green-100 text-green-800 p-2 rounded-lg mb-4">
+                {successMessage}
+              </div>
+            )}
             <form className="space-y-4">
               <div className="relative cb-shadow">
                 <input
@@ -90,12 +129,26 @@ const LoginModal: React.FC<LoginModalProps> = ({
                 </span>
               </div>
 
-              <div className='cb-shadow'>
-                <input type="password" name="password" id="login-password" value={loginData.password} onChange={handleLoginChange} placeholder="Password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" required />
+              <div className="cb-shadow">
+                <input
+                  type="password"
+                  name="password"
+                  id="login-password"
+                  value={loginData.password}
+                  onChange={handleLoginChange}
+                  placeholder="Password"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                  required
+                />
               </div>
-              <div className='flex flex-row justify-end'>
+              <div className="flex flex-row justify-end">
                 <div>Forget Password?</div>
-                <div className='secondary-blue cursor-pointer' onClick={toggleResetModal}>Reset it</div>
+                <div
+                  className="secondary-blue cursor-pointer"
+                  onClick={toggleResetModal}
+                >
+                  Reset it
+                </div>
               </div>
               <div className="flex items-center">
                 <input
@@ -105,63 +158,72 @@ const LoginModal: React.FC<LoginModalProps> = ({
                   onChange={() => setRemember(!remember)}
                   className="form-checkbox h-5 w-5 text-blue-600 border-blue-500 rounded"
                 />
-                <label htmlFor="remember-me" className="ml-2 text-gray-700">Remember me</label>
+                <label htmlFor="remember-me" className="ml-2 text-gray-700">
+                  Remember me
+                </label>
               </div>
 
               <button
                 type="button"
                 className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800"
-                onClick={() => handleLogin('student')}
+                onClick={() => handleLogin('ASSIGNMENT_CREATOR')}
               >
-                Login as Student
-              </button>
-
-              <button
-                type="button"
-                className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800"
-                onClick={() => handleLogin('teacher')}
-              >
-                Login as Teacher
+                Login {/*  as Assignment Creator */}
               </button>
 
               <div className="flex items-center my-4">
                 <div className="flex-grow border-t border-black"></div>
-                <span className="mx-4 ">or</span>
+                <span className="mx-4">or</span>
                 <div className="flex-grow border-t border-black"></div>
               </div>
 
-              <div className='flex flex-row justify-start items-start'>
-                <button type="button" className="w-full border border-black font-medium rounded-lg text-sm flex items-center space-x-2 px-4 py-1">
+              <div className="flex flex-row justify-start items-start">
+                <button
+                  type="button"
+                  className="w-full border border-black font-medium rounded-lg text-sm flex items-center space-x-2 px-4 py-1"
+                >
                   <Image
-                    src="/pngs/googleicon.svg" // Path to your image in the public directory
+                    src="/pngs/googleicon.svg"
                     alt="google icon"
-                    width={15} // Specify the width of the image
-                    height={15} // Specify the height of the image
+                    width={15}
+                    height={15}
                   />
-                  <span className='primary-text-gray'>Login with Google</span>
+                  <span className="primary-text-gray">Login with Google</span>
                 </button>
               </div>
 
-              <div className='flex flex-row justify-start items-start'>
-                <button type="button" className="w-full border border-black font-medium rounded-lg text-sm flex items-center space-x-2 px-4 py-1">
+              <div className="flex flex-row justify-start items-start">
+                <button
+                  type="button"
+                  className="w-full border border-black font-medium rounded-lg text-sm flex items-center space-x-2 px-4 py-1"
+                >
                   <Image
-                    src="/pngs/facebookicon.svg" // Path to your image in the public directory
+                    src="/pngs/facebookicon.svg"
                     alt="facebook icon"
-                    width={10} // Specify the width of the image
-                    height={10} // Specify the height of the image
+                    width={10}
+                    height={10}
                   />
-                  <span className='primary-text-gray'>Login with Facebook</span>
+                  <span className="primary-text-gray">Login with Facebook</span>
                 </button>
               </div>
 
-              <div className='flex flex-row justify-center'>
-                <div>Don&apos;t have an account?<button className='secondary-blue' onClick={toggleModal}> Sign up</button></div>
+              <div className="flex flex-row justify-center">
+                <div>
+                  Don&apos;t have an account?
+                  <button className="secondary-blue" onClick={toggleModal}>
+                    {' '}
+                    Sign up
+                  </button>
+                </div>
               </div>
             </form>
           </div>
         </div>
       </div>
-      <ResetPasswordModal isOpen={isResetModalOpen} toggleModal={toggleResetModal} /> {/* Add the reset password modal */}
+      <ResetPasswordModal
+        isOpen={isResetModalOpen}
+        toggleModal={toggleResetModal}
+      />
     </div>
   );
 };

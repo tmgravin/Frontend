@@ -9,92 +9,21 @@ import StudentInfoModal from './InfoModals/StudentInfoModal'; // Adjust the impo
   name: string;
   email: string;
   phone: string;
-  registrationDate: string;
+  createdAt: string;
   address: string;
 }
 
 const StudentComponent: React.FC = () => {
   const [users, setUsers] = useState<User[]>([
-    {
-      id: 1,
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      phone: '123-456-7890',
-      registrationDate: '2023-01-01',
-      address: '123 Main St, Anytown, USA'
-    },
-    {
-      id: 2,
-      name: 'Jane Smith',
-      email: 'janesmith@example.com',
-      phone: '987-654-3210',
-      registrationDate: '2023-02-15',
-      address: '456 Oak St, Anytown, USA'
-    },
-    {
-      id: 3,
-      name: 'Alice Johnson',
-      email: 'alicejohnson@example.com',
-      phone: '555-123-4567',
-      registrationDate: '2023-03-20',
-      address: '789 Pine St, Anytown, USA'
-    },
-    {
-      id: 4,
-      name: 'Bob Brown',
-      email: 'bobbrown@example.com',
-      phone: '555-765-4321',
-      registrationDate: '2023-04-10',
-      address: '101 Maple St, Anytown, USA'
-    },
-    {
-      id: 5,
-      name: 'Charlie Davis',
-      email: 'charliedavis@example.com',
-      phone: '555-246-8101',
-      registrationDate: '2023-05-05',
-      address: '202 Elm St, Anytown, USA'
-    },
-    {
-      id: 6,
-      name: 'David Evans',
-      email: 'davidevans@example.com',
-      phone: '555-987-6543',
-      registrationDate: '2023-06-12',
-      address: '303 Birch St, Anytown, USA'
-    },
-    {
-      id: 7,
-      name: 'Eve Foster',
-      email: 'evefoster@example.com',
-      phone: '555-654-3210',
-      registrationDate: '2023-07-08',
-      address: '404 Cedar St, Anytown, USA'
-    },
-    {
-      id: 8,
-      name: 'Frank Green',
-      email: 'frankgreen@example.com',
-      phone: '555-321-6540',
-      registrationDate: '2023-08-19',
-      address: '505 Walnut St, Anytown, USA'
-    },
-    {
-      id: 9,
-      name: 'Grace Harris',
-      email: 'graceharris@example.com',
-      phone: '555-147-2580',
-      registrationDate: '2023-09-23',
-      address: '606 Chestnut St, Anytown, USA'
-    },
-    {
-      id: 10,
-      name: 'Henry Irwin',
-      email: 'henryirwin@example.com',
-      phone: '555-369-2581',
-      registrationDate: '2023-10-17',
-      address: '707 Spruce St, Anytown, USA'
-    }
+    // {
+    //   id: 1,
+    //   name: 'John Doe',
+    //   email: 'johndoe@example.com',
+    //   phone: '123-456-7890',
+    //   registrationDate: '2023-01-01',
+    //   address: '123 Main St, Anytown, USA'
+    // },
+
   ]);
   const [search, setSearch] = useState('');
   const [currentPage, setCurrentPage] = useState(0);
@@ -105,7 +34,10 @@ const StudentComponent: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get('/api/users');
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/role?userType=ASSIGNMENT_CREATOR`);
+    
+      console.log(response)
+
       setUsers(response.data);
       setFilteredUsers(response.data);
     };
@@ -149,7 +81,7 @@ const StudentComponent: React.FC = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Student Details</h2>
+      <h2 className="text-2xl font-bold mb-4">Assigment Creators Details</h2>
       <div className="flex justify-between items-center mb-4">
         <input
           type="text"
@@ -191,7 +123,7 @@ const StudentComponent: React.FC = () => {
               <td className="border px-4 py-2">{user.name}</td>
               <td className="border px-4 py-2">{user.email}</td>
               <td className="border px-4 py-2">{user.phone}</td>
-              <td className="border px-4 py-2">{user.registrationDate}</td>
+              <td className="border px-4 py-2">{user.createdAt}</td>
               <td className="border px-4 py-2">{user.address}</td>
               <td className="border px-4 py-2">
                 <button

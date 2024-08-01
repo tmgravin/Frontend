@@ -1,22 +1,20 @@
-import React, { useState, useEffect } from 'react';
+// OtpModal.tsx
+
+import React, { useState } from 'react';
 
 interface OtpModalProps {
   isOpen: boolean;
   toggleModal: () => void;
-  handleVerifyOtp: (otp: string) => void;
+  handleVerifyOtp: (code: string) => void;
 }
 
 const OtpModal: React.FC<OtpModalProps> = ({ isOpen, toggleModal, handleVerifyOtp }) => {
-  const [otp, setOtp] = useState('');
-
-  useEffect(() => {
-    console.log('OTP Modal isOpen:', isOpen); // Debugging statement
-  }, [isOpen]);
+  const [code, setCode] = useState('');
 
   if (!isOpen) return null;
 
   const handleSubmit = () => {
-    handleVerifyOtp(otp);
+    handleVerifyOtp(code);
   };
 
   return (
@@ -40,13 +38,16 @@ const OtpModal: React.FC<OtpModalProps> = ({ isOpen, toggleModal, handleVerifyOt
                 <input
                   type="text"
                   name="otp"
-                  id="otp"
-                  value={otp}
-                  onChange={(e) => setOtp(e.target.value)}
+                  id="otp-input"
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5"
-                  placeholder="Enter  OTP"
+                  placeholder="Enter OTP"
                   required
                 />
+                <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                  <i className="fa-regular fa-key text-gray-400"></i>
+                </span>
               </div>
               <button
                 type="button"

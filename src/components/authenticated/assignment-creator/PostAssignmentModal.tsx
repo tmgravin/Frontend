@@ -47,47 +47,53 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
     event.preventDefault();
 
     const formData = new FormData();
-    formData.append('title', title);
+    formData.append('users', "1");
+    formData.append('projectName', title);
     formData.append('description', description);
-    formData.append('deadline', deadline);
-    formData.append('experience', experience);
-    formData.append('skills', skills.split(',').map(skill => skill.trim()).filter(skill => skill !== '').join(','));
-    formData.append('scope', JSON.stringify(scope));
-    formData.append('budgetType', budgetType);
-    formData.append('budget', budget);
-    formData.append('catagory', catagory);
-    formData.append('paymentVerified', paymentVerified.toString());
+    formData.append('projectDeadline', deadline);
+    formData.append('experienceYear', "LESS_THAN_ONE_MONTH");
+    formData.append('levelOfExperience', "INTERMEDIATE");
+
+
+    formData.append('scope',"LARGE");
+    // formData.append('scope', JSON.stringify(scope));
+    // formData.append('budgetType', budgetType);
+    formData.append('projectAmount', budget);
+    // formData.append('catagory', catagory);
+    // formData.append('paymentVerified', paymentVerified.toString());
     if (attachment) {
-      formData.append('attachment', attachment);
+      formData.append('projectUrl', attachment);
     }
+    
 
     try {
-      const response = await axios.post('/api/assignments', formData, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
+      console.log(response)
       setResultMessage('Assignment posted successfully!');
       setResultModalVisible(true);
       console.log('Assignment posted successfully:', response.data);
     } catch (error) {
-      setResultMessage('Error posting assignment. Please try again.');
-      setResultModalVisible(true);
+      // setResultMessage('Error posting assignment. Please try again.');
+      // setResultModalVisible(true);
       console.error('Error posting assignment:', error);
     }
 
     // Clear the form
-    setTitle('');
-    setDescription('');
-    setDeadline('');
-    setExperience('');
-    setSkills('');
-    setScope([]);
-    setBudgetType('');
-    setBudget('');
-    setCatagory("");
-    setAttachment(null);
-    setPaymentVerified(false);
+    // setTitle('');
+    // setDescription('');
+    // setDeadline('');
+    // setExperience('');
+    // setSkills('');
+    // setScope([]);
+    // setBudgetType('');
+    // setBudget('');
+    // setCatagory("");
+    // setAttachment(null);
+    // setPaymentVerified(false);
   };
 
   const handleCloseResultModal = () => {
@@ -116,7 +122,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
               strokeLinejoin="round"
               strokeWidth="2"
               d="M6 18L18 6M6 6l12 12"
-            />
+            />/
           </svg>
         </button>
         <h2 className="text-2xl font-bold mb-4">Post a New Assignment</h2>
@@ -151,40 +157,41 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
           </div>
 
           <div className="mb-4">
-            <label htmlFor="experience" className="block text-sm font-medium text-gray-700">
+            <label htmlFor="levelOfExperience" className="block text-sm font-medium text-gray-700">
               Required Experience
             </label>
             <select
-              id="experience"
+              id="levelOfExperience"
               value={experience}
               onChange={(e) => setExperience(e.target.value)}
               className="mt-1 block w-full border border-gray-300 rounded-md p-2"
               required
             >
               <option value="">Select Experience Level</option>
-              <option value="entry">Entry</option>
-              <option value="intermediate">Intermediate</option>
-              <option value="expert">Expert</option>
+              <option value="ENTRY">ENTRY</option>
+              <option value="INTERMEDIATE">INTERMEDIATE</option>
+              <option value="EXPERT">EXPERT</option>
             </select>
           </div>
           <div className="mb-4">
-            <label htmlFor="catagory" className="block text-sm font-medium text-gray-700">
-              Job Category
-            </label>
-            <select
-              id="catagory"
-              value={experience}
-              onChange={(e) => setExperience(e.target.value)}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-              required
-            >
-              <option value="">Select Catagory</option>
-              <option value="sctm">STEM-SCIENCE,TECHNOLOGY AND MATHEMATICS</option>
-              <option value="writing">WRITING</option>
-              <option value="projects">PROJECTS</option>
-              <option value="others">OTHERS</option>
-            </select>
-          </div>
+  <label htmlFor="catagory" className="block text-sm font-medium text-gray-700">
+    Job Category
+  </label>
+  <select
+    id="catagory"
+    value={catagory} 
+    onChange={(e) => setCatagory(e.target.value)}
+    className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+    required
+  >
+    <option value="">Select Category</option>
+    <option value="sctm">STEM-SCIENCE, TECHNOLOGY AND MATHEMATICS</option>
+    <option value="writing">WRITING</option>
+    <option value="projects">PROJECTS</option>
+    <option value="others">OTHERS</option>
+  </select>
+</div>
+
 
           <div className="mb-4">
             <label htmlFor="skills" className="block text-sm font-medium text-gray-700">

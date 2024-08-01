@@ -1,7 +1,9 @@
+// ResetPasswordModal.tsx
+
 import React, { useState } from 'react';
 import axios from 'axios';
-import OtpModal from './OtpModalRequest'; // Import the OTP modal
-import NewPasswordModal from './NewPasswordModal'; // Import the new password modal
+import OtpModal from './OtpModal'; // Adjust the path based on your project structure
+import NewPasswordModal from './NewPasswordModal'; // Adjust the path based on your project structure
 
 interface ResetPasswordModalProps {
   isOpen: boolean;
@@ -10,47 +12,58 @@ interface ResetPasswordModalProps {
 
 const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({ isOpen, toggleModal }) => {
   const [email, setEmail] = useState('');
-  const [isOtpModalOpen, setIsOtpModalOpen] = useState(false); // State for OTP modal
-  const [isNewPasswordModalOpen, setIsNewPasswordModalOpen] = useState(false); // State for new password modal
+  const [isOtpModalOpen, setIsOtpModalOpen] = useState(false);
+  const [isNewPasswordModalOpen, setIsNewPasswordModalOpen] = useState(false);
 
   if (!isOpen) return null;
 
   const handleResetPassword = async () => {
     try {
-    //   console.log('Requesting OTP for:', email); // Debugging statement
-    //   const response = await axios.post('/api/reset-password', { email });
-    //   console.log('Response from reset password:', response.data);
-      setIsOtpModalOpen(true); // Open OTP modal
+  
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/forgetPassword`, { email });
+  
+      if (response.status === 200) {
+        setIsOtpModalOpen(true); // Open OTP modal
+      }
     } catch (error) {
       console.error('Reset password failed', error);
+      if (error.response) {
+        console.error('Response data:', error.response.data);
+        console.error('Response status:', error.response.status);
+      }
     }
   };
 
-  const handleVerifyOtp = async (otp: string) => {
+  const handleVerifyOtp = async (code: string) => {
     try {
-    //   console.log('Verifying OTP:', otp); // Debugging statement
-    //   const response = await axios.post('/api/verify-otp', { email, otp });
-    //   console.log('Response from OTP verification:', response.data);
-      setIsOtpModalOpen(false);
-      setIsNewPasswordModalOpen(true); // Open new password modal
+     
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/verifyResetCode`, { email,code });
+      console.log('Response from OTP verification:', response.data);
+      if (response.status === 200) {
+
+
+        //invalid code if send old code neeed latest code
+        setIsOtpModalOpen(false);
+        setIsNewPasswordModalOpen(true); // Open new password modal
+      }
     } catch (error) {
       console.error('OTP verification failed', error);
     }
   };
 
-  const handlePasswordReset = async (newPassword: string, confirmPassword: string) => {
-    if (newPassword !== confirmPassword) {
+  const handlePasswordReset = async (password: string, confirmPassword: string) => {
+    if (password !== confirmPassword) {
       console.error('Passwords do not match');
       return;
     }
     try {
-    //   console.log('Resetting password for:', email); // Debugging statement
-    //   const response = await axios.post('/api/reset-password-confirm', { email, newPassword });
-    //   console.log('Response from password reset:', response.data);
-      setIsNewPasswordModalOpen(false);
-      toggleModal(); // Close reset p //   console.log('Resetting password for:', email); // Debugging statement
-      //   const response = await axios.post('/api/reset-password-confirm', { email, newPassword });
-      //   console.log('Response from password reset:', response.data);assword modal
+      console.log('Resetting password for:', email); // Debugging statement
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/resetPassword`, { email, password });
+      console.log('Response from password reset:', response.data);
+      if (response.status === 200) {
+        setIsNewPasswordModalOpen(false);
+        toggleModal(); // Close reset password modal
+      }
     } catch (error) {
       console.error('Password reset failed', error);
     }
@@ -104,7 +117,7 @@ const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({ isOpen, toggleM
                   className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800"
                   onClick={handleResetPassword}
                 >
-                 Request OTP
+                  Request OTP
                 </button>
               </form>
             </div>

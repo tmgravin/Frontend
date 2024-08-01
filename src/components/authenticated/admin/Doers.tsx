@@ -2,29 +2,28 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReactPaginate from 'react-paginate';
-import TeacherInfoModal from './InfoModals/TeacherInfoModal'; // Adjust the import path as necessary
+import TeacherInfoModal from './InfoModals/TeacherInfoModal';
 
 export interface User {
   id: number;
   name: string;
   email: string;
   phone: string;
-  registrationDate: string;
+  createdAt: string;
   address: string;
 }
 
 const TeacherComponent: React.FC = () => {
   const [users, setUsers] = useState<User[]>([
     // Sample data
-    {
-      id: 1,
-      name: 'John Doe',
-      email: 'johndoe@example.com',
-      phone: '123-456-7890',
-      registrationDate: '2023-01-01',
-      address: '123 Main St, Anytown, USA'
-    },
-    // Add more users as needed
+    // {
+    //   id: 1,
+    //   name: 'John Doe',
+    //   email: 'johndoe@example.com',
+    //   phone: '123-456-7890',
+    //   createdAt: '2023-01-01',
+    //   address: '123 Main St, Anytown, USA'
+    // },
   ]);
 
   const [search, setSearch] = useState('');
@@ -36,8 +35,9 @@ const TeacherComponent: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      // Replace with your actual API endpoint
-      const response = await axios.get('/api/users');
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/role?userType=ASSIGNMENT_DOER`);
+    
+      console.log(response)
       setUsers(response.data);
       setFilteredUsers(response.data);
     };
@@ -81,7 +81,7 @@ const TeacherComponent: React.FC = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Teachers Details</h2>
+      <h2 className="text-2xl font-bold mb-4">Assignment Doer Details</h2>
       <div className="flex justify-between items-center mb-4">
         <input
           type="text"
@@ -123,7 +123,7 @@ const TeacherComponent: React.FC = () => {
               <td className="border px-4 py-2">{user.name}</td>
               <td className="border px-4 py-2">{user.email}</td>
               <td className="border px-4 py-2">{user.phone}</td>
-              <td className="border px-4 py-2">{user.registrationDate}</td>
+              <td className="border px-4 py-2">{user.createdAt}</td>
               <td className="border px-4 py-2">{user.address}</td>
               <td className="border px-4 py-2">
                 <button
