@@ -11,6 +11,7 @@ export interface User {
   phone: string;
   createdAt: string;
   address: string;
+
 }
 
 const TeacherComponent: React.FC = () => {

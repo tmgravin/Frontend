@@ -49,7 +49,7 @@ const TeacherInfoModal: React.FC<UserModalProps> = ({ user, onClose, open }) => 
             <strong>Phone:</strong> {user.phone}
           </Typography>
           <Typography id="user-modal-description" className="mb-2">
-            <strong>Registration Date:</strong> {user.registrationDate}
+            <strong>Registration Date:</strong> {user.createdAt}
           </Typography>
           <Typography id="user-modal-description" className="mb-2">
             <strong>Address:</strong> {user.address}

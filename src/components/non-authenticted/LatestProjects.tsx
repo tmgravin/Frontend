@@ -18,6 +18,8 @@ export interface DataItem {
   budgetTo: number;
 }
 
+
+
 const LatestProjects: React.FC = () => {
   const [data, setData] = useState<DataItem[]>([
     {

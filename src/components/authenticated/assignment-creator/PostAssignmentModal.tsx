@@ -6,6 +6,13 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ResultModal from './ResultModal';
 import Image from 'next/image';
+  import { getUserFromCookies } from '../../auth/token'; 
+
+  const user = getUserFromCookies();
+
+
+
+
 
 interface PostAssignmentModalProps {
   onClose: () => void;
@@ -15,13 +22,14 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [deadline, setDeadline] = useState('');
-  const [experience, setExperience] = useState('');
+  const [experienceYear, setExperienceYear] = useState('');
+  const [levelOfExperience, setlevelOfExperience] = useState('');
   const [skills, setSkills] = useState('');
   const [budgetType, setBudgetType] = useState('');
   const [budget, setBudget] = useState('');
   const [attachment, setAttachment] = useState<File | null>(null);
   const [paymentVerified, setPaymentVerified] = useState(false);
-  const [scope, setScope] = useState<string[]>([]);
+  const [scope, setScope] = useState("");
   const [resultModalVisible, setResultModalVisible] = useState(false);
   const [resultMessage, setResultMessage] = useState('');
   const [catagory, setCatagory] = useState('');
@@ -32,12 +40,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
     }
   };
 
-  const handleScopeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setScope((prevScope) =>
-      prevScope.includes(value) ? prevScope.filter((scope) => scope !== value) : [...prevScope, value]
-    );
-  };
+ 
 
   const handleSkillsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSkills(e.target.value);
@@ -45,18 +48,16 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-
+    // Retrieving user data from cookies
     const formData = new FormData();
-    formData.append('users', "1");
+    formData.append('users', user.id);//notokens yet sending form id from cookie which is stored when logged in
     formData.append('projectName', title);
     formData.append('description', description);
     formData.append('projectDeadline', deadline);
-    formData.append('experienceYear', "LESS_THAN_ONE_MONTH");
-    formData.append('levelOfExperience', "INTERMEDIATE");
+    formData.append('experienceYear',experienceYear);//was supposed to be"how long will work take" but backend has named experienceYear 
+    formData.append('levelOfExperience', levelOfExperience);
 
-
-    formData.append('scope',"LARGE");
-    // formData.append('scope', JSON.stringify(scope));
+    formData.append('scope',scope);
     // formData.append('budgetType', budgetType);
     formData.append('projectAmount', budget);
     // formData.append('catagory', catagory);
@@ -162,8 +163,8 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
             </label>
             <select
               id="levelOfExperience"
-              value={experience}
-              onChange={(e) => setExperience(e.target.value)}
+              value={levelOfExperience}
+              onChange={(e) => setlevelOfExperience(e.target.value)}
               className="mt-1 block w-full border border-gray-300 rounded-md p-2"
               required
             >
@@ -173,6 +174,27 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
               <option value="EXPERT">EXPERT</option>
             </select>
           </div>
+          <div className="mb-4">
+            <label htmlFor="levelOfExperience" className="block text-sm font-medium text-gray-700">
+              Required Experience
+            </label>
+
+            <select
+              id="experienceYear"
+              value={experienceYear}
+              onChange={(e) => setExperienceYear(e.target.value)}
+              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+              required
+            >
+              <option value="">How long will work take</option>
+              <option value="LESS_THAN_MONTH">Less tha a month</option>
+              <option value="ONE_TO_THREE_MONTH">One to three month</option>
+              <option value="THREE_TO_SIX_MONTH">Three top six month</option>
+            </select>
+          </div>
+
+
+
           <div className="mb-4">
   <label htmlFor="catagory" className="block text-sm font-medium text-gray-700">
     Job Category
@@ -209,42 +231,46 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
           </div>
 
           <div className="mb-4">
-            <label htmlFor="scope" className="block text-sm font-medium text-gray-700">
-              Scope of Project
-            </label>
-            <div className="mt-1 flex flex-col space-y-2">
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  value="large"
-                  checked={scope.includes('large')}
-                  onChange={handleScopeChange}
-                  className="mr-2"
-                />
-                Large
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  value="medium"
-                  checked={scope.includes('medium')}
-                  onChange={handleScopeChange}
-                  className="mr-2"
-                />
-                Medium
-              </label>
-              <label className="flex items-center">
-                <input
-                  type="checkbox"
-                  value="small"
-                  checked={scope.includes('small')}
-                  onChange={handleScopeChange}
-                  className="mr-2"
-                />
-                Small
-              </label>
-            </div>
-          </div>
+  <label htmlFor="scope" className="block text-sm font-medium text-gray-700">
+    Scope of Project
+  </label>
+  <div className="mt-1 flex flex-col space-y-2">
+    <label className="flex items-center">
+      <input
+        type="radio"
+        value="LARGE"
+        checked={scope === 'LARGE'}
+        onChange={(e) => setScope(e.target.value)}
+        className="mr-2"
+        name="scope"
+      />
+      Large
+    </label>
+    <label className="flex items-center">
+      <input
+        type="radio"
+        value="MEDIUM"
+        checked={scope === 'MEDIUM'}
+        onChange={(e) => setScope(e.target.value)}
+        className="mr-2"
+        name="scope"
+      />
+      Medium
+    </label>
+    <label className="flex items-center">
+      <input
+        type="radio"
+        value="SMALL"
+        checked={scope === 'SMALL'}
+        onChange={(e) => setScope(e.target.value)}
+        className="mr-2"
+        name="scope"
+      />
+      Small
+    </label>
+  </div>
+</div>
+
 
           <div className="mb-4">
             <label htmlFor="budgetType" className="block text-sm font-medium text-gray-700">

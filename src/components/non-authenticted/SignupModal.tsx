@@ -1,5 +1,6 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
+import Link from 'next/link';
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -102,7 +103,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
                   Sign up as Creator
                 </button>
                 <div className='mt-5'>
-                  <div className='flex flex-row'> Already have an account?<button className='secondary-blue' onClick={() => setIsLoginModalOpen(true)}>Sign in</button></div>
+                  <div className='flex flex-row'> Already have an account?<button className='secondary-blue' /* onClick={() => setIsLoginModalOpen(true)} */>Sign in</button></div>
                 </div>
               </div>
             ) : (
@@ -133,7 +134,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
                 </div>
                 <div className="flex items-center mb-4">
                   <input type="checkbox" id="remember-me" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded" />
-                  <label htmlFor="remember-me" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
+                  <label htmlFor="remember-me" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">I agree to  <div className='text-blue-700'><Link href="/termsandconditions">Terms and Condition</Link> </div> </label>
                 </div>
                 <button type="submit" className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800">
                   Sign up

@@ -4,8 +4,8 @@ import Image from 'next/image';
 import axios from 'axios';
 
 const InfoCards: React.FC = () => {
-  const [totalCreator, setTotalCreator] = useState("");
-  const[totalDoer,setTotalDoer]=useState("")
+  const [totalCreator, setTotalCreator] = useState("12");
+  const[totalDoer,setTotalDoer]=useState("213")
   const [data, setData] = useState({
     totalTeachers: 25,
     totalAssignments: 150,
@@ -19,16 +19,17 @@ const InfoCards: React.FC = () => {
     const fetchData = async () => {
       try {
         const creatorResponse = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/countUsers`, {
-          usertype: "ASSIGNMENT_CREATOR",
+          userType: "ASSIGNMENT_CREATOR",
         });
-        setTotalCreator(creatorResponse.data); // Assuming the response has a 'total' field
-        console.log(creatorResponse.data)
+        setTotalCreator(creatorResponse.data); 
+        // console.log(creatorResponse)
 
         const doerResponse = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/countUsers`, {
-          usertype: "ASSIGNMENT_DOER",
+          userType: "ASSIGNMENT_DOER",
         });
-        // Assuming the response data can be mapped to state
-        setTotalDoer(doerResponse.data);
+        console.log(doerResponse)
+        // setTotalDoer(doerResponse.data);
+        
       } catch (err) {
         console.error("Error fetching data:", err);
       }
@@ -58,7 +59,7 @@ const InfoCards: React.FC = () => {
 
       <div className="bg-white shadow-lg rounded-lg p-4 flex flex-col items-start justify-start">
         <div className='w-full flex flex-row justify-between'>
-          <h3 className="text-xl font-bold mb-2">{data.totalAssignments}</h3>
+          <h3 className="text-xl font-bold mb-2">{totalDoer}</h3>
           <div>
             <Image
               src="/admin-icons/totalassignment.svg"
@@ -69,7 +70,7 @@ const InfoCards: React.FC = () => {
             />
           </div>
         </div>
-        <p className="text-start primary-gray">Total Assignments</p>
+        <p className="text-start primary-gray">Total Doers</p>
         <div className='bg-red-300 text-red-600'>{data.negativechange}</div>
       </div>
 

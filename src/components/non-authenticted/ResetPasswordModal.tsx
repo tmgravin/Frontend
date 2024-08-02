@@ -27,10 +27,7 @@ const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({ isOpen, toggleM
       }
     } catch (error) {
       console.error('Reset password failed', error);
-      if (error.response) {
-        console.error('Response data:', error.response.data);
-        console.error('Response status:', error.response.status);
-      }
+      
     }
   };
 

@@ -3,6 +3,7 @@ import Image from 'next/image';
 import axios from 'axios';
 import ResetPasswordModal from './ResetPasswordModal'; 
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
 
 interface SignupData {
   email: string;
@@ -48,6 +49,11 @@ const LoginModal: React.FC<LoginModalProps> = ({
       console.log(response.data);
 
       if (response.status === 200) {
+        // Storing user data in cookies (using js-cookie library)
+      Cookies.set('user', JSON.stringify(response.data), { expires: 7, secure: true, sameSite: 'Strict' });
+
+
+
         setSuccessMessage('Login successful!');
         setTimeout(() => {
           setSuccessMessage(null); // Clear the success message after 3 seconds

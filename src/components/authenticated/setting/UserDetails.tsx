@@ -3,6 +3,10 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 
+  import { getUserFromCookies } from '../../auth/token'; 
+  // const user = getUserFromCookies();
+  const user = getUserFromCookies() || { name: '', email: '', address: '', phone: '' };
+
 // Updated Profile interface
 interface Profile {
   name: string;
@@ -15,10 +19,10 @@ interface Profile {
 const UserDetails: React.FC = () => {
   // State for user profile data
   const [profile, setProfile] = useState<Profile>({
-    name: '',
-    email: '',
-    address: '',
-    contact: '',
+    name: user.name,
+    email: user.email,
+    address: user.address,
+    contact: user.phone,
     profilePicture: ''
   });
 
@@ -32,25 +36,27 @@ const UserDetails: React.FC = () => {
   const [openPasswordDialog, setOpenPasswordDialog] = useState(false);
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
+  const [currentPassword, setCurrentPassword] = useState('');
+
 
   // State for file upload
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  useEffect(() => {
-    // Fetch user profile data from API
-    const fetchProfileData = async () => {
-      try {
-        const response = await axios.get('/api/profile'); // Replace with your API endpoint
-        const result: Profile = response.data;
-        setProfile(result);
-        setFieldValues(result);
-      } catch (error) {
-        console.error('Error fetching profile data:', error);
-      }
-    };
+  // useEffect(() => {
+  //   // Fetch user profile data from API
+  //   const fetchProfileData = async () => {
+  //     try {
+  //       const response = await axios.get('/api/profile'); // Replace with your API endpoint
+  //       const result: Profile = response.data;
+  //       setProfile(result);   
+  //       setFieldValues(result);
+  //     } catch (error) {
+  //       console.error('Error fetching profile data:', error);
+  //     }
+  //   };
 
-    fetchProfileData();
-  }, []);
+  //   fetchProfileData();
+  // }, []);
 
   const handleFieldChange = (e: React.ChangeEvent<HTMLInputElement>, field: keyof Profile) => {
     const { value } = e.target;
@@ -60,7 +66,7 @@ const UserDetails: React.FC = () => {
   const handleSaveAll = async (e: React.MouseEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.put('/api/profile', fieldValues); // Replace with your API endpoint
+      const response = await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/updateUsers/?id=1`, fieldValues); // Replace with your API endpoint
       if (response.status === 200) {
         console.log('Profile updated successfully');
         setProfile(fieldValues);
@@ -117,8 +123,8 @@ const UserDetails: React.FC = () => {
       return;
     }
     try {
-      const response = await axios.post('/api/change-password', { // Replace with your API endpoint
-        password: newPassword
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/changePassword`, {
+        oldPassword: newPassword,curretPassword:currentPassword
       });
       if (response.status === 200) {
         console.log('Password changed successfully');
@@ -196,7 +202,7 @@ const UserDetails: React.FC = () => {
             />
           </div>
         ))}
-
+<div className='flex flex-col'>
         {isEditing ? (
           <div className="flex justify-end mt-2">
             <button
@@ -220,7 +226,7 @@ const UserDetails: React.FC = () => {
             }}
             className="px-4 py-2 bg-blue-500 text-white rounded"
           >
-            <i className="fas fa-edit"></i> Edit All
+            <i className="fas fa-edit"></i> Edit Information
           </button>
         )}
 
@@ -230,6 +236,7 @@ const UserDetails: React.FC = () => {
         >
           Change Password
         </button>
+        </div>
       </form>
 
       {/* Change Password Dialog */}
@@ -237,6 +244,13 @@ const UserDetails: React.FC = () => {
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
           <div className="bg-white p-6 rounded shadow-lg">
             <h3 className="text-xl mb-4">Change Password</h3>
+            <input
+              type="password"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              className="w-full p-2 border border-gray-300 rounded mb-4"
+              placeholder="Current Password"
+            />
             <input
               type="password"
               value={newPassword}

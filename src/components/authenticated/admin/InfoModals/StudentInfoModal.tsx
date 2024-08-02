@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import { Modal, Box, Typography, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { User } from '../Creators';
@@ -11,6 +12,23 @@ interface UserModalProps {
 }
 
 const StudentInfoModal: React.FC<UserModalProps> = ({ user, onClose, open }) => {
+  const [userData, setUserData] = useState<User | null>(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (user?.id && open) {
+          const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/?id=${user.id}`);
+          setUserData(response.data);
+        }
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+      }
+    };
+
+    fetchUserData();
+  }, [user, open]);
+
   if (!user) return null;
 
   return (
@@ -34,29 +52,34 @@ const StudentInfoModal: React.FC<UserModalProps> = ({ user, onClose, open }) => 
           <Typography variant="h6" id="user-modal-title" className="mb-4">
             User Details
           </Typography>
-          <Typography id="user-modal-description" className="mb-2">
-            <strong>ID:</strong> {user.id}
-          </Typography>
-          <Typography id="user-modal-description" className="mb-2">
-            <strong>Name:</strong> {user.name}
-          </Typography>
-          <Typography id="user-modal-description" className="mb-2">
-            <strong>Email:</strong> {user.email}
-          </Typography>
-          <Typography id="user-modal-description" className="mb-2">
-            <strong>Phone:</strong> {user.phone}
-          </Typography>
-          <Typography id="user-modal-description" className="mb-2">
-            <strong>Registration Date:</strong> {user.registrationDate}
-          </Typography>
-          <Typography id="user-modal-description" className="mb-2">
-            <strong>Address:</strong> {user.address}
-          </Typography>
-          <Typography id="user-modal-description" className="mb-2">
-          <p className="text-sm">Total Spent: $1000</p>
-          </Typography>
+          {userData ? (
+            <>
+              <Typography id="user-modal-description" className="mb-2">
+                <strong>ID:</strong> {userData.id}
+              </Typography>
+              <Typography id="user-modal-description" className="mb-2">
+                <strong>Name:</strong> {userData.name}
+              </Typography>
+              <Typography id="user-modal-description" className="mb-2">
+                <strong>Email:</strong> {userData.email}
+              </Typography>
+              <Typography id="user-modal-description" className="mb-2">
+                <strong>Phone:</strong> {userData.phone}
+              </Typography>
+              <Typography id="user-modal-description" className="mb-2">
+                <strong>Registration Date:</strong> {userData.createdAt}
+              </Typography>
+              <Typography id="user-modal-description" className="mb-2">
+                <strong>Address:</strong> {userData.address}
+              </Typography>
+              <Typography id="user-modal-description" className="mb-2">
+                <p className="text-sm">Total Spent: $1000</p>
+              </Typography>
+            </>
+          ) : (
+            <Typography>Loading user details...</Typography>
+          )}
 
-        
           <Box className="mt-4">
             <UsersAssignment />
           </Box>
