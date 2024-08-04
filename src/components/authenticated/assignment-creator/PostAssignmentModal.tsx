@@ -1,12 +1,13 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import ResultModal from './ResultModal';
 import Image from 'next/image';
   import { getUserFromCookies } from '../../auth/token'; 
+import { Category } from '@mui/icons-material';
 
   const user = getUserFromCookies();
 
@@ -33,6 +34,9 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
   const [resultModalVisible, setResultModalVisible] = useState(false);
   const [resultMessage, setResultMessage] = useState('');
   const [catagory, setCatagory] = useState('');
+  const [catData, setCatData] = useState<any[]>([]);
+
+console.log(catData)
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -58,9 +62,9 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
     formData.append('levelOfExperience', levelOfExperience);
 
     formData.append('scope',scope);
-    // formData.append('budgetType', budgetType);
+    formData.append('budgets', budgetType);
     formData.append('projectAmount', budget);
-    // formData.append('catagory', catagory);
+    formData.append('projectCategory', catagory);
     // formData.append('paymentVerified', paymentVerified.toString());
     if (attachment) {
       formData.append('projectUrl', attachment);
@@ -77,6 +81,8 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
       setResultMessage('Assignment posted successfully!');
       setResultModalVisible(true);
       console.log('Assignment posted successfully:', response.data);
+    
+
     } catch (error) {
       // setResultMessage('Error posting assignment. Please try again.');
       // setResultModalVisible(true);
@@ -96,7 +102,21 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
     // setAttachment(null);
     // setPaymentVerified(false);
   };
-
+  useEffect(() => {
+    // Define an async function inside useEffect to fetch the data
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/category/`); // Replace with your API endpoint
+        console.log(response.data)
+        setCatData(response.data); // Store the data in state
+      } catch (err) {
+        console.log(err); // Log the error if something goes wrong
+      }
+    };
+  
+    fetchData(); // Call the async function
+  }, []); // Dependency array is empty, so this runs only once after the initial render
+  
   const handleCloseResultModal = () => {
     setResultModalVisible(false);
     onClose();
@@ -187,7 +207,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
               required
             >
               <option value="">How long will work take</option>
-              <option value="LESS_THAN_MONTH">Less tha a month</option>
+              <option value="LESS_THAN_ONE_MONTH">Less tha a month</option>
               <option value="ONE_TO_THREE_MONTH">One to three month</option>
               <option value="THREE_TO_SIX_MONTH">Three top six month</option>
             </select>
@@ -200,18 +220,19 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
     Job Category
   </label>
   <select
-    id="catagory"
-    value={catagory} 
-    onChange={(e) => setCatagory(e.target.value)}
-    className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-    required
-  >
-    <option value="">Select Category</option>
-    <option value="sctm">STEM-SCIENCE, TECHNOLOGY AND MATHEMATICS</option>
-    <option value="writing">WRITING</option>
-    <option value="projects">PROJECTS</option>
-    <option value="others">OTHERS</option>
-  </select>
+        id="catagory"
+        value={catagory}
+        onChange={(e) => setCatagory(e.target.value)}
+        className="mt-1 block w-full border border-gray-300 rounded-md p-2"
+        required
+      >
+        <option value="">Select Category</option>
+        {catData.map((catData) => (
+          <option key={catData.id} value={catData.id}>
+         <div className='text-black'>  {catData.category}</div> 
+          </option>
+        ))}
+      </select>
 </div>
 
 
@@ -281,8 +302,8 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
                 <input
                   type="radio"
                   name="budgetType"
-                  value="hourly"
-                  checked={budgetType === 'hourly'}
+                  value="HOURLY_RATE"
+                  checked={budgetType === 'HOURLY_RATE'}
                   onChange={(e) => setBudgetType(e.target.value)}
                   className="absolute top-0 left-0"
                 />
@@ -298,8 +319,8 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
                 <input
                   type="radio"
                   name="budgetType"
-                  value="fixed"
-                  checked={budgetType === 'fixed'}
+                  value="FIXED_PRICE"
+                  checked={budgetType === "FIXED_PRICE"}
                   onChange={(e) => setBudgetType(e.target.value)}
                   className="absolute top-0 left-0"
                 />
@@ -311,7 +332,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
                 />
                 Fixed Price
               </label>
-              <label className="flex flex-col items-center justify-center relative mx-3">
+              {/* <label className="flex flex-col items-center justify-center relative mx-3">
                 <input
                   type="radio"
                   name="budgetType"
@@ -327,13 +348,13 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
                   height={30}
                 />
                 Recurring Payment
-              </label>
+              </label> */}
               <label className="flex flex-col items-center justify-center relative">
                 <input
                   type="radio"
                   name="budgetType"
-                  value="task-based"
-                  checked={budgetType === 'task-based'}
+                  value='TASK_BASED'
+                  checked={budgetType === 'TASK_BASED'}
                   onChange={(e) => setBudgetType(e.target.value)}
                   className="absolute top-0 left-0"
                 />

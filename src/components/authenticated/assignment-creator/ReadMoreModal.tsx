@@ -1,28 +1,34 @@
-// src/ReadMoreModal.tsx
 import React from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
 import { DataItem } from './LatestProjects';
 
 interface ReadMoreModalProps {
   project: DataItem | null;
   onClose: () => void;
-  onEdit: () => void;
 }
 
-const ReadMoreModal: React.FC<ReadMoreModalProps> = ({ project, onClose, onEdit }) => {
+
+const ReadMoreModal: React.FC<ReadMoreModalProps> = ({ project, onClose }) => {
+  if (!project) return null;
+
   return (
-    <Dialog open={!!project} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>{project?.title}</DialogTitle>
-      <DialogContent>
-        <p>{project?.description}</p>
-        <p className="text-sm">Project Amount: {project?.amount}</p>
-        <p className="text-sm">Deadline: {project?.deadline}</p>
-        {/* <button onClick={onEdit} className='primary-btn-blue'>Edit Details</button> */}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="primary">Close</Button>
-      </DialogActions>
-    </Dialog>
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+      <div className="bg-white p-4 rounded shadow-lg w-full max-w-3xl">
+        <h2 className="text-2xl font-bold mb-2">{project.projects.projectName}</h2>
+        <p className="mb-2"><strong>Description:</strong> {project.projects.projectAmount}</p>
+        <p className="mb-2"><strong>Amount:</strong> {project.projects.projectAmount}</p>
+        <p className="mb-2"><strong>Deadline:</strong> {project.projects.projectDeadline}</p>
+        <p className="mb-2"><strong>Scope:</strong> {project.scope}</p>
+        <p className="mb-2"><strong>Experience Year:</strong> {project.experienceYear}</p>
+        <p className="mb-2"><strong>Level of Experience:</strong> {project.levelOfExperience}</p>
+        <p className="mb-2"><strong>Status:</strong> {project.projectStatus}</p>
+        <button
+          onClick={onClose}
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+        >
+          Close
+        </button>
+      </div>
+    </div>
   );
 };
 

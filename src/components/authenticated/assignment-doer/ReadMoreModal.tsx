@@ -1,60 +1,34 @@
 import React from 'react';
-import { Modal, Box, Typography, IconButton, Button } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import { DataItem } from './Projects'; // Adjust the import path as necessary
+import { DataItem } from './Projects';
 
 interface ReadMoreModalProps {
   project: DataItem | null;
   onClose: () => void;
-  open: boolean;
-  onApply: (project: DataItem) => void; // New prop
 }
 
-const ReadMoreModal: React.FC<ReadMoreModalProps> = ({ project, onClose, open, onApply }) => {
+
+const ReadMoreModal: React.FC<ReadMoreModalProps> = ({ project, onClose }) => {
   if (!project) return null;
 
   return (
-    <Modal
-      open={open}
-      onClose={onClose}
-      aria-labelledby="read-more-modal-title"
-      aria-describedby="read-more-modal-description"
-    >
-      <Box className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-        <Box className="bg-white p-6 rounded shadow-md w-full max-w-md max-h-[90vh] overflow-y-auto relative">
-          <IconButton
-            edge="end"
-            color="inherit"
-            onClick={onClose}
-            aria-label="close"
-            className="absolute top-2 right-2"
-          >
-            <CloseIcon />
-          </IconButton>
-          <Typography variant="h6" id="read-more-modal-title" className="mb-4">
-            {project.title}
-          </Typography>
-          <Typography id="read-more-modal-description">
-            {project.description}
-          </Typography>
-          <Typography className="mt-4">
-            <strong>Amount:</strong> {project.amount}
-          </Typography>
-          <Typography>
-            <strong>Deadline:</strong> {project.deadline}
-          </Typography>
-          <div className="mt-6">
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={() => project && onApply(project)}
-            >
-              Apply Now
-            </Button>
-          </div>
-        </Box>
-      </Box>
-    </Modal>
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+      <div className="bg-white p-4 rounded shadow-lg w-full max-w-3xl">
+        <h2 className="text-2xl font-bold mb-2">{project.projects.projectName}</h2>
+        <p className="mb-2"><strong>Description:</strong> {project.projects.projectAmount}</p>
+        <p className="mb-2"><strong>Amount:</strong> {project.projects.projectAmount}</p>
+        <p className="mb-2"><strong>Deadline:</strong> {project.projects.projectDeadline}</p>
+        <p className="mb-2"><strong>Scope:</strong> {project.scope}</p>
+        <p className="mb-2"><strong>Experience Year:</strong> {project.experienceYear}</p>
+        <p className="mb-2"><strong>Level of Experience:</strong> {project.levelOfExperience}</p>
+        <p className="mb-2"><strong>Status:</strong> {project.projectStatus}</p>
+        <button
+          onClick={onClose}
+          className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+        >
+          Close
+        </button>
+      </div>
+    </div>
   );
 };
 

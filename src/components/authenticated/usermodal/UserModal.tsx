@@ -1,6 +1,5 @@
 "use client"
-
-
+import Cookies from 'js-cookie';
 import React, { useState, useEffect, MouseEvent } from 'react';
 import {
   Box,
@@ -12,37 +11,42 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+ import { getUserFromCookies } from '../../auth/token'; // Adjust the path as necessary
+  const user = getUserFromCookies();
+
 import axios from 'axios';
 
 interface User {
-  username: string;
-  role: string;
+  name: string;
+  userType: string;
   imageUrl: string;
 }
 
 const UserModal: React.FC = () => {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [user, setUser] = useState<User | null>(null);
+  // const [user, setUser] = useState<User | null>(null);
 
-  useEffect(() => {
-    // Fetch user data from the backend
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get('/api/user'); // Replace with your API endpoint
-        setUser(response.data);
-      } catch (error) {
-        console.error('Error fetching user data:', error);
-      }
-    };
+  // useEffect(() => {
+  //   // Fetch user data from the backend
+  //   const fetchUserData = async () => {
+  //     try {
+  //       const response = await axios.get('/api/user'); // Replace with your API endpoint
+  //       setUser(response.data);
+  //     } catch (error) {
+  //       console.error('Error fetching user data:', error);
+  //     }
+  //   };
 
-    fetchUserData();
-  }, []);
+  //   fetchUserData();
+  // }, []);
 
   const handleMenuClick = (event: MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
   const handleLogout = () => {
-    // Implement logout functionality
+        Cookies.remove('user');
+        console.log('User cookie has been cleared');
+      ;
     router.push('/homepage');
   };
   const handleSetting = () => {
@@ -55,10 +59,10 @@ const UserModal: React.FC = () => {
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
       <div className="flex flex-col items-center justify-center">
         <Typography variant="h6" sx={{ mr: 2 }}>
-          {user?.username || 'Loading...'}
+          {user?.name || 'Loading...'}
         </Typography>
         <Typography variant="subtitle2" sx={{ mr: 2 }}>
-          {user?.role || 'Loading...'}
+          {user?.userType || 'Loading...'}
         </Typography>
       </div>
       <IconButton onClick={handleMenuClick}>

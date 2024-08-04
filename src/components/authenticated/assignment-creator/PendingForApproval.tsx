@@ -22,36 +22,8 @@ interface DataItem {
 
 const PendingForApproval: React.FC = () => {
   const [data, setData] = useState<DataItem[]>([
-    {
-      title: 'Project 1',
-      description: 'Description 1',
-      amount: 1000,
-      deadline: '2024-07-30',
-      applicants: [
-        { name: 'John Doe', email: 'john@example.com', appliedDate: '2024-07-01' },
-        { name: 'Jane Smith', email: 'jane@example.com', appliedDate: '2024-07-02' }
-      ]
-    },
-    {
-      title: 'Project 2',
-      description: 'Description 2',
-      amount: 2000,
-      deadline: '2024-08-15',
-      applicants: [
-        { name: 'Alice Johnson', email: 'alice@example.com', appliedDate: '2024-07-05' },
-        { name: 'Bob Brown', email: 'bob@example.com', appliedDate: '2024-07-06' }
-      ]
-    },
-    {
-      title: 'Project 3',
-      description: 'Description 3',
-      amount: 3000,
-      deadline: '2024-09-01',
-      applicants: [
-        { name: 'Charlie Davis', email: 'charlie@example.com', appliedDate: '2024-07-10' },
-        { name: 'David Evans', email: 'david@example.com', appliedDate: '2024-07-11' }
-      ]
-    },
+
+   
     {
       title: 'Project 4',
       description: 'Description 4',

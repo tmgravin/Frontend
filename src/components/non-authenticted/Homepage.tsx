@@ -52,7 +52,7 @@ const Homepage: React.FC = () => {
   };
 
   return (
-    <div className='w-full h-full'>
+    <div className=''>
       <Header />
       <div className='homepage-bg w-full h-screen px-2 flex flex-1 flex-col justify-center items-start'>
         <div className='w-1/2 text-3xl text-white'>
