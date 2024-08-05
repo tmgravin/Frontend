@@ -1,9 +1,9 @@
 "use client";
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReadMoreModal from './ReadMoreModal';
 import EditAssignmentModal from './EditAssignmentModal';
+import PaymentUploadModal from '@/Payment/PaymentUploadModal'; // Correct import statement
 import { getUserFromCookies } from '../../auth/token';
 
 const user = getUserFromCookies();
@@ -17,6 +17,10 @@ export interface DataItem {
   projectUrl: string;
   createdAt: string;
   updatedAt: string;
+  description: string;
+  
+  skills?: string;
+  budgets?: string;
   projects: {
     id: number;
     projectName: string;
@@ -39,6 +43,7 @@ export interface DataItem {
 
 const LatestProjects: React.FC = () => {
   const [editModalVisible, setEditModalVisible] = useState(false);
+  const [paymentModalVisible, setPaymentModalVisible] = useState(false); // State for payment modal visibility
   const [data, setData] = useState<DataItem[]>([]);
   const [visibleCount, setVisibleCount] = useState(8);
   const [loading, setLoading] = useState(false);
@@ -55,6 +60,7 @@ const LatestProjects: React.FC = () => {
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data", error);
+      // Optionally set some error state here to show a user-friendly message
     }
     setLoading(false);
   };
@@ -64,10 +70,9 @@ const LatestProjects: React.FC = () => {
   };
 
   const truncateDescription = (description: string, length: number) => {
-    if (description.length <= length) return description;
-    return description.slice(0, length) + '... ';
+    return description.length <= length ? description : description.slice(0, length) + '...';
   };
-
+  
   const handleReadMore = (project: DataItem) => {
     setSelectedProject(project);
   };
@@ -86,6 +91,16 @@ const LatestProjects: React.FC = () => {
     setSelectedProject(null);
   };
 
+  const openPaymentModal = (project: DataItem) => {
+    setSelectedProject(project);
+    setPaymentModalVisible(true);
+  };
+
+  const closePaymentModal = () => {
+    setPaymentModalVisible(false);
+    setSelectedProject(null);
+  };
+
   const handleSave = () => {
     closeEditModal();
     // Optionally, refresh the data or take some other action
@@ -95,7 +110,9 @@ const LatestProjects: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4 cb-shadow cbg-color py-5">
-      <div className='flex justify-center items-center primary-green p-2'>Assignments You Have Posted</div>
+      <div className='flex justify-center items-center primary-green p-2'>
+        Assignments You Have Posted
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {displayedData.map((item, index) => (
           <div key={index} className="p-4 border rounded shadow">
@@ -105,6 +122,7 @@ const LatestProjects: React.FC = () => {
               <button
                 onClick={() => handleReadMore(item)}
                 className="text-blue-500 hover:underline"
+                aria-label={`Read more about ${item.projects.projectName}`}
               >
                 Read More
               </button>
@@ -114,8 +132,16 @@ const LatestProjects: React.FC = () => {
             <button
               className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg"
               onClick={() => openEditModal(item)}
+              aria-label={`Edit assignment ${item.projects.projectName}`}
             >
               Edit Assignment
+            </button>
+            <button
+              className="mt-2 px-4 py-2 bg-green-500 text-white rounded-lg"
+              onClick={() => openPaymentModal(item)}
+              aria-label={`Add payment for ${item.projects.projectName}`}
+            >
+              Add Payment
             </button>
           </div>
         ))}
@@ -142,6 +168,15 @@ const LatestProjects: React.FC = () => {
           project={selectedProject}
           onClose={closeEditModal}
           onSave={handleSave}
+        />
+      )}
+      {paymentModalVisible && selectedProject && (
+        <PaymentUploadModal
+          open={paymentModalVisible}
+          onClose={closePaymentModal}
+          projectId={selectedProject.projects.id} // Pass projectId as a string
+          projectName={selectedProject.projects.projectName}
+          name={selectedProject.projects.users.name}
         />
       )}
     </div>

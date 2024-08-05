@@ -16,7 +16,7 @@ const BankDetails: React.FC = () => {
   // State for editing values
   const [editValues, setEditValues] = useState({
     firstName: bankDetails.firstName,
-    lastName: bankDetails.lastName,
+     lastName: bankDetails.lastName,
     accountNumber: bankDetails.accountNumber,
     bankName: bankDetails.bankName,
     creditCardNumber: bankDetails.creditCardNumber,
@@ -83,32 +83,31 @@ const BankDetails: React.FC = () => {
         <div className='flex flex-row'>
         <div className="mb-4">
           <label className="block text-gray-700">
-           Account Holder First Name
+           Account Holder Name:
           </label>
           <p>{bankDetails.firstName}</p>
         </div>
-        <div className="mb-4 px-5">
+        {/* <div className="mb-4 px-5">
           <label className="block text-gray-700">
           Account Holder Last Name
           </label>
           <p>{bankDetails.lastName}</p>
-        </div>
+        </div> */}
        </div>
 
-       <div className='flex flex-row'>
         <div className="mb-4">
           <label className="block text-gray-700">
-            Account Number
+            Account Number:
           </label>
           <p>{bankDetails.accountNumber}</p>
         </div>
-        <div className="mb-4 px-5">
+        <div className="mb-4">
           <label className="block text-gray-700">
-            Bank Name
+            Bank Name:
           </label>
           <p>{bankDetails.bankName}</p>
         </div>
-        </div>
+       
         {/* <div className="mb-4">
           <label className="block text-gray-700">
             Credit Card Number
@@ -117,7 +116,7 @@ const BankDetails: React.FC = () => {
         </div> */}
         <div className="mb-4">
           <label className="block text-gray-700">
-            Registered Phone Number
+            Registered Phone Number:
           </label>
           <p>{bankDetails.registeredPhoneNumber}</p>
         </div>
@@ -144,14 +143,14 @@ const BankDetails: React.FC = () => {
               className="w-full p-2 border border-gray-300 rounded mb-4"
               placeholder="First Name"
             />
-            <input
+            {/* <input
               type="text"
               name="lastName"
               value={editValues.lastName}
               onChange={handleEditChange}
               className="w-full p-2 border border-gray-300 rounded mb-4"
               placeholder="Last Name"
-            />
+            /> */}
             <input
               type="text"
               name="accountNumber"

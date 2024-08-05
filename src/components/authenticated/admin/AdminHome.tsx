@@ -6,6 +6,7 @@ import ProjectsTableComponent from './Projects';
 import Dashboard from './Dashboard';
 import Image from 'next/image';
 import UserModal from '../usermodal/UserModal';
+import FeaturedImages from './FeaturedImages';
 const AdminHome: React.FC = () => {
   return (
   
@@ -28,6 +29,9 @@ const AdminHome: React.FC = () => {
           <Tabs.Trigger value="craetors" style={tabStyle}>Creators</Tabs.Trigger>
           <Tabs.Trigger value="doers" style={tabStyle}>Doers</Tabs.Trigger>
           <Tabs.Trigger value="projects" style={tabStyle}>Projects</Tabs.Trigger>
+          <Tabs.Trigger value="update" style={tabStyle}>Update Images</Tabs.Trigger>
+
+
 
           
         </Tabs.List>
@@ -50,6 +54,10 @@ const AdminHome: React.FC = () => {
           <Tabs.Content value="projects">
             <h2>Projects</h2>
           <ProjectsTableComponent/>
+          </Tabs.Content>
+          <Tabs.Content value="update">
+            <h2>Featured Images</h2>
+         <FeaturedImages/>
           </Tabs.Content>
         </div>
       </Tabs.Root>

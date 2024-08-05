@@ -1,9 +1,9 @@
-"use client"
 // src/DataFetching.tsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Box, Typography, Button, Container, Grid, CircularProgress } from '@mui/material';
 import ApplicantsInfoModal from './ApplicantsInfoModal';
+import { getUserFromCookies } from '@/components/auth/token';
 
 interface Applicant {
   name: string;
@@ -12,40 +12,27 @@ interface Applicant {
   status?: string;
 }
 
+interface Project {
+  projectName: string;
+  projectAmount: number;
+  projectDeadline: string;
+  // Include other fields as needed
+}
+
 interface DataItem {
-  title: string;
-  description: string;
-  amount: number;
-  deadline: string;
-  applicants: Applicant[];
+  id: number;
+  projects: Project;
+  doer: {
+    name: string;
+    email: string;
+  };
+  status: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const PendingForApproval: React.FC = () => {
-  const [data, setData] = useState<DataItem[]>([
-
-   
-    {
-      title: 'Project 4',
-      description: 'Description 4',
-      amount: 4000,
-      deadline: '2024-07-25',
-      applicants: [
-        { name: 'Eve Foster', email: 'eve@example.com', appliedDate: '2024-07-12' },
-        { name: 'Frank Green', email: 'frank@example.com', appliedDate: '2024-07-13' }
-      ]
-    },
-    {
-      title: 'Project 5',
-      description: 'Description 5',
-      amount: 5000,
-      deadline: '2024-08-05',
-      applicants: [
-        { name: 'Grace Harris', email: 'grace@example.com', appliedDate: '2024-07-14' },
-        { name: 'Hank Iverson', email: 'hank@example.com', appliedDate: '2024-07-15' }
-      ]
-    }
-  ]);
-  const [visibleCount, setVisibleCount] = useState(8);
+  const [data, setData] = useState<DataItem | null>(null);
   const [loading, setLoading] = useState(false);
   const [selectedAssignment, setSelectedAssignment] = useState<DataItem | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
@@ -54,19 +41,18 @@ const PendingForApproval: React.FC = () => {
     fetchData();
   }, []);
 
+  const user = getUserFromCookies();
+  const id = user.id;
+
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get<DataItem[]>('API_ENDPOINT');
+      const response = await axios.get<DataItem>(`http://localhost:8080/api/application/?id=1`);
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data", error);
     }
     setLoading(false);
-  };
-
-  const loadMore = () => {
-    setVisibleCount((prevCount) => prevCount + 4);
   };
 
   const handleViewApplicants = (assignment: DataItem) => {
@@ -76,66 +62,43 @@ const PendingForApproval: React.FC = () => {
 
   const handleAccept = (index: number) => {
     if (selectedAssignment) {
-      const updatedApplicants = [...selectedAssignment.applicants];
-      updatedApplicants[index].status = 'accepted';
-      const updatedData = data.map(item =>
-        item.title === selectedAssignment.title ? { ...item, applicants: updatedApplicants } : item
-      );
-      setData(updatedData);
-      setSelectedAssignment({ ...selectedAssignment, applicants: updatedApplicants });
+      // Update state logic here
+      // Assume you update applicant status in some way
     }
   };
 
   const handleReject = (index: number) => {
     if (selectedAssignment) {
-      const updatedApplicants = [...selectedAssignment.applicants];
-      updatedApplicants[index].status = 'rejected';
-      const updatedData = data.map(item =>
-        item.title === selectedAssignment.title ? { ...item, applicants: updatedApplicants } : item
-      );
-      setData(updatedData);
-      setSelectedAssignment({ ...selectedAssignment, applicants: updatedApplicants });
+      // Update state logic here
+      // Assume you update applicant status in some way
     }
   };
 
-  const displayedData = data.slice(0, visibleCount);
-
   return (
     <Container>
-      
-        <p  className='flex justify-center items-center primary-green p-2 font-bold'>Assignment Pending For Approval</p>
-     
+      <p className='flex justify-center items-center primary-green p-2 font-bold'>Assignment Pending For Approval</p>
       <Grid container spacing={4}>
-        {displayedData.map((item, index) => (
-          <Grid item xs={12} sm={6} md={4} lg={3} key={index}>
+        {data && (
+          <Grid item xs={12} sm={6} md={4} lg={3} key={data.id}>
             <Box sx={{ p: 2, border: '1px solid #ccc', borderRadius: '8px', boxShadow: 2 }}>
-              <Typography variant="h6" component="h2">{item.title}</Typography>
-              <Typography variant="body1">Description: {item.description}</Typography>
-              <Typography variant="body2">Amount: ${item.amount}</Typography>
-              <Typography variant="body2">Deadline: {item.deadline}</Typography>
+              <Typography variant="h6" component="h2">{data.projects.projectName}</Typography>
+              <Typography variant="body1">Description: {/* Add description if available */}</Typography>
+              <Typography variant="body2">Amount: ${data.projects.projectAmount}</Typography>
+              <Typography variant="body2">Deadline: {data.projects.projectDeadline}</Typography>
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => handleViewApplicants(item)}
+                onClick={() => handleViewApplicants(data)}
                 sx={{ mt: 2 }}
               >
                 View Applicants
               </Button>
             </Box>
           </Grid>
-        ))}
+        )}
       </Grid>
       <Box sx={{ textAlign: 'center', mt: 4 }}>
-        {visibleCount < data.length && (
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={loadMore}
-            disabled={loading}
-          >
-            {loading ? <CircularProgress size={24} /> : 'Load More'}
-          </Button>
-        )}
+        {loading && <CircularProgress size={24} />}
       </Box>
       {selectedAssignment && (
         <ApplicantsInfoModal

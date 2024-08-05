@@ -10,6 +10,7 @@ import { DataItem } from './LatestProjects';
 const user = getUserFromCookies();
 
 interface EditAssignmentModalProps {
+  
   project: DataItem;
   onClose: () => void;
   onSave: () => void;
@@ -17,13 +18,13 @@ interface EditAssignmentModalProps {
 
 const EditAssignmentModal: React.FC<EditAssignmentModalProps> = ({ project, onClose, onSave }) => {
   const [title, setTitle] = useState(project.projects.projectName);
-  const [description, setDescription] = useState(project.projects.description || '');
+  const [description, setDescription] = useState(project.description || '');
   const [deadline, setDeadline] = useState(project.projects.projectDeadline);
   const [attachment, setAttachment] = useState<File | null>(null);
 
   const [experienceYear, setExperienceYear] = useState(project.experienceYear);
   const [levelOfExperience, setLevelOfExperience] = useState(project.levelOfExperience);
-  const [skills, setSkills] = useState(project.projects.skills || '');
+  const [skills, setSkills] = useState(project.skills || '');
   const [budgetType, setBudgetType] = useState(project.projects.budgets || '');
   const [budget, setBudget] = useState(project.projects.projectAmount);
   const [scope, setScope] = useState(project.scope);

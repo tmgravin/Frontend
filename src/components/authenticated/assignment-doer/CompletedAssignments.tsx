@@ -1,9 +1,14 @@
-"use client"
-// src/DataFetching.tsx
+// src/CompletedAssignments.tsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { getUserFromCookies } from '@/components/auth/token';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Import toastify CSS
+
+const user = getUserFromCookies();
 
 interface DataItem {
+  id: number;
   title: string;
   description: string;
   amount: number;
@@ -11,22 +16,11 @@ interface DataItem {
 }
 
 const CompletedAssignments: React.FC = () => {
-  const [data, setData] = useState<DataItem[]>([
-    { title: 'Project 1', description: 'Description 1', amount: 1000, deadline: '2024-07-30' },
-    { title: 'Project 2', description: 'Description 2', amount: 2000, deadline: '2024-08-15' },
-    { title: 'Project 3', description: 'Description 3', amount: 3000, deadline: '2024-09-01' },
-    { title: 'Project 4', description: 'Description 4', amount: 4000, deadline: '2024-07-25' },
-    { title: 'Project 5', description: 'Description 5', amount: 5000, deadline: '2024-08-05' },
-    { title: 'Project 6', description: 'Description 6', amount: 6000, deadline: '2024-09-10' },
-    { title: 'Project 7', description: 'Description 7', amount: 7000, deadline: '2024-07-29' },
-    { title: 'Project 8', description: 'Description 8', amount: 8000, deadline: '2024-08-20' },
-    { title: 'Project 9', description: 'Description 9', amount: 9000, deadline: '2024-09-15' },
-    { title: 'Project 10', description: 'Description 10', amount: 10000, deadline: '2024-10-01' },
-  ]);
+  const [data, setData] = useState<DataItem[]>([]);
   const [visibleCount, setVisibleCount] = useState(8);
   const [loading, setLoading] = useState(false);
-  const [selectedFiles, setSelectedFiles] = useState<{ [key: string]: File | null }>({});
-  const [uploading, setUploading] = useState(false);
+  const [selectedFiles, setSelectedFiles] = useState<{ [key: number]: File | null }>({});
+  const [uploading, setUploading] = useState<{ [key: number]: boolean }>({});
 
   useEffect(() => {
     fetchData();
@@ -35,7 +29,8 @@ const CompletedAssignments: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get<DataItem[]>('API_ENDPOINT');
+      const doerID = user.id;
+      const response = await axios.get<DataItem[]>('http://localhost:8080/api/projects/doer?doer=1');
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data", error);
@@ -47,36 +42,38 @@ const CompletedAssignments: React.FC = () => {
     setVisibleCount((prevCount) => prevCount + 4);
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>, projectId: number) => {
     if (e.target.files && e.target.files.length > 0) {
       setSelectedFiles({
         ...selectedFiles,
-        [index]: e.target.files[0],
+        [projectId]: e.target.files[0],
       });
     }
   };
 
-  const handleUpload = async (index: number) => {
-    const file = selectedFiles[index];
+  const handleUpload = async (projectId: number) => {
+    const file = selectedFiles[projectId];
     if (!file) return;
 
-    setUploading(true);
+    setUploading((prev) => ({ ...prev, [projectId]: true }));
 
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('project', projectId.toString());
 
     try {
-      await axios.post(`/api/upload/${index}`, formData, {
+      await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/competed/project/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      alert('File uploaded successfully');
+      toast.success('File uploaded successfully');
     } catch (error) {
       console.error('Error uploading file:', error);
+      toast.error('Error uploading file');
     }
 
-    setUploading(false);
+    setUploading((prev) => ({ ...prev, [projectId]: false }));
   };
 
   const displayedData = data.slice(0, visibleCount);
@@ -85,8 +82,8 @@ const CompletedAssignments: React.FC = () => {
     <div className="container mx-auto p-4 cb-shadow cbg-color py-5">
       <div className='flex justify-center items-center primary-green p-2'>Completed Assignments</div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {displayedData.map((item, index) => (
-          <div key={index} className="p-4 border rounded shadow">
+        {displayedData.map((item) => (
+          <div key={item.id} className="p-4 border rounded shadow">
             <h2 className="text-xl font-bold">{item.title}</h2>
             <p>{item.description}</p>
             <p className="text-sm">Project Amount: {item.amount}</p>
@@ -94,15 +91,15 @@ const CompletedAssignments: React.FC = () => {
             <p className="text-sm">Upload Assignment:</p>
             <input
               type="file"
-              onChange={(e) => handleFileChange(e, index)}
+              onChange={(e) => handleFileChange(e, item.id)}
               className="mb-2"
             />
             <button
-              onClick={() => handleUpload(index)}
+              onClick={() => handleUpload(item.id)}
               className="mt-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700"
-              disabled={uploading}
+              disabled={uploading[item.id]}
             >
-              {uploading ? 'Uploading...' : 'Upload'}
+              {uploading[item.id] ? 'Uploading...' : 'Upload'}
             </button>
           </div>
         ))}
@@ -118,6 +115,7 @@ const CompletedAssignments: React.FC = () => {
           </button>
         )}
       </div>
+      <ToastContainer /> {/* Add ToastContainer here */}
     </div>
   );
 };

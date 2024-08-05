@@ -11,10 +11,10 @@ function Dashboard() {
 
 <div><AssignmentChart/></div>
 
-        <div>
+        {/* <div>
 
         <ProjectsTableComponent/>
-        </div>
+        </div> */}
     </div>
 
   )

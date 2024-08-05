@@ -1,4 +1,3 @@
-import ParentComponent from '@/Payment/Test'
 import React from 'react'
 
 function page
@@ -7,7 +6,7 @@ function page
   return (
     <div>
         
-        <ParentComponent/>
+      
     </div>
   )
 }

@@ -3,27 +3,32 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+// Define types based on the API response structure
+interface Project {
+  id: number;
+  projectName: string;
+  projectAmount: string;
+  projectDeadline: string;
+  status: string;
+}
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
+
 interface DataItem {
-  title: string;
-  description: string;
-  amount: number;
-  deadline: string;
-  status: 'Accepted' | 'Rejected';
+  id: number;
+  projects: Project;
+  doer: User;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 const AssignmentStatus: React.FC = () => {
-  const [data, setData] = useState<DataItem[]>([
-    { title: 'Project 1', description: 'Description 1', amount: 1000, deadline: '2024-07-30', status: 'Accepted' },
-    { title: 'Project 2', description: 'Description 2', amount: 2000, deadline: '2024-08-15', status: 'Rejected' },
-    { title: 'Project 3', description: 'Description 3', amount: 3000, deadline: '2024-09-01', status: 'Accepted' },
-    { title: 'Project 4', description: 'Description 4', amount: 4000, deadline: '2024-07-25', status: 'Rejected' },
-    { title: 'Project 5', description: 'Description 5', amount: 5000, deadline: '2024-08-05', status: 'Accepted' },
-    { title: 'Project 6', description: 'Description 6', amount: 6000, deadline: '2024-09-10', status: 'Rejected' },
-    { title: 'Project 7', description: 'Description 7', amount: 7000, deadline: '2024-07-29', status: 'Accepted' },
-    { title: 'Project 8', description: 'Description 8', amount: 8000, deadline: '2024-08-20', status: 'Rejected' },
-    { title: 'Project 9', description: 'Description 9', amount: 9000, deadline: '2024-09-15', status: 'Accepted' },
-    { title: 'Project 10', description: 'Description 10', amount: 10000, deadline: '2024-10-01', status: 'Rejected' },
-  ]);
+  const [data, setData] = useState<DataItem[]>([]);
   const [visibleCount, setVisibleCount] = useState(8);
   const [loading, setLoading] = useState(false);
 
@@ -34,7 +39,8 @@ const AssignmentStatus: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get<DataItem[]>('API_ENDPOINT');
+      //need to implement doer id here and ain
+      const response = await axios.get<DataItem[]>('http://localhost:8080/api/projects/doer?doer=1');
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data", error);
@@ -52,13 +58,13 @@ const AssignmentStatus: React.FC = () => {
     <div className="container mx-auto p-4 cb-shadow cbg-color py-5">
       <div className='flex justify-center items-center primary-green p-2'>Assignment Status</div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {displayedData.map((item, index) => (
-          <div key={index} className="p-4 border rounded shadow">
-            <h2 className="text-xl font-bold">{item.title}</h2>
-            <p>{item.description}</p>
-            <p className="text-sm">Project Amount: {item.amount}</p>
-            <p className="text-sm">Deadline: {item.deadline}</p>
-            <p className={`text-sm font-bold ${item.status === 'Accepted' ? 'text-green-500' : 'text-red-500'}`}>Status: {item.status}</p>
+        {displayedData.map((item) => (
+          <div key={item.id} className="p-4 border rounded shadow">
+            <h2 className="text-xl font-bold">{item.projects.projectName}</h2>
+            <p>{item.projects.projectAmount}</p>
+            <p className="text-sm">Deadline: {item.projects.projectDeadline}</p>
+            <p className={`text-sm font-bold ${item.status === 'ACCEPTED' ? 'text-green-500' : 'text-red-500'}`}>Status: {item.status}</p>
+            <p className="text-sm">Doer: {item.doer.name}</p>
           </div>
         ))}
       </div>

@@ -133,7 +133,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
                   <input type="password" name="confirmPassword" id="signup-confirm-password" value={isTeacherSignup ? teacherSignupData.confirmPassword : studentSignupData.confirmPassword} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Confirm Password" required />
                 </div>
                 <div className="flex items-center mb-4">
-                  <input type="checkbox" id="remember-me" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded" />
+                  <input type="checkbox" id="remember-me" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "required />
                   <label htmlFor="remember-me" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">I agree to  <div className='text-blue-700'><Link href="/termsandconditions">Terms and Condition</Link> </div> </label>
                 </div>
                 <button type="submit" className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800">

@@ -22,13 +22,13 @@ const InfoCards: React.FC = () => {
           userType: "ASSIGNMENT_CREATOR",
         });
         setTotalCreator(creatorResponse.data); 
-        // console.log(creatorResponse)
+  
 
         const doerResponse = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/countUsers`, {
           userType: "ASSIGNMENT_DOER",
         });
-        console.log(doerResponse)
-        // setTotalDoer(doerResponse.data);
+       
+        setTotalDoer(doerResponse.data)
         
       } catch (err) {
         console.error("Error fetching data:", err);
