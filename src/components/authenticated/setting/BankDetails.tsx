@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getUserFromCookies } from '@/components/auth/token';
-
+import { ToastContainer,toast } from 'react-toastify';
 const user = getUserFromCookies() || { id: null }; // Set a default value
 
 const BankDetails: React.FC = () => {
@@ -74,9 +74,11 @@ const BankDetails: React.FC = () => {
           headers: {
             'Content-Type': 'application/json',
           },
+          withCredentials: true,
         }
       );
       if (response.data) {
+        toast.success('Bank details updated successfully');
         console.log('Bank details updated successfully');
         setBankDetails(editValues);
         handleEditToggle(e);
@@ -84,12 +86,14 @@ const BankDetails: React.FC = () => {
         console.error('Failed to update bank details');
       }
     } catch (error) {
+      toast.error('Error updating bank details')
       console.error('Error updating bank details:', error);
     }
   };
 
   return (
     <div className="container mx-auto p-4 max-w-md">
+      <ToastContainer/>
       <h2 className="text-2xl mb-4">Bank Details</h2>
 
       <form noValidate autoComplete="off">

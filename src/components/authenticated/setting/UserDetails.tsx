@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
 import { getUserFromCookies } from '@/components/auth/token'; // Adjust the path as necessary
-
+import { ToastContainer,toast } from 'react-toastify';
 // Default user object if getUserFromCookies returns null
 const user = getUserFromCookies() || { id: '', name: '', email: '', address: '', phone: '', profilePicture: '' };
 
@@ -56,15 +56,20 @@ const UserDetails: React.FC = () => {
     };
 
     try {
-      const response = await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/updateUser/${user.id}`, payload); // Replace with your API endpoint
+      const response = await axios.put(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/updateUser/${user.id}`, payload,
+        {withCredentials: true,}
+      ); 
       if (response.status === 200) {
+        toast.success('Profile updated successfully')
         console.log('Profile updated successfully');
+
         setProfile(fieldValues);
         setIsEditing(false);
       } else {
         console.error('Failed to update profile');
       }
     } catch (error) {
+      toast.error('Error updating profiles')
       console.error('Error updating profile:', error);
     }
   };
@@ -80,7 +85,8 @@ const UserDetails: React.FC = () => {
       const response = await axios.put('/api/profile/picture', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
-        }
+        },
+        withCredentials: true,
       }); // Replace with your API endpoint
       if (response.status === 200) {
         console.log('Profile picture updated successfully');
@@ -121,12 +127,15 @@ const UserDetails: React.FC = () => {
         withCredentials: true // Include credentials with the request
       });
       if (response.status === 200) {
+        toast.success('Password changed successfully')
         console.log('Password changed successfully');
         handleClosePasswordDialog(e);
       } else {
         console.error('Failed to change password');
       }
     } catch (error) {
+      toast.error('Error changing password')
+
       console.error('Error changing password:', error);
     }
   };
@@ -139,6 +148,7 @@ const UserDetails: React.FC = () => {
 
   return (
     <div className="container mx-auto font-bold p-4 max-w-md">
+      <ToastContainer/>
       <h2 className="text-2xl mb-4">Personal Information</h2>
 
       {/* Profile Picture */}
