@@ -34,7 +34,9 @@ const StudentComponent: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/role?userType=ASSIGNMENT_CREATOR`);
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/role?userType=ASSIGNMENT_CREATOR`,{
+        withCredentials: true // Include credentials with the request
+      });
     
       console.log(response)
 

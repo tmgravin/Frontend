@@ -2,7 +2,8 @@
 // src/DataFetching.tsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import { getUserFromCookies } from '@/components/auth/token';
+const user =getUserFromCookies();
 // Define types based on the API response structure
 interface Project {
   id: number;
@@ -40,7 +41,7 @@ const AssignmentStatus: React.FC = () => {
     setLoading(true);
     try {
       //need to implement doer id here and ain
-      const response = await axios.get<DataItem[]>('http://localhost:8080/api/projects/doer?doer=1');
+      const response = await axios.get<DataItem[]>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/doer?doer=${user.id}`,{  withCredentials: true });
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data", error);

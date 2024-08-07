@@ -7,6 +7,7 @@ import Dashboard from './Dashboard';
 import Image from 'next/image';
 import UserModal from '../usermodal/UserModal';
 import FeaturedImages from './FeaturedImages';
+import CategoryForm from './InfoModals/AddCatagory/addCatagory';
 const AdminHome: React.FC = () => {
   return (
   
@@ -30,6 +31,7 @@ const AdminHome: React.FC = () => {
           <Tabs.Trigger value="doers" style={tabStyle}>Doers</Tabs.Trigger>
           <Tabs.Trigger value="projects" style={tabStyle}>Projects</Tabs.Trigger>
           <Tabs.Trigger value="update" style={tabStyle}>Update Images</Tabs.Trigger>
+          <Tabs.Trigger value="category" style={tabStyle}>Add Category</Tabs.Trigger>
 
 
 
@@ -58,6 +60,10 @@ const AdminHome: React.FC = () => {
           <Tabs.Content value="update">
             <h2>Featured Images</h2>
          <FeaturedImages/>
+          </Tabs.Content>
+          <Tabs.Content value="category">
+            <h2>add category</h2>
+        <CategoryForm/>
           </Tabs.Content>
         </div>
       </Tabs.Root>

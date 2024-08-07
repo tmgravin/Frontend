@@ -41,7 +41,9 @@ const EditAssignmentModal: React.FC<EditAssignmentModalProps> = ({ project, onCl
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/category/`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/category/`,{
+          withCredentials: true // Include credentials with the request
+        });
         setCatData(response.data);
       } catch (error) {
         console.error('Error fetching categories', error);
@@ -76,6 +78,8 @@ const EditAssignmentModal: React.FC<EditAssignmentModalProps> = ({ project, onCl
           headers: {
             'Content-Type': 'multipart/form-data', // Set the Content-Type header to multipart/form-data
           },
+          withCredentials: true
+
         }
       );
       toast.success('Assignment updated successfully!');

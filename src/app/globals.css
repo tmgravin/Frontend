@@ -88,10 +88,8 @@ color:#7F7D7D;
 .homepage-bg {
   background-image: 
     linear-gradient(101.39deg, #000000 5.69%, rgba(5, 4, 4, 0.7) 32.85%, rgba(4, 4, 4, 0.475) 46.15%, rgba(102, 102, 102, 0.3) 58.44%), /* Gradient layer */
-    url('/man-working-bg.jpeg'); /* Image layer */
-  background-size: cover;
-  background-position: center;
-  min-height: 300px; 
+    
+
 }
 
 .creator-bg {

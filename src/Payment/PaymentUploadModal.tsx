@@ -48,6 +48,7 @@ const PaymentUploadModal: React.FC<PaymentUploadModalProps> = ({ open, onClose, 
       headers: {
         'Content-Type': 'multipart/form-data',
       },
+      withCredentials: true // Include credentials with the request
     })
       .then(response => {
         console.log('Payment data uploaded successfully:', response.data);

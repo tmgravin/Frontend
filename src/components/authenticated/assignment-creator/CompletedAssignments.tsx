@@ -49,7 +49,9 @@ const CompletedAssignments: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get<DataItem[]>('API_ENDPOINT');
+      const response = await axios.get<DataItem[]>('API_ENDPOINT',{
+        withCredentials: true // Include credentials with the request
+      });
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data", error);

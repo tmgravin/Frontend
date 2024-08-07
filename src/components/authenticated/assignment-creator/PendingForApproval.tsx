@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Box, Typography, Button, Container, Grid, CircularProgress } from '@mui/material';
 import ApplicantsInfoModal from './ApplicantsInfoModal';
 import { getUserFromCookies } from '@/components/auth/token';
+const user = getUserFromCookies();
 
 interface Applicant {
   name: string;
@@ -41,13 +42,11 @@ const PendingForApproval: React.FC = () => {
     fetchData();
   }, []);
 
-  const user = getUserFromCookies();
-  const id = user.id;
 
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get<DataItem>(`http://localhost:8080/api/application/?id=1`);
+      const response = await axios.get<DataItem>(`http://localhost:8080/api/application/?id=${user.id}`,{  withCredentials: true });
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data", error);

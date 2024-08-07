@@ -1,5 +1,9 @@
 "use client";
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+import { getUserFromCookies } from '@/components/auth/token';
+
+const user = getUserFromCookies() || { id: null }; // Set a default value
 
 const BankDetails: React.FC = () => {
   // State for bank details
@@ -10,31 +14,38 @@ const BankDetails: React.FC = () => {
     bankName: '',
     creditCardNumber: '',
     registeredPhoneNumber: '',
-    expiryDate: ''
   });
 
   // State for editing values
   const [editValues, setEditValues] = useState({
     firstName: bankDetails.firstName,
-     lastName: bankDetails.lastName,
+    lastName: bankDetails.lastName,
     accountNumber: bankDetails.accountNumber,
     bankName: bankDetails.bankName,
     creditCardNumber: bankDetails.creditCardNumber,
     registeredPhoneNumber: bankDetails.registeredPhoneNumber,
-    expiryDate: bankDetails.expiryDate
+    users: {
+      id: user.id,
+    },
   });
 
   // State for edit dialog
   const [openEditDialog, setOpenEditDialog] = useState(false);
 
   useEffect(() => {
+    if (!user.id) {
+      console.error('User ID is not available');
+      return;
+    }
+
     // Fetch bank details from API
     const fetchBankDetails = async () => {
       try {
-        const response = await fetch('/api/bank-details'); // Replace with your API endpoint
-        const result = await response.json();
-        setBankDetails(result);
-        setEditValues(result);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/account/?id=${user.id}`, {
+          withCredentials: true,
+        }); // Replace with your API endpoint
+        setBankDetails(response.data);
+        setEditValues(response.data);
       } catch (error) {
         console.error('Error fetching bank details:', error);
       }
@@ -56,14 +67,16 @@ const BankDetails: React.FC = () => {
   const handleSave = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     try {
-      const response = await fetch('/api/bank-details', { // Replace with your API endpoint
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(editValues),
-      });
-      if (response.ok) {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/`,
+        editValues,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      if (response.data) {
         console.log('Bank details updated successfully');
         setBankDetails(editValues);
         handleEditToggle(e);
@@ -81,46 +94,31 @@ const BankDetails: React.FC = () => {
 
       <form noValidate autoComplete="off">
         <div className='flex flex-row'>
-        <div className="mb-4">
-          <label className="block text-gray-700">
-           Account Holder Name:
-          </label>
-          <p>{bankDetails.firstName}</p>
+          <div className="mb-4">
+            <label className="block text-gray-700">Account Holder Name:</label>
+            <p>{bankDetails.firstName}</p>
+          </div>
+          <div className="mb-4 px-5">
+            <label className="block text-gray-700">Account Holder Last Name:</label>
+            <p>{bankDetails.lastName}</p>
+          </div>
         </div>
-        {/* <div className="mb-4 px-5">
-          <label className="block text-gray-700">
-          Account Holder Last Name
-          </label>
-          <p>{bankDetails.lastName}</p>
-        </div> */}
-       </div>
-
         <div className="mb-4">
-          <label className="block text-gray-700">
-            Account Number:
-          </label>
+          <label className="block text-gray-700">Account Number:</label>
           <p>{bankDetails.accountNumber}</p>
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700">
-            Bank Name:
-          </label>
+          <label className="block text-gray-700">Bank Name:</label>
           <p>{bankDetails.bankName}</p>
         </div>
-       
-        {/* <div className="mb-4">
-          <label className="block text-gray-700">
-            Credit Card Number
-          </label>
-          <p>{bankDetails.creditCardNumber}</p>
-        </div> */}
         <div className="mb-4">
-          <label className="block text-gray-700">
-            Registered Phone Number:
-          </label>
+          <label className="block text-gray-700">Credit Card Number:</label>
+          <p>{bankDetails.creditCardNumber}</p>
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Registered Phone Number:</label>
           <p>{bankDetails.registeredPhoneNumber}</p>
         </div>
-      
 
         <button
           onClick={handleEditToggle}
@@ -143,14 +141,14 @@ const BankDetails: React.FC = () => {
               className="w-full p-2 border border-gray-300 rounded mb-4"
               placeholder="First Name"
             />
-            {/* <input
+            <input
               type="text"
               name="lastName"
               value={editValues.lastName}
               onChange={handleEditChange}
               className="w-full p-2 border border-gray-300 rounded mb-4"
               placeholder="Last Name"
-            /> */}
+            />
             <input
               type="text"
               name="accountNumber"
@@ -183,7 +181,7 @@ const BankDetails: React.FC = () => {
               className="w-full p-2 border border-gray-300 rounded mb-4"
               placeholder="Registered Phone Number"
             />
-          
+
             <div className="flex justify-end">
               <button
                 onClick={handleEditToggle}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Typography, Button } from '@mui/material';
-
+import axios from 'axios';
 interface Creator {
   name: string;
   email: string;
@@ -56,6 +56,8 @@ const ProjectInfoModal: React.FC<ProjectInfoModalProps> = ({ project, open, onCl
 
 
   const handleVisible=()=>{
+    const response= axios.post
+
     console.log("made visbile to creator")
   }
 

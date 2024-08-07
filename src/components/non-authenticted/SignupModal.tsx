@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
+import { ToastContainer,toast } from 'react-toastify';
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -63,8 +64,9 @@ const SignupModal: React.FC<SignupModalProps> = ({
     const dataToSend = { ...signupData, userType };
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/`, dataToSend);
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/signup`, dataToSend);
       if (response.status === 200) {
+        toast.success("Signup successful! Please verify your email to log in")
         setSuccessMessage("Signup successful! Please verify your email to log in.");
         setError(null);
         // Clear the form and close the modal after displaying the success message
@@ -73,6 +75,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
       }
     } catch (error) {
       console.error('Signup failed', error);
+      toast.error('Signup failed. Please try again.');
       setError('Signup failed. Please try again.');
       setSuccessMessage(null);
     }
@@ -82,6 +85,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
 
   return (
     <div id="signup-modal" tabIndex={-1} aria-hidden="true" className="fixed inset-0 z-50 flex items-center justify-center overflow-auto">
+      <ToastContainer/>
       <div className="relative p-4 w-full max-w-md max-h-full">
         <div className="relative bg-white rounded-lg shadow overflow-y-auto max-h-[90vh]">
           <div className="flex items-center justify-between p-4 md:p-5 rounded-t dark:border-gray-600">

@@ -17,7 +17,9 @@ const Homepage: React.FC = () => {
     useEffect(() => {
       const fetchBackgroundImage = async () => {
         try {
-          const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/featureImages/`); // Replace with your API endpoint
+          const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/featureImages/`,{
+            withCredentials: true 
+          }); // Replace with your API endpoint
         
           setBackgroundImage(response.data); // Assuming the API returns an object with `imageUrl` property
        console.log(response.data)
@@ -79,7 +81,7 @@ const Homepage: React.FC = () => {
     <div className=''>
       <Header />
       <div
-      className='w-full homepage-bg h-screen px-2 flex flex-1 flex-col justify-center items-start'
+      className='homepage-bg w-full homepage-bg h-screen px-2 flex flex-1 flex-col justify-center items-start'
       style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
     >
       <div className='w-1/2 text-3xl text-white'>

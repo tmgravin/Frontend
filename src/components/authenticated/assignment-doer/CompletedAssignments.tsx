@@ -29,8 +29,9 @@ const CompletedAssignments: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const doerID = user.id;
-      const response = await axios.get<DataItem[]>('http://localhost:8080/api/projects/doer?doer=1');
+      const response = await axios.get<DataItem[]>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/doer?doer=${user.id}`,
+        {withCredentials:true}
+      );
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data", error);
@@ -59,13 +60,15 @@ const CompletedAssignments: React.FC = () => {
 
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('project', projectId.toString());
+    formData.append('projectId', projectId.toString());
+    formData.append('doerId',user.id)
 
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/competed/project/`, formData, {
+      await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/completed/project/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+        withCredentials: true // Include credentials with the request
       });
       toast.success('File uploaded successfully');
     } catch (error) {

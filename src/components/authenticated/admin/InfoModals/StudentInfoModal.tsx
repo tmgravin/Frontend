@@ -18,7 +18,10 @@ const StudentInfoModal: React.FC<UserModalProps> = ({ user, onClose, open }) => 
     const fetchUserData = async () => {
       try {
         if (user?.id && open) {
-          const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/?id=${user.id}`);
+          const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/?id=${user.id}`,
+           { withCredentials: true 
+           },
+          );
           setUserData(response.data);
         }
       } catch (error) {

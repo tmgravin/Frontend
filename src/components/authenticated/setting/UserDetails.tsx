@@ -2,10 +2,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Image from 'next/image';
-import { getUserFromCookies } from '../../auth/token'; 
+import { getUserFromCookies } from '@/components/auth/token'; // Adjust the path as necessary
 
 // Default user object if getUserFromCookies returns null
-const user = getUserFromCookies() || { name: '', email: '', address: '', phone: '' };
+const user = getUserFromCookies() || { id: '', name: '', email: '', address: '', phone: '', profilePicture: '' };
 
 // Updated Profile interface
 interface Profile {
@@ -23,7 +23,7 @@ const UserDetails: React.FC = () => {
     email: user.email,
     address: user.address,
     contact: user.phone,
-    profilePicture: ''
+    profilePicture: user.profilePicture
   });
 
   // State for editing mode
@@ -117,6 +117,8 @@ const UserDetails: React.FC = () => {
         id: user.id,
         oldPassword: currentPassword,
         newPassword: newPassword
+      },{
+        withCredentials: true // Include credentials with the request
       });
       if (response.status === 200) {
         console.log('Password changed successfully');
@@ -183,8 +185,6 @@ const UserDetails: React.FC = () => {
       <form noValidate autoComplete="off">
 
         <div className="mb-4">
-
-        <div className="mb-4">
           <label className="block text-gray-700">Email</label>
           <input
             type="text"
@@ -193,6 +193,8 @@ const UserDetails: React.FC = () => {
             disabled
           />
         </div>
+        
+        <div className="mb-4">
           <label className="block text-gray-700">Name</label>
           <input
             type="text"
@@ -225,8 +227,6 @@ const UserDetails: React.FC = () => {
           />
         </div>
 
-       
-
         <div className="flex flex-col">
           {isEditing ? (
             <div className="flex justify-end mt-2">
@@ -257,7 +257,7 @@ const UserDetails: React.FC = () => {
 
           <button
             onClick={handleOpenPasswordDialog}
-            className="px-4 py-2 bg-blue-500 text-white rounded mt-4"
+            className="px-4 py-2 bg-green-500 text-white rounded mt-4"
           >
             Change Password
           </button>
@@ -266,44 +266,55 @@ const UserDetails: React.FC = () => {
 
       {/* Change Password Dialog */}
       {openPasswordDialog && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow-lg">
-            <h3 className="text-xl mb-4">Change Password</h3>
-            <input
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              placeholder="Current Password"
-              className="w-full p-2 border border-gray-300 rounded mb-2"
-            />
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              placeholder="New Password"
-              className="w-full p-2 border border-gray-300 rounded mb-2"
-            />
-            <input
-              type="password"
-              value={confirmNewPassword}
-              onChange={(e) => setConfirmNewPassword(e.target.value)}
-              placeholder="Confirm New Password"
-              className="w-full p-2 border border-gray-300 rounded mb-2"
-            />
-            <div className="flex justify-end">
-              <button
-                onClick={handleChangePassword}
-                className="px-4 py-2 bg-blue-500 text-white rounded mr-2"
-              >
-                Save
-              </button>
-              <button
-                onClick={handleClosePasswordDialog}
-                className="px-4 py-2 bg-gray-300 text-black rounded"
-              >
-                Cancel
-              </button>
-            </div>
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+          <div className="bg-white p-4 rounded-lg shadow-lg w-80">
+            <h3 className="text-lg mb-4">Change Password</h3>
+            <form noValidate autoComplete="off">
+              <div className="mb-4">
+                <label className="block text-gray-700">Current Password</label>
+                <input
+                  type="password"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-gray-700">New Password</label>
+                <input
+                  type="password"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded"
+                />
+              </div>
+
+              <div className="mb-4">
+                <label className="block text-gray-700">Confirm New Password</label>
+                <input
+                  type="password"
+                  value={confirmNewPassword}
+                  onChange={(e) => setConfirmNewPassword(e.target.value)}
+                  className="w-full p-2 border border-gray-300 rounded"
+                />
+              </div>
+
+              <div className="flex justify-end mt-2">
+                <button
+                  onClick={handleChangePassword}
+                  className="px-4 py-2 bg-blue-500 text-white rounded mr-2"
+                >
+                  Save
+                </button>
+                <button
+                  onClick={handleClosePasswordDialog}
+                  className="px-4 py-2 bg-gray-300 text-black rounded"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

@@ -4,6 +4,8 @@ import axios from 'axios';
 import ResetPasswordModal from './ResetPasswordModal'; 
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 interface SignupData {
   email: string;
@@ -31,7 +33,6 @@ const LoginModal: React.FC<LoginModalProps> = ({
   const router = useRouter();
   const [userRole, setUserRole] = useState<string | null>(null);
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
@@ -39,10 +40,17 @@ const LoginModal: React.FC<LoginModalProps> = ({
     console.log(loginData);
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/login`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/security/login`,
         {
           ...loginData,
           userType: userRole,
+        },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          withCredentials: true  // If you are using cookies for authentication
         }
       );
 
@@ -50,23 +58,25 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
       if (response.status === 200) {
         // Storing user data in cookies (using js-cookie library)
-      Cookies.set('user', JSON.stringify(response.data), { expires: 7, secure: true, sameSite: 'Strict' });
+        Cookies.set('user', JSON.stringify(response.data), { expires: 7, secure: true, sameSite: 'Strict' });
 
-
-
-        setSuccessMessage('Login successful!');
+        toast.success('Login successful!');
         setTimeout(() => {
-          setSuccessMessage(null); // Clear the success message after 3 seconds
           if (response.data.userType === 'ASSIGNMENT_CREATOR') {
             router.push(`/assignment-creator`);
           } else if (response.data.userType === 'ASSIGNMENT_DOER') {
             router.push(`/assignment-doer`);
           }
+          else if(response.data.userType==='ADMIN'){
+            router.push('admindashboard')
+
+          }
+          
         }, 3000);
       }
     } catch (error) {
-      console.error('Login failed', error);
-      // Handle login error here (e.g., show error message)
+      console.error('Login failed,Please Check your email and password. Also, check if email is verified.', error);
+      toast.error('Login failed. Please Verify Email And Check Your Credentials.');
     }
   };
 
@@ -74,11 +84,13 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
   return (
     <div
+   
       id="login-modal"
       tabIndex={-1}
       aria-hidden="true"
       className="fixed inset-0 z-50 flex items-center justify-center overflow-auto"
     >
+       <ToastContainer/>
       <div className="relative p-4 w-full max-w-md max-h-full">
         <div className="relative bg-white rounded-lg shadow overflow-y-auto max-h-[90vh]">
           <div className="flex justify-end px-4 md:px-5 rounded-t dark:border-gray-600">
@@ -113,11 +125,6 @@ const LoginModal: React.FC<LoginModalProps> = ({
             <div>Login to continue</div>
           </div>
           <div className="p-4 md:p-5">
-            {successMessage && (
-              <div className="bg-green-100 text-green-800 p-2 rounded-lg mb-4">
-                {successMessage}
-              </div>
-            )}
             <form className="space-y-4">
               <div className="relative cb-shadow">
                 <input

@@ -36,7 +36,9 @@ const TeacherComponent: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/role?userType=ASSIGNMENT_DOER`);
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/role?userType=ASSIGNMENT_DOER`,
+        {  withCredentials: true}
+      );
     
       console.log(response)
       setUsers(response.data);

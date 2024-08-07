@@ -46,7 +46,9 @@ const LatestProjects: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get<DataItem[]>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/`);
+       const response = await axios.get<DataItem[]>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/`,{
+        withCredentials: true 
+       });
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data", error);

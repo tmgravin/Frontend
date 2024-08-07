@@ -20,12 +20,16 @@ const InfoCards: React.FC = () => {
       try {
         const creatorResponse = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/countUsers`, {
           userType: "ASSIGNMENT_CREATOR",
+        },{
+          withCredentials: true // Include credentials with the request
         });
         setTotalCreator(creatorResponse.data); 
   
 
         const doerResponse = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/countUsers`, {
           userType: "ASSIGNMENT_DOER",
+        },{
+          withCredentials: true // Include credentials with the request
         });
        
         setTotalDoer(doerResponse.data)

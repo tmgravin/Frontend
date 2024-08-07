@@ -41,7 +41,9 @@ const ProjectTableComponent: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/projects/')
+    axios.get('http://localhost:8080/api/projects/',{
+      withCredentials: true // Include credentials with the request
+    })
       .then(response => {
         setProjects(response.data);
       })

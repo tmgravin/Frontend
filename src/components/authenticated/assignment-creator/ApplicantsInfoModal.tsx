@@ -54,6 +54,7 @@ const ApplicantsInfoModal: React.FC<ApplicantsInfoModalProps> = ({ open, onClose
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+        withCredentials: true // Include credentials with the request
       });
 
       toast.success('Application accepted successfully!');

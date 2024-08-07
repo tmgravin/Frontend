@@ -25,8 +25,10 @@ function FeaturedImages() {
     try {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/featureImages/`, formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          'Content-Type': 'multipart/form-data',
+          'Accept': 'multipart/form-data'
+        },
+        withCredentials: true
       });
       toast.success('Upload successful');
       console.log(response.data);
@@ -37,11 +39,19 @@ function FeaturedImages() {
   };
 
   return (
-    <div className='text-black flex-col flex'>
-      
-      <input type="file" accept="image/*" onChange={handleImageChange} />
-      <button onClick={handleImageUpload} className='primary-btn-blue'>
-        Update Featured Images
+    <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md flex flex-col items-center space-y-4">
+      <h2 className="text-2xl font-semibold text-gray-800 mb-4">Update Featured Images</h2>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={handleImageChange}
+        className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <button
+        onClick={handleImageUpload}
+        className="w-full py-2 px-4 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition duration-300"
+      >
+        Upload Image
       </button>
       <ToastContainer />
     </div>

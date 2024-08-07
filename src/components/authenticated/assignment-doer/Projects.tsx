@@ -93,6 +93,7 @@ const LatestProjects: React.FC = () => {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
+        withCredentials: true // Include credentials with the request
       });
 
       toast.success('Application submitted successfully!');

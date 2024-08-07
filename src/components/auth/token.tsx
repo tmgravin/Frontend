@@ -1,6 +1,5 @@
-// utils/cookies.ts
-import Cookies from 'js-cookie';
 
+import Cookies from 'js-cookie';
 export function getUserFromCookies(): any | null {
   const userCookie = Cookies.get('user');
   if (userCookie) {

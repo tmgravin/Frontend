@@ -11,10 +11,10 @@ import {
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
- import { getUserFromCookies } from '../../auth/token'; // Adjust the path as necessary
-  const user = getUserFromCookies();
-
+import { getUserFromCookies } from '../../auth/token'; // Adjust the path as necessary 
 import axios from 'axios';
+import { ToastContainer,toast } from 'react-toastify';
+const user = getUserFromCookies();
 
 interface User {
   name: string;
@@ -43,9 +43,23 @@ const UserModal: React.FC = () => {
 
   const handleMenuClick = (event: MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
-  const handleLogout = () => {
-        Cookies.remove('user');
-        console.log('User cookie has been cleared');
+  const handleLogout = async() => {
+    try{
+     const  response=await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/security/logout`
+     ,{ withCredentials: true}
+     )
+    if(response.status==200){
+      Cookies.remove('user');
+      console.log('User cookie has been cleared');
+      toast.success("Logout Failed ")
+    }
+
+  }
+    catch(err){
+      toast.success("Logout Failed")
+      console.log("error occured",err)
+    }
+       
       ;
     router.push('/homepage');
   };
@@ -56,7 +70,11 @@ const UserModal: React.FC = () => {
   const openMenu = Boolean(anchorEl);
 
   return (
+    <div>
+       <ToastContainer/>
+    
     <Box sx={{ display: 'flex', alignItems: 'center' }}>
+     
       <div className="flex flex-col items-center justify-center">
         <Typography variant="h6" sx={{ mr: 2 }}>
           {user?.name || 'Loading...'}
@@ -89,6 +107,7 @@ const UserModal: React.FC = () => {
         <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
     </Box>
+    </div>
   );
 };
 

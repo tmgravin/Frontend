@@ -72,10 +72,14 @@ console.log(catData)
     
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/`, formData, {
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/`, formData,
+         {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          'Content-Type': 'multipart/form-data' 
+          
+        },
+        withCredentials: true // Include credentials with the request
+        
       });
       console.log(response)
       setResultMessage('Assignment posted successfully!');
@@ -106,7 +110,11 @@ console.log(catData)
     // Define an async function inside useEffect to fetch the data
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/category/`); // Replace with your API endpoint
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/category/`
+         , {
+            withCredentials: true  // If you are using cookies for authentication
+          }
+        ); // Replace with your API endpoint
         console.log(response.data)
         setCatData(response.data); // Store the data in state
       } catch (err) {
