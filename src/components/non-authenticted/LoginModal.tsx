@@ -3,7 +3,6 @@ import Image from 'next/image';
 import axios from 'axios';
 import ResetPasswordModal from './ResetPasswordModal'; 
 import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -57,26 +56,23 @@ const LoginModal: React.FC<LoginModalProps> = ({
       console.log(response.data);
 
       if (response.status === 200) {
-        // Storing user data in cookies (using js-cookie library)
-        Cookies.set('user', JSON.stringify(response.data), { expires: 7, secure: true, sameSite: 'Strict' });
+        // Storing user data in localStorage
+        localStorage.setItem('user', JSON.stringify(response.data));
 
         toast.success('Login successful!');
         setTimeout(() => {
           if (response.data.userType === 'ASSIGNMENT_CREATOR') {
-            router.push(`/assignment-creator`);
+            router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-creator`);
           } else if (response.data.userType === 'ASSIGNMENT_DOER') {
-            router.push(`/assignment-doer`);
+            router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-doer`);
+          } else if(response.data.userType === 'ADMIN') {
+            router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/admindashboard`);
           }
-          else if(response.data.userType==='ADMIN'){
-            router.push('admindashboard')
-
-          }
-          
         }, 3000);
       }
     } catch (error) {
-      console.error('Login failed,Please Check your email and password. Also, check if email is verified.', error);
-      toast.error('Login failed. Please Verify Email And Check Your Credentials.');
+      console.error('Login failed, Please check your email and password. Also, check if email is verified.', error);
+      toast.error('Login failed. Please verify email and check your credentials.');
     }
   };
 
@@ -84,13 +80,12 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
   return (
     <div
-   
       id="login-modal"
       tabIndex={-1}
       aria-hidden="true"
       className="fixed inset-0 z-50 flex items-center justify-center overflow-auto"
     >
-       <ToastContainer/>
+      <ToastContainer />
       <div className="relative p-4 w-full max-w-md max-h-full">
         <div className="relative bg-white rounded-lg shadow overflow-y-auto max-h-[90vh]">
           <div className="flex justify-end px-4 md:px-5 rounded-t dark:border-gray-600">
@@ -181,7 +176,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
                 className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800"
                 onClick={() => handleLogin('ASSIGNMENT_CREATOR')}
               >
-                Login {/*  as Assignment Creator */}
+                Login {/* as Assignment Creator */}
               </button>
 
               <div className="flex items-center my-4">

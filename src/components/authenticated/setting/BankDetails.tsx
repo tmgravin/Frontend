@@ -2,30 +2,59 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { getUserFromCookies } from '@/components/auth/token';
-import { ToastContainer,toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 const user = getUserFromCookies() || { id: null }; // Set a default value
 
 const BankDetails: React.FC = () => {
   // State for bank details
   const [bankDetails, setBankDetails] = useState({
+    id: '',
     firstName: '',
     lastName: '',
     accountNumber: '',
     bankName: '',
     creditCardNumber: '',
     registeredPhoneNumber: '',
+    createdAt: '',
+    users: {
+      id: '',
+      name: '',
+      email: '',
+      isEmailVerified: '',
+      password: '',
+      phone: '',
+      address: '',
+      userType: '',
+      loginType: '',
+      createdAt: '',
+      updatedAt: '',
+    },
   });
 
   // State for editing values
   const [editValues, setEditValues] = useState({
+    id: bankDetails.id,
     firstName: bankDetails.firstName,
     lastName: bankDetails.lastName,
     accountNumber: bankDetails.accountNumber,
     bankName: bankDetails.bankName,
     creditCardNumber: bankDetails.creditCardNumber,
     registeredPhoneNumber: bankDetails.registeredPhoneNumber,
+    createdAt: bankDetails.createdAt,
     users: {
       id: user.id,
+      name: bankDetails.users.name,
+      email: bankDetails.users.email,
+      isEmailVerified: bankDetails.users.isEmailVerified,
+      password: bankDetails.users.password,
+      phone: bankDetails.users.phone,
+      address: bankDetails.users.address,
+      userType: bankDetails.users.userType,
+      loginType: bankDetails.users.loginType,
+      createdAt: bankDetails.users.createdAt,
+      updatedAt: bankDetails.users.updatedAt,
     },
   });
 
@@ -41,11 +70,34 @@ const BankDetails: React.FC = () => {
     // Fetch bank details from API
     const fetchBankDetails = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/account/?id=${user.id}`, {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/account/?userId=${user.id}`, {
           withCredentials: true,
         }); // Replace with your API endpoint
-        setBankDetails(response.data);
-        setEditValues(response.data);
+        const data = response.data[0]; // Assuming the API returns an array
+        setBankDetails(data);
+        setEditValues({
+          id: data.id,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          accountNumber: data.accountNumber,
+          bankName: data.bankName,
+          creditCardNumber: data.creditCardNumber,
+          registeredPhoneNumber: data.registeredPhoneNumber,
+          createdAt: data.createdAt,
+          users: {
+            id: user.id,
+            name: data.users.name,
+            email: data.users.email,
+            isEmailVerified: data.users.isEmailVerified,
+            password: data.users.password,
+            phone: data.users.phone,
+            address: data.users.address,
+            userType: data.users.userType,
+            loginType: data.users.loginType,
+            createdAt: data.users.createdAt,
+            updatedAt: data.users.updatedAt,
+          },
+        });
       } catch (error) {
         console.error('Error fetching bank details:', error);
       }
@@ -79,21 +131,20 @@ const BankDetails: React.FC = () => {
       );
       if (response.data) {
         toast.success('Bank details updated successfully');
-        console.log('Bank details updated successfully');
         setBankDetails(editValues);
         handleEditToggle(e);
       } else {
         console.error('Failed to update bank details');
       }
     } catch (error) {
-      toast.error('Error updating bank details')
+      toast.error('Error updating bank details');
       console.error('Error updating bank details:', error);
     }
   };
 
   return (
     <div className="container mx-auto p-4 max-w-md">
-      <ToastContainer/>
+      <ToastContainer />
       <h2 className="text-2xl mb-4">Bank Details</h2>
 
       <form noValidate autoComplete="off">
@@ -117,7 +168,7 @@ const BankDetails: React.FC = () => {
         </div>
         <div className="mb-4">
           <label className="block text-gray-700">Credit Card Number:</label>
-          <p>{bankDetails.creditCardNumber}</p>
+          <p>{bankDetails.creditCardNumber || 'N/A'}</p>
         </div>
         <div className="mb-4">
           <label className="block text-gray-700">Registered Phone Number:</label>

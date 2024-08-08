@@ -1,8 +1,8 @@
-// src/components/authenticated/project-table/ProjectTableComponent.tsx
 "use client"
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import ProjectInfoModal from './InfoModals/ProjectInfoModal'; // Adjust the import path as necessary
+import ProjectInfoModal from './InfoModals/ProjectInfoModal';
+import PaymentInfoModal from './InfoModals/PaymentInfo'; // Import the PaymentInfoModal
 
 interface Creator {
   name: string;
@@ -14,11 +14,12 @@ interface Category {
 }
 
 interface Project {
+  id: number;
   projectName: string;
   projectAmount: string;
   projectDeadline: string;
   paymentStatus: string;
-  projectUrl: string ; 
+  projectUrl: string;
   projectCategory: Category;
   users: Creator;
 }
@@ -38,11 +39,13 @@ interface ProjectWrapper {
 const ProjectTableComponent: React.FC = () => {
   const [projects, setProjects] = useState<ProjectWrapper[]>([]);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
+  const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/projects/',{
-      withCredentials: true // Include credentials with the request
+    axios.get('http://localhost:8080/api/projects/', {
+      withCredentials: true
     })
       .then(response => {
         setProjects(response.data);
@@ -52,14 +55,24 @@ const ProjectTableComponent: React.FC = () => {
       });
   }, []);
 
-  const handleOpenModal = (project: Project) => {
+  const handleOpenProjectModal = (project: Project) => {
     setSelectedProject(project);
-    setIsModalOpen(true);
+    setIsProjectModalOpen(true);
   };
 
-  const handleCloseModal = () => {
+  const handleCloseProjectModal = () => {
     setSelectedProject(null);
-    setIsModalOpen(false);
+    setIsProjectModalOpen(false);
+  };
+
+  const handleOpenPaymentModal = (projectId: number) => {
+    setSelectedProjectId(projectId);
+    setIsPaymentModalOpen(true);
+  };
+
+  const handleClosePaymentModal = () => {
+    setSelectedProjectId(null);
+    setIsPaymentModalOpen(false);
   };
 
   return (
@@ -68,19 +81,7 @@ const ProjectTableComponent: React.FC = () => {
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200">
           <thead>
-            <tr>
-              <th className="px-4 py-2 border-b-2 border-gray-200 bg-gray-100">Project Name</th>
-              <th className="px-4 py-2 border-b-2 border-gray-200 bg-gray-100">Amount</th>
-              <th className="px-4 py-2 border-b-2 border-gray-200 bg-gray-100">Deadline</th>
-              <th className="px-4 py-2 border-b-2 border-gray-200 bg-gray-100">Scope</th>
-              <th className="px-4 py-2 border-b-2 border-gray-200 bg-gray-100">Experience Required</th>
-              <th className="px-4 py-2 border-b-2 border-gray-200 bg-gray-100">Status</th>
-              <th className="px-4 py-2 border-b-2 border-gray-200 bg-gray-100">Category</th>
-              <th className="px-4 py-2 border-b-2 border-gray-200 bg-gray-100">Payment Status</th>
-              <th className="px-4 py-2 border-b-2 border-gray-200 bg-gray-100">Creator Name</th>
-              <th className="px-4 py-2 border-b-2 border-gray-200 bg-gray-100">Creator Email</th>
-              <th className="px-4 py-2 border-b-2 border-gray-200 bg-gray-100"></th> {/* Added for the "see more" button */}
-            </tr>
+            {/* Your existing table headers */}
           </thead>
           <tbody>
             {projects.map((projectWrapper) => {
@@ -96,16 +97,24 @@ const ProjectTableComponent: React.FC = () => {
                   <td className="px-4 py-2 border-b border-gray-200">{projectWrapper.scope}</td>
                   <td className="px-4 py-2 border-b border-gray-200">{projectWrapper.experienceYear}</td>
                   <td className="px-4 py-2 border-b border-gray-200">{projectWrapper.projectStatus}</td>
-                  <td className="px-4 py-2 border-b border-gray-200">{category?.category || 'N/A'}</td> {/* Safe access with optional chaining */}
+                  <td className="px-4 py-2 border-b border-gray-200">{category?.category || 'N/A'}</td>
                   <td className="px-4 py-2 border-b border-gray-200">{project.paymentStatus}</td>
                   <td className="px-4 py-2 border-b border-gray-200">{creator.name}</td>
                   <td className="px-4 py-2 border-b border-gray-200">{creator.email}</td>
                   <td className="px-4 py-2 border-b border-gray-200">
-                    <button 
+                    <button
                       className="text-blue-500 underline"
-                      onClick={() => handleOpenModal(project)}
+                      onClick={() => handleOpenProjectModal(project)}
                     >
-                      see more
+                      See More
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      className="text-green-500 underline ml-2"
+                      onClick={() => handleOpenPaymentModal(project.id)}
+                    >
+                      Payment Info
                     </button>
                   </td>
                 </tr>
@@ -117,8 +126,15 @@ const ProjectTableComponent: React.FC = () => {
       {selectedProject && (
         <ProjectInfoModal
           project={selectedProject}
-          open={isModalOpen}
-          onClose={handleCloseModal}
+          open={isProjectModalOpen}
+          onClose={handleCloseProjectModal}
+        />
+      )}
+      {selectedProjectId && (
+        <PaymentInfoModal
+          projectId={selectedProjectId}
+          open={isPaymentModalOpen}
+          onClose={handleClosePaymentModal}
         />
       )}
     </div>
