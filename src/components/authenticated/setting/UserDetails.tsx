@@ -154,7 +154,7 @@ const UserDetails: React.FC = () => {
       {/* Profile Picture */}
       <div className="flex items-center justify-center mb-4">
         <Image
-          src={profile.profilePicture || '/default-profile.png'} // Default profile picture if none provided
+          src={profile.profilePicture || '/default-img.png'} // Default profile picture if none provided
           alt="Profile Picture"
           width={96} // Set width and height for optimization
           height={96}

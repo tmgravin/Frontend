@@ -21,6 +21,7 @@ export function middleware(request: NextRequest) {
   return NextResponse.next();
 }
 
+
 export const config = {
   matcher: [
     '/admindashboard/:path*',  // Protect all routes under /admindashboard/

@@ -1,5 +1,4 @@
 "use client"
-import Cookies from 'js-cookie';
 import React, { useState, useEffect, MouseEvent } from 'react';
 import {
   Box,
@@ -49,7 +48,7 @@ const UserModal: React.FC = () => {
      ,{ withCredentials: true}
      )
     if(response.status==200){
-      Cookies.remove('user');
+      localStorage.removeItem('user');
       console.log('User cookie has been cleared');
       toast.success("Logout Failed ")
     }
@@ -61,10 +60,10 @@ const UserModal: React.FC = () => {
     }
        
       ;
-    router.push('/homepage');
+    router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/homepage`);
   };
   const handleSetting = () => {
-    router.push('/setting');
+    router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/setting`);
   };
 
   const openMenu = Boolean(anchorEl);

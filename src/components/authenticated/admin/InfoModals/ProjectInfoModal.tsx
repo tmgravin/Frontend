@@ -55,10 +55,12 @@ const ProjectInfoModal: React.FC<ProjectInfoModalProps> = ({ project, open, onCl
   };
 
 
-  const handleVisible=()=>{
-    const response= axios.post
 
-    console.log("made visbile to creator")
+
+  const handleVisible=()=>{
+    const response= axios
+
+    console.log("payment approved")
   }
 
   return (
