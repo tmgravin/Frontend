@@ -2,8 +2,7 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import UserModal from '../usermodal/UserModal';
 import CustomTabModal from './YourAssignments'; // Adjust the import path if needed
-import Link from 'next/link';
-
+import Image from 'next/image';
 const Header: React.FC = () => {
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setSignupModalOpen] = useState(false);
@@ -43,19 +42,25 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header>
-      <div className='flex flex-row justify-between items-center'>
-        <div className='flex felx-row'>
-          <div className='text-2xl potta-one-regular primary-navy-blue text-center'>MSP ASSIGNMENT</div>
+    <header className="p-1">
+      <div className='flex flex-col sm:flex-row justify-between items-center'>
+        <div className='flex flex-col sm:flex-row items-center'>
+          <div className='text-xl sm:text-2xl potta-one-regular primary-navy-blue mb-4 sm:mb-0 text-center'>MSP ASSIGNMENT</div>
           <div
-            className='px-3 text-center cursor-pointer'
+            className='px-3 py-2 flex flex-row text-center cursor-pointer sm:ml-4'
             onClick={toggleCustomTabModal}
           >
-            Your Assignments
+          <div className='p-1'> Your Assignments</div> 
+            <Image
+      src="/pngs/arrowdown.svg" // Path relative to the public directory
+      alt="Laptop Image"
+      width={20} // Provide appropriate width
+      height={20} // Provide appropriate height
+    />
           </div>
         </div>
-        <div className='flex flex-row justify-end items-center'>
-          {/* Other header elements */}
+        <div className='flex flex-row justify-end items-center mt-4 sm:mt-0'>
+          {/* Additional header elements */}
         </div>
         <UserModal/>
       </div>

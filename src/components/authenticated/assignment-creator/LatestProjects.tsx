@@ -70,7 +70,9 @@ const LatestProjects: React.FC = () => {
   };
 
   const truncateDescription = (description: string, length: number) => {
-    return description.length <= length ? description : description.slice(0, length) + '...';
+    if (typeof description !== 'string') return ''; // Return empty string if description is not a string
+    if (description.length <= length) return description;
+    return description.slice(0, length) + '...';
   };
   
   const handleReadMore = (project: DataItem) => {

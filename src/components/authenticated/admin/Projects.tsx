@@ -44,7 +44,7 @@ const ProjectTableComponent: React.FC = () => {
   const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
 
   useEffect(() => {
-    axios.get('http://localhost:8080/api/projects/', {
+    axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/`, {
       withCredentials: true
     })
       .then(response => {

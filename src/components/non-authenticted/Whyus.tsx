@@ -1,19 +1,19 @@
 import React from 'react';
 
 interface WhyusProps {
-  onGetStartedClick: () => void; // Add prop for the button click handler
+  onGetStartedClick: () => void;
 }
 
 const Whyus: React.FC<WhyusProps> = ({ onGetStartedClick }) => {
   return (
-    <div className='whyus-bg w-full h-screen text-white flex flex-col items-center'>
-      <div className='text-white text-4xl mb-8'>
+    <div className='whyus-bg w-full min-h-screen text-white flex flex-col items-center px-4 lg:px-0'>
+      <div className='text-white text-4xl mb-8 text-center'>
         Why us?
       </div>
 
-      <div className='flex w-full'>
+      <div className='flex flex-col lg:flex-row w-full'>
         {/* Left Column */}
-        <div className='w-1/2 flex flex-col items-end pr-24'> {/* Increased padding-right */}
+        <div className='lg:w-1/2 flex flex-col items-end lg:pr-24 mb-8 lg:mb-0'>
           <div className='m-2 text-right'>
             <div className='text-2xl'>
               Support <i className="fa-solid fa-headset"></i>
@@ -35,7 +35,7 @@ const Whyus: React.FC<WhyusProps> = ({ onGetStartedClick }) => {
         </div>
 
         {/* Right Column */}
-        <div className='w-1/2 flex flex-col items-start pl-24'> {/* Increased padding-left */}
+        <div className='lg:w-1/2 flex flex-col items-start lg:pl-24'>
           <div className='m-2 text-left'>
             <div className='text-2xl'>
               <i className="fa-solid fa-stopwatch text-white"></i> Flexibility
