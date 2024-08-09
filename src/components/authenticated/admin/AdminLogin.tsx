@@ -1,106 +1,87 @@
-"use client"
+"use client";
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import {
-  Box,
-  Button,
-  Container,
-  TextField,
-  Typography,
-  Alert
-} from '@mui/material';
 import axios from 'axios';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const AdminLogin: React.FC = () => {
   const router = useRouter();
-  const [username, setUsername] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState<string | null>(null);
 
-  const login = async (username: string, password: string) => {
-    try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/admin`, { username:username, passowrd:password,role:"admin" },
-        { withCredentials: true}
-      );
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
-  const handleLogin = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
 
-    // Basic validation
-    if (username === '' || password === '') {
-      setError('Both fields are required');
+  const Login =async(e:any)=> {
+    e.preventDefault();
+ 
+    if (email === '' || password === '') {
+      toast.error('Both fields are required');
       return;
     }
     try {
-      const data = await login(username, password);
-      if (data.success) {
-        router.push('/admindashboard'); // Redirect to a protected page
-      } else {
-        setError(data.message || 'Invalid credentials');
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/security/login`,
+        { email: email, password: password, role: "admin" },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      );
+      if(response.status==200 && response.data.userType=="ADMIN")
+        {
+        toast.success('login successful')
+        router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/admindashboard`)
       }
+
     } catch (error: any) {
-      setError(error.response?.data?.message || 'An error occurred');
+      toast.error("login failed")
+      console.error('Login error:', error); // Log detailed error
+      throw error;
     }
   };
 
+
+
   return (
-    <div className='flex flex-col justify-center items-center'>
-      <Container maxWidth="xs">
-        <Box
-          sx={{
-            marginTop: 8,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-          }}
-        >
-          <Typography component="h1" variant="h5">
-            MSP ASSIGNMENT ADMIN LOGIN
-          </Typography>
-          {error && <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>}
-          <Box component="form" onSubmit={handleLogin} sx={{ mt: 1 }}>
-            <TextField
-              variant="outlined"
-              margin="normal"
-              required
-              fullWidth
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="w-full max-w-md p-8 bg-white rounded-lg shadow-md">
+        <h1 className="text-2xl font-bold text-center mb-6">MSP ASSIGNMENT ADMIN LOGIN</h1>
+        <form  className="space-y-4">
+          <div>
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
+            <input
+              type="text"
               id="username"
-              label="Username"
               name="username"
-              autoComplete="username"
-              autoFocus
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-            />
-            <TextField
-              variant="outlined"
-              margin="normal"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
-              fullWidth
-              name="password"
-              label="Password"
+            />
+          </div>
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+            <input
               type="password"
               id="password"
-              autoComplete="current-password"
+              name="password"
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
+              required
             />
-            <Button
-              type="submit"
-              fullWidth
-              variant="contained"
-              color="primary"
-              sx={{ mt: 3, mb: 2 }}
-            >
-              Login
-            </Button>
-          </Box>
-        </Box>
-      </Container>
+          </div>
+          <button
+             onClick={Login}
+            className="w-full py-2 px-4 bg-blue-600 text-white font-semibold rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+         >
+            Login
+          </button>
+        </form>
+      </div>
+      <ToastContainer />
     </div>
   );
 };

@@ -9,68 +9,64 @@ import UserModal from '../usermodal/UserModal';
 import FeaturedImages from './FeaturedImages';
 import CategoryForm from './InfoModals/AddCatagory/addCatagory';
 import PaymentsTable from './InfoModals/PaymentsTable';
+
 const AdminHome: React.FC = () => {
   return (
-  
-    <div style={{ display: 'flex ' }}>
+    <div style={{ display: 'flex' }}>
       <Tabs.Root defaultValue="dashboard" orientation="vertical" style={{ display: 'flex', width: '100%' }}>
         <Tabs.List style={tabsListStyle}>
           <Tabs.Trigger value="">
             <div>
-          <Image
-          src="/admin-icons/adminmenuimg.png" 
-          alt="Total doers"
-          width={250}
-          height={150}
-          className="mb-4"
-        />
-        
+              <Image
+                src="/admin-icons/adminmenuimg.png" 
+                alt="Total doers"
+                width={250}
+                height={150}
+                className="m-1"
+              />
             </div>
           </Tabs.Trigger>
           <Tabs.Trigger value="dashboard" style={tabStyle}>Dashboard</Tabs.Trigger>
-          <Tabs.Trigger value="craetors" style={tabStyle}>Creators</Tabs.Trigger>
+          <Tabs.Trigger value="creators" style={tabStyle}>Creators</Tabs.Trigger>
           <Tabs.Trigger value="doers" style={tabStyle}>Doers</Tabs.Trigger>
           <Tabs.Trigger value="projects" style={tabStyle}>Projects</Tabs.Trigger>
           <Tabs.Trigger value="paymenttable" style={tabStyle}>Payment Table</Tabs.Trigger>
-
           <Tabs.Trigger value="update" style={tabStyle}>Update Images</Tabs.Trigger>
           <Tabs.Trigger value="category" style={tabStyle}>Add Category</Tabs.Trigger>
-
-
-
-          
         </Tabs.List>
 
         <div style={contentContainerStyle}>
           <Tabs.Content value="dashboard">
             <h2>Dashboard</h2>
-           <Dashboard/>
-            
-           
+            <Dashboard />
           </Tabs.Content>
-          <Tabs.Content value="craetors">
+          <Tabs.Content value="creators">
             <h2>Creators</h2>
-          <StudentComponent/>
+            <StudentComponent />
           </Tabs.Content>
           <Tabs.Content value="doers">
             <h2>Doers</h2>
-           <TeacherComponent/>
+            <TeacherComponent />
           </Tabs.Content>
           <Tabs.Content value="projects">
             <h2>Projects</h2>
-          <ProjectsTableComponent/>
+            <div style={scrollableContentStyle}>
+              <ProjectsTableComponent />
+            </div>
           </Tabs.Content>
           <Tabs.Content value="paymenttable">
-            <h2> Payment Table</h2>
-         <PaymentsTable/>
+            <h2>Payment Table</h2>
+            <div style={scrollableContentStyle}>
+              <PaymentsTable />
+            </div>
           </Tabs.Content>
           <Tabs.Content value="update">
             <h2>Featured Images</h2>
-         <FeaturedImages/>
+            <FeaturedImages />
           </Tabs.Content>
           <Tabs.Content value="category">
-            <h2>add category</h2>
-        <CategoryForm/>
+            <h2>Add Category</h2>
+            <CategoryForm />
           </Tabs.Content>
         </div>
       </Tabs.Root>
@@ -88,7 +84,13 @@ const tabsListStyle: React.CSSProperties = {
 
 const contentContainerStyle: React.CSSProperties = {
   flex: 1,
-  padding: '20px'
+  padding: '20px',
+  overflow: 'hidden', // Prevent overflow of content
+};
+
+const scrollableContentStyle: React.CSSProperties = {
+  maxHeight: 'calc(100vh - 60px)', // Adjust based on header height
+  overflowY: 'auto', // Enable vertical scrolling if content overflows
 };
 
 const tabStyle: React.CSSProperties = {
@@ -99,7 +101,11 @@ const tabStyle: React.CSSProperties = {
   borderRadius: '4px',
   marginBottom: '4px',
   textAlign: 'center',
-  width: '100%',
+  width: '200px', // Fixed width for the tab
+  height: '50px', // Fixed height for the tab
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
   transition: 'background-color 0.3s ease'
 };
 
