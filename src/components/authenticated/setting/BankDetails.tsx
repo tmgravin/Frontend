@@ -32,6 +32,8 @@ const BankDetails: React.FC = () => {
       updatedAt: '',
     },
   });
+  const id=bankDetails.id
+
 
   // State for editing values
   const [editValues, setEditValues] = useState({
@@ -73,7 +75,9 @@ const BankDetails: React.FC = () => {
         const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/account/?userId=${user.id}`, {
           withCredentials: true,
         }); // Replace with your API endpoint
+        
         const data = response.data[0]; // Assuming the API returns an array
+      
         setBankDetails(data);
         setEditValues({
           id: data.id,
@@ -119,8 +123,8 @@ const BankDetails: React.FC = () => {
   const handleSave = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/`,
+      const response = await axios.put(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/${id}`,
         editValues,
         {
           headers: {

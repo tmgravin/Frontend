@@ -1,5 +1,4 @@
-
-"use client"
+"use client";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReadMoreModal from './ReadMoreModal';
@@ -16,11 +15,12 @@ export interface DataItem {
   projects: {
     id: number;
     projectName: string;
-    projectAmount: string;
+    projectAmount: string; // Assuming projectAmount is a string representing amount
     projectDeadline: string;
     budgets: string | null;
     createdAt: string;
     updatedAt: string;
+    description: string; // Added description field
     users: {
       id: number;
       name: string;
@@ -46,9 +46,9 @@ const LatestProjects: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-       const response = await axios.get<DataItem[]>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/`,{
-        withCredentials: true 
-       });
+      const response = await axios.get<DataItem[]>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/pending`, {
+        withCredentials: true
+      });
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data", error);
@@ -61,8 +61,9 @@ const LatestProjects: React.FC = () => {
   };
 
   const truncateDescription = (description: string, length: number) => {
+    if (typeof description !== 'string') return ''; // Return empty string if description is not a string
     if (description.length <= length) return description;
-    return description.slice(0, length) + '... ';
+    return description.slice(0, length) + '...';
   };
 
   const handleReadMore = (project: DataItem) => {
@@ -83,7 +84,7 @@ const LatestProjects: React.FC = () => {
           <div key={index} className="p-4 border rounded shadow">
             <h2 className="text-xl font-bold">{item.projects.projectName}</h2>
             <p>
-              {truncateDescription(item.projects.projectAmount, 100)}
+              {truncateDescription(item.projects.description, 100)} {/* Use the description field */}
               <button
                 onClick={() => handleReadMore(item)}
                 className="text-blue-500 hover:underline"

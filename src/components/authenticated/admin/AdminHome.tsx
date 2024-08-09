@@ -8,13 +8,13 @@ import Image from 'next/image';
 import UserModal from '../usermodal/UserModal';
 import FeaturedImages from './FeaturedImages';
 import CategoryForm from './InfoModals/AddCatagory/addCatagory';
+import PaymentsTable from './InfoModals/PaymentsTable';
 const AdminHome: React.FC = () => {
   return (
   
     <div style={{ display: 'flex ' }}>
       <Tabs.Root defaultValue="dashboard" orientation="vertical" style={{ display: 'flex', width: '100%' }}>
         <Tabs.List style={tabsListStyle}>
-        <Tabs.Trigger value="" style={tabStyle}><UserModal/></Tabs.Trigger>
           <Tabs.Trigger value="">
             <div>
           <Image
@@ -24,12 +24,15 @@ const AdminHome: React.FC = () => {
           height={150}
           className="mb-4"
         />
+        
             </div>
           </Tabs.Trigger>
           <Tabs.Trigger value="dashboard" style={tabStyle}>Dashboard</Tabs.Trigger>
           <Tabs.Trigger value="craetors" style={tabStyle}>Creators</Tabs.Trigger>
           <Tabs.Trigger value="doers" style={tabStyle}>Doers</Tabs.Trigger>
           <Tabs.Trigger value="projects" style={tabStyle}>Projects</Tabs.Trigger>
+          <Tabs.Trigger value="paymenttable" style={tabStyle}>Payment Table</Tabs.Trigger>
+
           <Tabs.Trigger value="update" style={tabStyle}>Update Images</Tabs.Trigger>
           <Tabs.Trigger value="category" style={tabStyle}>Add Category</Tabs.Trigger>
 
@@ -56,6 +59,10 @@ const AdminHome: React.FC = () => {
           <Tabs.Content value="projects">
             <h2>Projects</h2>
           <ProjectsTableComponent/>
+          </Tabs.Content>
+          <Tabs.Content value="paymenttable">
+            <h2> Payment Table</h2>
+         <PaymentsTable/>
           </Tabs.Content>
           <Tabs.Content value="update">
             <h2>Featured Images</h2>

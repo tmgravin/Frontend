@@ -100,24 +100,22 @@ const Header: React.FC = () => {
 
   return (
     <header>
-      <div className="flex flex-row justify-between px-2">
-        <div>
-          <div className='flex flex-row'>
-            <Image
+      <div className="flex flex-col sm:flex-row justify-between items-center px-4 py-2">
+        <div className="flex items-center">
+          <Image
             src="/msplogo.jpg"
-            height="20"
-            width="30"
+            height={30}
+            width={30}
             alt="msp logo"
-            
-            />
-          <h1 className="text-2xl potta-font primary-navy-blue">MSP ASSIGNMENT</h1>
-          </div>
+            className="mr-2 sm:mr-4"
+          />
+          <h1 className="text-xl sm:text-2xl font-bold potta-font primary-navy-blue">MSP ASSIGNMENT</h1>
         </div>
-        <div className="flex flex-row justify-end items-center">
-          <div className="primary-blue px-5 cursor-pointer" onClick={toggleSignupModal}>
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
+          <div className="primary-blue px-4 py-2 cursor-pointer" onClick={toggleSignupModal}>
             Sign up <i className="fa-solid fa-pen-to-square"></i>
           </div>
-          <div className="primary-blue px-5 cursor-pointer" onClick={toggleLoginModal}>
+          <div className="primary-blue px-4 py-2 cursor-pointer" onClick={toggleLoginModal}>
             Login <i className="fa-solid fa-right-to-bracket"></i>
           </div>
         </div>
@@ -144,7 +142,6 @@ const Header: React.FC = () => {
         toggleModal={toggleLoginModal}
         loginData={loginData}
         handleLoginChange={handleLoginChange}
-       // handleLoginSubmit={handleLoginSubmit}
         remember={remember}
         setRemember={setRemember}
       />

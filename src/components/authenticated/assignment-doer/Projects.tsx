@@ -49,7 +49,7 @@ const LatestProjects: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get<DataItem[]>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/`);
+      const response = await axios.get<DataItem[]>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/pending`);
       setData(response.data);
     } catch (error) {
       console.error('Error fetching data', error);
@@ -62,8 +62,9 @@ const LatestProjects: React.FC = () => {
   };
 
   const truncateDescription = (description: string, length: number) => {
+    if (typeof description !== 'string') return ''; // Return empty string if description is not a string
     if (description.length <= length) return description;
-    return description.slice(0, length) + '... ';
+    return description.slice(0, length) + '...';
   };
 
   const handleReadMore = (project: DataItem) => {
