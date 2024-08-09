@@ -35,6 +35,15 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
   if (!isOpen) return null;
 
+  // Function to set user data in a cookie
+  function setUserCookie(data: any) {
+    const userValue = encodeURIComponent(JSON.stringify(data));
+    const expiryDate = new Date();
+    expiryDate.setDate(expiryDate.getDate() + 7); // Cookie expires in 7 days
+
+    document.cookie = `user=${userValue}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
+  }
+
   const handleLogin = async (userRole: string) => {
     console.log(loginData);
     try {
@@ -57,7 +66,8 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
       if (response.status === 200) {
         // Storing user data in localStorage
-        localStorage.setItem('user', JSON.stringify(response.data));
+        // localStorage.setItem('user', JSON.stringify(response.data));
+        setUserCookie(response.data); // Set user data in cookie
 
         toast.success('Login successful!');
         setTimeout(() => {
@@ -65,7 +75,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
             router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-creator`);
           } else if (response.data.userType === 'ASSIGNMENT_DOER') {
             router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-doer`);
-          } else if(response.data.userType === 'ADMIN') {
+          } else if (response.data.userType === 'ADMIN') {
             router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/admindashboard`);
           }
         }, 3000);

@@ -8,6 +8,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
+// Fetch user from cookies
 const user = getUserFromCookies();
 
 const UserModal: React.FC = () => {
@@ -19,22 +20,40 @@ const UserModal: React.FC = () => {
   const handleMenuClick = (event: MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
 
+  // Function to remove a cookie
+  const removeCookie = (name: string) => {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  };
+
   const handleLogout = async () => {
     try {
+      // Clear user data from localStorage
+      localStorage.removeItem('user');
+      console.log("User has been cleared from localStorage");
+
+      // Clear the user cookie
+      removeCookie('user');
+      console.log("User cookie has been cleared");
+
+      // Make the logout request to the server
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/security/logout`,
+        {},
         { withCredentials: true }
       );
+
       if (response.status === 200) {
-        localStorage.removeItem("user");
-        console.log("User cookie has been cleared");
         toast.success("Logout Successful");
+      } else {
+        toast.error("Logout Failed");
       }
     } catch (err) {
       toast.error("Logout Failed");
-      console.log("error occurred", err);
+      console.log("Error occurred", err);
+    } finally {
+      // Navigate to homepage regardless of success or failure
+      router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/homepage`);
     }
-    router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/homepage`);
   };
 
   const handleSetting = () => {

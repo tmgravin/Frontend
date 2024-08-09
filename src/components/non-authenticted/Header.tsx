@@ -1,4 +1,3 @@
-"use client";
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import axios from 'axios';
 import SignupModal from './SignupModal'; // Adjust the import path as needed
