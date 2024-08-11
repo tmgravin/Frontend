@@ -2,6 +2,7 @@ import React, { ChangeEvent, useState } from 'react';
 import Image from 'next/image';
 import axios from 'axios';
 import ResetPasswordModal from './ResetPasswordModal'; 
+import SignupModal from './SignupModal'; // Import your SignupModal component
 import { useRouter } from 'next/navigation';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -32,6 +33,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
   const router = useRouter();
   const [userRole, setUserRole] = useState<string | null>(null);
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
 
   if (!isOpen) return null;
 
@@ -87,6 +89,11 @@ const LoginModal: React.FC<LoginModalProps> = ({
   };
 
   const toggleResetModal = () => setIsResetModalOpen(!isResetModalOpen);
+
+  const toggleSignupModal = () => {
+    setIsSignupModalOpen(!isSignupModalOpen);
+    toggleModal(); // Close the login modal when opening the signup modal
+  };
 
   return (
     <div
@@ -218,30 +225,32 @@ const LoginModal: React.FC<LoginModalProps> = ({
                   <Image
                     src="/pngs/facebookicon.svg"
                     alt="facebook icon"
-                    width={10}
-                    height={10}
+                    width={15}
+                    height={15}
                   />
                   <span className="primary-text-gray">Login with Facebook</span>
                 </button>
               </div>
 
-              <div className="flex flex-row justify-center">
-                <div>
-                  Don&apos;t have an account?
-                  <button className="secondary-blue" onClick={toggleModal}>
-                    {' '}
+              <div className="flex justify-center items-center">
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Don`&apos;`t have an account?{' '}
+                  <button
+                    type="button"
+                    className="text-blue-500 hover:underline"
+                    onClick={toggleSignupModal}
+                  >
                     Sign up
                   </button>
-                </div>
+                </p>
               </div>
             </form>
           </div>
         </div>
       </div>
-      <ResetPasswordModal
-        isOpen={isResetModalOpen}
-        toggleModal={toggleResetModal}
-      />
+
+      {/* Include ResetPasswordModal component here */}
+      {isResetModalOpen && <ResetPasswordModal isOpen={isResetModalOpen} toggleModal={toggleResetModal} />}
     </div>
   );
 };

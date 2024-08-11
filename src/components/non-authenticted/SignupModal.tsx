@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
-import { ToastContainer,toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -66,7 +66,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
     try {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/signup`, dataToSend);
       if (response.status === 200) {
-        toast.success("Signup successful! Please verify your email to log in")
+        toast.success("Signup successful! Please verify your email to log in");
         setSuccessMessage("Signup successful! Please verify your email to log in.");
         setError(null);
         // Clear the form and close the modal after displaying the success message
@@ -85,7 +85,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
 
   return (
     <div id="signup-modal" tabIndex={-1} aria-hidden="true" className="fixed inset-0 z-50 flex items-center justify-center overflow-auto">
-      <ToastContainer/>
+      <ToastContainer />
       <div className="relative p-4 w-full max-w-md max-h-full">
         <div className="relative bg-white rounded-lg shadow overflow-y-auto max-h-[90vh]">
           <div className="flex items-center justify-between p-4 md:p-5 rounded-t dark:border-gray-600">
@@ -136,15 +136,13 @@ const SignupModal: React.FC<SignupModalProps> = ({
                 <div className="relative cb-shadow">
                   <input type="password" name="confirmPassword" id="signup-confirm-password" value={isTeacherSignup ? teacherSignupData.confirmPassword : studentSignupData.confirmPassword} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Confirm Password" required />
                 </div>
-                <div className="flex items-center mb-4">
-                  <input type="checkbox" id="remember-me" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded "required />
-                  <label htmlFor="remember-me" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">I agree to  <div className='text-blue-700'><Link href="/termsandconditions">Terms and Condition</Link> </div> </label>
+                <div className="flex items-start mb-4">
+                  <input type="checkbox" id="remember" checked={remember} onChange={() => setRemember(!remember)} className="w-4 h-4 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600" />
+                  <label htmlFor="remember" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
                 </div>
-                <button type="submit" className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800">
-                  Sign up
-                </button>
-                {error && <p className="text-red-500 text-center">{error}</p>}
-                {successMessage && <p className="text-green-500 text-center">{successMessage}</p>}
+                {error && <div className="text-red-600">{error}</div>}
+                {successMessage && <div className="text-green-600">{successMessage}</div>}
+                <button type="submit" className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800">Sign Up</button>
               </form>
             )}
           </div>
