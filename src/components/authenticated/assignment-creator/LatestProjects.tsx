@@ -43,7 +43,7 @@ export interface DataItem {
 
 const LatestProjects: React.FC = () => {
   const [editModalVisible, setEditModalVisible] = useState(false);
-  const [paymentModalVisible, setPaymentModalVisible] = useState(false); // State for payment modal visibility
+  const [paymentModalVisible, setPaymentModalVisible] = useState(false);
   const [data, setData] = useState<DataItem[]>([]);
   const [visibleCount, setVisibleCount] = useState(8);
   const [loading, setLoading] = useState(false);
@@ -56,11 +56,10 @@ const LatestProjects: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get<DataItem[]>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/byUser?userId=${user.id}`,{  withCredentials: true});
+      const response = await axios.get<DataItem[]>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/byUser?userId=${user.id}`, { withCredentials: true });
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data", error);
-      // Optionally set some error state here to show a user-friendly message
     }
     setLoading(false);
   };
@@ -70,13 +69,15 @@ const LatestProjects: React.FC = () => {
   };
 
   const truncateDescription = (description: string, length: number) => {
-    if (typeof description !== 'string') return ''; // Return empty string if description is not a string
+    if (typeof description !== 'string') return '';
     if (description.length <= length) return description;
     return description.slice(0, length) + '...';
   };
-  
+
   const handleReadMore = (project: DataItem) => {
     setSelectedProject(project);
+    setEditModalVisible(false); // Ensure other modals are closed
+    setPaymentModalVisible(false); // Ensure other modals are closed
   };
 
   const handleClose = () => {
@@ -86,6 +87,7 @@ const LatestProjects: React.FC = () => {
   const openEditModal = (project: DataItem) => {
     setSelectedProject(project);
     setEditModalVisible(true);
+    setPaymentModalVisible(false); // Ensure payment modal is closed
   };
 
   const closeEditModal = () => {
@@ -96,6 +98,7 @@ const LatestProjects: React.FC = () => {
   const openPaymentModal = (project: DataItem) => {
     setSelectedProject(project);
     setPaymentModalVisible(true);
+    setEditModalVisible(false); // Ensure edit modal is closed
   };
 
   const closePaymentModal = () => {
@@ -105,7 +108,6 @@ const LatestProjects: React.FC = () => {
 
   const handleSave = () => {
     closeEditModal();
-    // Optionally, refresh the data or take some other action
   };
 
   const displayedData = data.slice(0, visibleCount);
@@ -159,7 +161,7 @@ const LatestProjects: React.FC = () => {
           </button>
         </div>
       )}
-      {selectedProject && (
+      {selectedProject && !editModalVisible && !paymentModalVisible && (
         <ReadMoreModal 
           project={selectedProject} 
           onClose={handleClose} 
@@ -176,7 +178,7 @@ const LatestProjects: React.FC = () => {
         <PaymentUploadModal
           open={paymentModalVisible}
           onClose={closePaymentModal}
-          projectId={selectedProject.projects.id} // Pass projectId as a string
+          projectId={selectedProject.projects.id}
           projectName={selectedProject.projects.projectName}
           name={selectedProject.projects.users.name}
         />

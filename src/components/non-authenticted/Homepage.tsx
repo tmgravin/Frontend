@@ -127,21 +127,8 @@ const Homepage: React.FC = () => {
       <WorkYourWay />
       <Footer />
 
-      {/* Signup Modal */}
-      <SignupModal
-        isOpen={isSignupModalOpen}
-        toggleModal={toggleSignupModal}
-        isTeacherSignup={isTeacherSignup}
-        setIsTeacherSignup={setIsTeacherSignup}
-        teacherSignupData={teacherSignupData}
-        studentSignupData={studentSignupData}
-        handleSignupChange={handleSignupChange}
-        remember={remember}
-        setRemember={setRemember}
-      />
 
 
-      
     </div>
   );
 };
