@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReadMoreModal from './ReadMoreModal';
 import EditAssignmentModal from './EditAssignmentModal';
-import PaymentUploadModal from '@/Payment/PaymentUploadModal'; // Correct import statement
+import PaymentUploadModal from '@/components/Payment/PaymentUploadModal'; // Correct import statement
 import { getUserFromCookies } from '../../auth/token';
 
 const user = getUserFromCookies();

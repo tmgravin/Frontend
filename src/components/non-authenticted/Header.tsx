@@ -14,6 +14,7 @@ interface SignupData {
   remember?: boolean;
 }
 
+
 const Header: React.FC = () => {
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
   const [isSignupModalOpen, setSignupModalOpen] = useState(false);
