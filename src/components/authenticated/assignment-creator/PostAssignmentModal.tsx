@@ -383,7 +383,7 @@ console.log(catData)
             </label>
             <input
               id="budget"
-              type="text"
+              type="number"
               value={budget}
               onChange={(e) => setBudget(e.target.value)}
               className="mt-1 block w-full border border-gray-300 rounded-md p-2"

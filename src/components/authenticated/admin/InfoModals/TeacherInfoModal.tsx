@@ -55,6 +55,7 @@ const TeacherInfoModal: React.FC<UserModalProps> = ({ user, onClose, open }) => 
             <strong>Address:</strong> {user.address}
           </Typography>
           <Typography id="user-modal-description" className="mb-2">
+            
             <strong>CV:</strong> 
           </Typography>
           <Typography id="user-modal-description" className="mb-2">

@@ -4,6 +4,7 @@ import axios from 'axios';
 import SignupModal from './SignupModal';
 import LoginModal from './LoginModal';
 import Image from 'next/image';
+import { ToastContainer } from 'react-toastify';
 
 interface SignupData {
   name: string;
@@ -100,6 +101,7 @@ const Header: React.FC = () => {
 
   return (
     <header>
+      <ToastContainer/>
       <div className="flex flex-col sm:flex-row justify-between items-center px-4 py-2">
         <div className="flex items-center">
           <Image

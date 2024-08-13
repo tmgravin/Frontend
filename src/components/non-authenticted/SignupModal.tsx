@@ -1,7 +1,9 @@
 import React, { useState, ChangeEvent, FormEvent, KeyboardEvent } from 'react';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer,toast } from 'react-toastify';
 import Link from 'next/link';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -69,13 +71,12 @@ const SignupModal: React.FC<SignupModalProps> = ({
     try {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/signup`, dataToSend);
       if (response.status === 200) {
-        toast.success("Signup successful! Please verify your email to log in");
-       
+        toast.success("Signup successful! Please verify your email and log in");
         // Clear the form and close the modal after displaying the success message
         clearForm();
         setTimeout(() => {
           toggleModal();
-        }, 2000);
+        }, 1000);
       }
     } catch (error) {
       console.error('Signup failed', error);
@@ -101,8 +102,9 @@ const SignupModal: React.FC<SignupModalProps> = ({
   if (!isOpen) return null;
 
   return (
+    <div>
     <div id="signup-modal" tabIndex={-1} aria-hidden="true" className="fixed inset-0 z-50 flex items-center justify-center overflow-auto">
-      <ToastContainer />
+     
       <div className="relative p-4 w-full max-w-md max-h-full">
         <div className="relative bg-white rounded-lg shadow overflow-y-auto max-h-[90vh]">
           <div className="flex items-center justify-between p-4 md:p-5 rounded-t dark:border-gray-600">
@@ -132,7 +134,8 @@ const SignupModal: React.FC<SignupModalProps> = ({
                 </div>
               </div>
             ) : (
-              <form className="space-y-4" onSubmit={(e) => handleSignupSubmit(e, isTeacherSignup)} onKeyDown={handleKeyDown}>
+             
+             <form className="space-y-4" onSubmit={(e) => handleSignupSubmit(e, isTeacherSignup)} onKeyDown={handleKeyDown}>
                 <button type="button" className="text-gray-600 hover:text-gray-900" onClick={() => setIsTeacherSignup(null)}>
                   &larr; Back
                 </button>
@@ -180,6 +183,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

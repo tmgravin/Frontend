@@ -81,7 +81,20 @@ const ProjectTableComponent: React.FC = () => {
       <div className="overflow-x-auto">
         <table className="min-w-full bg-white border border-gray-200">
           <thead>
-            {/* Your existing table headers */}
+            <tr>
+              <th className="px-4 py-2 border-b border-gray-200">Project Name</th>
+              <th className="px-4 py-2 border-b border-gray-200">Amount</th>
+              <th className="px-4 py-2 border-b border-gray-200">Deadline</th>
+              <th className="px-4 py-2 border-b border-gray-200">Scope</th>
+              <th className="px-4 py-2 border-b border-gray-200">Experience Year</th>
+              <th className="px-4 py-2 border-b border-gray-200">Status</th>
+              <th className="px-4 py-2 border-b border-gray-200">Category</th>
+              <th className="px-4 py-2 border-b border-gray-200">Payment Status</th>
+              <th className="px-4 py-2 border-b border-gray-200">Creator Name</th>
+              <th className="px-4 py-2 border-b border-gray-200">Creator Email</th>
+              <th className="px-4 py-2 border-b border-gray-200">Details</th>
+              <th className="px-4 py-2 border-b border-gray-200">Payment Info</th>
+            </tr>
           </thead>
           <tbody>
             {projects.map((projectWrapper) => {

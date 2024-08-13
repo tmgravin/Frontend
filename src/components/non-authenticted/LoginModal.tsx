@@ -81,7 +81,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
           } else if (response.data.userType === 'ADMIN') {
             router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/admindashboard`);
           }
-        }, 1000);
+        }, 500);
       }
     } catch (error) {
       console.error('Login failed, Please check your email and password. Also, check if email is verified.', error);

@@ -1,46 +1,53 @@
-"use client"
+"use client";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReviewRating from '../../Review-modal/ReviewRating';
+import { getUserFromCookies } from '@/components/auth/token';
 
-interface DataItem {
+const user = getUserFromCookies();
+
+interface ProjectDetails {
   title: string;
   description: string;
-  amount: number;
-  deadline: string;
-  fileUrl: string;
 }
 
-interface Review {
-  rating: number;
-  comment: string;
-  reviewer: string;
+interface DataItem {
+  id: number;
+  projectName: string;
+  projectAmount: number;
+  projectDeadline: string;
+  budgets: string;
+  createdAt: string;
+  updatedAt: string;
+  users: {
+    id: number;
+    name: string;
+    email: string;
+    isEmailVerified: string;
+    phone: string;
+    address: string;
+    userType: string;
+    loginType: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  projectCategory: {
+    id: number;
+    category: string;
+    createdAt: string;
+    updatedAt: string;
+  };
+  paymentStatus: string;
+  file: string;
+  projectsDetails: ProjectDetails | null; // Include project details
 }
 
 const CompletedAssignments: React.FC = () => {
-  const [data, setData] = useState<DataItem[]>([
-    { title: 'Project 1', description: 'Description 1', amount: 1000, deadline: '2024-07-30', fileUrl: 'https://example.com/file1.pdf' },
-    { title: 'Project 2', description: 'Description 2', amount: 2000, deadline: '2024-08-15', fileUrl: 'https://example.com/file2.pdf' },
-    { title: 'Project 3', description: 'Description 3', amount: 3000, deadline: '2024-09-01', fileUrl: 'https://example.com/file3.pdf' },
-    { title: 'Project 4', description: 'Description 4', amount: 4000, deadline: '2024-07-25', fileUrl: 'https://example.com/file4.pdf' },
-    { title: 'Project 5', description: 'Description 5', amount: 5000, deadline: '2024-08-05', fileUrl: 'https://example.com/file5.pdf' },
-    { title: 'Project 6', description: 'Description 6', amount: 6000, deadline: '2024-09-10', fileUrl: 'https://example.com/file6.pdf' },
-    { title: 'Project 7', description: 'Description 7', amount: 7000, deadline: '2024-07-29', fileUrl: 'https://example.com/file7.pdf' },
-    { title: 'Project 8', description: 'Description 8', amount: 8000, deadline: '2024-08-20', fileUrl: 'https://example.com/file8.pdf' },
-    { title: 'Project 9', description: 'Description 9', amount: 9000, deadline: '2024-09-15', fileUrl: 'https://example.com/file9.pdf' },
-    { title: 'Project 10', description: 'Description 10', amount: 10000, deadline: '2024-10-01', fileUrl: 'https://example.com/file10.pdf' },
-  ]);
+  const [data, setData] = useState<DataItem[]>([]);
   const [visibleCount, setVisibleCount] = useState(8);
   const [loading, setLoading] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedAssignment, setSelectedAssignment] = useState<DataItem | null>(null);
-  const [reviews, setReviews] = useState<Review[]>([
-    { rating: 5, comment: 'Excellent teacher!', reviewer: 'John Doe' },
-    { rating: 4, comment: 'Very good, but can improve.', reviewer: 'Jane Doe' },
-    { rating: 3, comment: 'Average experience.', reviewer: 'Alex Smith' },
-  ]);
-  const [averageRating, setAverageRating] = useState(4.0);
-  const [totalRatings, setTotalRatings] = useState(3);
 
   useEffect(() => {
     fetchData();
@@ -49,8 +56,8 @@ const CompletedAssignments: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get<DataItem[]>(`/api/completed/project/?userId=1`,{
-        withCredentials: true // Include credentials with the request
+      const response = await axios.get<DataItem[]>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/completed?userId=${user.id}`, {
+        withCredentials: true, // Include credentials with the request
       });
       setData(response.data);
     } catch (error) {
@@ -73,32 +80,63 @@ const CompletedAssignments: React.FC = () => {
     setSelectedAssignment(null);
   };
 
-  const handleRate = () => {
-    console.log('Rate teacher clicked');
-    // Add logic to handle rating here
+  const handleDownloadClick = async (filename: string) => {
+    try {
+      const formData = new FormData();
+      formData.append('filename', filename);
+      formData.append('bucketName', 'msp-academy1');
+
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/file/download/`, formData, {
+        
+        responseType: 'blob', // Ensure the response is a Blob for file download
+        withCredentials: true,
+      });
+      
+
+      // Create a URL for the file
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', filename.split('/').pop() || 'file'); // Extract filename from URL
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+    } catch (error) {
+      console.error('Error downloading the file', error);
+    }
   };
 
   const displayedData = data.slice(0, visibleCount);
 
   return (
     <div className="container mx-auto p-4 cb-shadow cbg-color py-5">
-      <div className='flex justify-center items-center primary-green p-2 font-bold'>Completed Assignments Ready For Download</div>
+      <div className='flex justify-center items-center primary-green p-2 font-bold'>
+        Completed Assignments Ready For Download
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {displayedData.map((item, index) => (
           <div key={index} className="p-4 border rounded shadow">
-            <h2 className="text-xl font-bold">{item.title}</h2>
-            <h2>Completed by:</h2>
-            <p>{item.description}</p>
-            <p className="text-sm">Project Amount: {item.amount}</p>
-            <p className="text-sm">Deadline: {item.deadline}</p>
+            <h2 className="text-xl font-bold">{item.projectName}</h2>
+            <h2>Completed by: {item.users.name}</h2>
+            {item.projectsDetails && (
+              <>
+                <p>{item.projectsDetails.title}</p>
+                <p>{item.projectsDetails.description}</p>
+              </>
+            )}
+            <p className="text-sm">Project Amount: {item.projectAmount}</p>
+            <p className="text-sm">Deadline: {item.projectDeadline}</p>
             <p className='text-sm'>
               Download Assignment: 
-              <a href={item.fileUrl} className="text-blue-500 underline ml-2" download>
+              <button
+                onClick={() => handleDownloadClick(item.file)}
+                className="text-blue-500 underline ml-2"
+              >
                 Download
-              </a>
+              </button>
             </p>
             <button
-              className="mt-4 px-4 py-2  text-white rounded primary-btn-blue"
+              className="mt-4 px-4 py-2 text-white rounded primary-btn-blue"
               onClick={() => handleReviewClick(item)}
             >
               Review Teacher
@@ -117,14 +155,13 @@ const CompletedAssignments: React.FC = () => {
           </button>
         )}
       </div>
+
       {selectedAssignment && (
         <ReviewRating
           open={modalOpen}
           onClose={handleModalClose}
-          // onRate={handleRate}
-          reviews={reviews}
-          averageRating={averageRating}
-          totalRatings={totalRatings}
+          doerId={selectedAssignment.users.id} // Pass the userId of the selected assignment
+          doerName={selectedAssignment.users.name}
         />
       )}
     </div>

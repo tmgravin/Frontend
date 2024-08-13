@@ -6,56 +6,84 @@ import {
   DialogTitle,
   Button,
   TextField,
-  Box,
-  IconButton,
   Typography,
+  Box,
+  Rating
 } from '@mui/material';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStar } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
 interface RateTeacherModalProps {
   open: boolean;
   onClose: () => void;
-  onSave: (review: { rating: number; comment: string }) => void;
+  userId: number;
 }
 
-const RateTeacherModal: React.FC<RateTeacherModalProps> = ({ open, onClose, onSave }) => {
-  const [rating, setRating] = useState<number>(0);
-  const [hover, setHover] = useState<number>(-1);
+const RateTeacherModal: React.FC<RateTeacherModalProps> = ({ open, onClose, userId }) => {
+  const [rating, setRating] = useState<number | null>(null);
   const [comment, setComment] = useState<string>('');
+  const [creator, setCreator] = useState<any>(null);
 
-  const handleSave = () => {
-    onSave({ rating, comment });
-    onClose();
+  // Fetch user data (creator) on mount
+  React.useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/${userId}`, {
+          withCredentials: true
+        });
+        setCreator(response.data);
+      } catch (error) {
+        console.error('Error fetching user:', error);
+      }
+    };
+
+    fetchUser();
+  }, [userId]);
+
+  const handleSave = async () => {
+    if (rating === null) {
+      // Show error message or alert
+      return;
+    }
+
+    try {
+      await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/review/`, {
+        creatorId: creator?.id,
+        doerId: userId,
+        rating,
+        comment
+      }, {
+        withCredentials: true
+      });
+
+      onClose();
+    } catch (error) {
+      console.error('Error saving review:', error);
+      // Handle the error here, e.g., show a notification to the user
+    }
   };
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
-      <DialogTitle>Rate and Review Teacher</DialogTitle>
+      <DialogTitle>Rate Teacher</DialogTitle>
       <DialogContent>
-        <Typography variant="h6">Rating</Typography>
-        <Box display="flex" alignItems="center" mb={2}>
-          {[...Array(5)].map((_, index) => (
-            <IconButton
-              key={index}
-              onClick={() => setRating(index + 1)}
-              onMouseEnter={() => setHover(index + 1)}
-              onMouseLeave={() => setHover(-1)}
-              color={index + 1 <= (hover || rating) ? 'primary' : 'default'}
-            >
-              <FontAwesomeIcon icon={faStar} />
-            </IconButton>
-          ))}
+        <Box display="flex" flexDirection="column" alignItems="center">
+          <Typography variant="h6">Rate the teacher</Typography>
+          <Rating
+            value={rating}
+            onChange={(event, newValue) => setRating(newValue)}
+            size="large"
+            sx={{ mt: 2 }}
+          />
+          <TextField
+            label="Comment"
+            multiline
+            rows={4}
+            variant="outlined"
+            value={comment}
+            onChange={(e) => setComment(e.target.value)}
+            sx={{ mt: 2, width: '100%' }}
+          />
         </Box>
-        <TextField
-          label="Comment"
-          multiline
-          rows={4}
-          value={comment}
-          onChange={(e) => setComment(e.target.value)}
-          fullWidth
-          margin="normal"
-        />
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="secondary">
