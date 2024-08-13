@@ -18,27 +18,27 @@ const BankDetails: React.FC = () => {
     registeredPhoneNumber: '',
     users: {
       id: `${user.id}`,
-    
     },
   });
 
   // State for editing values
   const [editValues, setEditValues] = useState({
-    firstName: bankDetails.firstName,
-    lastName: bankDetails.lastName,
-    accountNumber: bankDetails.accountNumber,
-    bankName: bankDetails.bankName,
-    creditCardNumber: bankDetails.creditCardNumber,
-    registeredPhoneNumber: bankDetails.registeredPhoneNumber,
+    firstName: '',
+    lastName: '',
+    accountNumber: '',
+    bankName: '',
+    creditCardNumber: '',
+    registeredPhoneNumber: '',
     users: {
-      id: user.id,
-      
+      id: `${user.id}`,
     },
   });
 
-  // State for dialogs
+  // State for dialogs and button disable states
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openPostDialog, setOpenPostDialog] = useState(false);
+  const [isPostDisabled, setIsPostDisabled] = useState(false);
+  const [isEditDisabled, setIsEditDisabled] = useState(true);
 
   useEffect(() => {
     if (!user.id) {
@@ -54,20 +54,26 @@ const BankDetails: React.FC = () => {
         }); // Replace with your API endpoint
         
         const data = response.data[0]; // Assuming the API returns an array
-      
-        setBankDetails(data);
-        setEditValues({
-          
-          firstName: data.firstName,
-          lastName: data.lastName,
-          accountNumber: data.accountNumber,
-          bankName: data.bankName,
-          creditCardNumber: data.creditCardNumber,
-          registeredPhoneNumber: data.registeredPhoneNumber,
-          users: {
-            id: user.id,
-          },
-        });
+        
+        if (data) {
+          setBankDetails(data);
+          setEditValues({
+            firstName: data.firstName,
+            lastName: data.lastName,
+            accountNumber: data.accountNumber,
+            bankName: data.bankName,
+            creditCardNumber: data.creditCardNumber,
+            registeredPhoneNumber: data.registeredPhoneNumber,
+            users: {
+              id: user.id,
+            },
+          });
+          setIsPostDisabled(true);
+          setIsEditDisabled(false);
+        } else {
+          setIsPostDisabled(false);
+          setIsEditDisabled(true);
+        }
       } catch (error) {
         console.error('Error fetching bank details:', error);
       }
@@ -90,10 +96,9 @@ const BankDetails: React.FC = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/${1}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/${user.id}`,
         editValues,
         {
-          
           headers: {
             'Content-Type': 'application/json',
           },
@@ -139,6 +144,8 @@ const BankDetails: React.FC = () => {
       if (response.data) {
         toast.success('Bank details posted successfully');
         handlePostToggle(e);
+        setIsPostDisabled(true);
+        setIsEditDisabled(false);
       } else {
         console.error('Failed to post bank details');
       }
@@ -186,6 +193,7 @@ const BankDetails: React.FC = () => {
 
         <button
           onClick={handleEditToggle}
+          disabled={isEditDisabled}
           className="px-4 py-2 primary-btn-blue text-white rounded mr-2"
         >
           Edit Bank Details
@@ -193,7 +201,8 @@ const BankDetails: React.FC = () => {
 
         <button
           onClick={handlePostToggle}
-          className="px-4 py-2 primary-btn-green text-white primary-btn-blue rounded"
+          disabled={isPostDisabled}
+          className="px-4 py-2 primary-btn-green text-white rounded"
         >
           Post Bank Details
         </button>
@@ -252,20 +261,18 @@ const BankDetails: React.FC = () => {
               className="w-full p-2 border border-gray-300 rounded mb-4"
               placeholder="Registered Phone Number"
             />
-            <div className="flex justify-end">
-              <button
-                onClick={handleSave}
-                className="px-4 py-2 primary-btn-blue text-white rounded mr-2"
-              >
-                Save
-              </button>
-              <button
-                onClick={handleEditToggle}
-                className="px-4 py-2 primary-btn-red text-white rounded"
-              >
-                Cancel
-              </button>
-            </div>
+            <button
+              onClick={handleSave}
+              className="px-4 py-2 primary-btn-blue text-white rounded mr-2"
+            >
+              Save
+            </button>
+            <button
+              onClick={handleEditToggle}
+              className="px-4 py-2 primary-btn-blue text-white rounded"
+            >
+              Cancel
+            </button>
           </div>
         </div>
       )}
@@ -323,20 +330,18 @@ const BankDetails: React.FC = () => {
               className="w-full p-2 border border-gray-300 rounded mb-4"
               placeholder="Registered Phone Number"
             />
-            <div className="flex justify-end">
-              <button
-                onClick={handlePost}
-                className="px-4 py-2 primary-btn-blue  rounded mr-2"
-              >
-                Post
-              </button>
-              <button
-                onClick={handlePostToggle}
-                className="px-4 py-2 primary-btn-red ] rounded"
-              >
-                Cancel
-              </button>
-            </div>
+            <button
+              onClick={handlePost}
+              className="px-4 py-2 primary-btn-green text-white rounded mr-2"
+            >
+              Post
+            </button>
+            <button
+              onClick={handlePostToggle}
+              className="px-4 py-2 primary-btn-blue text-white rounded"
+            >
+              Cancel
+            </button>
           </div>
         </div>
       )}

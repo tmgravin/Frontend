@@ -28,8 +28,8 @@ const UserModal: React.FC = () => {
   const handleLogout = async () => {
     try {
       // Clear user data from localStorage
-      localStorage.removeItem('user');
-      console.log("User has been cleared from localStorage");
+      // localStorage.removeItem('user');
+      // console.log("User has been cleared from localStorage");
 
       // Clear the user cookie
       removeCookie('user');
