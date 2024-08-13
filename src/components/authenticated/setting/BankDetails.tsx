@@ -10,58 +10,35 @@ const user = getUserFromCookies() || { id: null }; // Set a default value
 const BankDetails: React.FC = () => {
   // State for bank details
   const [bankDetails, setBankDetails] = useState({
-    id: '',
     firstName: '',
     lastName: '',
     accountNumber: '',
     bankName: '',
     creditCardNumber: '',
     registeredPhoneNumber: '',
-    createdAt: '',
     users: {
-      id: '',
-      name: '',
-      email: '',
-      isEmailVerified: '',
-      password: '',
-      phone: '',
-      address: '',
-      userType: '',
-      loginType: '',
-      createdAt: '',
-      updatedAt: '',
+      id: `${user.id}`,
+    
     },
   });
-  const id=bankDetails.id
-
 
   // State for editing values
   const [editValues, setEditValues] = useState({
-    id: bankDetails.id,
     firstName: bankDetails.firstName,
     lastName: bankDetails.lastName,
     accountNumber: bankDetails.accountNumber,
     bankName: bankDetails.bankName,
     creditCardNumber: bankDetails.creditCardNumber,
     registeredPhoneNumber: bankDetails.registeredPhoneNumber,
-    createdAt: bankDetails.createdAt,
     users: {
       id: user.id,
-      name: bankDetails.users.name,
-      email: bankDetails.users.email,
-      isEmailVerified: bankDetails.users.isEmailVerified,
-      password: bankDetails.users.password,
-      phone: bankDetails.users.phone,
-      address: bankDetails.users.address,
-      userType: bankDetails.users.userType,
-      loginType: bankDetails.users.loginType,
-      createdAt: bankDetails.users.createdAt,
-      updatedAt: bankDetails.users.updatedAt,
+      
     },
   });
 
-  // State for edit dialog
+  // State for dialogs
   const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [openPostDialog, setOpenPostDialog] = useState(false);
 
   useEffect(() => {
     if (!user.id) {
@@ -80,26 +57,15 @@ const BankDetails: React.FC = () => {
       
         setBankDetails(data);
         setEditValues({
-          id: data.id,
+          
           firstName: data.firstName,
           lastName: data.lastName,
           accountNumber: data.accountNumber,
           bankName: data.bankName,
           creditCardNumber: data.creditCardNumber,
           registeredPhoneNumber: data.registeredPhoneNumber,
-          createdAt: data.createdAt,
           users: {
             id: user.id,
-            name: data.users.name,
-            email: data.users.email,
-            isEmailVerified: data.users.isEmailVerified,
-            password: data.users.password,
-            phone: data.users.phone,
-            address: data.users.address,
-            userType: data.users.userType,
-            loginType: data.users.loginType,
-            createdAt: data.users.createdAt,
-            updatedAt: data.users.updatedAt,
           },
         });
       } catch (error) {
@@ -124,9 +90,10 @@ const BankDetails: React.FC = () => {
     e.preventDefault();
     try {
       const response = await axios.put(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/${id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/${1}`,
         editValues,
         {
+          
           headers: {
             'Content-Type': 'application/json',
           },
@@ -146,6 +113,41 @@ const BankDetails: React.FC = () => {
     }
   };
 
+  const handlePostChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setBankDetails((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handlePostToggle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    setOpenPostDialog(!openPostDialog);
+  };
+
+  const handlePost = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/`,
+        bankDetails,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          withCredentials: true,
+        }
+      );
+      if (response.data) {
+        toast.success('Bank details posted successfully');
+        handlePostToggle(e);
+      } else {
+        console.error('Failed to post bank details');
+      }
+    } catch (error) {
+      toast.error('Error posting bank details');
+      console.error('Error posting bank details:', error);
+    }
+  };
+
   return (
     <div className="container mx-auto p-4 max-w-md">
       <ToastContainer />
@@ -162,14 +164,17 @@ const BankDetails: React.FC = () => {
             <p>{bankDetails.lastName}</p>
           </div>
         </div>
+        <div className='flex flex-row'>
         <div className="mb-4">
           <label className="block text-gray-700">Account Number:</label>
           <p>{bankDetails.accountNumber}</p>
         </div>
-        <div className="mb-4">
+        <div className="mb-4 ">
           <label className="block text-gray-700">Bank Name:</label>
           <p>{bankDetails.bankName}</p>
         </div>
+        </div>
+       
         <div className="mb-4">
           <label className="block text-gray-700">Credit Card Number:</label>
           <p>{bankDetails.creditCardNumber || 'N/A'}</p>
@@ -181,9 +186,16 @@ const BankDetails: React.FC = () => {
 
         <button
           onClick={handleEditToggle}
-          className="px-4 py-2 primary-btn-blue text-white rounded"
+          className="px-4 py-2 primary-btn-blue text-white rounded mr-2"
         >
           Edit Bank Details
+        </button>
+
+        <button
+          onClick={handlePostToggle}
+          className="px-4 py-2 primary-btn-green text-white primary-btn-blue rounded"
+        >
+          Post Bank Details
         </button>
       </form>
 
@@ -240,19 +252,89 @@ const BankDetails: React.FC = () => {
               className="w-full p-2 border border-gray-300 rounded mb-4"
               placeholder="Registered Phone Number"
             />
-
             <div className="flex justify-end">
               <button
+                onClick={handleSave}
+                className="px-4 py-2 primary-btn-blue text-white rounded mr-2"
+              >
+                Save
+              </button>
+              <button
                 onClick={handleEditToggle}
-                className="px-4 py-2 bg-gray-300 text-black rounded mr-2"
+                className="px-4 py-2 primary-btn-red text-white rounded"
               >
                 Cancel
               </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Post Bank Details Dialog */}
+      {openPostDialog && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+          <div className="bg-white p-6 rounded shadow-lg">
+            <h3 className="text-xl mb-4">Post Bank Details</h3>
+            <input
+              type="text"
+              name="firstName"
+              value={bankDetails.firstName}
+              onChange={handlePostChange}
+              className="w-full p-2 border border-gray-300 rounded mb-4"
+              placeholder="First Name"
+            />
+            <input
+              type="text"
+              name="lastName"
+              value={bankDetails.lastName}
+              onChange={handlePostChange}
+              className="w-full p-2 border border-gray-300 rounded mb-4"
+              placeholder="Last Name"
+            />
+            <input
+              type="text"
+              name="accountNumber"
+              value={bankDetails.accountNumber}
+              onChange={handlePostChange}
+              className="w-full p-2 border border-gray-300 rounded mb-4"
+              placeholder="Account Number"
+            />
+            <input
+              type="text"
+              name="bankName"
+              value={bankDetails.bankName}
+              onChange={handlePostChange}
+              className="w-full p-2 border border-gray-300 rounded mb-4"
+              placeholder="Bank Name"
+            />
+            <input
+              type="text"
+              name="creditCardNumber"
+              value={bankDetails.creditCardNumber}
+              onChange={handlePostChange}
+              className="w-full p-2 border border-gray-300 rounded mb-4"
+              placeholder="Credit Card Number"
+            />
+            <input
+              type="text"
+              name="registeredPhoneNumber"
+              value={bankDetails.registeredPhoneNumber}
+              onChange={handlePostChange}
+              className="w-full p-2 border border-gray-300 rounded mb-4"
+              placeholder="Registered Phone Number"
+            />
+            <div className="flex justify-end">
               <button
-                onClick={handleSave}
-                className="px-4 py-2 bg-blue-500 text-white rounded"
+                onClick={handlePost}
+                className="px-4 py-2 primary-btn-blue  rounded mr-2"
               >
-                Save
+                Post
+              </button>
+              <button
+                onClick={handlePostToggle}
+                className="px-4 py-2 primary-btn-red ] rounded"
+              >
+                Cancel
               </button>
             </div>
           </div>
