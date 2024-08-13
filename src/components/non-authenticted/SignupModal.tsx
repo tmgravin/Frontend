@@ -1,14 +1,13 @@
 import React, { useState, ChangeEvent, FormEvent, KeyboardEvent } from 'react';
 import axios from 'axios';
-import { ToastContainer,toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import Link from 'next/link';
 import 'react-toastify/dist/ReactToastify.css';
 
-
 interface SignupModalProps {
   isOpen: boolean;
-  toggleModal: () => void;
-  toggleLoginModal: () => void;
+  toggleModal: () => void; // Ensure this is used correctly
+  toggleLoginModal?: () => void; // Optional function with default value
   isTeacherSignup: boolean | null;
   setIsTeacherSignup: (isTeacher: boolean | null) => void;
   teacherSignupData: SignupData;
@@ -30,7 +29,7 @@ interface SignupData {
 const SignupModal: React.FC<SignupModalProps> = ({
   isOpen,
   toggleModal,
-  toggleLoginModal,
+  toggleLoginModal = () => {}, // Default function
   isTeacherSignup,
   setIsTeacherSignup,
   teacherSignupData,
@@ -39,7 +38,6 @@ const SignupModal: React.FC<SignupModalProps> = ({
   remember,
   setRemember
 }) => {
-
   const [isLoading, setIsLoading] = useState<boolean>(false); // Add loading state
 
   const clearForm = () => {
@@ -81,7 +79,6 @@ const SignupModal: React.FC<SignupModalProps> = ({
     } catch (error) {
       console.error('Signup failed', error);
       toast.error('Signup failed. Please try again.');
-    
     } finally {
       setIsLoading(false); // Set loading to false
     }
@@ -103,87 +100,80 @@ const SignupModal: React.FC<SignupModalProps> = ({
 
   return (
     <div>
-    <div id="signup-modal" tabIndex={-1} aria-hidden="true" className="fixed inset-0 z-50 flex items-center justify-center overflow-auto">
-     
-      <div className="relative p-4 w-full max-w-md max-h-full">
-        <div className="relative bg-white rounded-lg shadow overflow-y-auto max-h-[90vh]">
-          <div className="flex items-center justify-between p-4 md:p-5 rounded-t dark:border-gray-600">
-            <h3 className="text-xl font-semibold">Sign up</h3>
-            <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={toggleModal}>
-              <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
-              </svg>
-              <span className="sr-only">Close modal</span>
-            </button>
-          </div>
-          <div className="p-4 md:p-5">
-            {isTeacherSignup === null ? (
-              <div>
-                <button className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800" onClick={() => setIsTeacherSignup(true)}>
-                  Sign up as Doer
-                </button>
-                <button className="w-full mt-5 text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800" onClick={() => setIsTeacherSignup(false)}>
-                  Sign up as Creator
-                </button>
-                <div className='mt-5'>
-                  <div className='flex flex-row'> Already have an account?<button className='secondary-blue' onClick={() => {
-                toggleModal(); 
-                toggleLoginModal(); 
-              }}
-                >Sign in</button></div>
+      <div id="signup-modal" tabIndex={-1} aria-hidden="true" className="fixed inset-0 z-50 flex items-center justify-center overflow-auto">
+        <div className="relative p-4 w-full max-w-md max-h-full">
+          <div className="relative bg-white rounded-lg shadow overflow-y-auto max-h-[90vh]">
+            <div className="flex items-center justify-between p-4 md:p-5 rounded-t dark:border-gray-600">
+              <h3 className="text-xl font-semibold">Sign up</h3>
+              <button type="button" className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" onClick={toggleModal}>
+                <svg className="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                </svg>
+                <span className="sr-only">Close modal</span>
+              </button>
+            </div>
+            <div className="p-4 md:p-5">
+              {isTeacherSignup === null ? (
+                <div>
+                  <button className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800" onClick={() => setIsTeacherSignup(true)}>
+                    Sign up as Doer
+                  </button>
+                  <button className="w-full mt-5 text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800" onClick={() => setIsTeacherSignup(false)}>
+                    Sign up as Creator
+                  </button>
+                  <div className='mt-5'>
+                    <div className='flex flex-row'> Already have an account?<button className='secondary-blue' onClick={() => {
+                      toggleModal(); 
+                      toggleLoginModal(); 
+                    }}>Sign in</button></div>
+                  </div>
                 </div>
-              </div>
-            ) : (
-             
-             <form className="space-y-4" onSubmit={(e) => handleSignupSubmit(e, isTeacherSignup)} onKeyDown={handleKeyDown}>
-                <button type="button" className="text-gray-600 hover:text-gray-900" onClick={() => setIsTeacherSignup(null)}>
-                  &larr; Back
-                </button>
-                <div className="relative cb-shadow">
-                  <input type="text" name="name" id="signup-name" value={isTeacherSignup ? teacherSignupData.name : studentSignupData.name} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Full Name" required />
-                </div>
-                <div className="relative cb-shadow">
-                  <input type="email" name="email" id="signup-email" value={isTeacherSignup ? teacherSignupData.email : studentSignupData.email} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Email Address" required />
-                  <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                    <i className="fa-regular fa-envelope text-gray-400"></i>
-                  </span>
-                </div>
-                <div className="relative cb-shadow">
-                  <input type="text" name="address" id="signup-address" value={isTeacherSignup ? teacherSignupData.address : studentSignupData.address} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Address" required />
-                </div>
-                <div className="relative cb-shadow">
-                  <input type="text" name="phone" id="signup-phone" value={isTeacherSignup ? teacherSignupData.phone : studentSignupData.phone} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Phone Number" required />
-                </div>
-                <div className="relative cb-shadow">
-                  <input type="password" name="password" id="signup-password" value={isTeacherSignup ? teacherSignupData.password : studentSignupData.password} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Password" required />
-                </div>
-                <div className="relative cb-shadow">
-                  <input type="password" name="confirmPassword" id="signup-confirm-password" value={isTeacherSignup ? teacherSignupData.confirmPassword : studentSignupData.confirmPassword} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Confirm Password" required />
-                </div>
-                <div className="flex items-center">
-                  <input id="remember" type="checkbox" required checked={remember} onChange={() => setRemember(!remember)} className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800" />
-                  <label htmlFor="remember" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"><div className='flex text-center'>I AGREE TO  <Link href="/termsandcondition"><div className='text-blue-500 px-1'> TERMS AND CONDITIONS</div></Link></div></label>
-                </div>
-              
-                <button type="submit" className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800" disabled={isLoading}>
-                  {isLoading ? (
-                    <>
-                      <span className="mr-2">signing up...</span>
-                      <svg className="animate-spin w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg flex " fill="none" viewBox="0 0 24 24">
-                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 1 1 16 0A8 8 0 0 1 4 12zm12 0a4 4 0 1 0-8 0 4 4 0 0 0 8 0z"></path>
-                      </svg>
-                    </>
-                  ) : (
-                    "Sign up"
-                  )}
-                </button>
-              </form>
-            )}
+              ) : (
+                <form className="space-y-4" onSubmit={(e) => handleSignupSubmit(e, isTeacherSignup)} onKeyDown={handleKeyDown}>
+                  <button type="button" className="text-gray-600 hover:text-gray-900" onClick={() => setIsTeacherSignup(null)}>
+                    &larr; Back
+                  </button>
+                  <div className="relative cb-shadow">
+                    <input type="text" name="name" id="signup-name" value={isTeacherSignup ? teacherSignupData.name : studentSignupData.name} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Full Name" required />
+                  </div>
+                  <div className="relative cb-shadow">
+                    <input type="email" name="email" id="signup-email" value={isTeacherSignup ? teacherSignupData.email : studentSignupData.email} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Email Address" required />
+                    <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                      <i className="fa-regular fa-envelope text-gray-400"></i>
+                    </span>
+                  </div>
+                  <div className="relative cb-shadow">
+                    <input type="text" name="address" id="signup-address" value={isTeacherSignup ? teacherSignupData.address : studentSignupData.address} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Address" required />
+                  </div>
+                  <div className="relative cb-shadow">
+                    <input type="text" name="phone" id="signup-phone" value={isTeacherSignup ? teacherSignupData.phone : studentSignupData.phone} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Phone Number" required />
+                  </div>
+                  <div className="relative cb-shadow">
+                    <input type="password" name="password" id="signup-password" value={isTeacherSignup ? teacherSignupData.password : studentSignupData.password} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Password" required />
+                  </div>
+                  <div className="relative cb-shadow">
+                    <input type="password" name="confirmPassword" id="signup-confirm-password" value={isTeacherSignup ? teacherSignupData.confirmPassword : studentSignupData.confirmPassword} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Confirm Password" required />
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <input id="remember-me" type="checkbox" checked={remember} onChange={() => setRemember(!remember)} className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600" />
+                    <label htmlFor="remember-me" className="text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
+                  </div>
+                  <button type="submit" className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800" disabled={isLoading}>
+                    {isLoading ? 'Signing up...' : 'Sign up'}
+                  </button>
+                  <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
+                    Already have an account? <Link href="#" className="text-blue-700 dark:text-blue-500 hover:underline" onClick={() => {
+                      toggleModal(); 
+                      toggleLoginModal(); 
+                    }}>Sign in</Link>
+                  </div>
+                </form>
+              )}
+            </div>
           </div>
         </div>
       </div>
-    </div>
+      <ToastContainer />
     </div>
   );
 };
