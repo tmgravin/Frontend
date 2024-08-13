@@ -3,6 +3,7 @@ import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, M
 import { CloudUpload } from '@mui/icons-material';
 import axios from 'axios';
 import { getUserFromCookies } from '@/components/auth/token';
+import { toast } from 'react-toastify';
 
 const userid = getUserFromCookies();
 
@@ -51,7 +52,8 @@ const PaymentUploadModal: React.FC<PaymentUploadModalProps> = ({ open, onClose, 
       withCredentials: true // Include credentials with the request
     })
       .then(response => {
-        console.log('Payment data uploaded successfully:', response.data);
+        toast.success("Payment updated successfully.")
+         console.log('Payment data uploaded successfully:', response.data);
         onClose();
       })
       .catch(error => {

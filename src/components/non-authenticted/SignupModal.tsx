@@ -1,11 +1,14 @@
-import React, { useState, ChangeEvent, FormEvent } from 'react';
+import React, { useState, ChangeEvent, FormEvent, KeyboardEvent } from 'react';
 import axios from 'axios';
+import { ToastContainer,toast } from 'react-toastify';
 import Link from 'next/link';
-import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 interface SignupModalProps {
   isOpen: boolean;
   toggleModal: () => void;
+  toggleLoginModal: () => void;
   isTeacherSignup: boolean | null;
   setIsTeacherSignup: (isTeacher: boolean | null) => void;
   teacherSignupData: SignupData;
@@ -27,6 +30,7 @@ interface SignupData {
 const SignupModal: React.FC<SignupModalProps> = ({
   isOpen,
   toggleModal,
+  toggleLoginModal,
   isTeacherSignup,
   setIsTeacherSignup,
   teacherSignupData,
@@ -35,8 +39,8 @@ const SignupModal: React.FC<SignupModalProps> = ({
   remember,
   setRemember
 }) => {
-  const [error, setError] = useState<string | null>(null);
-  const [successMessage, setSuccessMessage] = useState<string | null>(null);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false); // Add loading state
 
   const clearForm = () => {
     // Clear the form data
@@ -52,11 +56,12 @@ const SignupModal: React.FC<SignupModalProps> = ({
 
   const handleSignupSubmit = async (e: FormEvent<HTMLFormElement>, isTeacher: boolean) => {
     e.preventDefault();
+    setIsLoading(true); // Set loading to true
     const signupData = isTeacher ? teacherSignupData : studentSignupData;
     const userType = isTeacher ? 'ASSIGNMENT_DOER' : 'ASSIGNMENT_CREATOR'; // Determine the role
 
     if (signupData.password !== signupData.confirmPassword) {
-      setError("Passwords do not match");
+      setIsLoading(false); // Set loading to false
       return;
     }
 
@@ -66,26 +71,40 @@ const SignupModal: React.FC<SignupModalProps> = ({
     try {
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/signup`, dataToSend);
       if (response.status === 200) {
-        toast.success("Signup successful! Please verify your email to log in");
-        setSuccessMessage("Signup successful! Please verify your email to log in.");
-        setError(null);
+        toast.success("Signup successful! Please verify your email and log in");
         // Clear the form and close the modal after displaying the success message
         clearForm();
-        toggleModal();
+        setTimeout(() => {
+          toggleModal();
+        }, 1000);
       }
     } catch (error) {
       console.error('Signup failed', error);
       toast.error('Signup failed. Please try again.');
-      setError('Signup failed. Please try again.');
-      setSuccessMessage(null);
+    
+    } finally {
+      setIsLoading(false); // Set loading to false
+    }
+  };
+
+  const handleKeyDown = (e: KeyboardEvent<HTMLFormElement>) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+      // Trigger form submission
+      const form = e.currentTarget;
+      if (form.checkValidity()) {
+        const submitEvent = new Event('submit', { bubbles: true });
+        form.dispatchEvent(submitEvent);
+      }
     }
   };
 
   if (!isOpen) return null;
 
   return (
+    <div>
     <div id="signup-modal" tabIndex={-1} aria-hidden="true" className="fixed inset-0 z-50 flex items-center justify-center overflow-auto">
-      <ToastContainer />
+     
       <div className="relative p-4 w-full max-w-md max-h-full">
         <div className="relative bg-white rounded-lg shadow overflow-y-auto max-h-[90vh]">
           <div className="flex items-center justify-between p-4 md:p-5 rounded-t dark:border-gray-600">
@@ -107,11 +126,16 @@ const SignupModal: React.FC<SignupModalProps> = ({
                   Sign up as Creator
                 </button>
                 <div className='mt-5'>
-                  <div className='flex flex-row'> Already have an account?<button className='secondary-blue' /* onClick={() => setIsLoginModalOpen(true)} */>Sign in</button></div>
+                  <div className='flex flex-row'> Already have an account?<button className='secondary-blue' onClick={() => {
+                toggleModal(); 
+                toggleLoginModal(); 
+              }}
+                >Sign in</button></div>
                 </div>
               </div>
             ) : (
-              <form className="space-y-4" onSubmit={(e) => handleSignupSubmit(e, isTeacherSignup)}>
+             
+             <form className="space-y-4" onSubmit={(e) => handleSignupSubmit(e, isTeacherSignup)} onKeyDown={handleKeyDown}>
                 <button type="button" className="text-gray-600 hover:text-gray-900" onClick={() => setIsTeacherSignup(null)}>
                   &larr; Back
                 </button>
@@ -125,7 +149,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
                   </span>
                 </div>
                 <div className="relative cb-shadow">
-                  <input type="text" name="address" id="signup-address" value={isTeacherSignup ? teacherSignupData.address : studentSignupData.address} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Home Address" required />
+                  <input type="text" name="address" id="signup-address" value={isTeacherSignup ? teacherSignupData.address : studentSignupData.address} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Address" required />
                 </div>
                 <div className="relative cb-shadow">
                   <input type="text" name="phone" id="signup-phone" value={isTeacherSignup ? teacherSignupData.phone : studentSignupData.phone} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Phone Number" required />
@@ -136,18 +160,30 @@ const SignupModal: React.FC<SignupModalProps> = ({
                 <div className="relative cb-shadow">
                   <input type="password" name="confirmPassword" id="signup-confirm-password" value={isTeacherSignup ? teacherSignupData.confirmPassword : studentSignupData.confirmPassword} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Confirm Password" required />
                 </div>
-                <div className="flex items-start mb-4">
-                  <input type="checkbox" id="remember" checked={remember} onChange={() => setRemember(!remember)} className="w-4 h-4 border-gray-300 rounded dark:bg-gray-700 dark:border-gray-600" />
-                  <label htmlFor="remember" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
+                <div className="flex items-center">
+                  <input id="remember" type="checkbox" required checked={remember} onChange={() => setRemember(!remember)} className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600 dark:ring-offset-gray-800" />
+                  <label htmlFor="remember" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"><div className='flex text-center'>I AGREE TO  <Link href="/termsandcondition"><div className='text-blue-500 px-1'> TERMS AND CONDITIONS</div></Link></div></label>
                 </div>
-                {error && <div className="text-red-600">{error}</div>}
-                {successMessage && <div className="text-green-600">{successMessage}</div>}
-                <button type="submit" className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800">Sign Up</button>
+              
+                <button type="submit" className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800" disabled={isLoading}>
+                  {isLoading ? (
+                    <>
+                      <span className="mr-2">signing up...</span>
+                      <svg className="animate-spin w-4 h-4 text-white" xmlns="http://www.w3.org/2000/svg flex " fill="none" viewBox="0 0 24 24">
+                        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 1 1 16 0A8 8 0 0 1 4 12zm12 0a4 4 0 1 0-8 0 4 4 0 0 0 8 0z"></path>
+                      </svg>
+                    </>
+                  ) : (
+                    "Sign up"
+                  )}
+                </button>
               </form>
             )}
           </div>
         </div>
       </div>
+    </div>
     </div>
   );
 };

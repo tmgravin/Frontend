@@ -7,16 +7,30 @@ import 'react-toastify/dist/ReactToastify.css'; // Import toastify CSS
 
 const user = getUserFromCookies();
 
-interface DataItem {
+interface Project {
   id: number;
-  title: string;
-  description: string;
-  amount: number;
-  deadline: string;
+  projectName: string;
+  projectAmount: number;
+  projectDeadline: string;
+  paymentStatus: string;
+  file: string | null;
+}
+
+interface CompletedAssignment {
+  id: number;
+  projects: Project;
+  doer: {
+    id: number;
+    name: string;
+    email: string;
+  };
+  status: string;
+  createdAt: string;
+  updatedAt: string | null;
 }
 
 const CompletedAssignments: React.FC = () => {
-  const [data, setData] = useState<DataItem[]>([]);
+  const [data, setData] = useState<CompletedAssignment[]>([]);
   const [visibleCount, setVisibleCount] = useState(8);
   const [loading, setLoading] = useState(false);
   const [selectedFiles, setSelectedFiles] = useState<{ [key: number]: File | null }>({});
@@ -29,10 +43,11 @@ const CompletedAssignments: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get<DataItem[]>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/doer?doer=${user.id}`,
-        {withCredentials:true}
+      const response = await axios.get<CompletedAssignment[]>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/doer?doer=${user.id}`,
+        { withCredentials: true }
       );
       setData(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error("Error fetching data", error);
     }
@@ -55,13 +70,12 @@ const CompletedAssignments: React.FC = () => {
   const handleUpload = async (projectId: number) => {
     const file = selectedFiles[projectId];
     if (!file) return;
-
     setUploading((prev) => ({ ...prev, [projectId]: true }));
 
     const formData = new FormData();
     formData.append('file', file);
     formData.append('projectId', projectId.toString());
-    formData.append('doerId',user.id)
+    formData.append('doerId', user.id);
 
     try {
       await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/completed/project/`, formData, {
@@ -75,7 +89,6 @@ const CompletedAssignments: React.FC = () => {
       console.error('Error uploading file:', error);
       toast.error('Error uploading file');
     }
-
     setUploading((prev) => ({ ...prev, [projectId]: false }));
   };
 
@@ -87,22 +100,23 @@ const CompletedAssignments: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {displayedData.map((item) => (
           <div key={item.id} className="p-4 border rounded shadow">
-            <h2 className="text-xl font-bold">{item.title}</h2>
-            <p>{item.description}</p>
-            <p className="text-sm">Project Amount: {item.amount}</p>
-            <p className="text-sm">Deadline: {item.deadline}</p>
+            <h2 className="text-xl font-bold">{item.projects.projectName}</h2>
+            <p>{item.projects.projectAmount}</p>
+            <p className="text-sm">Deadline: {new Date(item.projects.projectDeadline).toLocaleDateString()}</p>
+            <p className="text-sm">Status: {item.status}</p>
+            <p className="text-sm">Creator: {item.projects.file ? 'Completed' : 'Pending'}</p>
             <p className="text-sm">Upload Assignment:</p>
             <input
               type="file"
-              onChange={(e) => handleFileChange(e, item.id)}
+              onChange={(e) => handleFileChange(e, item.projects.id)}
               className="mb-2"
             />
             <button
-              onClick={() => handleUpload(item.id)}
+              onClick={() => handleUpload(item.projects.id)}
               className="mt-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700"
-              disabled={uploading[item.id]}
+              disabled={uploading[item.projects.id]}
             >
-              {uploading[item.id] ? 'Uploading...' : 'Upload'}
+              {uploading[item.projects.id] ? 'Uploading...' : 'Upload'}
             </button>
           </div>
         ))}

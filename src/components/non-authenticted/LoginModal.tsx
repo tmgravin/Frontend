@@ -2,7 +2,6 @@ import React, { ChangeEvent, useState } from 'react';
 import Image from 'next/image';
 import axios from 'axios';
 import ResetPasswordModal from './ResetPasswordModal'; 
-import SignupModal from './SignupModal'; // Import your SignupModal component
 import { useRouter } from 'next/navigation';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,7 +13,8 @@ interface SignupData {
 }
 
 interface LoginModalProps {
-  isOpen: boolean;
+  toggleSignupModal: () => void;
+  isOpen: boolean
   toggleModal: () => void;
   loginData: SignupData;
   handleLoginChange: (e: ChangeEvent<HTMLInputElement>) => void;
@@ -23,17 +23,18 @@ interface LoginModalProps {
 }
 
 const LoginModal: React.FC<LoginModalProps> = ({
+  toggleSignupModal,
   isOpen,
   toggleModal,
   loginData,
   handleLoginChange,
   remember,
   setRemember
+  
 }) => {
   const router = useRouter();
   const [userRole, setUserRole] = useState<string | null>(null);
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
-  const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
 
   if (!isOpen) return null;
 
@@ -80,7 +81,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
           } else if (response.data.userType === 'ADMIN') {
             router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/admindashboard`);
           }
-        }, 3000);
+        }, 500);
       }
     } catch (error) {
       console.error('Login failed, Please check your email and password. Also, check if email is verified.', error);
@@ -90,10 +91,11 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
   const toggleResetModal = () => setIsResetModalOpen(!isResetModalOpen);
 
-  const toggleSignupModal = () => {
-    setIsSignupModalOpen(!isSignupModalOpen);
-    toggleModal(); // Close the login modal when opening the signup modal
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault(); // Prevent the default form submission
+    // handleLogin(userRole || ''); // Call handleLogin with the userRole
   };
+  
 
   return (
     <div
@@ -137,7 +139,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
             <div>Login to continue</div>
           </div>
           <div className="p-4 md:p-5">
-            <form className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
               <div className="relative cb-shadow">
                 <input
                   type="email"
@@ -189,7 +191,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
               </div>
 
               <button
-                type="button"
+                type="submit"
                 className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800"
                 onClick={() => handleLogin('ASSIGNMENT_CREATOR')}
               >
@@ -238,8 +240,12 @@ const LoginModal: React.FC<LoginModalProps> = ({
                   <button
                     type="button"
                     className="text-blue-500 hover:underline"
-                    onClick={toggleSignupModal}
-                  >
+                    onClick={() => {
+                      toggleModal(); 
+                      toggleSignupModal(); 
+                    }}
+                 
+                 >
                     Sign up
                   </button>
                 </p>

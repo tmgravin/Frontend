@@ -1,8 +1,10 @@
+// Header.tsx
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import axios from 'axios';
-import SignupModal from './SignupModal'; // Adjust the import path as needed
-import LoginModal from './LoginModal'; // Import the LoginModal
+import SignupModal from './SignupModal';
+import LoginModal from './LoginModal';
 import Image from 'next/image';
+import { ToastContainer } from 'react-toastify';
 
 interface SignupData {
   name: string;
@@ -13,7 +15,6 @@ interface SignupData {
   confirmPassword: string;
   remember?: boolean;
 }
-
 
 const Header: React.FC = () => {
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
@@ -100,6 +101,7 @@ const Header: React.FC = () => {
 
   return (
     <header>
+      <ToastContainer/>
       <div className="flex flex-col sm:flex-row justify-between items-center px-4 py-2">
         <div className="flex items-center">
           <Image
@@ -128,6 +130,7 @@ const Header: React.FC = () => {
       <SignupModal
         isOpen={isSignupModalOpen}
         toggleModal={toggleSignupModal}
+        toggleLoginModal={toggleLoginModal} // Pass the toggleLoginModal function as a prop
         isTeacherSignup={isTeacherSignup}
         setIsTeacherSignup={setIsTeacherSignup}
         teacherSignupData={teacherSignupData}
@@ -138,6 +141,7 @@ const Header: React.FC = () => {
       />
 
       <LoginModal
+        toggleSignupModal={toggleSignupModal}// Pass the toggleLoginModal function as a prop
         isOpen={isLoginModalOpen}
         toggleModal={toggleLoginModal}
         loginData={loginData}
