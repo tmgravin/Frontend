@@ -21,8 +21,19 @@ const Header: React.FC = () => {
 
   return (
     <header className="p-1">
-      <div className='flex flex-col lg:flex-row justify-between items-center'>
+      <div className='flex flex-row justify-between'>
+      <div className='flex flex-col lg:flex-row justify-start items-center'>
+      <div className="flex items-center">
+     
+       </div>
         <div className='flex flex-col lg:flex-row items-center'>
+        <Image
+      src="/msp-logo.png" // Path relative to the public directory
+      alt="logo"
+      width={50} // Provide appropriate width
+      height={50} // Provide appropriate height
+    />
+       
           <div className='text-2xl font-potta primary-navy-blue mb-4 lg:mb-0'>
             MSP ASSIGNMENT
           </div>
@@ -60,7 +71,9 @@ const Header: React.FC = () => {
           {isCustomTabModalOpen && <CustomTabModal onClose={toggleCustomTabModal} />}
         </div>
 
-        <UserModal />
+      
+      </div>
+      <UserModal />
       </div>
 
       {/* Backdrop Overlay with Blur */}

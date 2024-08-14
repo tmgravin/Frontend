@@ -1,10 +1,11 @@
-// Header.tsx
 import React, { ChangeEvent, FormEvent, useState } from 'react';
 import axios from 'axios';
 import SignupModal from './SignupModal';
 import LoginModal from './LoginModal';
 import Image from 'next/image';
 import { ToastContainer } from 'react-toastify';
+import { Menu, MenuItem, Button, IconButton } from '@mui/material';
+import { Menu as MenuIcon, Login as LoginIcon, Edit as EditIcon } from '@mui/icons-material';
 
 interface SignupData {
   name: string;
@@ -39,6 +40,18 @@ const Header: React.FC = () => {
   });
   const [remember, setRemember] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isDropdownOpen, setDropdownOpen] = useState(false);
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+    setDropdownOpen(true);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setDropdownOpen(false);
+  };
 
   const toggleLoginModal = () => {
     setLoginModalOpen(!isLoginModalOpen);
@@ -101,25 +114,68 @@ const Header: React.FC = () => {
 
   return (
     <header>
-      <ToastContainer/>
-      <div className="flex flex-col sm:flex-row justify-between items-center px-4 py-2">
+      <ToastContainer />
+      <div className="flex flex-row sm:flex-row justify-between items-center px-2 py-1">
         <div className="flex items-center">
           <Image
-            src="/msplogo.jpg"
-            height={30}
-            width={30}
+            src="/msp-logo.png"
+            height={50}
+            width={50}
             alt="msp logo"
-            className="mr-2 sm:mr-4"
           />
           <h1 className="text-xl sm:text-2xl font-bold potta-font primary-navy-blue">MSP ASSIGNMENT</h1>
         </div>
-        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-4">
-          <div className="primary-blue px-4 py-2 cursor-pointer" onClick={toggleSignupModal}>
-            Sign up <i className="fa-solid fa-pen-to-square"></i>
-          </div>
-          <div className="primary-blue px-4 py-2 cursor-pointer" onClick={toggleLoginModal}>
-            Login <i className="fa-solid fa-right-to-bracket"></i>
-          </div>
+
+        
+        {/* Dropdown menu for small screens */}
+        <div className="block sm:hidden">
+          <IconButton onClick={handleMenuOpen} color="primary">
+            <MenuIcon />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={isDropdownOpen}
+            onClose={handleMenuClose}
+            PaperProps={{
+              style: {
+                width: 200,
+              },
+            }}
+          >
+            <MenuItem
+              onClick={() => {
+                handleMenuClose();
+                toggleSignupModal();
+              }}
+            >
+              Sign up <EditIcon style={{ marginLeft: 8 }} />
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                handleMenuClose();
+                toggleLoginModal();
+              }}
+            >
+              Login <LoginIcon style={{ marginLeft: 8 }} />
+            </MenuItem>
+          </Menu>
+        </div>
+        {/* Desktop menu items */}
+        <div className="hidden sm:flex flex-row sm:flex-row space-x-4">
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={toggleSignupModal}
+          >
+            Sign up <EditIcon style={{ marginLeft: 8 }} />
+          </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={toggleLoginModal}
+          >
+            Login <LoginIcon style={{ marginLeft: 8 }} />
+          </Button>
         </div>
       </div>
 
@@ -130,7 +186,7 @@ const Header: React.FC = () => {
       <SignupModal
         isOpen={isSignupModalOpen}
         toggleModal={toggleSignupModal}
-        toggleLoginModal={toggleLoginModal} // Pass the toggleLoginModal function as a prop
+        toggleLoginModal={toggleLoginModal}
         isTeacherSignup={isTeacherSignup}
         setIsTeacherSignup={setIsTeacherSignup}
         teacherSignupData={teacherSignupData}
@@ -141,7 +197,7 @@ const Header: React.FC = () => {
       />
 
       <LoginModal
-        toggleSignupModal={toggleSignupModal}// Pass the toggleLoginModal function as a prop
+        toggleSignupModal={toggleSignupModal}
         isOpen={isLoginModalOpen}
         toggleModal={toggleLoginModal}
         loginData={loginData}

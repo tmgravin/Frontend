@@ -80,13 +80,13 @@ const Homepage: React.FC = () => {
       <ToastContainer />
       <Header />
       <div
-        className="homepage-bg w-full homepage-bg h-screen px-2 flex flex-1 flex-col justify-center items-start"
+        className="homepage-bg w-full pb-10 homepage-bg h-full px-2 flex flex-1 flex-col justify-center items-start lg:h-screen lg:p-2"
         style={{ backgroundImage: `url(${backgroundImage})`, backgroundSize: 'cover', backgroundPosition: 'center' }}
       >
-        <div className="w-1/2 text-3xl text-white">
+        <div className="text-3xl text-white lg:w-1/2 pt-10">
           Get Freelancing Jobs Instantly Start Working for Yourself!
         </div>
-        <div className="text-white">
+        <div className="text-white py-2">
           Work with the best freelance talent from around the world on our secure, flexible, and cost-effective platform
         </div>
         <div>
@@ -108,8 +108,8 @@ const Homepage: React.FC = () => {
             </button>
           </form>
         </div>
-        <div className="text-white">Academic writing | VC/Resume Writing | Copywriting</div>
-        <button onClick={toggleSignupModal} className="bg-white text-black rounded-lg w-32 p-1">
+        <div className="text-white py-2">Academic writing | VC/Resume Writing | Copywriting</div>
+        <button onClick={toggleSignupModal} className="bg-white text-black rounded-lg w-32 p-1 pb-">
           Get Started
         </button>
       </div>

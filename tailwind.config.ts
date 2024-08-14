@@ -18,6 +18,12 @@ const config = {
       },
     },
     extend: {
+      backgroundImage: {
+        'whyus-bg': "url('/woman-coffee.png')",
+      },
+      backgroundSize: {
+        '40': '40%',
+      },
       fontFamily: {
         poppins: ['Poppins', 'sans-serif'],
         potta: ['Potta One', 'sans-serif'],

@@ -107,7 +107,8 @@ color:#7F7D7D;
   background-color: #0A4AC5; /* Solid blue background color */
   background-image: url('/woman-coffee.png'); /* Image overlay */
   background-size: 40%; /* Scale the image to 50% of the element's size */
-  background-position: bottom center; /* Position the image at the bottom center */
+  background-position: -10% bottom; /* Position the image slightly left and at the bottom */
+  background-position: bottom center ; /* Position the image at the bottom center */
   background-repeat: no-repeat; /* Prevent the image from repeating */
   min-height: 300px; /* Fixed height for the div */
 }
@@ -176,6 +177,29 @@ color:#7F7D7D;
 
 .dot.active {
   background-color: blue;
+}
+
+/* styles/achievements.css */
+.swiper {
+  position: relative; /* Ensure the Swiper container is positioned relative */
+}
+
+.swiper-pagination {
+  position: absolute;
+  bottom: 40px; /* Increase this value to move bullets lower */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  justify-content: center; /* Center the bullets horizontally */
+  gap: 8px; /* Optional: space between pagination bullets */
+}
+
+.swiper-pagination-bullet {
+  background-color: rgba(0, 0, 0, 0.3); /* Customize bullet color */
+}
+
+.swiper-pagination-bullet-active {
+  background-color: rgba(0, 0, 0, 0.8); /* Customize active bullet color */
 }
 
 
