@@ -75,7 +75,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
         toast.success('Login successful!');
         setTimeout(() => {
           if (response.data.userType === 'ASSIGNMENT_CREATOR') {
-            router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-creator`);
+           router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-creator`);
           } else if (response.data.userType === 'ASSIGNMENT_DOER') {
             router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-doer`);
           } else if (response.data.userType === 'ADMIN') {
@@ -132,7 +132,13 @@ const LoginModal: React.FC<LoginModalProps> = ({
             </button>
           </div>
           <div className="flex flex-col justify-center items-center">
-            <div className="text-xl font-semibold">Welcome to</div>
+          <Image
+                    src="/msp-logo.png"
+                    alt="logo"
+                    width={50}
+                    height={50}
+                  />
+            <div className="text-xl font-semibold primary-navy-blue">Welcome to</div>
             <div className="text-xl font-semibold primary-navy-blue">
               MSP Assignment
             </div>
@@ -204,10 +210,10 @@ const LoginModal: React.FC<LoginModalProps> = ({
                 <div className="flex-grow border-t border-black"></div>
               </div>
 
-              <div className="flex flex-row justify-start items-start">
+              <div className="flex flex-row justify-center items-center">
                 <button
                   type="button"
-                  className="w-full border border-black font-medium rounded-lg text-sm flex items-center space-x-2 px-4 py-1"
+                  className="w-full border border-black font-medium rounded-lg text-sm flex items-center justify-center space-x-2 px-4 py-1"
                 >
                   <Image
                     src="/pngs/googleicon.svg"
@@ -222,7 +228,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
               <div className="flex flex-row justify-start items-start">
                 <button
                   type="button"
-                  className="w-full border border-black font-medium rounded-lg text-sm flex items-center space-x-2 px-4 py-1"
+                  className="w-full border border-black font-medium rounded-lg text-sm flex items-center justify-center space-x-2 px-4 py-1"
                 >
                   <Image
                     src="/pngs/facebookicon.svg"
@@ -236,7 +242,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
               <div className="flex justify-center items-center">
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Don`&apos;`t have an account?{' '}
+                  Don&apos;t have an account?{' '}
                   <button
                     type="button"
                     className="text-blue-500 hover:underline"

@@ -45,6 +45,12 @@ const Header: React.FC = () => {
     <header className="p-1">
       <div className='flex flex-col sm:flex-row justify-between items-center'>
         <div className='flex flex-col sm:flex-row items-center'>
+        <Image
+      src="/msp-logo.png" // Path relative to the public directory
+      alt="logo"
+      width={50} // Provide appropriate width
+      height={50} // Provide appropriate height
+    />
           <div className='text-xl sm:text-2xl potta-one-regular primary-navy-blue mb-4 sm:mb-0 text-center'>MSP ASSIGNMENT</div>
           <div
             className='px-3 py-2 flex flex-row text-center cursor-pointer sm:ml-4'
@@ -53,7 +59,7 @@ const Header: React.FC = () => {
           <div className='p-1'> Your Assignments</div> 
             <Image
       src="/pngs/arrowdown.svg" // Path relative to the public directory
-      alt="Laptop Image"
+      alt="arrowdown"
       width={20} // Provide appropriate width
       height={20} // Provide appropriate height
     />

@@ -70,8 +70,14 @@ const PendingForApproval: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get<DataItem[]>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/application/creator?creatorId=${user.id}`, { withCredentials: true });
-      setData(response.data); // Set data as an array
+      const response = await axios.get<DataItem[]>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/application/creator?creatorId=${user.id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+       
+        withCredentials: true });
+      setData(response.data); 
     } catch (error) {
       console.error("Error fetching data", error);
     }
@@ -96,6 +102,7 @@ const PendingForApproval: React.FC = () => {
       // Assume you update applicant status in some way
     }
   };
+
 
   return (
     <Container>
