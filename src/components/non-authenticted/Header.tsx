@@ -118,12 +118,12 @@ const Header: React.FC = () => {
       <div className="flex flex-row sm:flex-row justify-between items-center px-2 py-1">
         <div className="flex items-center">
           <Image
-            src="/msp-logo.png"
+            src="/notextlogo.png"
             height={50}
             width={50}
             alt="msp logo"
           />
-          <h1 className="text-xl sm:text-2xl font-bold potta-font primary-navy-blue">MSP ASSIGNMENT</h1>
+          <h1 className="text-xl sm:text-2xl font-bold potta-font primary-navy-blue"> MSP ACADEMY</h1>
         </div>
 
         

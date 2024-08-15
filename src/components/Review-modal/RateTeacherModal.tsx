@@ -12,43 +12,30 @@ import {
 } from '@mui/material';
 import axios from 'axios';
 
+
 interface RateTeacherModalProps {
   open: boolean;
   onClose: () => void;
   userId: number;
+  doerId:number;
 }
 
-const RateTeacherModal: React.FC<RateTeacherModalProps> = ({ open, onClose, userId }) => {
+const RateTeacherModal: React.FC<RateTeacherModalProps> = ({ open, onClose, doerId,userId }) => {
   const [rating, setRating] = useState<number | null>(null);
   const [comment, setComment] = useState<string>('');
-  const [creator, setCreator] = useState<any>(null);
 
-  // Fetch user data (creator) on mount
-  React.useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/user/${userId}`, {
-          withCredentials: true
-        });
-        setCreator(response.data);
-      } catch (error) {
-        console.error('Error fetching user:', error);
-      }
-    };
-
-    fetchUser();
-  }, [userId]);
-
+  
   const handleSave = async () => {
     if (rating === null) {
       // Show error message or alert
       return;
     }
 
+
     try {
       await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/review/`, {
-        creatorId: creator?.id,
-        doerId: userId,
+        users: {id:userId},
+        doer: {id:doerId},
         rating,
         comment
       }, {

@@ -64,7 +64,7 @@ const ReviewRating: React.FC<ReviewRatingProps> = ({ open, onClose, doerId, doer
           // Handle the error here, e.g., show a notification to the user
         });
     }
-  }, [open, doerId]);
+  }, [open]);
 
   const calculateRatingStats = (reviews: Review[]) => {
     const total = reviews.length;
@@ -216,7 +216,7 @@ const ReviewRating: React.FC<ReviewRatingProps> = ({ open, onClose, doerId, doer
           Close
         </Button>
       </DialogActions>
-      <RateTeacherModal open={rateModalOpen} onClose={handleRateModalClose} userId={doerId} />
+      <RateTeacherModal open={rateModalOpen} onClose={handleRateModalClose} doerId={doerId} userId={user.id} />
     </Dialog>
   );
 };

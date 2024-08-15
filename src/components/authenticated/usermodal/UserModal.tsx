@@ -32,7 +32,7 @@ const UserModal: React.FC = () => {
       // console.log("User has been cleared from localStorage");
 
       // Clear the user cookie
-      removeCookie('user');
+      removeCookie("user");
       console.log("User cookie has been cleared");
 
       // Make the logout request to the server
@@ -69,40 +69,49 @@ const UserModal: React.FC = () => {
         sx={{
           display: "flex",
           alignItems: "center",
-          flexWrap: "wrap", // Allows wrapping on smaller screens
         }}
       >
-        <div className="flex flex-col items-center justify-center">
-          <Typography
-            variant={isSmallScreen ? "body1" : "h6"} // Responsive typography
-            sx={{
-              mr: 2,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {user?.name || "Loading..."}
-          </Typography>
-          <Typography
-            variant="subtitle2"
-            sx={{
-              mr: 2,
-              overflow: "hidden",
-              textOverflow: "ellipsis",
-              whiteSpace: "nowrap",
-            }}
-          >
-            {user?.userType || "Loading..."}
-          </Typography>
-        </div>
-        <IconButton onClick={handleMenuClick}>
-          {user?.imageUrl ? (
-            <Avatar src={user.imageUrl} alt={user.name} />
-          ) : (
-            <AccountCircleIcon fontSize="large" />
-          )}
-        </IconButton>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "row", // Row direction on all screen sizes
+          }}
+        >
+          <div className="flex flex-col items-start justify-center">
+            <Typography
+              variant={isSmallScreen ? "body1" : "h6"} // Responsive typography
+              sx={{
+                mr: 2,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+              }}
+            >
+              {user?.name || "Loading..."}
+            </Typography>
+            {!isSmallScreen && (
+              <Typography
+                variant="subtitle2"
+                sx={{
+                  mr: 2,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                {user?.userType || "Loading..."}
+              </Typography>
+            )}
+          </div>
+          <IconButton onClick={handleMenuClick} sx={{ ml: 2 }}>
+            {user?.imageUrl ? (
+              <Avatar src={user.imageUrl} alt={user.name} />
+            ) : (
+              <AccountCircleIcon fontSize="large" />
+            )}
+          </IconButton>
+        </Box>
         <Menu
           anchorEl={anchorEl}
           open={openMenu}
