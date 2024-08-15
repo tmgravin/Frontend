@@ -46,12 +46,12 @@ const Header: React.FC = () => {
       <div className='flex flex-col sm:flex-row justify-between items-center'>
         <div className='flex flex-col sm:flex-row items-center'>
         <Image
-      src="/msp-logo.png" // Path relative to the public directory
+      src="/notextlogo.png" // Path relative to the public directory
       alt="logo"
       width={50} // Provide appropriate width
       height={50} // Provide appropriate height
     />
-          <div className='text-xl sm:text-2xl potta-one-regular primary-navy-blue mb-4 sm:mb-0 text-center'>MSP ASSIGNMENT</div>
+          <div className='text-xl sm:text-2xl potta-one-regular primary-navy-blue mb-4 sm:mb-0 text-center'> MSP ACADEMY</div>
           <div
             className='px-3 py-2 flex flex-row text-center cursor-pointer sm:ml-4'
             onClick={toggleCustomTabModal}

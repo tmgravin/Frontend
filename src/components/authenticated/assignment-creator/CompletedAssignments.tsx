@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReviewRating from '../../Review-modal/ReviewRating';
 import { getUserFromCookies } from '@/components/auth/token';
+import Image from 'next/image';
 
 const user = getUserFromCookies();
 
@@ -18,7 +19,7 @@ interface DataItem {
   projectDeadline: string;
   budgets: string;
   createdAt: string;
-  updatedAt: string;
+  updatedAt: string | null; // Handle nullable updatedAt
   users: {
     id: number;
     name: string;
@@ -27,19 +28,31 @@ interface DataItem {
     phone: string;
     address: string;
     userType: string;
-    loginType: string;
+    loginType: string | null; // Handle nullable loginType
     createdAt: string;
-    updatedAt: string;
+    updatedAt: string | null; // Handle nullable updatedAt
   };
   projectCategory: {
     id: number;
     category: string;
     createdAt: string;
-    updatedAt: string;
+    updatedAt: string | null; // Handle nullable updatedAt
   };
   paymentStatus: string;
-  file: string;
-  projectsDetails: ProjectDetails | null; // Include project details
+  file: string | null; // Handle nullable file
+  projectsDetails: ProjectDetails | string; // Change to string to handle current data format
+  doer: {
+    id: number;
+    name: string;
+    email: string;
+    isEmailVerified: string;
+    phone: string;
+    address: string;
+    userType: string;
+    loginType: string | null; // Handle nullable loginType
+    createdAt: string;
+    updatedAt: string | null; // Handle nullable updatedAt
+  };
 }
 
 const CompletedAssignments: React.FC = () => {
@@ -80,18 +93,18 @@ const CompletedAssignments: React.FC = () => {
     setSelectedAssignment(null);
   };
 
-  const handleDownloadClick = async (filename: string) => {
+  const handleDownloadClick = async (filename: string | null) => {
+    if (!filename) return; // Handle null filename
+
     try {
       const formData = new FormData();
       formData.append('filename', filename);
-      formData.append('bucketName', 'msp-academy1');
+     
 
       const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/file/download/`, formData, {
-        
         responseType: 'blob', // Ensure the response is a Blob for file download
         withCredentials: true,
       });
-      
 
       // Create a URL for the file
       const url = window.URL.createObjectURL(new Blob([response.data]));
@@ -117,8 +130,11 @@ const CompletedAssignments: React.FC = () => {
         {displayedData.map((item, index) => (
           <div key={index} className="p-4 border rounded shadow">
             <h2 className="text-xl font-bold">{item.projectName}</h2>
-            <h2>Completed by: {item.users.name}</h2>
-            {item.projectsDetails && (
+            <h2>Completed by: {item.doer.name}</h2>
+            <h2>DoerId:{item.doer.id}</h2>
+            {typeof item.projectsDetails === 'string' ? (
+              <p>{item.projectsDetails}</p>
+            ) : (
               <>
                 <p>{item.projectsDetails.title}</p>
                 <p>{item.projectsDetails.description}</p>
@@ -126,20 +142,27 @@ const CompletedAssignments: React.FC = () => {
             )}
             <p className="text-sm">Project Amount: {item.projectAmount}</p>
             <p className="text-sm">Deadline: {item.projectDeadline}</p>
-            <p className='text-sm'>
-              Download Assignment: 
-              <button
-                onClick={() => handleDownloadClick(item.file)}
-                className="text-blue-500 underline ml-2"
-              >
-                Download
-              </button>
-            </p>
+            {item.file && (
+              <p className='text-sm'>
+                Download Assignment: 
+                <button
+                  onClick={() => handleDownloadClick(item.file)}
+                  className="text-blue-500 underline ml-2"
+                >
+                  Download
+                </button>
+              </p>
+            )}
             <button
-              className="mt-4 px-4 py-2 text-white rounded primary-btn-blue"
+              className="underline"
               onClick={() => handleReviewClick(item)}
-            >
+            ><div className='flex flex-row'>
               Review Teacher
+              <Image src="./star.svg" className='px-1'
+              alt="star icon"
+              height="40"
+              width="80"/>
+              </div>
             </button>
           </div>
         ))}
@@ -160,8 +183,8 @@ const CompletedAssignments: React.FC = () => {
         <ReviewRating
           open={modalOpen}
           onClose={handleModalClose}
-          doerId={selectedAssignment.users.id} // Pass the userId of the selected assignment
-          doerName={selectedAssignment.users.name}
+          doerId={selectedAssignment.doer.id} // Pass the userId of the selected assignment
+          doerName={selectedAssignment.doer.name}
         />
       )}
     </div>
