@@ -50,7 +50,7 @@ const ApplicantsInfoModal: React.FC<ApplicantsInfoModalProps> = ({ open, onClose
       const formData = new FormData();
       formData.append('applicationId', applicationId.toString());
 
-      await axios.post('http://localhost:8080/api/projects/acceptApplication', formData, {
+      await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/acceptApplication`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
