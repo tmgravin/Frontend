@@ -120,12 +120,12 @@ const LatestProjects: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {displayedData.map((item, index) => (
           <div key={index} className="p-4 border rounded shadow">
-            <h2 className="text-xl font-bold">{item.projects.projectName}</h2>
+            <h2 className="text-xl font-bold underline">{item.projects.projectName}</h2>
             <p>
               {truncateDescription(item.projects.projectAmount, 100)}
               <button
                 onClick={() => handleReadMore(item)}
-                className="text-blue-500 hover:underline"
+                className="primary-orange hover:underline"
                 aria-label={`Read more about ${item.projects.projectName}`}
               >
                 Read More
@@ -134,14 +134,14 @@ const LatestProjects: React.FC = () => {
             <p className="text-sm">Project Amount: {item.projects.projectAmount}</p>
             <p className="text-sm">Deadline: {item.projects.projectDeadline}</p>
             <button
-              className="mt-2 px-4 py-2 bg-blue-500 text-white rounded-lg"
+              className="mt-2 px-4 py-2 primary-orangebg text-white rounded-lg"
               onClick={() => openEditModal(item)}
               aria-label={`Edit assignment ${item.projects.projectName}`}
             >
               Edit Assignment
             </button>
             <button
-              className="mt-2 px-4 py-2 bg-green-500 text-white rounded-lg"
+              className="mt-2 px-4 py-2 primary-navy-blue text-white rounded-lg underline hover:text-orange-500"
               onClick={() => openPaymentModal(item)}
               aria-label={`Add payment for ${item.projects.projectName}`}
             >
