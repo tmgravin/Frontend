@@ -133,16 +133,16 @@ const LoginModal: React.FC<LoginModalProps> = ({
           </div>
           <div className="flex flex-col justify-center items-center">
           <Image
-                    src="/msp-logo.png"
+                    src="/notextlogo.png"
                     alt="logo"
                     width={50}
                     height={50}
                   />
             <div className="text-xl font-semibold primary-navy-blue">Welcome to</div>
             <div className="text-xl font-semibold primary-navy-blue">
-              MSP Assignment
+              MSP Academy
             </div>
-            <div>Login to continue</div>
+            <div className='underline'>Login to continue</div>
           </div>
           <div className="p-4 md:p-5">
           <form className="space-y-4" onSubmit={handleSubmit}>
@@ -177,7 +177,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
               <div className="flex flex-row justify-end">
                 <div>Forget Password?</div>
                 <div
-                  className="secondary-blue cursor-pointer"
+                  className="primary-orange cursor-pointer"
                   onClick={toggleResetModal}
                 >
                   Reset it
@@ -198,7 +198,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
               <button
                 type="submit"
-                className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800"
+                className="w-full text-white primary-orangebg hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800"
                 onClick={() => handleLogin('ASSIGNMENT_CREATOR')}
               >
                 Login {/* as Assignment Creator */}
@@ -210,7 +210,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
                 <div className="flex-grow border-t border-black"></div>
               </div>
 
-              <div className="flex flex-row justify-center items-center">
+              {/* <div className="flex flex-row justify-center items-center">
                 <button
                   type="button"
                   className="w-full border border-black font-medium rounded-lg text-sm flex items-center justify-center space-x-2 px-4 py-1"
@@ -223,9 +223,9 @@ const LoginModal: React.FC<LoginModalProps> = ({
                   />
                   <span className="primary-text-gray">Login with Google</span>
                 </button>
-              </div>
+              </div> */}
 
-              <div className="flex flex-row justify-start items-start">
+              {/* <div className="flex flex-row justify-start items-start">
                 <button
                   type="button"
                   className="w-full border border-black font-medium rounded-lg text-sm flex items-center justify-center space-x-2 px-4 py-1"
@@ -238,14 +238,14 @@ const LoginModal: React.FC<LoginModalProps> = ({
                   />
                   <span className="primary-text-gray">Login with Facebook</span>
                 </button>
-              </div>
+              </div> */}
 
               <div className="flex justify-center items-center">
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   Don&apos;t have an account?{' '}
                   <button
                     type="button"
-                    className="text-blue-500 hover:underline"
+                    className="primary-orange hover:underline"
                     onClick={() => {
                       toggleModal(); 
                       toggleSignupModal(); 

@@ -164,14 +164,14 @@ const Header: React.FC = () => {
         <div className="hidden sm:flex flex-row sm:flex-row space-x-4">
           <Button
             variant="contained"
-            color="primary"
+          className="primary-orangebg"
             onClick={toggleSignupModal}
           >
             Sign up <EditIcon style={{ marginLeft: 8 }} />
           </Button>
           <Button
             variant="contained"
-            color="primary"
+           className="primary-orangebg"
             onClick={toggleLoginModal}
           >
             Login <LoginIcon style={{ marginLeft: 8 }} />

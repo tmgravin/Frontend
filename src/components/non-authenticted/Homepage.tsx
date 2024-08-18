@@ -102,14 +102,14 @@ const Homepage: React.FC = () => {
                 <i className="fa-solid fa-magnifying-glass text-gray-500"></i>
               </div>
             </div>
-            <button type="submit" className="p-2.5 text-sm font-medium text-white bg-blue-700 border border-blue-700 hover:bg-blue-800 focus:ring-4 rounded-r-sm focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+            <button type="submit" className="p-2.5 text-sm font-medium text-white primary-orangebg focus:ring-4 rounded-r-sm focus:outline-none focus:ring-blue-300">
               Search
-              <span className="sr-only">Search</span>
+              <span className="sr-only ">Search</span>
             </button>
           </form>
         </div>
         <div className="text-white py-2">Academic writing | VC/Resume Writing | Copywriting</div>
-        <button onClick={toggleSignupModal} className="bg-white text-black rounded-lg w-32 p-1 pb-">
+        <button onClick={toggleSignupModal} className="primary-orangebg text-white rounded-lg w-32 p-1 pb-">
           Get Started
         </button>
       </div>

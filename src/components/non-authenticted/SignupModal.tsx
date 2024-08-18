@@ -115,14 +115,14 @@ const SignupModal: React.FC<SignupModalProps> = ({
             <div className="p-4 md:p-5">
               {isTeacherSignup === null ? (
                 <div>
-                  <button className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800" onClick={() => setIsTeacherSignup(true)}>
+                  <button className="w-full text-white primary-orangebg hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800" onClick={() => setIsTeacherSignup(true)}>
                     Sign up as Doer
                   </button>
-                  <button className="w-full mt-5 text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800" onClick={() => setIsTeacherSignup(false)}>
+                  <button className="w-full mt-5 text-white primary-orangebg hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800" onClick={() => setIsTeacherSignup(false)}>
                     Sign up as Creator
                   </button>
                   <div className='mt-5'>
-                    <div className='flex flex-row'> Already have an account?<button className='secondary-blue' onClick={() => {
+                    <div className='flex flex-row'> Already have an account?<button className='primary-orange' onClick={() => {
                       toggleModal(); 
                       toggleLoginModal(); 
                     }}>Sign in</button></div>
@@ -158,11 +158,11 @@ const SignupModal: React.FC<SignupModalProps> = ({
                     <input id="remember-me" type="checkbox" checked={remember} onChange={() => setRemember(!remember)} required className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600" />
                     <label htmlFor="remember-me" className="text-sm font-medium text-gray-900 dark:text-gray-300">I AGREE TO <div className='text-blue'> <Link href ="/termsandcondition">TERMS AND CONDITION</Link></div></label>
                   </div>
-                  <button type="submit" className="w-full text-white primary-btn-blue hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800" disabled={isLoading}>
+                  <button type="submit" className="w-full text-white primary-orangebg focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " disabled={isLoading}>
                     {isLoading ? 'Signing up...' : 'Sign up'}
                   </button>
                   <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-                    Already have an account? <Link href="#" className="text-blue-700 dark:text-blue-500 hover:underline" onClick={() => {
+                    Already have an account? <Link href="#" className="primary-orange" onClick={() => {
                       toggleModal(); 
                       toggleLoginModal(); 
                     }}>Sign in</Link>
