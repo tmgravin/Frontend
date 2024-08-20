@@ -332,13 +332,13 @@ const BankDetails: React.FC = () => {
             />
             <button
               onClick={handlePost}
-              className="px-4 py-2 primary-btn-green text-white rounded mr-2"
+              className="px-4 py-2 primary-orangebg text-white rounded mr-2"
             >
               Post
             </button>
             <button
               onClick={handlePostToggle}
-              className="px-4 py-2 primary-btn-blue text-white rounded"
+              className="px-4 py-2 primary-orangebg text-white rounded"
             >
               Cancel
             </button>

@@ -27,15 +27,9 @@ const UserModal: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      // Clear user data from localStorage
-      // localStorage.removeItem('user');
-      // console.log("User has been cleared from localStorage");
-
-      // Clear the user cookie
       removeCookie("user");
       console.log("User cookie has been cleared");
 
-      // Make the logout request to the server
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/security/logout`,
         {},
@@ -51,7 +45,6 @@ const UserModal: React.FC = () => {
       toast.error("Logout Failed");
       console.log("Error occurred", err);
     } finally {
-      // Navigate to homepage regardless of success or failure
       router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/homepage`);
     }
   };
@@ -69,16 +62,24 @@ const UserModal: React.FC = () => {
         sx={{
           display: "flex",
           alignItems: "center",
+          justifyContent: "flex-end", // Align content to the right
         }}
       >
         <Box
           sx={{
             display: "flex",
             alignItems: "center",
-            flexDirection: "row", // Row direction on all screen sizes
+            flexDirection: "row-reverse", // Reverse row direction
           }}
         >
-          <div className="flex flex-col items-start justify-center">
+          <IconButton onClick={handleMenuClick} sx={{ ml:0 }}>
+            {user?.imageUrl ? (
+              <Avatar src={user.imageUrl} alt={user.name} />
+            ) : (
+              <AccountCircleIcon fontSize="large" />
+            )}
+          </IconButton>
+          <div className="flex flex-col items-end justify-center"> {/* Align text to the right */}
             <Typography
               variant={isSmallScreen ? "body1" : "h6"} // Responsive typography
               sx={{
@@ -86,6 +87,7 @@ const UserModal: React.FC = () => {
                 overflow: "hidden",
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
+                textAlign: "right", // Align text to the right
               }}
             >
               {user?.name || "Loading..."}
@@ -98,19 +100,13 @@ const UserModal: React.FC = () => {
                   overflow: "hidden",
                   textOverflow: "ellipsis",
                   whiteSpace: "nowrap",
+                  textAlign: "right", // Align text to the right
                 }}
               >
                 {user?.userType || "Loading..."}
               </Typography>
             )}
           </div>
-          <IconButton onClick={handleMenuClick} sx={{ ml: 2 }}>
-            {user?.imageUrl ? (
-              <Avatar src={user.imageUrl} alt={user.name} />
-            ) : (
-              <AccountCircleIcon fontSize="large" />
-            )}
-          </IconButton>
         </Box>
         <Menu
           anchorEl={anchorEl}

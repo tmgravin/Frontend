@@ -51,7 +51,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
     console.log(loginData);
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/security/login`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/login`,
         {
           ...loginData,
           userType: userRole,

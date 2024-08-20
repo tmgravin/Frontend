@@ -125,7 +125,7 @@ const LatestProjects: React.FC = () => {
               {truncateDescription(item.projects.projectAmount, 100)}
               <button
                 onClick={() => handleReadMore(item)}
-                className="primary-orange hover:underline"
+                className=" primary-navy-blue hover:underline"
                 aria-label={`Read more about ${item.projects.projectName}`}
               >
                 Read More
@@ -134,7 +134,7 @@ const LatestProjects: React.FC = () => {
             <p className="text-sm">Project Amount: {item.projects.projectAmount}</p>
             <p className="text-sm">Deadline: {item.projects.projectDeadline}</p>
             <button
-              className="mt-2 px-4 py-2 primary-orangebg text-white rounded-lg"
+              className="mt-2 px-2 py-1 primary-orangebg text-white rounded-lg"
               onClick={() => openEditModal(item)}
               aria-label={`Edit assignment ${item.projects.projectName}`}
             >

@@ -22,14 +22,14 @@ function ApplicationProcess() {
           <div className="flex-auto border-t-4 border-orange-500"></div>
           {/* Step 3 */}
           <div className="relative flex items-center">
-            <div className="w-10 h-10 rounded-full bg-orange-500 text-gray-600 flex items-center justify-center">3</div>
+            <div className="w-10 h-10 rounded-full bg-orange-500 text-white flex items-center justify-center">3</div>
             <div className="absolute top-0 left-1/2 transform -translate-x-1/2 translate-y-5 text-center text-xs py-5">Sample Essay</div>
           </div>
           {/* Line between steps */}
           <div className="flex-auto border-t-4 border-orange-500"></div>
           {/* Step 4 */}
           <div className="relative flex items-center">
-            <div className="w-10 h-10 rounded-full bg-pink-500 text-gray-600 flex items-center justify-center">4</div>
+            <div className="w-10 h-10 rounded-full bg-pink-500 text-white flex items-center justify-center">4</div>
             <div className="absolute top-0 left-1/2 transform -translate-x-1/2 translate-y-5 text-center text-xs py-5">ID Verification</div>
           </div>
         </div>

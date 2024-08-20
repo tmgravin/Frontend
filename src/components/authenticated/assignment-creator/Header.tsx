@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from 'react';
 import PostAssignmentModal from './PostAssignmentModal';
-import UserModal from '../usermodal/UserModal';
 import CustomTabModal from './YourAssignments';
+import UserModal from '../usermodal/UserModal';
 import Image from 'next/image';
 
 const Header: React.FC = () => {
@@ -21,45 +21,44 @@ const Header: React.FC = () => {
     <header className="p-1">
       {/* Show header only on medium and larger screens */}
       <div className="hidden md:flex md:flex-row md:justify-between md:items-center">
-        <div className="flex flex-row justify-start items-center">
-          <div className="flex items-center">
+        <div className="flex items-center">
+          <Image
+            src="/notextlogo.png"
+            height={50}
+            width={50}
+            alt="msp logo"
+          />
+          <div className='mt-4 px-3'>
+            <h1 className="text-xs font-bold sm:text-2xl primary-navy-blue">MSP ACADEMY</h1>
+          </div>
+        </div>
+
+        {/* Centered Post Assignment and Your Assignments */}
+        <div className='flex flex-row justify-center items-center space-x-6'>
+          <div
+            onClick={togglePostAssignmentModal}
+            className="text-sm px-5 flex flex-row py-2.5 text-center cursor-pointer"
+          >
+            <div className='p-1'>Post Assignment</div>
             <Image
-              src="/msp-logo.png"
-              alt="logo"
-              width={50}
-              height={50}
+              src="/pngs/arrowdown.svg"
+              alt="Dropdown Arrow"
+              width={20}
+              height={20}
             />
-            <div className='text-2xl font-potta primary-navy-blue ml-2'>
-              MSP ASSIGNMENT
-            </div>
           </div>
 
-          <div className='flex flex-row items-center ml-4'>
-            <div
-              onClick={togglePostAssignmentModal}
-              className="text-sm px-5 flex flex-row py-2.5 text-center cursor-pointer"
-            >
-              <div className='p-1'>Post Assignment</div>
-              <Image
-                src="/pngs/arrowdown.svg"
-                alt="Dropdown Arrow"
-                width={20}
-                height={20}
-              />
-            </div>
-
-            <div
-              onClick={toggleCustomTabModal}
-              className="text-sm px-5 flex flex-row py-2.5 text-center cursor-pointer ml-4"
-            >
-              <div className='p-1'>Your Assignments</div>
-              <Image
-                src="/pngs/arrowdown.svg"
-                alt="Dropdown Arrow"
-                width={20}
-                height={20}
-              />
-            </div>
+          <div
+            onClick={toggleCustomTabModal}
+            className="text-sm px-5 flex flex-row py-2.5 text-center cursor-pointer"
+          >
+            <div className='p-1'>Your Assignments</div>
+            <Image
+              src="/pngs/arrowdown.svg"
+              alt="Dropdown Arrow"
+              width={20}
+              height={20}
+            />
           </div>
         </div>
 
@@ -68,10 +67,9 @@ const Header: React.FC = () => {
           <UserModal />
         </div>
 
-        <div className='flex justify-end items-center mt-4 lg:mt-0'>
-          {isPostAssignmentModalOpen && <PostAssignmentModal onClose={togglePostAssignmentModal} />}
-          {isCustomTabModalOpen && <CustomTabModal onClose={toggleCustomTabModal} />}
-        </div>
+        {/* Modals */}
+        {isPostAssignmentModalOpen && <PostAssignmentModal onClose={togglePostAssignmentModal} />}
+        {isCustomTabModalOpen && <CustomTabModal onClose={toggleCustomTabModal} />}
       </div>
 
       {/* For small screens */}
@@ -84,7 +82,7 @@ const Header: React.FC = () => {
               width={50}
               height={50}
             />
-            <div className='text-2xl font-potta primary-navy-blue ml-2'>
+            <div className='text-2xl font-potta font-bold primary-navy-blue ml-2'>
               MSP ACADEMY
             </div>
           </div>

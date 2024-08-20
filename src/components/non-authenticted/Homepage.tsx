@@ -90,18 +90,19 @@ const Homepage: React.FC = () => {
           Work with the best freelance talent from around the world on our secure, flexible, and cost-effective platform
         </div>
         <div>
-          <form className="flex items-center max-w-sm mx-auto">
-            <div className="relative w-full">
-              <input
-                type="text"
-                className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l-sm focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5"
-                placeholder="What skills are you searching for?"
-                required
-              />
-              <div className="absolute inset-y-0 end-0 flex items-center pe-3 pointer-events-none">
-                <i className="fa-solid fa-magnifying-glass text-gray-500"></i>
-              </div>
-            </div>
+          <form className="flex items-center w-full">
+          <div className="relative w-full">
+  <input
+    type="text"
+    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l-sm   w-full md:w-[500px] px-4 pr-10 p-2.5"
+    placeholder="What skills are you searching for?"
+    required
+  />
+  <div className="absolute inset-y-0 end-0 flex items-center pe-3 pointer-events-none">
+    <i className="fa-solid fa-magnifying-glass text-gray-500"></i>
+  </div>
+</div>
+
             <button type="submit" className="p-2.5 text-sm font-medium text-white primary-orangebg focus:ring-4 rounded-r-sm focus:outline-none focus:ring-blue-300">
               Search
               <span className="sr-only ">Search</span>
@@ -118,11 +119,15 @@ const Homepage: React.FC = () => {
       <Whyus onGetStartedClick={toggleSignupModal} /> {/* Pass the handler to Whyus */}
       <Applicationprocess />
       <Applicationprocess2 />
+
       <div className="flex justify-center items-center pt-10">
-        <button onClick={toggleSignupModal} className="primary-btn-blue hover:primary-btn-blue text-white font-bold py-2 px-4 rounded">
-          START REGISTRATION
-        </button>
-      </div>
+
+        
+<button /* onClick={toggleSignupModal} */ className="primary-orangebg hover:primary-btn-blue text-white font-bold py-2 px-4 rounded">
+  START REGISTRATION
+</button>
+</div>
+     
       <WorkYourWay />
       <Footer />
 

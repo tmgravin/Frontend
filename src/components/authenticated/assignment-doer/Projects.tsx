@@ -113,12 +113,12 @@ const LatestProjects: React.FC = () => {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {displayedData.map((item, index) => (
           <div key={index} className="p-4 border rounded shadow">
-            <h2 className="text-xl font-bold">{item.projects.projectName}</h2>
+            <h2 className="text-xl font-bold underline">{item.projects.projectName}</h2>
             <p>
               {truncateDescription(item.projects.projectAmount, 100)}
               <button
                 onClick={() => handleReadMore(item)}
-                className="text-blue-500 hover:underline"
+                className=" primary-navy-blue hover:underline"
               >
                 Read More
               </button>
@@ -126,7 +126,7 @@ const LatestProjects: React.FC = () => {
             <p className="text-sm">Project Amount: {item.projects.projectAmount}</p>
             <p className="text-sm">Deadline: {item.projects.projectDeadline}</p>
             <button
-              className="primary-btn-blue rounded-md text-white"
+              className="primary-orangebg rounded-sm p-1 text-white"
               onClick={() => handleApplyNow(item.projects.id)}
             >
               Apply now

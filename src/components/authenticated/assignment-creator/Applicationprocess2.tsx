@@ -4,7 +4,7 @@ import Image from 'next/image';
 
 function ApplicationProcess2() {
   return (
-    <div className='cb-shadow applicationprocess2-bgcolor'>
+    <div className='cb-shadow applicationprocess2-bgcolor pb-10'>
       <div className='primary-orange flex justify-center items-center font-bold p-10'>
        Get Your Assignments Done
       </div>
