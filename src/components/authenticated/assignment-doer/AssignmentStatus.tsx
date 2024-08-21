@@ -11,6 +11,7 @@ interface Project {
   projectAmount: string;
   projectDeadline: string;
   status: string;
+  users:User;
 }
 
 interface User {
@@ -24,6 +25,7 @@ interface DataItem {
   projects: Project;
   doer: User;
   status: string;
+  users:User;
   createdAt: string;
   updatedAt: string;
 }
@@ -62,10 +64,13 @@ const AssignmentStatus: React.FC = () => {
         {displayedData.map((item) => (
           <div key={item.id} className="p-4 border rounded shadow">
             <h2 className="text-xl font-bold">{item.projects.projectName}</h2>
-            <p>{item.projects.projectAmount}</p>
+            <p>${item.projects.projectAmount}</p>
             <p className="text-sm">Deadline: {item.projects.projectDeadline}</p>
-            <p className={`text-sm font-bold ${item.status === 'ACCEPTED' ? 'text-green-500' : 'text-red-500'}`}>Status: {item.status}</p>
-            <p className="text-sm">Doer: {item.doer.name}</p>
+           
+          
+          <p className={`text-sm font-bold ${item.status === 'ACCEPTED' ? 'text-green-500' : 'text-red-500'}`}>Status: {item.status}</p>
+            <p className="text-sm">Creator: {item.projects.users.name}</p>
+
           </div>
         ))}
       </div>
@@ -73,7 +78,7 @@ const AssignmentStatus: React.FC = () => {
         {visibleCount < data.length && (
           <button
             onClick={loadMore}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+            className="mt-4 px-4 py-2 primary-orange-bg text-white rounded hover:bg-orange-600"
             disabled={loading}
           >
             {loading ? 'Loading...' : 'Load More'}

@@ -14,6 +14,11 @@ interface Project {
   projectDeadline: string;
   paymentStatus: string;
   file: string | null;
+  users:User;
+}
+
+interface User{
+   name:string;
 }
 
 interface CompletedAssignment {
@@ -101,10 +106,10 @@ const CompletedAssignments: React.FC = () => {
         {displayedData.map((item) => (
           <div key={item.id} className="p-4 border rounded shadow">
             <h2 className="text-xl font-bold">{item.projects.projectName}</h2>
-            <p>{item.projects.projectAmount}</p>
+            <p>${item.projects.projectAmount}</p>
             <p className="text-sm">Deadline: {new Date(item.projects.projectDeadline).toLocaleDateString()}</p>
             <p className="text-sm">Status: {item.status}</p>
-            <p className="text-sm">Creator: {item.projects.file ? 'Completed' : 'Pending'}</p>
+            <p className="text-sm">Creator: {item.projects.users.name}</p>
             <p className="text-sm">Upload Assignment:</p>
             <input
               type="file"
@@ -113,7 +118,7 @@ const CompletedAssignments: React.FC = () => {
             />
             <button
               onClick={() => handleUpload(item.projects.id)}
-              className="mt-2 px-4 py-2 bg-green-500 text-white rounded hover:bg-green-700"
+              className="mt-2 px-4 py-2 primary-orangebg text-white rounded hover:bg-orange-00"
               disabled={uploading[item.projects.id]}
             >
               {uploading[item.projects.id] ? 'Uploading...' : 'Upload'}
@@ -125,7 +130,7 @@ const CompletedAssignments: React.FC = () => {
         {visibleCount < data.length && (
           <button
             onClick={loadMore}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+            className="mt-4 px-4 py-2 primary-orangebg text-white rounded hover:bg-orange-600"
             disabled={loading}
           >
             {loading ? 'Loading...' : 'Load More'}

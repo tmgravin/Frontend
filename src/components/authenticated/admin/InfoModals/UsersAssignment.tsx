@@ -1,7 +1,15 @@
-// src/LatestProjects.tsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import ReadMoreModal from './ReadMoreModal';
+
+interface Props {
+  user: User;
+}
+
+interface User {
+  id: number;
+  name: string;
+}
 
 export interface DataItem {
   title: string;
@@ -10,18 +18,9 @@ export interface DataItem {
   deadline: string;
 }
 
-const UsersAssignment: React.FC = () => {
+const UsersAssignment: React.FC<Props> = ({ user }) => {
   const [data, setData] = useState<DataItem[]>([
     { title: 'Project 1', description: 'Description 1', amount: 1000, deadline: '2024-07-30' },
-    { title: 'Project 2', description: 'Description 2', amount: 2000, deadline: '2024-08-15' },
-    { title: 'Project 3', description: 'Description 3', amount: 3000, deadline: '2024-09-01' },
-    { title: 'Project 4', description: 'Description 4', amount: 4000, deadline: '2024-07-25' },
-    { title: 'Project 5', description: 'Description 5', amount: 5000, deadline: '2024-08-05' },
-    { title: 'Project 6', description: 'Description 6', amount: 6000, deadline: '2024-09-10' },
-    { title: 'Project 7', description: 'Description 7', amount: 7000, deadline: '2024-07-29' },
-    { title: 'Project 8', description: 'Description 8', amount: 8000, deadline: '2024-08-20' },
-    { title: 'Project 9', description: 'Description 9', amount: 9000, deadline: '2024-09-15' },
-    { title: 'Project 10', description: 'Description 10', amount: 10000, deadline: '2024-10-01' },
   ]);
   const [visibleCount, setVisibleCount] = useState(8);
   const [loading, setLoading] = useState(false);
@@ -35,8 +34,17 @@ const UsersAssignment: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get<DataItem[]>('API_ENDPOINT');
-      setData(response.data);
+      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/byUser?userId=${user.id}`);
+      
+      // Map the response to DataItem structure
+      const formattedData = response.data.map((item: any) => ({
+        title: item.projects.projectName,
+        description: item.projects.projectDetails || 'No description available', // Fallback if projectDetails is null
+        amount: item.projects.projectAmount,
+        deadline: item.projects.projectDeadline,
+      }));
+
+      setData(formattedData);
     } catch (error) {
       console.error("Error fetching data", error);
     }
@@ -97,10 +105,8 @@ const UsersAssignment: React.FC = () => {
                 Read More
               </button>
             </p>
-            <p className="text-sm">Project Amount: {item.amount}</p>
+            <p className="text-sm">Project Amount: ${item.amount}</p>
             <p className="text-sm">Deadline: {item.deadline}</p>
-            
-
           </div>
         ))}
       </div>
@@ -120,7 +126,6 @@ const UsersAssignment: React.FC = () => {
         onClose={handleClose} 
         onEdit={() => handleEditDetails(selectedProject!)} 
       />
-    
     </div>
   );
 };

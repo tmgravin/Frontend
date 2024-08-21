@@ -1,15 +1,25 @@
-import React from 'react';
-import Image from 'next/image';
-import { useTheme, useMediaQuery } from '@mui/material';
-import { Pagination } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import React from "react";
+import Image from "next/image";
+import { useTheme, useMediaQuery } from "@mui/material";
+import { Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/pagination';
+import "swiper/css";
+import "swiper/css/pagination";
 
-const AchievementItem = ({ imgSrc, title, subtitle, isFirst }: { imgSrc: string, title: string, subtitle: string, isFirst?: boolean }) => (
-  <div className='flex flex-col items-center p-2'>
+const AchievementItem = ({
+  imgSrc,
+  title,
+  subtitle,
+  isFirst,
+}: {
+  imgSrc: string;
+  title: string;
+  subtitle: string;
+  isFirst?: boolean;
+}) => (
+  <div className="flex flex-col items-center p-2">
     <div>
       <Image
         src={imgSrc}
@@ -18,8 +28,8 @@ const AchievementItem = ({ imgSrc, title, subtitle, isFirst }: { imgSrc: string,
         height={isFirst ? 30 : 50} // Make the first image smaller
       />
     </div>
-    <div className='ml-3 text-center'>
-      <div className='font-bold text-xl'>{title}</div>
+    <div className="ml-3 text-center">
+      <div className="font-bold text-xl">{title}</div>
       <div>{subtitle}</div>
     </div>
   </div>
@@ -27,10 +37,10 @@ const AchievementItem = ({ imgSrc, title, subtitle, isFirst }: { imgSrc: string,
 
 export default function Achievements() {
   const theme = useTheme();
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
-    <div className='p-4'>
+    <div className="p-4">
       {isSmallScreen ? (
         <Swiper
           modules={[Pagination]} // Only include Pagination module
@@ -79,7 +89,7 @@ export default function Achievements() {
           </SwiperSlide>
         </Swiper>
       ) : (
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4'>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <AchievementItem
             imgSrc="/pngs/rocket.svg"
             title="100+"

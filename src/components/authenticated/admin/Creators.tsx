@@ -37,9 +37,6 @@ const StudentComponent: React.FC = () => {
       const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/role?userType=ASSIGNMENT_CREATOR`,{
         withCredentials: true // Include credentials with the request
       });
-    
-      console.log(response)
-
       setUsers(response.data);
       setFilteredUsers(response.data);
     };

@@ -1,28 +1,28 @@
-import React from 'react';
-import Image from 'next/image';
-import { Pagination } from 'swiper/modules';
-import { Swiper, SwiperSlide } from 'swiper/react';
+import React from "react";
+import Image from "next/image";
+import { Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 
 // Import Swiper styles
-import 'swiper/css';
-import 'swiper/css/pagination';
+import "swiper/css";
+import "swiper/css/pagination";
 
 function ApplicationProcess2() {
   return (
-    <div className='cb-shadow applicationprocess2-bgcolor py-10 relative'>
-      <div className='primary-orange flex justify-center items-center font-bold pt-6'>
+    <div className="cb-shadow applicationprocess2-bgcolor py-10 relative">
+      <div className="primary-orange flex justify-center items-center font-bold pt-6">
         Jump Start Your Freelance Jobs
       </div>
-      
+
       {/* Swiper Container */}
-      <div className='pt-6 relative'>
+      <div className="pt-6 relative">
         <Swiper
           modules={[Pagination]}
           spaceBetween={50}
           slidesPerView={1}
           pagination={{
             clickable: true,
-            el: '.custom-swiper-pagination', // Target custom pagination
+            el: ".custom-swiper-pagination", // Target custom pagination
           }}
           breakpoints={{
             768: {
@@ -33,31 +33,29 @@ function ApplicationProcess2() {
         >
           {/* First Slide */}
           <SwiperSlide>
-            <div className='flex flex-col items-center'>
+            <div className="flex flex-col items-center">
               <Image
                 src="/pngs/profile.svg"
                 alt="Profile Icon"
                 width={50}
                 height={30}
               />
-              <div className='font-bold p-3 text-center'>1. Register yourself</div>
-              <div className='text-center'>
-                Fill in your details and qualifications, and share the skills in which you are proficient.
+              <div className="font-bold p-3 text-center">
+                1. Register yourself
+              </div>
+              <div className="text-center">
+                Fill in your details and qualifications, and share the skills in
+                which you are proficient.
               </div>
             </div>
           </SwiperSlide>
 
           {/* Second Slide */}
           <SwiperSlide>
-            <div className='flex flex-col items-center'>
-              <Image
-                src="/pngs/cv.svg"
-                alt="CV Icon"
-                width={50}
-                height={30}
-              />
-              <div className='font-bold p-3 text-center'>2. Get hired</div>
-              <div className='text-center'>
+            <div className="flex flex-col items-center">
+              <Image src="/pngs/cv.svg" alt="CV Icon" width={50} height={30} />
+              <div className="font-bold p-3 text-center">2. Get hired</div>
+              <div className="text-center">
                 Get the most suited job for your skills.
               </div>
             </div>
@@ -65,16 +63,19 @@ function ApplicationProcess2() {
 
           {/* Third Slide */}
           <SwiperSlide>
-            <div className='flex flex-col items-center'>
+            <div className="flex flex-col items-center">
               <Image
                 src="/pngs/payment.svg"
                 alt="Payment Icon"
                 width={50}
                 height={30}
               />
-              <div className='font-bold p-3 text-center'>3. Earn money with secure payment</div>
-              <div className='text-center'>
-                Choose from several freelance job methods with Safepay payment protection.
+              <div className="font-bold p-3 text-center">
+                3. Earn money with secure payment
+              </div>
+              <div className="text-center">
+                Choose from several freelance job methods with Safepay payment
+                protection.
               </div>
             </div>
           </SwiperSlide>
@@ -82,7 +83,7 @@ function ApplicationProcess2() {
       </div>
 
       {/* Custom Swiper Pagination - Outside the Box */}
-      <div className='custom-swiper-pagination absolute bottom-[-30px] left-0 right-0 flex justify-center'></div>
+      <div className="custom-swiper-pagination absolute bottom-[-30px] left-0 right-0 flex justify-center"></div>
     </div>
   );
 }

@@ -7,6 +7,8 @@ import {
   DialogActions,
   Button,
   Typography,
+  Checkbox,
+  FormControlLabel,
 } from "@mui/material";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
@@ -44,6 +46,7 @@ const PaymentInfoModal: React.FC<PaymentInfoModalProps> = ({
   const [paymentInfo, setPaymentInfo] = useState<PaymentInfo | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isApproved, setIsApproved] = useState<boolean>(false);
 
   useEffect(() => {
     if (open && projectId) {
@@ -90,7 +93,7 @@ const PaymentInfoModal: React.FC<PaymentInfoModalProps> = ({
   }, [open, projectId]);
 
   const handleApprovePayment = () => {
-    if (paymentInfo) {
+    if (paymentInfo && isApproved) {
       axios
         .post(
           `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/payment/approve?id=${paymentInfo.id}`,
@@ -112,6 +115,12 @@ const PaymentInfoModal: React.FC<PaymentInfoModalProps> = ({
         });
     }
   };
+
+  useEffect(() => {
+    if (isApproved) {
+      handleApprovePayment();
+    }
+  }, [isApproved]);
 
   return (
     <div>
@@ -156,13 +165,16 @@ const PaymentInfoModal: React.FC<PaymentInfoModalProps> = ({
                 <strong>Payment Status:</strong>{" "}
                 {paymentInfo.projects.paymentStatus}
               </Typography>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleApprovePayment}
-              >
-                Approve Payment as Complete
-              </Button>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={isApproved}
+                    onChange={(e) => setIsApproved(e.target.checked)}
+                    color="primary"
+                  />
+                }
+                label="Approve Payment as Complete"
+              />
             </>
           ) : (
             <Typography variant="body1">

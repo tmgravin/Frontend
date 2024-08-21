@@ -84,7 +84,7 @@ const StudentInfoModal: React.FC<UserModalProps> = ({ user, onClose, open }) => 
           )}
 
           <Box className="mt-4">
-            <UsersAssignment />
+            <UsersAssignment user={user} />
           </Box>
         </Box>
       </Box>

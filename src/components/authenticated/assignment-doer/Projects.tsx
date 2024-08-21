@@ -1,11 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import ReadMoreModal from './ReadMoreModal';
-import 'react-toastify/dist/ReactToastify.css';
-import { toast, ToastContainer } from 'react-toastify'; 
-import { getUserFromCookies } from '../../auth/token'; 
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import ReadMoreModal from "./ReadMoreModal";
+import ApplyModal from "./ApplyModal";
+import "react-toastify/dist/ReactToastify.css";
+import { toast, ToastContainer } from "react-toastify";
+import { getUserFromCookies } from "../../auth/token";
 
 export interface DataItem {
   id: number;
@@ -41,6 +42,8 @@ const LatestProjects: React.FC = () => {
   const [visibleCount, setVisibleCount] = useState(8);
   const [loading, setLoading] = useState(false);
   const [selectedProject, setSelectedProject] = useState<DataItem | null>(null);
+  const [showApplyModal, setShowApplyModal] = useState(false);
+  const [showReadMoreModal, setShowReadMoreModal] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -49,10 +52,12 @@ const LatestProjects: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get<DataItem[]>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/pending`);
+      const response = await axios.get<DataItem[]>(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/pending`
+      );
       setData(response.data);
     } catch (error) {
-      console.error('Error fetching data', error);
+      console.error("Error fetching data", error);
     }
     setLoading(false);
   };
@@ -62,46 +67,29 @@ const LatestProjects: React.FC = () => {
   };
 
   const truncateDescription = (description: string, length: number) => {
-    if (typeof description !== 'string') return ''; // Return empty string if description is not a string
+    if (typeof description !== "string") return "";
     if (description.length <= length) return description;
-    return description.slice(0, length) + '...';
+    return description.slice(0, length) + "...";
   };
 
   const handleReadMore = (project: DataItem) => {
     setSelectedProject(project);
+    setShowReadMoreModal(true);
   };
 
-  const handleClose = () => {
+  const handleCloseReadMore = () => {
+    setShowReadMoreModal(false);
     setSelectedProject(null);
   };
 
-  const handleApplyNow = async (projectId: number) => {
-    try {
-      const user = getUserFromCookies();
+  const handleApplyNow = (project: DataItem) => {
+    setSelectedProject(project);
+    setShowApplyModal(true);
+  };
 
-      if (!user || !user.id) {
-        toast.error('User not found. Please log in.');
-        return;
-      }
-
-      const doerId = user.id;
-
-      const formData = new FormData();
-      formData.append('doerId', doerId.toString());
-      formData.append('projectId', projectId.toString());
-
-      await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/apply`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        withCredentials: true // Include credentials with the request
-      });
-
-      toast.success('Application submitted successfully!');
-    } catch (error) {
-      console.error('Error applying for project', error);
-      toast.error('Failed to apply for the project. Please try again.');
-    }
+  const handleCloseApplyModal = () => {
+    setShowApplyModal(false);
+    setSelectedProject(null);
   };
 
   const displayedData = data.slice(0, visibleCount);
@@ -109,46 +97,76 @@ const LatestProjects: React.FC = () => {
   return (
     <div className="container mx-auto p-4 cb-shadow cbg-color py-5">
       <ToastContainer />
-      <div className='flex justify-center items-center primary-green p-2'>Latest Projects</div>
+      <div className="flex justify-center items-center primary-green p-2">
+        Latest Projects
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {displayedData.map((item, index) => (
           <div key={index} className="p-4 border rounded shadow">
-            <h2 className="text-xl font-bold underline">{item.projects.projectName}</h2>
+            <h2 className="text-xl font-bold underline">
+              {item.projects.projectName}
+            </h2>
             <p>
               {truncateDescription(item.projects.projectAmount, 100)}
               <button
                 onClick={() => handleReadMore(item)}
-                className=" primary-navy-blue hover:underline"
+                className="primary-navy-blue hover:underline"
               >
                 Read More
               </button>
             </p>
-            <p className="text-sm">Project Amount: {item.projects.projectAmount}</p>
+            <p className="text-sm">
+              Project Amount: {item.projects.projectAmount}
+            </p>
             <p className="text-sm">Deadline: {item.projects.projectDeadline}</p>
             <button
-              className="primary-orangebg rounded-sm p-1 text-white"
-              onClick={() => handleApplyNow(item.projects.id)}
+              className="primary-orangebg rounded-sm p-1 text-white "
+              onClick={() => handleApplyNow(item)}
             >
-              Apply now
+              <h1 className="text-xs">Apply now</h1>
             </button>
           </div>
         ))}
       </div>
-      <div className='flex items-center justify-center'>
+      <div className="flex items-center justify-center">
         {visibleCount < data.length && (
           <button
             onClick={loadMore}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+            className="mt-4 px-4 py-2 text-white rounded hover:bg-orange-600 primary-orangebg"
             disabled={loading}
           >
-            {loading ? 'Loading...' : 'Load More'}
+            {loading ? "Loading..." : "Load More"}
           </button>
         )}
       </div>
-      <ReadMoreModal 
-        project={selectedProject} 
-        onClose={handleClose} 
-      />
+      {showReadMoreModal && selectedProject && (
+        <>
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"
+            onClick={handleCloseReadMore}
+          />
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <ReadMoreModal
+              project={selectedProject}
+              onClose={handleCloseReadMore}
+            />
+          </div>
+        </>
+      )}
+      {showApplyModal && selectedProject && (
+        <>
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"
+            onClick={handleCloseApplyModal}
+          />
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <ApplyModal
+              project={selectedProject}
+              onClose={handleCloseApplyModal}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 };
