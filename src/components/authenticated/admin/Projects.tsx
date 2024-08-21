@@ -85,10 +85,10 @@ const ProjectTableComponent: React.FC = () => {
               <th className="px-4 py-2 border-b border-gray-200">Project Name</th>
               <th className="px-4 py-2 border-b border-gray-200">Amount</th>
               <th className="px-4 py-2 border-b border-gray-200">Deadline</th>
-              <th className="px-4 py-2 border-b border-gray-200">Scope</th>
-              <th className="px-4 py-2 border-b border-gray-200">Experience Year</th>
+              {/* <th className="px-4 py-2 border-b border-gray-200">Scope</th>
+              <th className="px-4 py-2 border-b border-gray-200">Experience Year</th> */}
               <th className="px-4 py-2 border-b border-gray-200">Status</th>
-              <th className="px-4 py-2 border-b border-gray-200">Category</th>
+              {/* <th className="px-4 py-2 border-b border-gray-200">Category</th> */}
               <th className="px-4 py-2 border-b border-gray-200">Payment Status</th>
               <th className="px-4 py-2 border-b border-gray-200">Creator Name</th>
               <th className="px-4 py-2 border-b border-gray-200">Creator Email</th>
@@ -107,10 +107,10 @@ const ProjectTableComponent: React.FC = () => {
                   <td className="px-4 py-2 border-b border-gray-200">{project.projectName}</td>
                   <td className="px-4 py-2 border-b border-gray-200">{project.projectAmount}</td>
                   <td className="px-4 py-2 border-b border-gray-200">{new Date(project.projectDeadline).toLocaleDateString()}</td>
-                  <td className="px-4 py-2 border-b border-gray-200">{projectWrapper.scope}</td>
-                  <td className="px-4 py-2 border-b border-gray-200">{projectWrapper.experienceYear}</td>
+                  {/* <td className="px-4 py-2 border-b border-gray-200">{projectWrapper.scope}</td>
+                  <td className="px-4 py-2 border-b border-gray-200">{projectWrapper.experienceYear}</td> */}
                   <td className="px-4 py-2 border-b border-gray-200">{projectWrapper.projectStatus}</td>
-                  <td className="px-4 py-2 border-b border-gray-200">{category?.category || 'N/A'}</td>
+                  {/* <td className="px-4 py-2 border-b border-gray-200">{category?.category || 'N/A'}</td> */}
                   <td className="px-4 py-2 border-b border-gray-200">{project.paymentStatus}</td>
                   <td className="px-4 py-2 border-b border-gray-200">{creator.name}</td>
                   <td className="px-4 py-2 border-b border-gray-200">{creator.email}</td>

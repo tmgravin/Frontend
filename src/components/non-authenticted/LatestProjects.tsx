@@ -93,7 +93,7 @@ const LatestProjects: React.FC = () => {
               {truncateDescription(item.projects.description, 100)} {/* Use the description field */}
               <button
                 onClick={() => handleReadMore(item)}
-                className="text-blue-500 hover:underline"
+                className="primary-orange hover:underline"
               >
                 Read More
               </button>
@@ -107,7 +107,7 @@ const LatestProjects: React.FC = () => {
         {visibleCount < data.length && (
           <button
             onClick={loadMore}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+            className="mt-4 px-4 py-2  text-white rounded hover:bg-orange-600 primary-orangebg"
             disabled={loading}
           >
             {loading ? 'Loading...' : 'Load More'}

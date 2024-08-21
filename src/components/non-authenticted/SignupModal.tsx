@@ -60,6 +60,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
 
     if (signupData.password !== signupData.confirmPassword) {
       setIsLoading(false); // Set loading to false
+      toast.error('Passwords do not match.');
       return;
     }
 
@@ -146,27 +147,21 @@ const SignupModal: React.FC<SignupModalProps> = ({
                     <input type="text" name="address" id="signup-address" value={isTeacherSignup ? teacherSignupData.address : studentSignupData.address} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Address" required />
                   </div>
                   <div className="relative cb-shadow">
-                    <input type="text" name="phone" id="signup-phone" value={isTeacherSignup ? teacherSignupData.phone : studentSignupData.phone} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Phone Number" required />
+                    <input type="tel" name="phone" id="signup-phone" value={isTeacherSignup ? teacherSignupData.phone : studentSignupData.phone} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Phone Number" required />
                   </div>
                   <div className="relative cb-shadow">
                     <input type="password" name="password" id="signup-password" value={isTeacherSignup ? teacherSignupData.password : studentSignupData.password} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Password" required />
                   </div>
                   <div className="relative cb-shadow">
-                    <input type="password" name="confirmPassword" id="signup-confirm-password" value={isTeacherSignup ? teacherSignupData.confirmPassword : studentSignupData.confirmPassword} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Confirm Password" required />
+                    <input type="password" name="confirmPassword" id="signup-confirmPassword" value={isTeacherSignup ? teacherSignupData.confirmPassword : studentSignupData.confirmPassword} onChange={(e) => handleSignupChange(e, isTeacherSignup)} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5" placeholder="Confirm Password" required />
                   </div>
-                  <div className="flex items-center gap-2">
-                    <input id="remember-me" type="checkbox" checked={remember} onChange={() => setRemember(!remember)} required className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-blue-600" />
-                    <label htmlFor="remember-me" className="text-sm font-medium text-gray-900 dark:text-gray-300">I AGREE TO <div className='text-blue'> <Link href ="/termsandcondition">TERMS AND CONDITION</Link></div></label>
+                  <div className="relative flex items-center mb-4">
+                    <input type="checkbox" id="signup-remember" checked={remember} onChange={() => setRemember(!remember)} className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:bg-gray-700 dark:border-gray-600" />
+                    <label htmlFor="signup-remember" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
                   </div>
-                  <button type="submit" className="w-full text-white primary-orangebg focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center " disabled={isLoading}>
-                    {isLoading ? 'Signing up...' : 'Sign up'}
+                  <button type="submit" className="w-full text-white primary-orangebg hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800">
+                    {isLoading ? 'Signing Up...' : 'Sign Up'}
                   </button>
-                  <div className="text-sm font-medium text-gray-500 dark:text-gray-300">
-                    Already have an account? <Link href="#" className="primary-orange" onClick={() => {
-                      toggleModal(); 
-                      toggleLoginModal(); 
-                    }}>Sign in</Link>
-                  </div>
                 </form>
               )}
             </div>

@@ -25,7 +25,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({ onClose }) =>
   const [deadline, setDeadline] = useState('');
   const [experienceYear, setExperienceYear] = useState('');
   const [levelOfExperience, setlevelOfExperience] = useState('');
-  const [skills, setSkills] = useState('');
+  // const [skills, setSkills] = useState('');
   const [budgetType, setBudgetType] = useState('');
   const [budget, setBudget] = useState('');
   const [attachment, setAttachment] = useState<File | null>(null);
@@ -46,9 +46,9 @@ console.log(catData)
 
  
 
-  const handleSkillsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSkills(e.target.value);
-  };
+  // const handleSkillsChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setSkills(e.target.value);
+  // };
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -244,7 +244,7 @@ console.log(catData)
 </div>
 
 
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label htmlFor="skills" className="block text-sm font-medium text-gray-700">
               Skills (separate by commas)
             </label>
@@ -257,7 +257,7 @@ console.log(catData)
               placeholder="e.g., JavaScript, React, Node.js"
               required
             />
-          </div>
+          </div> */}
 
           <div className="mb-4">
   <label htmlFor="scope" className="block text-sm font-medium text-gray-700">
@@ -401,6 +401,7 @@ console.log(catData)
               onChange={handleFileChange}
               className="mt-1 block w-full"
               accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
+              required
             />
           </div>
 
@@ -433,7 +434,7 @@ console.log(catData)
           <div className="flex justify-end">
             <button
               type="submit"
-              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              className=" text-white px-4 py-2 rounded hover:bg-orange-600 primary-orangebg"
             >
               Post Assignment
             </button>

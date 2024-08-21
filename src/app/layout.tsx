@@ -2,13 +2,13 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
-import { ToastContainer,toast } from "react-toastify"; // Import ToastContainer
-import 'react-toastify/dist/ReactToastify.css'; // Import the Toastify CSS
+import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer
+import "react-toastify/dist/ReactToastify.css"; // Import the Toastify CSS
 
 const inter = Poppins({ weight: "500", subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "MSP Assignment",
+  title: "MSP Academy",
   description: "MSP Assignment is a .....",
 };
 
@@ -23,7 +23,7 @@ export default function RootLayout({
       <body className={inter.className}>
         {children}
         <div>
-        <ToastContainer />
+          <ToastContainer />
         </div>
       </body>
     </html>

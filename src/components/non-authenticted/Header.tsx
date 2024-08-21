@@ -116,6 +116,9 @@ const Header: React.FC = () => {
     <header>
       <ToastContainer />
       <div className="flex flex-row sm:flex-row justify-between items-center px-2 py-1">
+        <div>
+
+        
         <div className="flex items-center">
           <Image
             src="/notextlogo.png"
@@ -123,13 +126,14 @@ const Header: React.FC = () => {
             width={50}
             alt="msp logo"
           />
-          <h1 className="text-xl sm:text-2xl font-bold potta-font primary-navy-blue"> MSP ACADEMY</h1>
+    <div className='mt-4  px-3'><h1 className="text-xl sm:text-2xl font-bold potta-font primary-navy-blue"> MSP ACADEMY</h1></div>
         </div>
-
+        </div>
         
+      
         {/* Dropdown menu for small screens */}
         <div className="block sm:hidden">
-          <IconButton onClick={handleMenuOpen} color="primary">
+          <IconButton onClick={handleMenuOpen} className='primary-orange'>
             <MenuIcon />
           </IconButton>
           <Menu
@@ -138,7 +142,7 @@ const Header: React.FC = () => {
             onClose={handleMenuClose}
             PaperProps={{
               style: {
-                width: 200,
+                width: 140,
               },
             }}
           >
@@ -148,7 +152,7 @@ const Header: React.FC = () => {
                 toggleSignupModal();
               }}
             >
-              Sign up <EditIcon style={{ marginLeft: 8 }} />
+              <div className='primary-orangebg text-white rounded-sm p-2 '>Sign up <EditIcon style={{ marginLeft: 8 }} /></div>
             </MenuItem>
             <MenuItem
               onClick={() => {
@@ -156,27 +160,26 @@ const Header: React.FC = () => {
                 toggleLoginModal();
               }}
             >
-              Login <LoginIcon style={{ marginLeft: 8 }} />
+            <div className='primary-orangebg text-white rounded-sm py-2 px-4 '>   Login <LoginIcon style={{ marginLeft: 8 }} /></div>
             </MenuItem>
           </Menu>
         </div>
         {/* Desktop menu items */}
         <div className="hidden sm:flex flex-row sm:flex-row space-x-4">
-          <Button
-            variant="contained"
-          className="primary-orangebg"
-            onClick={toggleSignupModal}
-          >
-            Sign up <EditIcon style={{ marginLeft: 8 }} />
-          </Button>
-          <Button
-            variant="contained"
-           className="primary-orangebg"
-            onClick={toggleLoginModal}
-          >
-            Login <LoginIcon style={{ marginLeft: 8 }} />
-          </Button>
-        </div>
+
+        <button
+  className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+  onClick={toggleSignupModal}
+>
+  Signup
+</button>
+
+<button
+  className="bg-orange-500 rounded-sm px-5 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+  onClick={toggleLoginModal}
+>
+  Login
+</button>        </div>
       </div>
 
       {(isSignupModalOpen || isLoginModalOpen) && (

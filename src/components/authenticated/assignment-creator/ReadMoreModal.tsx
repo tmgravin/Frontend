@@ -15,6 +15,9 @@ const ReadMoreModal: React.FC<ReadMoreModalProps> = ({ project, onClose }) => {
       <div className="bg-white p-4 rounded shadow-lg w-full max-w-3xl">
         <h2 className="text-2xl font-bold mb-2">{project.projects.projectName}</h2>
         <p className="mb-2"><strong>Description:</strong> {project.projects.projectAmount}</p>
+      {/* project description */}
+
+
         <p className="mb-2"><strong>Amount:</strong> {project.projects.projectAmount}</p>
         <p className="mb-2"><strong>Deadline:</strong> {project.projects.projectDeadline}</p>
         <p className="mb-2"><strong>Scope:</strong> {project.scope}</p>
