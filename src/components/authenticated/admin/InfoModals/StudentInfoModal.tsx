@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Modal, Box, Typography, IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import { User } from '../Creators';
-import UsersAssignment from './UsersAssignment';
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { Modal, Box, Typography, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { User } from "../Creators";
+import UsersAssignment from "./UsersAssignment";
 
 interface UserModalProps {
   user: User | null;
@@ -11,21 +11,31 @@ interface UserModalProps {
   open: boolean;
 }
 
-const StudentInfoModal: React.FC<UserModalProps> = ({ user, onClose, open }) => {
+const StudentInfoModal: React.FC<UserModalProps> = ({
+  user,
+  onClose,
+  open,
+}) => {
   const [userData, setUserData] = useState<User | null>(null);
+  const [totalSpent, setTotalSpent] = useState();
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         if (user?.id && open) {
-          const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/?id=${user.id}`,
-           { withCredentials: true 
-           },
+          const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/?id=${user.id}`,
+            { withCredentials: true }
           );
           setUserData(response.data);
+          const totalspentresponse = await axios.get(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/creator/total-spent?creatorId=1${user.id}`,
+            { withCredentials: true }
+          );
+          setTotalSpent(totalspentresponse.data);
         }
       } catch (error) {
-        console.error('Error fetching user details:', error);
+        console.error("Error fetching user details:", error);
       }
     };
 
@@ -76,7 +86,7 @@ const StudentInfoModal: React.FC<UserModalProps> = ({ user, onClose, open }) => 
                 <strong>Address:</strong> {userData.address}
               </Typography>
               <Typography id="user-modal-description" className="mb-2">
-                <p className="text-sm">Total Spent: $1000</p>
+                <strong>Total Spent:</strong> {totalSpent}
               </Typography>
             </>
           ) : (

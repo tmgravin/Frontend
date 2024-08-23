@@ -3,7 +3,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import ReadMoreModal from "./ReadMoreModal";
 import EditAssignmentModal from "./EditAssignmentModal";
-import PaymentUploadModal from "@/components/Payment/PaymentUploadModal";
+import PaymentUploadModal from "@/components/authenticated/assignment-doer/Payment/PaymentUploadModal";
 import DeleteModal from "./DeleteModal"; // Import DeleteModal component
 import { getUserFromCookies } from "../../auth/token";
 

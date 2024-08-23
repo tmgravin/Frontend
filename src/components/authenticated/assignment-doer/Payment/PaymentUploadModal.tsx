@@ -1,9 +1,21 @@
-import React, { useState, ChangeEvent } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, MenuItem, Select, InputLabel, FormControl, SelectChangeEvent } from '@mui/material';
-import { CloudUpload } from '@mui/icons-material';
-import axios from 'axios';
-import { getUserFromCookies } from '@/components/auth/token';
-import { toast } from 'react-toastify';
+import React, { useState, ChangeEvent } from "react";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  MenuItem,
+  Select,
+  InputLabel,
+  FormControl,
+  SelectChangeEvent,
+} from "@mui/material";
+import { CloudUpload } from "@mui/icons-material";
+import axios from "axios";
+import { getUserFromCookies } from "@/components/auth/token";
+import { toast } from "react-toastify";
 
 const userid = getUserFromCookies();
 
@@ -15,9 +27,15 @@ interface PaymentUploadModalProps {
   name: string;
 }
 
-const PaymentUploadModal: React.FC<PaymentUploadModalProps> = ({ open, onClose, projectId, projectName, name }) => {
-  const [amount, setAmount] = useState<number | ''>('');
-  const [paymentMethod, setPaymentMethod] = useState<string>('');
+const PaymentUploadModal: React.FC<PaymentUploadModalProps> = ({
+  open,
+  onClose,
+  projectId,
+  projectName,
+  name,
+}) => {
+  const [amount, setAmount] = useState<number | "">("");
+  const [paymentMethod, setPaymentMethod] = useState<string>("");
   const [file, setFile] = useState<File | null>(null);
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -28,7 +46,7 @@ const PaymentUploadModal: React.FC<PaymentUploadModalProps> = ({ open, onClose, 
 
   const handleAmountChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    setAmount(value === '' ? '' : Number(value));
+    setAmount(value === "" ? "" : Number(value));
   };
 
   const handlePaymentMethodChange = (event: SelectChangeEvent<string>) => {
@@ -37,27 +55,28 @@ const PaymentUploadModal: React.FC<PaymentUploadModalProps> = ({ open, onClose, 
 
   const handleSubmit = () => {
     const formData = new FormData();
-    formData.append('projects', projectId.toString());
-    formData.append('amount', amount.toString());
-    formData.append('paymentMethod', paymentMethod);
-    formData.append('users', userid.id);
+    formData.append("projects", projectId.toString());
+    formData.append("amount", amount.toString());
+    formData.append("paymentMethod", paymentMethod);
+    formData.append("users", userid.id);
     if (file) {
-      formData.append('screenshotUrl', file);
+      formData.append("screenshotUrl", file);
     }
 
-    axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-      withCredentials: true // Include credentials with the request
-    })
-      .then(response => {
-        toast.success("Payment updated successfully.")
-         console.log('Payment data uploaded successfully:', response.data);
+    axios
+      .post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+        withCredentials: true, // Include credentials with the request
+      })
+      .then((response) => {
+        toast.success("Payment updated successfully.");
+        console.log("Payment data uploaded successfully:", response.data);
         onClose();
       })
-      .catch(error => {
-        console.error('Error uploading payment data:', error);
+      .catch((error) => {
+        console.error("Error uploading payment data:", error);
       });
   };
 
@@ -119,7 +138,7 @@ const PaymentUploadModal: React.FC<PaymentUploadModalProps> = ({ open, onClose, 
         </FormControl>
         <input
           accept="image/*,application/pdf"
-          style={{ display: 'none' }}
+          style={{ display: "none" }}
           id="upload-file"
           type="file"
           onChange={handleFileChange}
@@ -130,13 +149,13 @@ const PaymentUploadModal: React.FC<PaymentUploadModalProps> = ({ open, onClose, 
             component="span"
             startIcon={<CloudUpload />}
             fullWidth
-            style={{ marginTop: '16px' }}
+            style={{ marginTop: "16px" }}
           >
             Upload Screenshot/File
           </Button>
         </label>
         {file && (
-          <div style={{ marginTop: '10px' }}>
+          <div style={{ marginTop: "10px" }}>
             <strong>Selected File:</strong> {file.name}
           </div>
         )}
