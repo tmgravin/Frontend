@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import ReviewRating from '../../Review-modal/ReviewRating';
+import ReviewRating from '../Review-modal/ReviewRating';
 import { getUserFromCookies } from '@/components/auth/token';
 import Image from 'next/image';
 

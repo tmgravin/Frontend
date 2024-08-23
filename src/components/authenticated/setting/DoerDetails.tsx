@@ -5,6 +5,7 @@ import Image from "next/image";
 import { getUserFromCookies } from "@/components/auth/token"; // Adjust the path as necessary
 import { ToastContainer, toast } from "react-toastify";
 import ChangePasswordDialog from "./ChangePasswordDialog";
+
 // Default user object if getUserFromCookies returns null
 const user = getUserFromCookies() || {
   id: "",
@@ -25,7 +26,7 @@ interface Profile {
   profilePicture?: string; // Made optional
 }
 
-const UserDetails: React.FC = () => {
+const DoerDetails: React.FC = () => {
   // State for user profile data
   const [profile, setProfile] = useState<Profile>({
     name: user.name,
@@ -46,6 +47,7 @@ const UserDetails: React.FC = () => {
 
   // State for file upload
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [cvFile, setCvFile] = useState<File | null>(null);
 
   const handleFieldChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -57,30 +59,32 @@ const UserDetails: React.FC = () => {
 
   const handleSaveAll = async (e: React.MouseEvent) => {
     e.preventDefault();
-    // Construct the payload in the specified format
-    const payload = {
-      name: fieldValues.name,
-      phone: fieldValues.contact,
-      address: fieldValues.address,
-    };
+    const formData = new FormData();
+    if (cvFile) {
+      formData.append("cv", cvFile);
+    }
+    formData.append("name", fieldValues.name);
+    formData.append("phone", fieldValues.contact);
+    formData.append("address", fieldValues.address);
 
     try {
       const response = await axios.put(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/updateUser/${user.id}`,
-        payload,
-        { withCredentials: true }
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+          withCredentials: true,
+        }
       );
       if (response.status === 200) {
         toast.success("Profile updated successfully");
-        console.log("Profile updated successfully");
-
         setProfile(fieldValues);
         setIsEditing(false);
       } else {
-        console.error("Failed to update profile");
+        toast.error("Failed to update profile");
       }
     } catch (error) {
-      toast.error("Error updating profiles");
+      toast.error("Error updating profile");
       console.error("Error updating profile:", error);
     }
   };
@@ -89,10 +93,10 @@ const UserDetails: React.FC = () => {
     e.preventDefault();
     if (!selectedFile) return;
 
-    try {
-      const formData = new FormData();
-      formData.append("imageUrl", selectedFile);
+    const formData = new FormData();
+    formData.append("imageUrl", selectedFile);
 
+    try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${user.id}`,
         formData,
@@ -104,15 +108,16 @@ const UserDetails: React.FC = () => {
         }
       );
       if (response.status === 200) {
-        console.log("Profile picture updated successfully");
         const pictureUrl = URL.createObjectURL(selectedFile);
         setProfile((prev) => ({ ...prev, profilePicture: pictureUrl }));
         setFieldValues((prev) => ({ ...prev, profilePicture: pictureUrl }));
         setSelectedFile(null);
+        toast.success("Profile picture updated successfully");
       } else {
-        console.error("Failed to update profile picture");
+        toast.error("Failed to update profile picture");
       }
     } catch (error) {
+      toast.error("Error updating profile picture");
       console.error("Error updating profile picture:", error);
     }
   };
@@ -128,14 +133,15 @@ const UserDetails: React.FC = () => {
         }
       );
       if (response.status === 200) {
-        console.log("Profile picture deleted successfully");
+        setProfile((prev) => ({ ...prev, profilePicture: "" }));
+        setFieldValues((prev) => ({ ...prev, profilePicture: "" }));
         toast.success("Profile picture deleted successfully");
       } else {
-        console.error("Failed to update profile picture");
+        toast.error("Failed to delete profile picture");
       }
     } catch (error) {
-      console.error("Error updating profile picture:", error);
       toast.error("Error deleting profile picture");
+      console.error("Error deleting profile picture:", error);
     }
   };
 
@@ -147,9 +153,16 @@ const UserDetails: React.FC = () => {
   const handleClosePasswordDialog = () => {
     setOpenPasswordDialog(false);
   };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setSelectedFile(e.target.files[0]);
+    }
+  };
+
+  const handleCvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setCvFile(e.target.files[0]);
     }
   };
 
@@ -160,7 +173,7 @@ const UserDetails: React.FC = () => {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${user.id}`
         );
-        const imageUrl = await response.data;
+        const imageUrl = response.data; // Assuming the URL is returned directly
         setImageUrl(imageUrl);
       } catch (error) {
         console.error("Error fetching the image URL:", error);
@@ -204,7 +217,7 @@ const UserDetails: React.FC = () => {
               </button>
               <button
                 onClick={deletePicture}
-                className="px-4 py-2  primary-orangebg text-white rounded ml-2"
+                className="px-4 py-2 primary-orangebg text-white rounded ml-2"
               >
                 Delete Picture
               </button>
@@ -253,7 +266,7 @@ const UserDetails: React.FC = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700">Contact</label>
+          <label className="block text-gray-700">Contact Number</label>
           <input
             type="text"
             value={fieldValues.contact}
@@ -263,44 +276,61 @@ const UserDetails: React.FC = () => {
           />
         </div>
 
-        <div className="flex flex-col">
-          {isEditing ? (
-            <div className="flex justify-end mt-2">
-              <button
-                onClick={handleSaveAll}
-                className="px-4 py-2 bg-blue-500 text-white rounded mr-2"
-              >
-                Save All
-              </button>
-              <button
-                onClick={() => setIsEditing(false)}
-                className="px-4 py-2 bg-gray-300 text-black rounded"
-              >
-                Cancel
-              </button>
-            </div>
-          ) : (
-            <button
-              onClick={(e) => {
-                e.preventDefault();
-                setIsEditing(true);
-              }}
-              className="px-4 py-2 primary-orangebg text-white rounded"
-            >
-              <i className="fas fa-edit"></i> Edit Information
-            </button>
-          )}
-
-          <button
-            onClick={handleOpenPasswordDialog}
-            className="px-4 py-2 primary-orangebg text-white rounded mt-2"
+        <div className="mb-4">
+          <label className="block text-gray-700">CV</label>
+          <input
+            type="file"
+            accept=".pdf,.doc,.docx"
+            onChange={handleCvChange}
+            disabled={!isEditing}
+            className="mb-2"
+          />
+          {/* <button
+            onClick={handleSaveAll}
+            className="px-4 py-2 primary-orangebg text-white rounded"
+            disabled={!isEditing}
           >
-            <i className="fa-solid fa-key"></i> Change Password
-          </button>
+            Save CV
+          </button> */}
         </div>
+
+        {isEditing ? (
+          <div className="flex  mt-4">
+            <button
+              type="button"
+              onClick={handleSaveAll}
+              className="px-4 py-2 primary-orangebg text-white rounded mr-2"
+            >
+              Save All
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsEditing(false)}
+              className="px-4 py-2 bg-gray-300 text-black rounded"
+            >
+              Cancel
+            </button>
+          </div>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setIsEditing(true)}
+            className="px-4 py-2 primary-orangebg text-white rounded"
+          >
+            Edit
+          </button>
+        )}
       </form>
 
-      {/* Change Password Dialog */}
+      <div className="mt-4">
+        <button
+          onClick={handleOpenPasswordDialog}
+          className="px-4 py-2 primary-orangebg text-white rounded"
+        >
+          Change Password
+        </button>
+      </div>
+
       {openPasswordDialog && (
         <ChangePasswordDialog
           userId={user.id}
@@ -311,4 +341,4 @@ const UserDetails: React.FC = () => {
   );
 };
 
-export default UserDetails;
+export default DoerDetails;

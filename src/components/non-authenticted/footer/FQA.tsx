@@ -20,7 +20,7 @@ function FQA() {
       <div className="space-y-6">
         <div>
           <h2
-            className="text-xl font-semibold cursor-pointer mb-2 flex items-center justify-between"
+            className="text-lg  cursor-pointer mb-2 flex items-center justify-between"
             onClick={() => toggleQuestion(1)}
           >
             <span>1. What is MSP Academy?</span>
@@ -44,7 +44,7 @@ function FQA() {
 
         <div>
           <h2
-            className="text-xl font-semibold cursor-pointer mb-2 flex items-center justify-between"
+            className="text-lg font-semibold cursor-pointer mb-2 flex items-center justify-between"
             onClick={() => toggleQuestion(2)}
           >
             <span>2. What are the roles within MSP Academy?</span>
@@ -73,7 +73,7 @@ function FQA() {
 
         <div>
           <h2
-            className="text-xl font-semibold cursor-pointer mb-2 flex items-center justify-between"
+            className="text-lg font-semibold cursor-pointer mb-2 flex items-center justify-between"
             onClick={() => toggleQuestion(3)}
           >
             <span>
@@ -98,7 +98,7 @@ function FQA() {
 
         <div>
           <h2
-            className="text-xl font-semibold cursor-pointer mb-2 flex items-center justify-between"
+            className="text-lg font-semibold cursor-pointer mb-2 flex items-center justify-between"
             onClick={() => toggleQuestion(4)}
           >
             <span>4. How does the assignment process work?</span>
@@ -145,7 +145,7 @@ function FQA() {
 
         <div>
           <h2
-            className="text-xl font-semibold cursor-pointer mb-2 flex items-center justify-between"
+            className="text-lg font-semibold cursor-pointer mb-2 flex items-center justify-between"
             onClick={() => toggleQuestion(5)}
           >
             <span>5. How are payments handled on MSP Academy?</span>
@@ -168,7 +168,7 @@ function FQA() {
 
         <div>
           <h2
-            className="text-xl font-semibold cursor-pointer mb-2 flex items-center justify-between"
+            className="text-lg font-semibold cursor-pointer mb-2 flex items-center justify-between"
             onClick={() => toggleQuestion(6)}
           >
             <span>6. How does MSP Academy ensure the security of my data?</span>

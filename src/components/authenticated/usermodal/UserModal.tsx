@@ -1,6 +1,15 @@
 "use client";
-import React, { useState, MouseEvent } from "react";
-import { Box, IconButton, Menu, MenuItem, Typography, Avatar, useMediaQuery, useTheme } from "@mui/material";
+import React, { useState, MouseEvent, useEffect } from "react";
+import {
+  Box,
+  IconButton,
+  Menu,
+  MenuItem,
+  Typography,
+  Avatar,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { useRouter } from "next/navigation";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { getUserFromCookies } from "../../auth/token"; // Adjust the path as necessary
@@ -17,7 +26,8 @@ const UserModal: React.FC = () => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const handleMenuClick = (event: MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
+  const handleMenuClick = (event: MouseEvent<HTMLElement>) =>
+    setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
 
   // Function to remove a cookie
@@ -54,6 +64,29 @@ const UserModal: React.FC = () => {
   };
 
   const openMenu = Boolean(anchorEl);
+  const [imageUrl, setImageUrl] = useState("");
+
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${user.id}`
+        );
+        const imageUrl = await response.data;
+        setImageUrl(imageUrl);
+      } catch (error) {
+        console.error("Error fetching the image URL:", error);
+      }
+    };
+
+    fetchImage();
+  }, []);
+
+  // Capitalize the first letter and make the rest lowercase
+  const formatName = (name: string) => {
+    if (!name) return "Loading...";
+    return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+  };
 
   return (
     <div>
@@ -72,14 +105,15 @@ const UserModal: React.FC = () => {
             flexDirection: "row-reverse", // Reverse row direction
           }}
         >
-          <IconButton onClick={handleMenuClick} sx={{ ml:0 }}>
-            {user?.imageUrl ? (
-              <Avatar src={user.imageUrl} alt={user.name} />
+          <IconButton onClick={handleMenuClick} sx={{ ml: 0 }}>
+            {imageUrl ? (
+              <Avatar src={imageUrl} alt={user.name} />
             ) : (
               <AccountCircleIcon fontSize="large" />
             )}
           </IconButton>
-          <div className="flex flex-col items-end justify-center"> {/* Align text to the right */}
+          <div className="flex flex-col items-end justify-center">
+            {/* Align text to the right */}
             <Typography
               variant={isSmallScreen ? "body1" : "h6"} // Responsive typography
               sx={{
@@ -88,9 +122,10 @@ const UserModal: React.FC = () => {
                 textOverflow: "ellipsis",
                 whiteSpace: "nowrap",
                 textAlign: "right", // Align text to the right
+                textTransform: "capitalize", // Capitalize first letter
               }}
             >
-              {user?.name || "Loading..."}
+              {formatName(user?.name)}
             </Typography>
             {!isSmallScreen && (
               <Typography

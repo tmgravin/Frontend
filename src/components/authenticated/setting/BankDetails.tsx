@@ -1,21 +1,21 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { getUserFromCookies } from '@/components/auth/token';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { getUserFromCookies } from "@/components/auth/token";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const user = getUserFromCookies() || { id: null }; // Set a default value
 
 const BankDetails: React.FC = () => {
   // State for bank details
   const [bankDetails, setBankDetails] = useState({
-    firstName: '',
-    lastName: '',
-    accountNumber: '',
-    bankName: '',
-    creditCardNumber: '',
-    registeredPhoneNumber: '',
+    firstName: "",
+    lastName: "",
+    accountNumber: "",
+    bankName: "",
+    creditCardNumber: "",
+    registeredPhoneNumber: "",
     users: {
       id: `${user.id}`,
     },
@@ -23,12 +23,12 @@ const BankDetails: React.FC = () => {
 
   // State for editing values
   const [editValues, setEditValues] = useState({
-    firstName: '',
-    lastName: '',
-    accountNumber: '',
-    bankName: '',
-    creditCardNumber: '',
-    registeredPhoneNumber: '',
+    firstName: "",
+    lastName: "",
+    accountNumber: "",
+    bankName: "",
+    creditCardNumber: "",
+    registeredPhoneNumber: "",
     users: {
       id: `${user.id}`,
     },
@@ -42,19 +42,22 @@ const BankDetails: React.FC = () => {
 
   useEffect(() => {
     if (!user.id) {
-      console.error('User ID is not available');
+      console.error("User ID is not available");
       return;
     }
 
     // Fetch bank details from API
     const fetchBankDetails = async () => {
       try {
-        const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/account/?userId=${user.id}`, {
-          withCredentials: true,
-        }); // Replace with your API endpoint
-        
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/?userId=${user.id}`,
+          {
+            withCredentials: true,
+          }
+        ); // Replace with your API endpoint
+
         const data = response.data[0]; // Assuming the API returns an array
-        
+
         if (data) {
           setBankDetails(data);
           setEditValues({
@@ -75,7 +78,7 @@ const BankDetails: React.FC = () => {
           setIsEditDisabled(true);
         }
       } catch (error) {
-        console.error('Error fetching bank details:', error);
+        console.error("Error fetching bank details:", error);
       }
     };
 
@@ -87,12 +90,16 @@ const BankDetails: React.FC = () => {
     setEditValues((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleEditToggle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleEditToggle = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
     setOpenEditDialog(!openEditDialog);
   };
 
-  const handleSave = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handleSave = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
     try {
       const response = await axios.put(
@@ -100,21 +107,21 @@ const BankDetails: React.FC = () => {
         editValues,
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           withCredentials: true,
         }
       );
       if (response.data) {
-        toast.success('Bank details updated successfully');
+        toast.success("Bank details updated successfully");
         setBankDetails(editValues);
         handleEditToggle(e);
       } else {
-        console.error('Failed to update bank details');
+        console.error("Failed to update bank details");
       }
     } catch (error) {
-      toast.error('Error updating bank details');
-      console.error('Error updating bank details:', error);
+      toast.error("Error updating bank details");
+      console.error("Error updating bank details:", error);
     }
   };
 
@@ -123,12 +130,16 @@ const BankDetails: React.FC = () => {
     setBankDetails((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handlePostToggle = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handlePostToggle = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
     setOpenPostDialog(!openPostDialog);
   };
 
-  const handlePost = async (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+  const handlePost = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
     e.preventDefault();
     try {
       const response = await axios.post(
@@ -136,22 +147,22 @@ const BankDetails: React.FC = () => {
         bankDetails,
         {
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           withCredentials: true,
         }
       );
       if (response.data) {
-        toast.success('Bank details posted successfully');
+        toast.success("Bank details posted successfully");
         handlePostToggle(e);
         setIsPostDisabled(true);
         setIsEditDisabled(false);
       } else {
-        console.error('Failed to post bank details');
+        console.error("Failed to post bank details");
       }
     } catch (error) {
-      toast.error('Error posting bank details');
-      console.error('Error posting bank details:', error);
+      toast.error("Error posting bank details");
+      console.error("Error posting bank details:", error);
     }
   };
 
@@ -161,33 +172,37 @@ const BankDetails: React.FC = () => {
       <h2 className="text-2xl mb-4">Bank Details</h2>
 
       <form noValidate autoComplete="off">
-        <div className='flex flex-row'>
+        <div className="flex flex-row">
           <div className="mb-4">
             <label className="block text-gray-700">Account Holder Name:</label>
             <p>{bankDetails.firstName}</p>
           </div>
           <div className="mb-4 px-5">
-            <label className="block text-gray-700">Account Holder Last Name:</label>
+            <label className="block text-gray-700">
+              Account Holder Last Name:
+            </label>
             <p>{bankDetails.lastName}</p>
           </div>
         </div>
-        <div className='flex flex-row'>
-        <div className="mb-4">
-          <label className="block text-gray-700">Account Number:</label>
-          <p>{bankDetails.accountNumber}</p>
+        <div className="flex flex-row">
+          <div className="mb-4">
+            <label className="block text-gray-700">Account Number:</label>
+            <p>{bankDetails.accountNumber}</p>
+          </div>
+          <div className="mb-4 px-5">
+            <label className="block text-gray-700">Bank Name:</label>
+            <p>{bankDetails.bankName}</p>
+          </div>
         </div>
-        <div className="mb-4 ">
-          <label className="block text-gray-700">Bank Name:</label>
-          <p>{bankDetails.bankName}</p>
-        </div>
-        </div>
-       
+
         <div className="mb-4">
           <label className="block text-gray-700">Credit Card Number:</label>
-          <p>{bankDetails.creditCardNumber || 'N/A'}</p>
+          <p>{bankDetails.creditCardNumber || "N/A"}</p>
         </div>
         <div className="mb-4">
-          <label className="block text-gray-700">Registered Phone Number:</label>
+          <label className="block text-gray-700">
+            Registered Phone Number:
+          </label>
           <p>{bankDetails.registeredPhoneNumber}</p>
         </div>
 

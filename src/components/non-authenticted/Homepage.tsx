@@ -139,13 +139,7 @@ const Homepage: React.FC = () => {
       {/* Pass the handler to Whyus */}
       <Applicationprocess />
       <Applicationprocess2 />
-      <div className="flex justify-center items-center pt-10">
-        <button
-          /* onClick={toggleSignupModal} */ className="primary-orangebg hover:primary-btn-blue text-white font-bold py-2 px-4 rounded"
-        >
-          START REGISTRATION
-        </button>
-      </div>
+     
       <WorkYourWay />
       <FQA />
       <Footer />

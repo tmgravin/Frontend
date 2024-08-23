@@ -1,7 +1,9 @@
-import React from 'react';
-import { Modal, Box, Typography, IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import { User } from '../Doers'
+import React from "react";
+import { Modal, Box, Typography, IconButton } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
+import { User } from "../Doers";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 interface UserModalProps {
   user: User | null;
@@ -9,7 +11,38 @@ interface UserModalProps {
   open: boolean;
 }
 
-const TeacherInfoModal: React.FC<UserModalProps> = ({ user, onClose, open }) => {
+const TeacherInfoModal: React.FC<UserModalProps> = ({
+  user,
+  onClose,
+  open,
+}) => {
+  const [userData, setUserData] = useState<User | null>(null);
+  const [totalEarning, setTotalEarning] = useState();
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        if (user?.id && open) {
+          //   const response = await axios.get(
+          //     `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/?id=${user.id}`,
+          //     { withCredentials: true }
+          //   );
+          //   setUserData(response.data);
+
+          const totalEarningResponse = await axios.get(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/doer/total-earnings?doerId=${user.id}`,
+            { withCredentials: true }
+          );
+          setTotalEarning(totalEarningResponse.data);
+        }
+      } catch (error) {
+        console.error("Error fetching user details:", error);
+      }
+    };
+
+    fetchUserData();
+  }, [user, open]);
+
   if (!user) return null;
 
   return (
@@ -21,7 +54,6 @@ const TeacherInfoModal: React.FC<UserModalProps> = ({ user, onClose, open }) => 
     >
       <Box className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
         <Box className="bg-white p-6 rounded shadow-md w-full max-w-md relative">
-       
           <IconButton
             edge="end"
             color="inherit"
@@ -55,17 +87,17 @@ const TeacherInfoModal: React.FC<UserModalProps> = ({ user, onClose, open }) => 
             <strong>Address:</strong> {user.address}
           </Typography>
           <Typography id="user-modal-description" className="mb-2">
-            
-            <strong>CV:</strong> 
+            <strong>CV:</strong>
           </Typography>
           <Typography id="user-modal-description" className="mb-2">
-            <strong>Cover letter:</strong> 
+            <strong>Cover letter:</strong>
           </Typography>
           <Typography id="user-modal-description" className="mb-2">
-            <strong>Total Earning:</strong> 
+            <strong>Total Earning:</strong>
+            {totalEarning}
           </Typography>
           <Typography id="user-modal-description" className="mb-2">
-            <strong>Paymetn Verified:</strong> 
+            <strong>Paymetn Verified:</strong>
           </Typography>
         </Box>
       </Box>
