@@ -128,9 +128,8 @@ const Header: React.FC = () => {
               width={50}
               alt="msp logo"
             />
-            <div className="mt-4  px-3">
-              <h1 className="text-xl sm:text-2xl font-bold potta-font primary-navy-blue">
-                {" "}
+            <div className="mt-4 px-3">
+              <h1 className="text-xs font-bold sm:text-2xl primary-navy-blue">
                 MSP ACADEMY
               </h1>
             </div>

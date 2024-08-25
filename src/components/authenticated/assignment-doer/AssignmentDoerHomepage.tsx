@@ -94,11 +94,6 @@ function Homepage() {
         <Applicationprocess />
         <Applicationprocess2 />
       </div>
-      <div className="flex justify-center items-center p-3">
-        <button className="primary-btn-blue hover:primary-btn-blue text-white font-bold py-2 px-4 rounded">
-          START EARNING
-        </button>
-      </div>
 
       <div>
         <WorkYourWay />

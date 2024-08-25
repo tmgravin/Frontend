@@ -406,11 +406,12 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
               htmlFor="budget"
               className="block text-sm font-medium text-gray-700"
             >
-              Budget
+              Budget (in USD)
             </label>
             <input
               id="budget"
               type="number"
+              placeholder="$"
               value={budget}
               onChange={(e) => setBudget(e.target.value)}
               className="mt-1 block w-full border border-gray-300 rounded-md p-2"

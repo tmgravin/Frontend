@@ -93,8 +93,10 @@ const Header: React.FC = () => {
             width={50} // Provide appropriate width
             height={50} // Provide appropriate height
           />
-          <div className="text-xl sm:text-2xl potta-one-regular primary-navy-blue mb-4 sm:mb-0 text-center mt-2">
-            MSP ACADEMY
+          <div className="mt-4 px-3">
+            <h1 className="text-xs font-bold sm:text-2xl primary-navy-blue">
+              MSP ACADEMY
+            </h1>
           </div>
         </div>
         <div className="flex items-center ml-4">
