@@ -1,71 +1,103 @@
-import React from 'react';
-import Image from 'next/image';
+import React from "react";
+import Image from "next/image";
+import { Pagination } from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
 
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/pagination";
 
 function ApplicationProcess2() {
   return (
-    <div className='cb-shadow applicationprocess2-bgcolor pb-10'>
-      <div className='primary-orange flex justify-center items-center font-bold p-10'>
-       Get Your Assignments Done
-      </div>
-      <div className=''>
-        <div className='flex flex-row justify-between items-center'>
-          <div className='flex flex-col items-center'>
-            <div className='text-3xl'><Image
-          src="/pngs/profile.svg"
-          alt="Example SVG Image"
-          width={50}
-          height={30}
-        /></div>
-            <div className='font-bold p-3 text-center'>1.Upload Assignment</div>
-            <div className='text-center'>Fill in your details and qualification, and sahre the skills in which you are proficient</div>
-          </div>
-
-          <div className='flex items-center justify-center'>
-          
-          
-          <Image
-          src="/pngs/arrowleft.svg"
-          alt="Example SVG Image"
-          width={50}
-          height={30}
-        />
-
-
-          </div>
-
-          <div className='flex flex-col items-center'>
-            <div className='text-3xl'><Image
-          src="/pngs/cv.svg"
-          alt="Example SVG Image"
-          width={50}
-          height={30}
-        /></div>
-            <div className='font-bold p-3 text-center' >2.Hire Assignment Doer</div>
-            <div className='text-center'> Get the most suited job for your skills</div>
-          </div>
-
-          <div className='flex items-center justify-center'>
-           
-          <Image
-          src="/pngs/arrowleft.svg"
-          alt="Example SVG Image"
-          width={50}
-          height={30}
-        />
-          </div>
-
-          <div className='flex flex-col items-center'>
-            <div className='text-3xl'><div>   <Image
-          src="/pngs/payment.svg"
-          alt="Example SVG Image"
-          width={50}
-          height={30}
-        /></div></div>
-            <div className='font-bold p-3 text-center'>3.Get assignment done with secure payment</div>
-            <div className='text-center'>Choose from several freelance jobs methods with Safepay payment protection</div>
-          </div>
+    <div className="cb-shadow applicationprocess2-bgcolor pb-10">
+      <div className=" py-10 relative">
+        <div className="primary-orange flex justify-center items-center font-bold pt-6">
+          Jump Start Your Freelance Jobs
         </div>
+
+        {/* Swiper Container */}
+        <div className="pt-6 relative">
+          <Swiper
+            modules={[Pagination]}
+            spaceBetween={50}
+            slidesPerView={1}
+            pagination={{
+              clickable: true,
+              el: ".custom-swiper-pagination", // Target custom pagination
+            }}
+            breakpoints={{
+              768: {
+                slidesPerView: 3, // Show 3 slides at once on larger screens
+                spaceBetween: 30,
+              },
+            }}
+          >
+            {/* First Slide */}
+            <SwiperSlide>
+              <div className="flex flex-col items-center">
+                <Image
+                  src="/pngs/profile.svg"
+                  alt="Profile Icon"
+                  width={50}
+                  height={30}
+                />
+                <div className="font-bold p-3 text-center">
+                  1. Register yourself
+                </div>
+                <div className="text-center">
+                  Fill in your details and qualifications, and share the skills
+                  in which you are proficient.
+                </div>
+              </div>
+            </SwiperSlide>
+
+            {/* Second Slide */}
+            <SwiperSlide>
+              <div className="flex flex-col items-center">
+                <Image
+                  src="/pngs/cv.svg"
+                  alt="CV Icon"
+                  width={50}
+                  height={30}
+                />
+                <div className="font-bold p-3 text-center">2. Get hired</div>
+                <div className="text-center">
+                  Get the most suited job for your skills.
+                </div>
+              </div>
+            </SwiperSlide>
+
+            {/* Third Slide */}
+            <SwiperSlide>
+              <div className="flex flex-col items-center">
+                <Image
+                  src="/pngs/payment.svg"
+                  alt="Payment Icon"
+                  width={50}
+                  height={30}
+                />
+                <div className="font-bold p-3 text-center">
+                  3. Earn money with secure payment
+                </div>
+                <div className="text-center">
+                  Choose from several freelance job methods with Safepay payment
+                  protection.
+                </div>
+              </div>
+            </SwiperSlide>
+          </Swiper>
+        </div>
+
+        {/* Custom Swiper Pagination - Outside the Box */}
+        <div className="custom-swiper-pagination absolute bottom-[-30px] left-0 right-0 flex justify-center"></div>
+      </div>
+
+      <div className="flex justify-center items-center pt-10">
+        <button
+          /* onClick={toggleSignupModal} */ className="primary-orangebg  text-white font-bold py-2 px-4 rounded"
+        >
+          START REGISTRATION
+        </button>
       </div>
     </div>
   );

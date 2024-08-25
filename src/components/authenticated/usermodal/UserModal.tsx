@@ -38,19 +38,8 @@ const UserModal: React.FC = () => {
   const handleLogout = async () => {
     try {
       removeCookie("user");
+      toast.warning("logging out");
       console.log("User cookie has been cleared");
-
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/security/logout`,
-        {},
-        { withCredentials: true }
-      );
-
-      if (response.status === 200) {
-        toast.success("Logout Successful");
-      } else {
-        toast.error("Logout Failed");
-      }
     } catch (err) {
       toast.error("Logout Failed");
       console.log("Error occurred", err);
@@ -81,6 +70,20 @@ const UserModal: React.FC = () => {
 
     fetchImage();
   }, []);
+
+  // Function to map userType to a readable label
+  const getUserTypeLabel = (userType: string) => {
+    switch (userType) {
+      case "ASSIGNMENT_DOER":
+        return "Doer";
+      case "ASSIGNMENT_CREATOR":
+        return "Creator";
+      case "ADMIN":
+        return "Admin";
+      default:
+        return "User";
+    }
+  };
 
   // Capitalize the first letter and make the rest lowercase
   const formatName = (name: string) => {
@@ -138,7 +141,7 @@ const UserModal: React.FC = () => {
                   textAlign: "right", // Align text to the right
                 }}
               >
-                {user?.userType || "Loading..."}
+                {getUserTypeLabel(user?.userType) || "Loading..."}
               </Typography>
             )}
           </div>

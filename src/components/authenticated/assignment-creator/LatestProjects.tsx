@@ -18,7 +18,6 @@ export interface DataItem {
   projectUrl: string;
   createdAt: string;
   updatedAt: string;
-  description: string;
   projectDescription: string;
   skills?: string;
   budgets?: string;
@@ -73,10 +72,10 @@ const LatestProjects: React.FC = () => {
     setVisibleCount((prevCount) => prevCount + 4);
   };
 
-  const truncateDescription = (description: string, length: number) => {
-    if (typeof description !== "string") return "";
-    if (description.length <= length) return description;
-    return description.slice(0, length) + "...";
+  const truncateDescription = (projectDescription: string, length: number) => {
+    if (typeof projectDescription !== "string") return "";
+    if (projectDescription.length <= length) return projectDescription;
+    return projectDescription.slice(0, length) + "...";
   };
 
   const handleReadMore = (project: DataItem) => {
@@ -164,9 +163,15 @@ const LatestProjects: React.FC = () => {
             >
               <h1 className="text-xs"> Edit Assignment </h1>
             </button>
+            <button
+              className="sm:hidden primary-orangebg rounded-lg text-white text-xs p-1 ml-2"
+              onClick={() => openDeleteModal(item)} // Open DeleteModal on click
+            >
+              Delete<i className="px-1 fa-solid fa-trash"></i>
+            </button>
 
             <button
-              className="mt-2 px-4 py-2 primary-navy-blue text-white rounded-lg underline hover:text-orange-500"
+              className="  mt-2 px-4 py-2 primary-navy-blue text-white text-sm rounded-lg underline hover:text-orange-500"
               onClick={() => openPaymentModal(item)}
               aria-label={`Add payment for ${item.projects.projectName}`}
             >
@@ -174,7 +179,7 @@ const LatestProjects: React.FC = () => {
             </button>
 
             <button
-              className="primary-orangebg rounded-lg text-white text-xs p-1"
+              className="hidden sm:block primary-orangebg rounded-lg text-white text-xs p-1 "
               onClick={() => openDeleteModal(item)} // Open DeleteModal on click
             >
               Delete<i className="px-1 fa-solid fa-trash"></i>
