@@ -19,7 +19,7 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
     setLoading(true);
     try {
       await axios.delete(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/delete/${projectId}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/delete?${projectId}`,
         { withCredentials: true }
       );
       toast.success("Project deleted successfully!");

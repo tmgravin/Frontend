@@ -85,14 +85,15 @@ const LoginModal: React.FC<LoginModalProps> = ({
           }
         }, 500);
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error(
         "Login failed, Please check your email and password. Also, check if email is verified.",
         error
       );
-      toast.error(
-        "Login failed. Please verify email and check your credentials."
-      );
+      const errorMessage =
+        error.response?.data ||
+        "Login failed. Please verify email and check your credentials.";
+      toast.error(errorMessage);
     }
   };
 

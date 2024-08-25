@@ -67,7 +67,7 @@ const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
         { email, password }
       );
       if (response.status === 200) {
-        toast.success("Password reset successful");
+        toast.success("Password reset successfully.");
         setIsNewPasswordModalOpen(false);
         toggleModal(); // Close reset password modal
       }
