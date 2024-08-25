@@ -61,11 +61,10 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
     const formData = new FormData();
     formData.append("users", user.id); //notokens yet sending form id from cookie which is stored when logged in
     formData.append("projectName", title);
-    formData.append("description", description);
+    formData.append("projectDescription", description);
     formData.append("projectDeadline", deadline);
     formData.append("experienceYear", experienceYear); //was supposed to be"how long will work take" but backend has named experienceYear
     formData.append("levelOfExperience", levelOfExperience);
-
     formData.append("scope", scope);
     formData.append("budgets", budgetType);
     formData.append("projectAmount", budget);
@@ -453,7 +452,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
             ></textarea>
           </div>
 
-          <div className="mb-4">
+          {/* <div className="mb-4">
             <label className="flex items-center">
               <input
                 type="checkbox"
@@ -463,7 +462,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
               />
               Payment Verified
             </label>
-          </div>
+          </div> */}
 
           <div className="flex justify-end">
             <button

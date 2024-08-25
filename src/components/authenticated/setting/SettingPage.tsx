@@ -44,8 +44,7 @@ function SettingPage() {
         Back
       </button>
       <div>
-        <UserDetails />
-        {/* <DoerDetails /> */}
+        {userType === "ASSIGNMENT_DOER" ? <DoerDetails /> : <UserDetails />}
       </div>
       {userType === "ASSIGNMENT_DOER" && (
         <div>

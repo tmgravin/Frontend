@@ -103,17 +103,17 @@ const UserDetails: React.FC = () => {
           withCredentials: true,
         }
       );
-      if (response.status === 200) {
-        console.log("Profile picture updated successfully");
+      if (response.status == 200) {
+        toast.success("Profile picture updated successfully");
         const pictureUrl = URL.createObjectURL(selectedFile);
         setProfile((prev) => ({ ...prev, profilePicture: pictureUrl }));
         setFieldValues((prev) => ({ ...prev, profilePicture: pictureUrl }));
         setSelectedFile(null);
       } else {
-        console.error("Failed to update profile picture");
+        toast.error("Failed to update profile picture");
       }
     } catch (error) {
-      console.error("Error updating profile picture:", error);
+      toast.error("Error updating profile picture:");
     }
   };
 
@@ -268,7 +268,7 @@ const UserDetails: React.FC = () => {
             <div className="flex justify-end mt-2">
               <button
                 onClick={handleSaveAll}
-                className="px-4 py-2 bg-blue-500 text-white rounded mr-2"
+                className="px-4 py-2 primary-orangebg text-white rounded mr-2"
               >
                 Save All
               </button>

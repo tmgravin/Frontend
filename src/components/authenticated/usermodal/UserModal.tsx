@@ -82,6 +82,20 @@ const UserModal: React.FC = () => {
     fetchImage();
   }, []);
 
+  // Function to map userType to a readable label
+  const getUserTypeLabel = (userType: string) => {
+    switch (userType) {
+      case "ASSIGNMENT_DOER":
+        return "Doer";
+      case "ASSIGNMENT_CREATOR":
+        return "Creator";
+      case "ADMIN":
+        return "Admin";
+      default:
+        return "User";
+    }
+  };
+
   // Capitalize the first letter and make the rest lowercase
   const formatName = (name: string) => {
     if (!name) return "Loading...";
@@ -138,7 +152,7 @@ const UserModal: React.FC = () => {
                   textAlign: "right", // Align text to the right
                 }}
               >
-                {user?.userType || "Loading..."}
+                {getUserTypeLabel(user?.userType) || "Loading..."}
               </Typography>
             )}
           </div>
