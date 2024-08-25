@@ -38,19 +38,8 @@ const UserModal: React.FC = () => {
   const handleLogout = async () => {
     try {
       removeCookie("user");
+      toast.warning("logging out");
       console.log("User cookie has been cleared");
-
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/security/logout`,
-        {},
-        { withCredentials: true }
-      );
-
-      if (response.status === 200) {
-        toast.success("Logout Successful");
-      } else {
-        toast.error("Logout Failed");
-      }
     } catch (err) {
       toast.error("Logout Failed");
       console.log("Error occurred", err);
