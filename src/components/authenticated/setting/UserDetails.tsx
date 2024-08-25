@@ -204,7 +204,7 @@ const UserDetails: React.FC = () => {
               </button>
               <button
                 onClick={deletePicture}
-                className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+                className="ml-2 bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
               >
                 Delete Picture
               </button>

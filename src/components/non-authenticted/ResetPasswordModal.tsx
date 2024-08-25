@@ -1,11 +1,8 @@
-// ResetPasswordModal.tsx
-
 import React, { useState } from "react";
 import axios from "axios";
-import OtpModal from "./OtpModal"; // Adjust the path based on your project structure
-import NewPasswordModal from "./NewPasswordModal"; // Adjust the path based on your project structure
+import OtpModal from "./OtpModal";
+import NewPasswordModal from "./NewPasswordModal";
 import { toast } from "react-toastify";
-import test from "node:test";
 
 interface ResetPasswordModalProps {
   isOpen: boolean;
@@ -30,7 +27,7 @@ const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
       );
 
       if (response.status === 200) {
-        toast.success("OTP code is sent to your emial");
+        toast.success("OTP code is sent to your email");
         setIsOtpModalOpen(true); // Open OTP modal
       }
     } catch (error) {
@@ -45,10 +42,8 @@ const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/verifyResetCode`,
         { email, code }
       );
-      console.log("Response from OTP verification:", response.data);
       if (response.status === 200) {
         toast.success("OTP verified successfully");
-        //invalid code if send old code neeed latest code
         setIsOtpModalOpen(false);
         setIsNewPasswordModalOpen(true); // Open new password modal
       }
@@ -67,14 +62,12 @@ const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
       return;
     }
     try {
-      console.log("Resetting password for:", email); // Debugging statement
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/resetPassword`,
         { email, password }
       );
-      console.log("Response from password reset:", response.data);
       if (response.status === 200) {
-        toast.success("Password reset successful");
+        toast.success("Password reset successfully.");
         setIsNewPasswordModalOpen(false);
         toggleModal(); // Close reset password modal
       }
@@ -98,7 +91,9 @@ const ResetPasswordModal: React.FC<ResetPasswordModalProps> = ({
         id="reset-password-modal"
         tabIndex={-1}
         aria-hidden="true"
-        className="fixed inset-0 z-50 flex items-center justify-center overflow-auto"
+        className={`fixed inset-0 z-50 flex items-center justify-center overflow-auto bg-black bg-opacity-50 backdrop-blur-sm backdrop-brightness-75 ${
+          isOpen ? "block" : "hidden"
+        }`}
       >
         <div className="relative p-4 w-full max-w-md max-h-full">
           <div className="relative bg-white rounded-lg shadow overflow-y-auto max-h-[90vh]">
