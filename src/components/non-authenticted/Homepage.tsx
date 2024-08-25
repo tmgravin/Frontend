@@ -38,7 +38,7 @@ const Homepage: React.FC = () => {
     password: "",
     confirmPassword: "",
   });
-  const [remember, setRemember] = useState(false);
+  const [agree, setAgree] = useState(false);
 
   useEffect(() => {
     const fetchBackgroundImage = async () => {
@@ -139,7 +139,6 @@ const Homepage: React.FC = () => {
       {/* Pass the handler to Whyus */}
       <Applicationprocess />
       <Applicationprocess2 />
-     
       <WorkYourWay />
       <FQA />
       <Footer />
@@ -156,8 +155,8 @@ const Homepage: React.FC = () => {
         teacherSignupData={teacherSignupData}
         studentSignupData={studentSignupData}
         handleSignupChange={handleSignupChange}
-        remember={remember}
-        setRemember={setRemember}
+        agree={agree}
+        setAgree={setAgree}
       />
     </div>
   );

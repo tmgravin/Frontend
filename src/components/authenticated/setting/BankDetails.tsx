@@ -39,6 +39,7 @@ const BankDetails: React.FC = () => {
   const [openPostDialog, setOpenPostDialog] = useState(false);
   const [isPostDisabled, setIsPostDisabled] = useState(false);
   const [isEditDisabled, setIsEditDisabled] = useState(true);
+  const [hasBankDetails, setHasBankDetails] = useState(false); // New state
 
   useEffect(() => {
     if (!user.id) {
@@ -46,7 +47,6 @@ const BankDetails: React.FC = () => {
       return;
     }
 
-    // Fetch bank details from API
     const fetchBankDetails = async () => {
       try {
         const response = await axios.get(
@@ -54,11 +54,11 @@ const BankDetails: React.FC = () => {
           {
             withCredentials: true,
           }
-        ); // Replace with your API endpoint
+        );
 
         const data = response.data[0]; // Assuming the API returns an array
 
-        if (data) {
+        if (response.status === 200 && data) {
           setBankDetails(data);
           setEditValues({
             firstName: data.firstName,
@@ -73,9 +73,11 @@ const BankDetails: React.FC = () => {
           });
           setIsPostDisabled(true);
           setIsEditDisabled(false);
+          setHasBankDetails(true); // Set hasBankDetails to true
         } else {
           setIsPostDisabled(false);
           setIsEditDisabled(true);
+          setHasBankDetails(false); // Set hasBankDetails to false
         }
       } catch (error) {
         console.error("Error fetching bank details:", error);
@@ -152,11 +154,12 @@ const BankDetails: React.FC = () => {
           withCredentials: true,
         }
       );
-      if (response.data) {
+      if (response.status == 200) {
         toast.success("Bank details posted successfully");
         handlePostToggle(e);
         setIsPostDisabled(true);
         setIsEditDisabled(false);
+        setHasBankDetails(true); // Set hasBankDetails to true
       } else {
         console.error("Failed to post bank details");
       }
@@ -167,7 +170,7 @@ const BankDetails: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto p-4 max-w-md">
+    <div className="container mx-auto p-4 max-w-lg">
       <ToastContainer />
       <h2 className="text-2xl mb-4">Bank Details</h2>
 
@@ -206,21 +209,23 @@ const BankDetails: React.FC = () => {
           <p>{bankDetails.registeredPhoneNumber}</p>
         </div>
 
-        <button
-          onClick={handleEditToggle}
-          disabled={isEditDisabled}
-          className="px-4 py-2 primary-btn-blue text-white rounded mr-2"
-        >
-          Edit Bank Details
-        </button>
-
-        <button
-          onClick={handlePostToggle}
-          disabled={isPostDisabled}
-          className="px-4 py-2 primary-btn-green text-white rounded"
-        >
-          Post Bank Details
-        </button>
+        {!hasBankDetails ? (
+          <button
+            onClick={handlePostToggle}
+            disabled={isPostDisabled}
+            className="primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+          >
+            Post Bank Details
+          </button>
+        ) : (
+          <button
+            onClick={handleEditToggle}
+            disabled={isEditDisabled}
+            className="primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+          >
+            Edit Bank Details
+          </button>
+        )}
       </form>
 
       {/* Edit Bank Details Dialog */}
@@ -276,18 +281,20 @@ const BankDetails: React.FC = () => {
               className="w-full p-2 border border-gray-300 rounded mb-4"
               placeholder="Registered Phone Number"
             />
-            <button
-              onClick={handleSave}
-              className="px-4 py-2 primary-btn-blue text-white rounded mr-2"
-            >
-              Save
-            </button>
-            <button
-              onClick={handleEditToggle}
-              className="px-4 py-2 primary-btn-blue text-white rounded"
-            >
-              Cancel
-            </button>
+            <div className="flex justify-end">
+              <button
+                onClick={(e) => handleSave(e)}
+                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+              >
+                Save
+              </button>
+              <button
+                onClick={handleEditToggle}
+                className="bg-gray-500 text-white px-4 py-2 rounded ml-2 hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}
@@ -345,18 +352,20 @@ const BankDetails: React.FC = () => {
               className="w-full p-2 border border-gray-300 rounded mb-4"
               placeholder="Registered Phone Number"
             />
-            <button
-              onClick={handlePost}
-              className="px-4 py-2 primary-orangebg text-white rounded mr-2"
-            >
-              Post
-            </button>
-            <button
-              onClick={handlePostToggle}
-              className="px-4 py-2 primary-orangebg text-white rounded"
-            >
-              Cancel
-            </button>
+            <div className="flex justify-end">
+              <button
+                onClick={(e) => handlePost(e)}
+                className="primary-orange-bg text-white px-4 py-2 rounded "
+              >
+                Post
+              </button>
+              <button
+                onClick={handlePostToggle}
+                className="bg-gray-500 text-white px-4 py-2 rounded ml-2 hover:bg-gray-600"
+              >
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       )}

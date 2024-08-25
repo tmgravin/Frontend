@@ -150,6 +150,7 @@ const PaymentUploadModal: React.FC<PaymentUploadModalProps> = ({
             startIcon={<CloudUpload />}
             fullWidth
             style={{ marginTop: "16px" }}
+            className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
           >
             Upload Screenshot/File
           </Button>
@@ -164,7 +165,12 @@ const PaymentUploadModal: React.FC<PaymentUploadModalProps> = ({
         <Button onClick={onClose} color="secondary">
           Cancel
         </Button>
-        <Button onClick={handleSubmit} color="primary" variant="contained">
+        <Button
+          onClick={handleSubmit}
+          color="primary"
+          variant="contained"
+          className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+        >
           Submit
         </Button>
       </DialogActions>

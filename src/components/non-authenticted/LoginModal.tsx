@@ -1,10 +1,10 @@
-import React, { ChangeEvent, useState } from 'react';
-import Image from 'next/image';
-import axios from 'axios';
-import ResetPasswordModal from './ResetPasswordModal'; 
-import { useRouter } from 'next/navigation';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { ChangeEvent, useState } from "react";
+import Image from "next/image";
+import axios from "axios";
+import ResetPasswordModal from "./ResetPasswordModal";
+import { useRouter } from "next/navigation";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface SignupData {
   email: string;
@@ -14,12 +14,10 @@ interface SignupData {
 
 interface LoginModalProps {
   toggleSignupModal: () => void;
-  isOpen: boolean
+  isOpen: boolean;
   toggleModal: () => void;
   loginData: SignupData;
   handleLoginChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  remember: boolean;
-  setRemember: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const LoginModal: React.FC<LoginModalProps> = ({
@@ -28,13 +26,11 @@ const LoginModal: React.FC<LoginModalProps> = ({
   toggleModal,
   loginData,
   handleLoginChange,
-  remember,
-  setRemember
-  
 }) => {
   const router = useRouter();
   const [userRole, setUserRole] = useState<string | null>(null);
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const [remember, setRemember] = useState(false);
 
   if (!isOpen) return null;
 
@@ -58,10 +54,10 @@ const LoginModal: React.FC<LoginModalProps> = ({
         },
         {
           headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            "Content-Type": "application/json",
+            Accept: "application/json",
           },
-          withCredentials: true  // If you are using cookies for authentication
+          withCredentials: true, // If you are using cookies for authentication
         }
       );
 
@@ -72,20 +68,31 @@ const LoginModal: React.FC<LoginModalProps> = ({
         // localStorage.setItem('user', JSON.stringify(response.data));
         setUserCookie(response.data); // Set user data in cookie
 
-        toast.success('Login successful!');
+        toast.success("Login successful!");
         setTimeout(() => {
-          if (response.data.userType === 'ASSIGNMENT_CREATOR') {
-           router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-creator`);
-          } else if (response.data.userType === 'ASSIGNMENT_DOER') {
-            router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-doer`);
-          } else if (response.data.userType === 'ADMIN') {
-            router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/admindashboard`);
+          if (response.data.userType === "ASSIGNMENT_CREATOR") {
+            router.push(
+              `${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-creator`
+            );
+          } else if (response.data.userType === "ASSIGNMENT_DOER") {
+            router.push(
+              `${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-doer`
+            );
+          } else if (response.data.userType === "ADMIN") {
+            router.push(
+              `${process.env.NEXT_PUBLIC_FRONTEND_URL}/admindashboard`
+            );
           }
         }, 500);
       }
     } catch (error) {
-      console.error('Login failed, Please check your email and password. Also, check if email is verified.', error);
-      toast.error('Login failed. Please verify email and check your credentials.');
+      console.error(
+        "Login failed, Please check your email and password. Also, check if email is verified.",
+        error
+      );
+      toast.error(
+        "Login failed. Please verify email and check your credentials."
+      );
     }
   };
 
@@ -95,7 +102,6 @@ const LoginModal: React.FC<LoginModalProps> = ({
     event.preventDefault(); // Prevent the default form submission
     // handleLogin(userRole || ''); // Call handleLogin with the userRole
   };
-  
 
   return (
     <div
@@ -132,20 +138,17 @@ const LoginModal: React.FC<LoginModalProps> = ({
             </button>
           </div>
           <div className="flex flex-col justify-center items-center">
-          <Image
-                    src="/notextlogo.png"
-                    alt="logo"
-                    width={50}
-                    height={50}
-                  />
-            <div className="text-xl font-semibold primary-navy-blue">Welcome to</div>
+            <Image src="/notextlogo.png" alt="logo" width={50} height={50} />
+            <div className="text-xl font-semibold primary-navy-blue">
+              Welcome to
+            </div>
             <div className="text-xl font-semibold primary-navy-blue">
               MSP Academy
             </div>
-            <div className='underline'>Login to continue</div>
+            <div className="underline">Login to continue</div>
           </div>
           <div className="p-4 md:p-5">
-          <form className="space-y-4" onSubmit={handleSubmit}>
+            <form className="space-y-4" onSubmit={handleSubmit}>
               <div className="relative cb-shadow">
                 <input
                   type="email"
@@ -199,7 +202,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
               <button
                 type="submit"
                 className="w-full text-white primary-orangebg hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800"
-                onClick={() => handleLogin('ASSIGNMENT_CREATOR')}
+                onClick={() => handleLogin("ASSIGNMENT_CREATOR")}
               >
                 Login {/* as Assignment Creator */}
               </button>
@@ -242,16 +245,15 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
               <div className="flex justify-center items-center">
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  Don&apos;t have an account?{' '}
+                  Don&apos;t have an account?{" "}
                   <button
                     type="button"
                     className="primary-orange hover:underline"
                     onClick={() => {
-                      toggleModal(); 
-                      toggleSignupModal(); 
+                      toggleModal();
+                      toggleSignupModal();
                     }}
-                 
-                 >
+                  >
                     Sign up
                   </button>
                 </p>
@@ -262,7 +264,12 @@ const LoginModal: React.FC<LoginModalProps> = ({
       </div>
 
       {/* Include ResetPasswordModal component here */}
-      {isResetModalOpen && <ResetPasswordModal isOpen={isResetModalOpen} toggleModal={toggleResetModal} />}
+      {isResetModalOpen && (
+        <ResetPasswordModal
+          isOpen={isResetModalOpen}
+          toggleModal={toggleResetModal}
+        />
+      )}
     </div>
   );
 };
