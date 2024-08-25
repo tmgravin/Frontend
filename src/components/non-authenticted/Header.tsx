@@ -1,11 +1,15 @@
-import React, { ChangeEvent, FormEvent, useState } from 'react';
-import axios from 'axios';
-import SignupModal from './SignupModal';
-import LoginModal from './LoginModal';
-import Image from 'next/image';
-import { ToastContainer } from 'react-toastify';
-import { Menu, MenuItem, Button, IconButton } from '@mui/material';
-import { Menu as MenuIcon, Login as LoginIcon, Edit as EditIcon } from '@mui/icons-material';
+import React, { ChangeEvent, FormEvent, useState } from "react";
+import axios from "axios";
+import SignupModal from "./SignupModal";
+import LoginModal from "./LoginModal";
+import Image from "next/image";
+import { ToastContainer } from "react-toastify";
+import { Menu, MenuItem, Button, IconButton } from "@mui/material";
+import {
+  Menu as MenuIcon,
+  Login as LoginIcon,
+  Edit as EditIcon,
+} from "@mui/icons-material";
 
 interface SignupData {
   name: string;
@@ -14,7 +18,7 @@ interface SignupData {
   phone: string;
   password: string;
   confirmPassword: string;
-  remember?: boolean;
+  agree?: boolean;
 }
 
 const Header: React.FC = () => {
@@ -38,7 +42,7 @@ const Header: React.FC = () => {
     password: "",
     confirmPassword: "",
   });
-  const [remember, setRemember] = useState(false);
+  const [agree, setAgree] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isDropdownOpen, setDropdownOpen] = useState(false);
@@ -100,7 +104,7 @@ const Header: React.FC = () => {
       return;
     }
     try {
-      const response = await axios.post('/api/signup', signupData);
+      const response = await axios.post("/api/signup", signupData);
       if (response.status === 200) {
         alert("Signup successful!");
         toggleSignupModal();
@@ -117,23 +121,25 @@ const Header: React.FC = () => {
       <ToastContainer />
       <div className="flex flex-row sm:flex-row justify-between items-center px-2 py-1">
         <div>
+          <div className="flex items-center">
+            <Image
+              src="/notextlogo.png"
+              height={50}
+              width={50}
+              alt="msp logo"
+            />
+            <div className="mt-4  px-3">
+              <h1 className="text-xl sm:text-2xl font-bold potta-font primary-navy-blue">
+                {" "}
+                MSP ACADEMY
+              </h1>
+            </div>
+          </div>
+        </div>
 
-        
-        <div className="flex items-center">
-          <Image
-            src="/notextlogo.png"
-            height={50}
-            width={50}
-            alt="msp logo"
-          />
-    <div className='mt-4  px-3'><h1 className="text-xl sm:text-2xl font-bold potta-font primary-navy-blue"> MSP ACADEMY</h1></div>
-        </div>
-        </div>
-        
-      
         {/* Dropdown menu for small screens */}
         <div className="block sm:hidden">
-          <IconButton onClick={handleMenuOpen} className='primary-orange'>
+          <IconButton onClick={handleMenuOpen} className="primary-orange">
             <MenuIcon />
           </IconButton>
           <Menu
@@ -152,7 +158,9 @@ const Header: React.FC = () => {
                 toggleSignupModal();
               }}
             >
-              <div className='primary-orangebg text-white rounded-sm p-2 '>Sign up <EditIcon style={{ marginLeft: 8 }} /></div>
+              <div className="primary-orangebg text-white rounded-sm p-2 ">
+                Sign up <EditIcon style={{ marginLeft: 8 }} />
+              </div>
             </MenuItem>
             <MenuItem
               onClick={() => {
@@ -160,30 +168,35 @@ const Header: React.FC = () => {
                 toggleLoginModal();
               }}
             >
-            <div className='primary-orangebg text-white rounded-sm py-2 px-4 '>   Login <LoginIcon style={{ marginLeft: 8 }} /></div>
+              <div className="primary-orangebg text-white rounded-sm py-2 px-4 ">
+                {" "}
+                Login <LoginIcon style={{ marginLeft: 8 }} />
+              </div>
             </MenuItem>
           </Menu>
         </div>
         {/* Desktop menu items */}
         <div className="hidden sm:flex flex-row sm:flex-row space-x-4">
-
-        <button
-  className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
-  onClick={toggleSignupModal}
->
-  Signup
-</button>
-
-<button
-  className="bg-orange-500 rounded-sm px-5 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
-  onClick={toggleLoginModal}
->
-  Login
-</button>        </div>
+          <button
+            className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+            onClick={toggleSignupModal}
+          >
+            Signup
+          </button>
+          <button
+            className="bg-orange-500 rounded-sm px-5 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+            onClick={toggleLoginModal}
+          >
+            Login
+          </button>{" "}
+        </div>
       </div>
 
       {(isSignupModalOpen || isLoginModalOpen) && (
-        <div className="fixed inset-0 z-40 bg-black bg-opacity-50 backdrop-blur-sm" aria-hidden="true"></div>
+        <div
+          className="fixed inset-0 z-40 bg-black bg-opacity-50 backdrop-blur-sm"
+          aria-hidden="true"
+        ></div>
       )}
 
       <SignupModal
@@ -195,8 +208,8 @@ const Header: React.FC = () => {
         teacherSignupData={teacherSignupData}
         studentSignupData={studentSignupData}
         handleSignupChange={handleSignupChange}
-        remember={remember}
-        setRemember={setRemember}
+        agree={agree}
+        setAgree={setAgree}
       />
 
       <LoginModal
@@ -205,8 +218,6 @@ const Header: React.FC = () => {
         toggleModal={toggleLoginModal}
         loginData={loginData}
         handleLoginChange={handleLoginChange}
-        remember={remember}
-        setRemember={setRemember}
       />
     </header>
   );

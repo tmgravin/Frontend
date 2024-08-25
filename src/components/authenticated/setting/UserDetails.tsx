@@ -198,13 +198,13 @@ const UserDetails: React.FC = () => {
               />
               <button
                 onClick={handleSavePicture}
-                className="px-4 py-2 primary-orangebg text-white rounded ml-2"
+                className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
               >
-                Save Picture
+                Change Picture
               </button>
               <button
                 onClick={deletePicture}
-                className="px-4 py-2  primary-orangebg text-white rounded ml-2"
+                className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
               >
                 Delete Picture
               </button>
@@ -268,7 +268,7 @@ const UserDetails: React.FC = () => {
             <div className="flex justify-end mt-2">
               <button
                 onClick={handleSaveAll}
-                className="px-4 py-2 primary-orangebg text-white rounded mr-2"
+                className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
               >
                 Save All
               </button>
@@ -285,7 +285,7 @@ const UserDetails: React.FC = () => {
                 e.preventDefault();
                 setIsEditing(true);
               }}
-              className="px-4 py-2 primary-orangebg text-white rounded"
+              className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
             >
               <i className="fas fa-edit"></i> Edit Information
             </button>

@@ -1,5 +1,6 @@
 "use client";
 
+import Header from "./Header";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import BankDetails from "./BankDetails";
@@ -36,10 +37,11 @@ function SettingPage() {
   }
 
   return (
-    <div className="mx-auto p-4">
+    <div className="mx-auto">
+      <Header />
       <button
         onClick={handleBackClick}
-        className="px-4 py-2 mb-4 bg-blue-500 text-white rounded"
+        className="m-4 bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
       >
         Back
       </button>
