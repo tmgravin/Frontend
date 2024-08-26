@@ -83,10 +83,10 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className=" cb-shadow rounded-sm">
+    <header className="cb-shadow rounded-sm">
       <ToastContainer />
-      <div className="sm:flex flex-row justify-between ">
-        <div className="flex flex-row items-center">
+      <div className="flex justify-between items-center">
+        <div className="flex items-center">
           <Image
             src="/notextlogo.png" // Path relative to the public directory
             alt="logo"
@@ -99,8 +99,8 @@ const Header: React.FC = () => {
             </h1>
           </div>
         </div>
-        <div className="flex items-center ml-4">
-          <Box>
+        <div className="flex items-center">
+          <Box className="text-right mr-2">
             <Typography variant="h6">
               {formatName(user?.name || "Loading...")}
             </Typography>
@@ -108,7 +108,7 @@ const Header: React.FC = () => {
               {getUserTypeLabel(user?.userType || "USER")}
             </Typography>
           </Box>
-          <IconButton onClick={handleMenuClick} sx={{ ml: 2 }}>
+          <IconButton onClick={handleMenuClick}>
             {imageUrl ? (
               <Avatar src={imageUrl} alt={user?.name} />
             ) : (

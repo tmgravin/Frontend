@@ -37,6 +37,7 @@ const UserDetails: React.FC = () => {
 
   // State for editing mode
   const [isEditing, setIsEditing] = useState(false);
+  const [isEditingImage, setIsEditingImage] = useState(false);
 
   // State for field values
   const [fieldValues, setFieldValues] = useState<Profile>(profile);
@@ -185,10 +186,13 @@ const UserDetails: React.FC = () => {
           className="w-24 h-24 rounded-full"
         />
         <div className="ml-4">
-          <button onClick={() => setIsEditing(true)} className="primary-orange">
+          <button
+            onClick={() => setIsEditingImage(true)}
+            className="primary-orange"
+          >
             <i className="fas fa-camera"></i>
           </button>
-          {isEditing && (
+          {isEditingImage && (
             <div className="mt-2">
               <input
                 type="file"
@@ -209,7 +213,7 @@ const UserDetails: React.FC = () => {
                 Delete Picture
               </button>
               <button
-                onClick={() => setIsEditing(false)}
+                onClick={() => setIsEditingImage(false)}
                 className="px-4 py-2 bg-gray-300 text-black rounded ml-2 mt-2"
               >
                 Cancel

@@ -78,12 +78,8 @@ const LoginModal: React.FC<LoginModalProps> = ({
             router.push(
               `${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-doer`
             );
-          } else if (response.data.userType === "ADMIN") {
-            router.push(
-              `${process.env.NEXT_PUBLIC_FRONTEND_URL}/admindashboard`
-            );
           }
-        }, 500);
+        }, 100);
       }
     } catch (error: any) {
       console.error(

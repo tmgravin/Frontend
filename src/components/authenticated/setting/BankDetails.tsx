@@ -85,7 +85,7 @@ const BankDetails: React.FC = () => {
     };
 
     fetchBankDetails();
-  }, [user.id]);
+  });
 
   const handleEditChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -307,7 +307,7 @@ const BankDetails: React.FC = () => {
 
       {/* Add Bank Details Dialog */}
       {openPostDialog && (
-        <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
+        <div className="fixed inset-0 flex items-center justify-center  bg-gray-900 bg-opacity-50">
           <div className="bg-white p-6 rounded shadow-lg">
             <h3 className="text-xl mb-4">Add Bank Details</h3>
             <input
