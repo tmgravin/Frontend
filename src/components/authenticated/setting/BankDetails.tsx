@@ -59,7 +59,7 @@ const BankDetails: React.FC = () => {
         const data = response.data[0]; // Assuming the API returns an array
 
         if (response.status === 200 && data) {
-          setBankDetails(data);
+          setBankDetails(data); 
           setEditValues({
             firstName: data.firstName,
             lastName: data.lastName,

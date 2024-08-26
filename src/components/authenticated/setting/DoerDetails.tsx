@@ -215,13 +215,13 @@ const DoerDetails: React.FC = () => {
               />
               <button
                 onClick={handleSavePicture}
-                className="px-4 py-2 primary-orangebg text-white rounded ml-2"
+                className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
               >
                 Save Picture
               </button>
               <button
                 onClick={deletePicture}
-                className="px-4 py-2 primary-orangebg text-white rounded ml-2"
+                className="bg-orange-500 rounded-sm px-3 py-1 ml-2 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
               >
                 Delete Picture
               </button>
