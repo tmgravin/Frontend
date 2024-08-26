@@ -182,7 +182,7 @@ const DoerDetails: React.FC = () => {
     };
 
     fetchImage();
-  }, []);
+  });
 
   return (
     <div className="container mx-auto font-bold p-4 max-w-lg">
@@ -303,7 +303,7 @@ const DoerDetails: React.FC = () => {
             <button
               type="button"
               onClick={handleSaveAll}
-              className="px-4 py-2 primary-orangebg text-white rounded mr-2"
+              className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
             >
               Save All
             </button>

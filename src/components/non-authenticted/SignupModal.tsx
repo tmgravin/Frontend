@@ -171,13 +171,13 @@ const SignupModal: React.FC<SignupModalProps> = ({
               {isTeacherSignup === null ? (
                 <div>
                   <button
-                    className="w-full text-white primary-orangebg hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800"
+                    className="w-full bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
                     onClick={() => setIsTeacherSignup(true)}
                   >
                     Sign up as Doer
                   </button>
                   <button
-                    className="w-full mt-5 text-white primary-orangebg hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800"
+                    className="w-full mt-2 bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
                     onClick={() => setIsTeacherSignup(false)}
                   >
                     Sign up as Creator
@@ -335,7 +335,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
                   </div>
                   <button
                     type="submit"
-                    className="w-full text-white primary-orangebg hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800"
+                    className="w-full bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
                   >
                     {isLoading ? "Signing Up..." : "Sign Up"}
                   </button>
