@@ -38,6 +38,7 @@ const DoerDetails: React.FC = () => {
 
   // State for editing mode
   const [isEditing, setIsEditing] = useState(false);
+  const [isEditingImage, setIsEditingImage] = useState(false);
 
   // State for field values
   const [fieldValues, setFieldValues] = useState<Profile>(profile);
@@ -198,10 +199,13 @@ const DoerDetails: React.FC = () => {
           className="w-24 h-24 rounded-full"
         />
         <div className="ml-4">
-          <button onClick={() => setIsEditing(true)} className="primary-orange">
+          <button
+            onClick={() => setIsEditingImage(true)}
+            className="primary-orange"
+          >
             <i className="fas fa-camera"></i>
           </button>
-          {isEditing && (
+          {isEditingImage && (
             <div className="mt-2">
               <input
                 type="file"
@@ -222,7 +226,7 @@ const DoerDetails: React.FC = () => {
                 Delete Picture
               </button>
               <button
-                onClick={() => setIsEditing(false)}
+                onClick={() => setIsEditingImage(false)}
                 className="px-4 py-2 bg-gray-300 text-black rounded ml-2 mt-2"
               >
                 Cancel
@@ -315,7 +319,7 @@ const DoerDetails: React.FC = () => {
           <button
             type="button"
             onClick={() => setIsEditing(true)}
-            className="px-4 py-2 primary-orangebg text-white rounded"
+            className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
           >
             Edit
           </button>
@@ -325,7 +329,7 @@ const DoerDetails: React.FC = () => {
       <div className="mt-4">
         <button
           onClick={handleOpenPasswordDialog}
-          className="px-4 py-2 primary-orangebg text-white rounded"
+          className="bg-orange-500 rounded-sm px-3 py-1 mt-3 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
         >
           Change Password
         </button>

@@ -297,7 +297,7 @@ const UserDetails: React.FC = () => {
 
           <button
             onClick={handleOpenPasswordDialog}
-            className="px-4 py-2 primary-orangebg text-white rounded mt-2"
+            className="bg-orange-500 rounded-sm px-3 mt-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
           >
             <i className="fa-solid fa-key"></i> Change Password
           </button>

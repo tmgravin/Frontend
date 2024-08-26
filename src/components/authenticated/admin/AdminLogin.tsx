@@ -41,9 +41,10 @@ const AdminLogin: React.FC = () => {
         router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/admindashboard`);
       }
     } catch (error: any) {
-      toast.error("login failed");
-      console.error("Login error:", error); // Log detailed error
-      throw error;
+      const errorMessage =
+        error.response?.data ||
+        "Login failed. Please verify email and check your credentials.";
+      toast.error(errorMessage);
     }
   };
 
