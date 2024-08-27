@@ -5,52 +5,68 @@ import Image from "next/image";
 import { getUserFromCookies } from "@/components/auth/token"; // Adjust the path as necessary
 import { ToastContainer, toast } from "react-toastify";
 import ChangePasswordDialog from "./ChangePasswordDialog";
-// Default user object if getUserFromCookies returns null
-const user = getUserFromCookies() || {
-  id: "",
-  name: "",
-  email: "",
-  address: "",
-  phone: "",
-  profilePicture: "",
-  userType: "",
-};
 
-// Updated Profile interface
-interface Profile {
+// Default user object if getUserFromCookies returns null
+const cookieuser = getUserFromCookies();
+
+interface User {
   name: string;
-  email: string;
+  email?: string;
   address: string;
-  contact: string;
-  profilePicture?: string; // Made optional
+  phone: string;
+  userType: string;
+  cv: string | null;
+  profilePicture?: string;
 }
 
 const UserDetails: React.FC = () => {
-  // State for user profile data
-  const [profile, setProfile] = useState<Profile>({
-    name: user.name,
-    email: user.email,
-    address: user.address,
-    contact: user.phone,
-    profilePicture: user.profilePicture,
+  const [user, setUser] = useState<User>({
+    name: "",
+    phone: "",
+    address: "",
+    userType: "",
+    cv: "",
   });
 
-  // State for editing mode
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingImage, setIsEditingImage] = useState(false);
-
-  // State for field values
-  const [fieldValues, setFieldValues] = useState<Profile>(profile);
-
-  // State for change password dialog
-  const [openPasswordDialog, setOpenPasswordDialog] = useState(false);
-
-  // State for file upload
+  const [fieldValues, setFieldValues] = useState<User>(user);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [openPasswordDialog, setOpenPasswordDialog] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string>("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/?id=${cookieuser?.id}`,
+          { withCredentials: true }
+        );
+        const userData = response.data;
+        setUser({
+          name: userData.name || "",
+          phone: userData.phone || "",
+          address: userData.address || "",
+          userType: userData.userType || "",
+          cv: userData.cv || null,
+        });
+        setFieldValues({
+          name: userData.name || "",
+          phone: userData.phone || "",
+          address: userData.address || "",
+          userType: userData.userType || "",
+          cv: userData.cv || null,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleFieldChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: keyof Profile
+    field: keyof User
   ) => {
     const { value } = e.target;
     setFieldValues((prev) => ({ ...prev, [field]: value }));
@@ -58,24 +74,21 @@ const UserDetails: React.FC = () => {
 
   const handleSaveAll = async (e: React.MouseEvent) => {
     e.preventDefault();
-    // Construct the payload in the specified format
     const payload = {
       name: fieldValues.name,
-      phone: fieldValues.contact,
+      phone: fieldValues.phone,
       address: fieldValues.address,
     };
 
     try {
       const response = await axios.put(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/updateUser/${user.id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/updateUser/${cookieuser?.id}`,
         payload,
         { withCredentials: true }
       );
       if (response.status === 200) {
         toast.success("Profile updated successfully");
-        console.log("Profile updated successfully");
-
-        setProfile(fieldValues);
+        setUser(fieldValues);
         setIsEditing(false);
       } else {
         console.error("Failed to update profile");
@@ -95,7 +108,7 @@ const UserDetails: React.FC = () => {
       formData.append("imageUrl", selectedFile);
 
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${user.id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${cookieuser?.id}`,
         formData,
         {
           headers: {
@@ -104,10 +117,10 @@ const UserDetails: React.FC = () => {
           withCredentials: true,
         }
       );
-      if (response.status == 200) {
+      if (response.status === 200) {
         toast.success("Profile picture updated successfully");
         const pictureUrl = URL.createObjectURL(selectedFile);
-        setProfile((prev) => ({ ...prev, profilePicture: pictureUrl }));
+        setUser((prev) => ({ ...prev, profilePicture: pictureUrl }));
         setFieldValues((prev) => ({ ...prev, profilePicture: pictureUrl }));
         setSelectedFile(null);
       } else {
@@ -123,19 +136,20 @@ const UserDetails: React.FC = () => {
 
     try {
       const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${user.id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${cookieuser?.id}`,
         {
           withCredentials: true,
         }
       );
       if (response.status === 200) {
-        console.log("Profile picture deleted successfully");
         toast.success("Profile picture deleted successfully");
+        setUser((prev) => ({ ...prev, profilePicture: undefined }));
+        setFieldValues((prev) => ({ ...prev, profilePicture: undefined }));
       } else {
-        console.error("Failed to update profile picture");
+        console.error("Failed to delete profile picture");
       }
     } catch (error) {
-      console.error("Error updating profile picture:", error);
+      console.error("Error deleting profile picture:", error);
       toast.error("Error deleting profile picture");
     }
   };
@@ -148,18 +162,18 @@ const UserDetails: React.FC = () => {
   const handleClosePasswordDialog = () => {
     setOpenPasswordDialog(false);
   };
+
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       setSelectedFile(e.target.files[0]);
     }
   };
 
-  const [imageUrl, setImageUrl] = useState("");
   useEffect(() => {
     const fetchImage = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${user.id}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${cookieuser?.id}`
         );
         const imageUrl = await response.data;
         setImageUrl(imageUrl);
@@ -176,12 +190,11 @@ const UserDetails: React.FC = () => {
       <ToastContainer />
       <h2 className="text-2xl mb-4">Personal Information</h2>
 
-      {/* Profile Picture */}
       <div className="flex items-center justify-center mb-4">
         <Image
-          src={imageUrl || "/default-img.png"} // Default profile picture if none provided
+          src={imageUrl || "/default-img.png"}
           alt="Profile Picture"
-          width={96} // Set width and height for optimization
+          width={96}
           height={96}
           className="w-24 h-24 rounded-full"
         />
@@ -228,7 +241,7 @@ const UserDetails: React.FC = () => {
           <label className="block text-gray-700">Email</label>
           <input
             type="text"
-            value={fieldValues.email}
+            value={fieldValues.email || ""}
             className="w-full p-2 border border-gray-300 rounded"
             disabled
           />
@@ -260,54 +273,54 @@ const UserDetails: React.FC = () => {
           <label className="block text-gray-700">Contact</label>
           <input
             type="text"
-            value={fieldValues.contact}
-            onChange={(e) => handleFieldChange(e, "contact")}
+            value={fieldValues.phone}
+            onChange={(e) => handleFieldChange(e, "phone")}
             className="w-full p-2 border border-gray-300 rounded"
             disabled={!isEditing}
           />
         </div>
+        <div className="flex flex-row">
+          <div className="flex justify-center">
+            {!isEditing ? (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="px-4 py-2 bg-orange-500 text-white rounded mr-2"
+              >
+                Edit Profile
+              </button>
+            ) : (
+              <div>
+                <button
+                  onClick={handleSaveAll}
+                  className="px-4 py-2 bg-orange-500 text-white rounded mr-2"
+                >
+                  Save Changes
+                </button>
+                <button
+                  onClick={() => setIsEditing(false)}
+                  className="px-4 py-2 bg-gray-300 text-black rounded"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+          </div>
 
-        <div className="flex flex-col">
-          {isEditing ? (
-            <div className="flex justify-end mt-2">
-              <button
-                onClick={handleSaveAll}
-                className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
-              >
-                Save All
-              </button>
-              <button
-                onClick={() => setIsEditing(false)}
-                className="px-4 py-2 bg-gray-300 text-black rounded"
-              >
-                Cancel
-              </button>
-            </div>
-          ) : (
+          <div className="flex justify-center ml-4">
             <button
-              onClick={(e) => {
-                e.preventDefault();
-                setIsEditing(true);
-              }}
-              className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+              onClick={handleOpenPasswordDialog}
+              className="px-4 py-2 bg-orange-500 text-white rounded"
             >
-              <i className="fas fa-edit"></i> Edit Information
+              Change Password
             </button>
-          )}
-
-          <button
-            onClick={handleOpenPasswordDialog}
-            className="bg-orange-500 rounded-sm px-3 mt-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
-          >
-            <i className="fa-solid fa-key"></i> Change Password
-          </button>
+          </div>
         </div>
       </form>
 
       {/* Change Password Dialog */}
       {openPasswordDialog && (
         <ChangePasswordDialog
-          userId={user.id}
+          userId={cookieuser.id}
           onClose={handleClosePasswordDialog}
         />
       )}

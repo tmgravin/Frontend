@@ -67,19 +67,16 @@ const LoginModal: React.FC<LoginModalProps> = ({
         // Storing user data in localStorage
         // localStorage.setItem('user', JSON.stringify(response.data));
         setUserCookie(response.data); // Set user data in cookie
-
         toast.success("Login successful!");
-        setTimeout(() => {
-          if (response.data.userType === "ASSIGNMENT_CREATOR") {
-            router.push(
-              `${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-creator`
-            );
-          } else if (response.data.userType === "ASSIGNMENT_DOER") {
-            router.push(
-              `${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-doer`
-            );
-          }
-        }, 100);
+        if (response.data.userType === "ASSIGNMENT_CREATOR") {
+          router.push(
+            `${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-creator`
+          );
+        } else if (response.data.userType === "ASSIGNMENT_DOER") {
+          router.push(
+            `${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-doer`
+          );
+        }
       }
     } catch (error: any) {
       console.error(

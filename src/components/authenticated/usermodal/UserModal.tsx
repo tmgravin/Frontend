@@ -18,19 +18,46 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 // Fetch user from cookies
-const user = getUserFromCookies();
+const cookieuser = getUserFromCookies();
 
 const UserModal: React.FC = () => {
+  const [user, setUser] = useState({
+    name: "",
+    phone: "",
+    address: "",
+    userType: "",
+    cv: "",
+  });
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/?id=${cookieuser?.id}`,
+          { withCredentials: true }
+        );
+        const userData = response.data;
+        setUser({
+          name: userData.name || "",
+          phone: userData.phone || "",
+          address: userData.address || "",
+          userType: userData.userType || "",
+          cv: userData.cv || null,
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    fetchData();
+  }, []);
 
   const handleMenuClick = (event: MouseEvent<HTMLElement>) =>
     setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
 
-  // Function to remove a cookie
   const removeCookie = (name: string) => {
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
   };
@@ -39,7 +66,6 @@ const UserModal: React.FC = () => {
     try {
       removeCookie("user");
       toast.warning("logging out");
-      console.log("User cookie has been cleared");
     } catch (err) {
       toast.error("Logout Failed");
       console.log("Error occurred", err);
@@ -59,7 +85,7 @@ const UserModal: React.FC = () => {
     const fetchImage = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${user.id}`
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${cookieuser.id}`
         );
         const imageUrl = await response.data;
         setImageUrl(imageUrl);

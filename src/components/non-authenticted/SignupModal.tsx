@@ -106,9 +106,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
         toast.success("Signup successful! Please verify your email and log in");
         // Clear the form and close the modal after displaying the success message
         clearForm();
-        setTimeout(() => {
-          toggleModal();
-        }, 500);
+        toggleModal();
       }
     } catch (error) {
       console.error("Signup failed", error);
