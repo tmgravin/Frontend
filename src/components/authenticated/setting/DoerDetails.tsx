@@ -5,7 +5,7 @@ import Image from "next/image";
 import { getUserFromCookies } from "@/components/auth/token";
 import { ToastContainer, toast } from "react-toastify";
 import ChangePasswordDialog from "./ChangePasswordDialog";
-
+import useUserData from "@/components/providers/UserProvider";
 const cookieuser = getUserFromCookies();
 
 interface User {
@@ -16,53 +16,25 @@ interface User {
   userType: string;
   cv: string | null;
   profilePicture?: string;
+  cvUrl?: string;
 }
 
 const UserDetails: React.FC = () => {
-  const [user, setUser] = useState<User>({
-    name: "",
-    phone: "",
-    address: "",
-    userType: "",
-    cv: null,
-  });
+
+  useEffect(() => {
+    fetchImage();
+  }, []); // Only run fetchImage once on initial render
+
+  const { user, setUser, fieldValues, setFieldValues, fetchData } =
+    useUserData();
 
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingImage, setIsEditingImage] = useState(false);
-  const [fieldValues, setFieldValues] = useState<User>(user);
+  // const [fieldValues, setFieldValues] = useState<User>(user);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedCV, setSelectedCV] = useState<File | null>(null); // New state for CV file
   const [openPasswordDialog, setOpenPasswordDialog] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>("");
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/?id=${cookieuser?.id}`,
-          { withCredentials: true }
-        );
-        const userData = response.data;
-        setUser({
-          name: userData.name || "",
-          phone: userData.phone || "",
-          address: userData.address || "",
-          userType: userData.userType || "",
-          cv: userData.cv || null,
-        });
-        setFieldValues({
-          name: userData.name || "",
-          phone: userData.phone || "",
-          address: userData.address || "",
-          userType: userData.userType || "",
-          cv: userData.cv || null,
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchData();
-  }, []);
 
   const handleFieldChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -74,27 +46,40 @@ const UserDetails: React.FC = () => {
 
   const handleSaveAll = async (e: React.MouseEvent) => {
     e.preventDefault();
-    const payload = {
-      name: fieldValues.name,
-      phone: fieldValues.phone,
-      address: fieldValues.address,
-    };
+
+    // Create FormData instance
+    const formData = new FormData();
+    formData.append("name", fieldValues.name || "");
+    formData.append("phone", fieldValues.phone || "");
+    formData.append("address", fieldValues.address || "");
+    if (selectedCV) {
+      formData.append("cv", selectedCV);
+    }
 
     try {
+      // Send PUT request with FormData
       const response = await axios.put(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/updateUser/${cookieuser?.id}`,
-        payload,
-        { withCredentials: true }
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data", // Set header for FormData
+          },
+        }
       );
+
       if (response.status === 200) {
         toast.success("Profile updated successfully");
-        setUser(fieldValues);
+        //  setUser(fieldValues);
         setIsEditing(false);
+        setSelectedCV(null);
+        fetchData();
       } else {
         console.error("Failed to update profile");
       }
     } catch (error) {
-      toast.error("Error updating profiles");
+      toast.error("Error updating profile");
       console.error("Error updating profile:", error);
     }
   };
@@ -120,9 +105,10 @@ const UserDetails: React.FC = () => {
       if (response.status === 200) {
         toast.success("Profile picture updated successfully");
         const pictureUrl = URL.createObjectURL(selectedFile);
-        setUser((prev) => ({ ...prev, profilePicture: pictureUrl }));
+        // setUser((prev) => ({ ...prev, profilePicture: pictureUrl }));
         setFieldValues((prev) => ({ ...prev, profilePicture: pictureUrl }));
         setSelectedFile(null);
+        fetchImage();
       } else {
         toast.error("Failed to update profile picture");
       }
@@ -143,8 +129,9 @@ const UserDetails: React.FC = () => {
       );
       if (response.status === 200) {
         toast.success("Profile picture deleted successfully");
-        setUser((prev) => ({ ...prev, profilePicture: undefined }));
+        // setUser((prev) => ({ ...prev, profilePicture: undefined }));
         setFieldValues((prev) => ({ ...prev, profilePicture: undefined }));
+        fetchImage();
       } else {
         console.error("Failed to delete profile picture");
       }
@@ -165,7 +152,7 @@ const UserDetails: React.FC = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setSelectedFile(e.target.files[0]);
+      setSelectedCV(e.target.files[0]); // Set the selected CV file
     }
   };
 
@@ -174,53 +161,22 @@ const UserDetails: React.FC = () => {
       setSelectedCV(e.target.files[0]); // Set the selected CV file
     }
   };
-
-  const handleSaveCV = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (!selectedCV) return;
-
+  const fetchImage = async () => {
     try {
-      const formData = new FormData();
-      formData.append("cv", selectedCV);
-
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/uploadCV/${cookieuser?.id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${cookieuser?.id}`
       );
-      if (response.status === 200) {
-        toast.success("CV uploaded successfully");
-        setUser((prev) => ({ ...prev, cv: selectedCV.name }));
-        setFieldValues((prev) => ({ ...prev, cv: selectedCV.name }));
-        setSelectedCV(null);
-      } else {
-        toast.error("Failed to upload CV");
-      }
+      const imageUrl = await response.data;
+      setImageUrl(imageUrl);
     } catch (error) {
-      toast.error("Error uploading CV:");
+      console.error("Error fetching the image URL:", error);
     }
   };
 
-  useEffect(() => {
-    const fetchImage = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${cookieuser?.id}`
-        );
-        const imageUrl = await response.data;
-        setImageUrl(imageUrl);
-      } catch (error) {
-        console.error("Error fetching the image URL:", error);
-      }
-    };
-
-    fetchImage();
-  }, []);
+  const getFileNameFromUrl = (url: string) => {
+    const parts = url.split("/");
+    return parts[parts.length - 1];
+  };
 
   return (
     <div className="container mx-auto font-bold p-4 max-w-lg">
@@ -316,34 +272,50 @@ const UserDetails: React.FC = () => {
             disabled={!isEditing}
           />
         </div>
+
         {/* Other fields... */}
 
         <div className="mb-4">
-          <label className="block text-gray-700">Upload CV</label>
-          <input
-            type="file"
-            accept=".pdf,.doc,.docx"
-            onChange={handleCVChange}
-            className="mb-2"
-          />
-          {user.cv && (
-            <a
-              href={`${process.env.NEXT_PUBLIC_BASE_URL}/api/users/downloadCV/${cookieuser?.id}`}
-              className="text-blue-500 underline"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Download Existing CV
-            </a>
+          <label className="block text-gray-700">
+            <div className="flex flex-row">
+              <label className="block text-gray-700">Your CV:</label>
+              <div className="ml-2 text-green-500">
+                {fieldValues.cvUrl ? (
+                  <a href={fieldValues.cvUrl} download>
+                    {getFileNameFromUrl(fieldValues.cvUrl)}
+                  </a>
+                ) : (
+                  <span>No CV available</span>
+                )}
+              </div>
+            </div>
+          </label>
+          {fieldValues.cvUrl ? (
+            <div>
+              {isEditing && (
+                <div className="mt-2">
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+              )}
+            </div>
+          ) : (
+            isEditing && (
+              <div>
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  className="w-full p-2 border border-gray-300 rounded"
+                  disabled={!isEditing}
+                />
+                <p className="mt-2 text-gray-600">Choose file to upload</p>
+              </div>
+            )
           )}
-          <button
-            onClick={handleSaveCV}
-            className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105 mt-2"
-          >
-            Upload CV
-          </button>
         </div>
-
         {/* Save and cancel buttons */}
         <div className="flex flex-row">
           <div className="flex justify-center">

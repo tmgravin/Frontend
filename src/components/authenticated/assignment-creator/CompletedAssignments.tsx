@@ -77,7 +77,12 @@ const CompletedAssignments: React.FC = () => {
           withCredentials: true, // Include credentials with the request
         }
       );
-      setData(response.data);
+      // Ensure the response data is an array
+      if (Array.isArray(response.data)) {
+        setData(response.data);
+      } else {
+        console.error("Unexpected data format", response.data);
+      }
     } catch (error) {
       console.error("Error fetching data", error);
     }

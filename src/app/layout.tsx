@@ -4,7 +4,7 @@ import "./globals.css";
 import Script from "next/script";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer
 import "react-toastify/dist/ReactToastify.css"; // Import the Toastify CSS
-import { ProjectProvider } from "@/components/providers/FetchProvider";
+import { ProjectProvider } from "@/components/providers/ProjectProvider";
 
 const inter = Poppins({ weight: "500", subsets: ["latin"] });
 

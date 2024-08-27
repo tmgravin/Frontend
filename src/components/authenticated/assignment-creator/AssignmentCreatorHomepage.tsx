@@ -8,7 +8,7 @@ import WorkYourWay from "@/components/non-authenticted/WorkYourWay";
 import Footer from "@/components/non-authenticted/footer/Footer";
 import axios from "axios";
 import { useState, useEffect } from "react";
-import { ProjectProvider } from "@/components/providers/FetchProvider";
+import { ProjectProvider } from "@/components/providers/ProjectProvider";
 
 function Homepage() {
   const [backgroundImage, setBackgroundImage] = useState<string | null | []>();

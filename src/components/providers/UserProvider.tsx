@@ -1,0 +1,55 @@
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { getUserFromCookies } from "@/components/auth/token";
+
+interface UserData {
+  name: string;
+  email: string;
+  phone: string;
+  address: string;
+  userType: string;
+  cv: string | null | undefined;
+  cvUrl: string | undefined | null;
+}
+
+const useUserData = () => {
+  const [user, setUser] = useState<UserData | null>(null);
+  const [fieldValues, setFieldValues] = useState<Partial<UserData>>({});
+  const fetchData = async () => {
+    try {
+      const cookieuser = getUserFromCookies();
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/?id=${cookieuser?.id}`,
+        { withCredentials: true }
+      );
+      const userData = response.data;
+      setUser({
+        name: userData.name || "",
+        email: userData.email || "",
+        phone: userData.phone || "",
+        address: userData.address || "",
+        userType: userData.userType || "",
+        cv: userData.cv || null,
+        cvUrl: userData.cvUrl || null,
+      });
+      setFieldValues({
+        name: userData.name || "",
+        email: userData.email || "",
+        phone: userData.phone || "",
+        address: userData.address || "",
+        userType: userData.userType || "",
+        cv: userData.cv || null,
+        cvUrl: userData.cvUrl || null,
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  useEffect(() => {
+    fetchData();
+  }, []); // Only run fetchData once on initial render
+
+  return { user, setUser, fieldValues, setFieldValues, fetchData };
+};
+
+export default useUserData;

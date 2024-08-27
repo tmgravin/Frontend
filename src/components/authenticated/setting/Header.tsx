@@ -17,15 +17,19 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getUserFromCookies } from "@/components/auth/token";
+import useUserData from "@/components/providers/UserProvider";
 
 const Header: React.FC = () => {
+  const { user, fieldValues, fetchData } = useUserData();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [imageUrl, setImageUrl] = useState<string>("");
   const router = useRouter();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const user = getUserFromCookies();
+  const cookieuser = getUserFromCookies();
+
+  
 
   const handleMenuClick = (event: MouseEvent<HTMLElement>) =>
     setAnchorEl(event.currentTarget);
@@ -50,7 +54,7 @@ const Header: React.FC = () => {
 
   const fetchImage = async () => {
     try {
-      const userId = user.id;
+      const userId = cookieuser.id;
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${userId}`
       );

@@ -5,6 +5,7 @@ import Image from "next/image";
 import { getUserFromCookies } from "@/components/auth/token"; // Adjust the path as necessary
 import { ToastContainer, toast } from "react-toastify";
 import ChangePasswordDialog from "./ChangePasswordDialog";
+import useUserData from "@/components/providers/UserProvider";
 
 // Default user object if getUserFromCookies returns null
 const cookieuser = getUserFromCookies();
@@ -20,49 +21,19 @@ interface User {
 }
 
 const UserDetails: React.FC = () => {
-  const [user, setUser] = useState<User>({
-    name: "",
-    phone: "",
-    address: "",
-    userType: "",
-    cv: "",
-  });
+  useEffect(() => {
+    fetchImage();
+  }, []); // Only run fetchImage once on initial render
+
+  const { user, setUser, fieldValues, setFieldValues, fetchData } =
+    useUserData();
 
   const [isEditing, setIsEditing] = useState(false);
   const [isEditingImage, setIsEditingImage] = useState(false);
-  const [fieldValues, setFieldValues] = useState<User>(user);
+  // const [fieldValues, setFieldValues] = useState<User>(user);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [openPasswordDialog, setOpenPasswordDialog] = useState(false);
   const [imageUrl, setImageUrl] = useState<string>("");
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/?id=${cookieuser?.id}`,
-          { withCredentials: true }
-        );
-        const userData = response.data;
-        setUser({
-          name: userData.name || "",
-          phone: userData.phone || "",
-          address: userData.address || "",
-          userType: userData.userType || "",
-          cv: userData.cv || null,
-        });
-        setFieldValues({
-          name: userData.name || "",
-          phone: userData.phone || "",
-          address: userData.address || "",
-          userType: userData.userType || "",
-          cv: userData.cv || null,
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    };
-    fetchData();
-  }, []);
 
   const handleFieldChange = (
     e: React.ChangeEvent<HTMLInputElement>,
@@ -74,27 +45,34 @@ const UserDetails: React.FC = () => {
 
   const handleSaveAll = async (e: React.MouseEvent) => {
     e.preventDefault();
-    const payload = {
-      name: fieldValues.name,
-      phone: fieldValues.phone,
-      address: fieldValues.address,
-    };
+    // Create FormData instance
+    const formData = new FormData();
+    formData.append("name", fieldValues.name || "");
+    formData.append("phone", fieldValues.phone || "");
+    formData.append("address", fieldValues.address || "");
 
     try {
+      // Send PUT request with FormData
       const response = await axios.put(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/updateUser/${cookieuser?.id}`,
-        payload,
-        { withCredentials: true }
+        formData,
+        {
+          withCredentials: true,
+          headers: {
+            "Content-Type": "multipart/form-data", // Set header for FormData
+          },
+        }
       );
+
       if (response.status === 200) {
         toast.success("Profile updated successfully");
-        setUser(fieldValues);
         setIsEditing(false);
+        fetchData();
       } else {
         console.error("Failed to update profile");
       }
     } catch (error) {
-      toast.error("Error updating profiles");
+      toast.error("Error updating profile");
       console.error("Error updating profile:", error);
     }
   };
@@ -120,9 +98,9 @@ const UserDetails: React.FC = () => {
       if (response.status === 200) {
         toast.success("Profile picture updated successfully");
         const pictureUrl = URL.createObjectURL(selectedFile);
-        setUser((prev) => ({ ...prev, profilePicture: pictureUrl }));
         setFieldValues((prev) => ({ ...prev, profilePicture: pictureUrl }));
         setSelectedFile(null);
+        fetchImage();
       } else {
         toast.error("Failed to update profile picture");
       }
@@ -143,7 +121,6 @@ const UserDetails: React.FC = () => {
       );
       if (response.status === 200) {
         toast.success("Profile picture deleted successfully");
-        setUser((prev) => ({ ...prev, profilePicture: undefined }));
         setFieldValues((prev) => ({ ...prev, profilePicture: undefined }));
       } else {
         console.error("Failed to delete profile picture");
@@ -169,21 +146,17 @@ const UserDetails: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    const fetchImage = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${cookieuser?.id}`
-        );
-        const imageUrl = await response.data;
-        setImageUrl(imageUrl);
-      } catch (error) {
-        console.error("Error fetching the image URL:", error);
-      }
-    };
-
-    fetchImage();
-  }, []);
+  const fetchImage = async () => {
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${cookieuser?.id}`
+      );
+      const imageUrl = await response.data;
+      setImageUrl(imageUrl);
+    } catch (error) {
+      console.error("Error fetching the image URL:", error);
+    }
+  };
 
   return (
     <div className="container mx-auto font-bold p-4 max-w-lg">

@@ -8,7 +8,7 @@ import ResultModal from "./ResultModal";
 import Image from "next/image";
 import { getUserFromCookies } from "../../auth/token";
 import { Category } from "@mui/icons-material";
-import { useProjects } from "@/components/providers/FetchProvider";
+import { useProjects } from "@/components/providers/ProjectProvider";
 
 const user = getUserFromCookies();
 
