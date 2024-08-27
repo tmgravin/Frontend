@@ -94,7 +94,8 @@ function ApplicationProcess2() {
 
       <div className="flex justify-center items-center pt-10">
         <button
-          /* onClick={toggleSignupModal} */ className="primary-orangebg  text-white font-bold py-2 px-4 rounded"
+          /* onClick={toggleSignupModal} */
+          className="primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
         >
           START EARNING
         </button>

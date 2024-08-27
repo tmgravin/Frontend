@@ -19,6 +19,7 @@ interface PostAssignmentModalProps {
 const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
   onClose,
 }) => {
+  const [isPosting, setIsPosting] = useState<boolean>(false);
   const { fetchData }: any = useProjects();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -45,8 +46,6 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
     setTitle(capitalizeFirstLetter(value));
   };
 
-  console.log(catData);
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       setAttachment(e.target.files[0]);
@@ -59,6 +58,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    setIsPosting(true); // Set loading state to true
     // Retrieving user data from cookies
     const formData = new FormData();
     formData.append("users", user.id); //notokens yet sending form id from cookie which is stored when logged in
@@ -77,6 +77,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
     }
 
     try {
+      setIsPosting(true); // Set loading state to true
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/`,
         formData,
@@ -96,6 +97,8 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
       // setResultMessage('Error posting assignment. Please try again.');
       // setResultModalVisible(true);
       console.error("Error posting assignment:", error);
+    } finally {
+      setIsPosting(false); // Reset loading state
     }
 
     // Clear the form
@@ -471,9 +474,10 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
           <div className="flex justify-end">
             <button
               type="submit"
-              className=" text-white px-4 py-2 rounded hover:bg-orange-600 primary-orangebg"
+              className="text-white px-4 py-2 rounded hover:bg-orange-600 primary-orangebg"
+              disabled={isPosting}
             >
-              Post Assignment
+              {isPosting ? "Posting..." : "Post Assignment"}
             </button>
           </div>
         </form>

@@ -128,7 +128,7 @@ const Homepage: React.FC = () => {
         </div>
         <button
           onClick={toggleSignupModal}
-          className="primary-orangebg text-white rounded-lg w-32 p-1 pb-"
+          className="primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
         >
           Get Started
         </button>
@@ -138,7 +138,7 @@ const Homepage: React.FC = () => {
       <Whyus onGetStartedClick={toggleSignupModal} />{" "}
       {/* Pass the handler to Whyus */}
       <Applicationprocess />
-      <Applicationprocess2 />
+      <Applicationprocess2 startRegistration={toggleSignupModal} />
       <WorkYourWay />
       <FQA />
       <Footer />
