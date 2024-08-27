@@ -82,9 +82,7 @@ const PaymentInfoModal: React.FC<PaymentInfoModalProps> = ({
         })
         .catch((error) => {
           console.error("Error fetching payment info:", error);
-          setError(
-            "An error occurred while fetching payment information."
-          );
+          setError("An error occurred while fetching payment information.");
         })
         .finally(() => {
           setLoading(false);
@@ -151,7 +149,8 @@ const PaymentInfoModal: React.FC<PaymentInfoModalProps> = ({
                 {new Date(paymentInfo.createdAt).toLocaleDateString()}
               </Typography>
               <Typography variant="body1">
-                <strong>Project Name:</strong> {paymentInfo.projects.projectName}
+                <strong>Project Name:</strong>{" "}
+                {paymentInfo.projects.projectName}
               </Typography>
               <Typography variant="body1">
                 <strong>Project Amount:</strong> $
@@ -159,7 +158,9 @@ const PaymentInfoModal: React.FC<PaymentInfoModalProps> = ({
               </Typography>
               <Typography variant="body1">
                 <strong>Project Deadline:</strong>{" "}
-                {new Date(paymentInfo.projects.projectDeadline).toLocaleDateString()}
+                {new Date(
+                  paymentInfo.projects.projectDeadline
+                ).toLocaleDateString()}
               </Typography>
               <Typography variant="body1">
                 <strong>Payment Status:</strong>{" "}

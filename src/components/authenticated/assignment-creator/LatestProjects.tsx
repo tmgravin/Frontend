@@ -6,6 +6,7 @@ import EditAssignmentModal from "./EditAssignmentModal";
 import PaymentUploadModal from "@/components/authenticated/assignment-doer/Payment/PaymentUploadModal";
 import DeleteModal from "./DeleteModal"; // Import DeleteModal component
 import { getUserFromCookies } from "../../auth/token";
+import { useProjects } from "@/components/providers/FetchProvider";
 
 const user = getUserFromCookies();
 
@@ -45,28 +46,13 @@ const LatestProjects: React.FC = () => {
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [paymentModalVisible, setPaymentModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false); // State for DeleteModal
-  const [data, setData] = useState<DataItem[]>([]);
   const [visibleCount, setVisibleCount] = useState(8);
-  const [loading, setLoading] = useState(false);
   const [selectedProject, setSelectedProject] = useState<DataItem | null>(null);
 
+  const { data, loading, fetchData }: any = useProjects();
   useEffect(() => {
     fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get<DataItem[]>(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/byUser?userId=${user.id}`,
-        { withCredentials: true }
-      );
-      setData(response.data);
-    } catch (error) {
-      console.error("Error fetching data", error);
-    }
-    setLoading(false);
-  };
+  });
 
   const loadMore = () => {
     setVisibleCount((prevCount) => prevCount + 4);
@@ -121,12 +107,13 @@ const LatestProjects: React.FC = () => {
   };
 
   const handleDelete = () => {
-    fetchData();
     closeDeleteModal();
+    fetchData();
   };
 
   const handleSave = () => {
     closeEditModal();
+    fetchData();
   };
 
   const displayedData = data.slice(0, visibleCount);
@@ -137,7 +124,7 @@ const LatestProjects: React.FC = () => {
         Assignments You Have Posted
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {displayedData.map((item, index) => (
+        {displayedData.map((item: any, index: any) => (
           <div key={index} className="p-4 border rounded shadow">
             <h2 className="text-xl font-bold underline">
               {item.projects.projectName}

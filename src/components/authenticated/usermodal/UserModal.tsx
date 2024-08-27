@@ -53,7 +53,7 @@ const UserModal: React.FC = () => {
     };
     fetchData();
   }, []);
-
+  console.log(user);
   const handleMenuClick = (event: MouseEvent<HTMLElement>) =>
     setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);

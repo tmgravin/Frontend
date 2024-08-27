@@ -8,6 +8,7 @@ import ResultModal from "./ResultModal";
 import Image from "next/image";
 import { getUserFromCookies } from "../../auth/token";
 import { Category } from "@mui/icons-material";
+import { useProjects } from "@/components/providers/FetchProvider";
 
 const user = getUserFromCookies();
 
@@ -18,6 +19,7 @@ interface PostAssignmentModalProps {
 const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
   onClose,
 }) => {
+  const { fetchData }: any = useProjects();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState("");
@@ -88,6 +90,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
       console.log(response);
       setResultMessage("Assignment posted successfully!");
       setResultModalVisible(true);
+      fetchData();
       console.log("Assignment posted successfully:", response.data);
     } catch (error) {
       // setResultMessage('Error posting assignment. Please try again.');
