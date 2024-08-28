@@ -13,7 +13,16 @@ interface UserData {
 }
 
 const useUserData = () => {
-  const [user, setUser] = useState<UserData | null>(null);
+  const [user, setUser] = useState<UserData>({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    userType: "",
+    cv: "null",
+    cvUrl: "",
+  });
+
   const [fieldValues, setFieldValues] = useState<Partial<UserData>>({});
   const fetchData = async () => {
     try {
@@ -47,7 +56,7 @@ const useUserData = () => {
   };
   useEffect(() => {
     fetchData();
-  }, []); // Only run fetchData once on initial render
+  }, []);
 
   return { user, setUser, fieldValues, setFieldValues, fetchData };
 };

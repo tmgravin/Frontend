@@ -1,16 +1,24 @@
 "use client";
-import React, { useState } from 'react';
-import axios from 'axios';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState } from "react";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import Image from "next/image";
 
 function FeaturedImages() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
-  const [selectedCategory, setSelectedCategory] = useState<string>('');
+  const [preview, setPreview] = useState<string | null>(null); // State to store image preview URL
+  const [selectedCategory, setSelectedCategory] = useState<string>("");
 
+  // Handle image selection and create preview URL
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setSelectedImage(e.target.files[0]);
+    if (e.target.files && e.target.files[0]) {
+      const file = e.target.files[0];
+      setSelectedImage(file);
+      setPreview(URL.createObjectURL(file)); // Create URL for image preview
+    } else {
+      setSelectedImage(null);
+      setPreview(null);
     }
   };
 
@@ -20,12 +28,12 @@ function FeaturedImages() {
 
   const handleImageUpload = async () => {
     if (!selectedImage || !selectedCategory) {
-      toast.error('No image or category selected');
+      toast.error("No image or category selected");
       return;
     }
 
     const formData = new FormData();
-    formData.append('image', selectedImage);
+    formData.append("image", selectedImage);
 
     try {
       const response = await axios.post(
@@ -33,29 +41,46 @@ function FeaturedImages() {
         formData,
         {
           headers: {
-            'Content-Type': 'multipart/form-data',
-            'Accept': 'multipart/form-data',
+            "Content-Type": "multipart/form-data",
+            Accept: "multipart/form-data",
           },
           withCredentials: true,
         }
       );
-      toast.success('Upload successful');
+      toast.success("Upload successful");
       console.log(response.data);
+      // Reset state after successful upload
+      setSelectedImage(null);
+      setPreview(null);
+      setSelectedCategory("");
     } catch (error) {
-      console.error('Error uploading image:', error);
-      toast.error('Upload failed');
+      console.error("Error uploading image:", error);
+      toast.error("Upload failed");
     }
   };
 
   return (
     <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md flex flex-col items-center space-y-4">
-      <h2 className="text-2xl font-semibold text-gray-800 mb-4">Update Featured Images</h2>
+      <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+        Update Featured Images
+      </h2>
       <input
         type="file"
         accept="image/*"
         onChange={handleImageChange}
         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
       />
+      {preview && ( // Show image preview if available
+        <div className="mt-4">
+          <Image
+            src={preview}
+            width={160}
+            height={90}
+            alt="Selected Preview"
+            className="w-48 h-48 object-cover rounded-md"
+          />
+        </div>
+      )}
       <select
         value={selectedCategory}
         onChange={handleCategoryChange}

@@ -18,18 +18,21 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getUserFromCookies } from "@/components/auth/token";
 import useUserData from "@/components/providers/UserProvider";
-
+import { useImageContext } from "@/components/providers/ImageProvider"; // Import the custom hook
 const Header: React.FC = () => {
+  const { imageUrl, fetchImage } = useImageContext();
+
   const { user, fieldValues, fetchData } = useUserData();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [imageUrl, setImageUrl] = useState<string>("");
   const router = useRouter();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const cookieuser = getUserFromCookies();
 
-  
+  useEffect(() => {
+    fetchImage();
+  });
 
   const handleMenuClick = (event: MouseEvent<HTMLElement>) =>
     setAnchorEl(event.currentTarget);
@@ -52,22 +55,6 @@ const Header: React.FC = () => {
     }
   };
 
-  const fetchImage = async () => {
-    try {
-      const userId = cookieuser.id;
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${userId}`
-      );
-      setImageUrl(response.data);
-    } catch (error) {
-      console.error("Error fetching the image URL:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchImage();
-  });
-
   const getUserTypeLabel = (userType: string) => {
     switch (userType) {
       case "ASSIGNMENT_DOER":
@@ -77,7 +64,7 @@ const Header: React.FC = () => {
       case "ADMIN":
         return "Admin";
       default:
-        return "User";
+        return "Loading...";
     }
   };
 

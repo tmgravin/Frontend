@@ -5,6 +5,7 @@ import React, {
   useCallback,
   useContext,
   ReactNode,
+  useEffect,
 } from "react";
 import axios from "axios";
 import { getUserFromCookies } from "../auth/token";
@@ -47,6 +48,10 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({
       console.error("Error fetching data", error);
     }
     setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    fetchData();
   }, []);
 
   return (

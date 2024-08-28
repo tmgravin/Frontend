@@ -52,7 +52,7 @@ const LatestProjects: React.FC = () => {
   const { data, loading, fetchData }: any = useProjects();
   useEffect(() => {
     fetchData();
-  });
+  }, []);
 
   const loadMore = () => {
     setVisibleCount((prevCount) => prevCount + 4);

@@ -5,6 +5,7 @@ import Script from "next/script";
 import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer
 import "react-toastify/dist/ReactToastify.css"; // Import the Toastify CSS
 import { ProjectProvider } from "@/components/providers/ProjectProvider";
+import { ImageProvider } from "@/components/providers/ImageProvider";
 
 const inter = Poppins({ weight: "500", subsets: ["latin"] });
 
@@ -22,12 +23,14 @@ export default function RootLayout({
     <html lang="en">
       <Script src="https://kit.fontawesome.com/deb7916e2f.js"></Script>
       <ProjectProvider>
-        <body className={inter.className}>
-          {children}
-          <div>
-            <ToastContainer />
-          </div>
-        </body>
+        <ImageProvider>
+          <body className={inter.className}>
+            {children}
+            <div>
+              <ToastContainer />
+            </div>
+          </body>
+        </ImageProvider>
       </ProjectProvider>
     </html>
   );

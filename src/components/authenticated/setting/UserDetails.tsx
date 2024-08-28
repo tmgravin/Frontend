@@ -6,6 +6,7 @@ import { getUserFromCookies } from "@/components/auth/token"; // Adjust the path
 import { ToastContainer, toast } from "react-toastify";
 import ChangePasswordDialog from "./ChangePasswordDialog";
 import useUserData from "@/components/providers/UserProvider";
+import ImageDetails from "./ImageDetails";
 
 // Default user object if getUserFromCookies returns null
 const cookieuser = getUserFromCookies();
@@ -21,20 +22,10 @@ interface User {
 }
 
 const UserDetails: React.FC = () => {
-  useEffect(() => {
-    fetchImage();
-  }, []); // Only run fetchImage once on initial render
-
   const { user, setUser, fieldValues, setFieldValues, fetchData } =
     useUserData();
-
   const [isEditing, setIsEditing] = useState(false);
-  const [isEditingImage, setIsEditingImage] = useState(false);
-  // const [fieldValues, setFieldValues] = useState<User>(user);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [openPasswordDialog, setOpenPasswordDialog] = useState(false);
-  const [imageUrl, setImageUrl] = useState<string>("");
-
   const handleFieldChange = (
     e: React.ChangeEvent<HTMLInputElement>,
     field: keyof User
@@ -77,60 +68,6 @@ const UserDetails: React.FC = () => {
     }
   };
 
-  const handleSavePicture = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (!selectedFile) return;
-
-    try {
-      const formData = new FormData();
-      formData.append("imageUrl", selectedFile);
-
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${cookieuser?.id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }
-      );
-      if (response.status === 200) {
-        toast.success("Profile picture updated successfully");
-        const pictureUrl = URL.createObjectURL(selectedFile);
-        setFieldValues((prev) => ({ ...prev, profilePicture: pictureUrl }));
-        setSelectedFile(null);
-        fetchImage();
-      } else {
-        toast.error("Failed to update profile picture");
-      }
-    } catch (error) {
-      toast.error("Error updating profile picture:");
-    }
-  };
-
-  const deletePicture = async (e: React.MouseEvent) => {
-    e.preventDefault();
-
-    try {
-      const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${cookieuser?.id}`,
-        {
-          withCredentials: true,
-        }
-      );
-      if (response.status === 200) {
-        toast.success("Profile picture deleted successfully");
-        setFieldValues((prev) => ({ ...prev, profilePicture: undefined }));
-      } else {
-        console.error("Failed to delete profile picture");
-      }
-    } catch (error) {
-      console.error("Error deleting profile picture:", error);
-      toast.error("Error deleting profile picture");
-    }
-  };
-
   const handleOpenPasswordDialog = (e: React.MouseEvent) => {
     e.preventDefault();
     setOpenPasswordDialog(true);
@@ -140,74 +77,12 @@ const UserDetails: React.FC = () => {
     setOpenPasswordDialog(false);
   };
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      setSelectedFile(e.target.files[0]);
-    }
-  };
-
-  const fetchImage = async () => {
-    try {
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${cookieuser?.id}`
-      );
-      const imageUrl = await response.data;
-      setImageUrl(imageUrl);
-    } catch (error) {
-      console.error("Error fetching the image URL:", error);
-    }
-  };
-
   return (
     <div className="container mx-auto font-bold p-4 max-w-lg">
       <ToastContainer />
       <h2 className="text-2xl mb-4">Personal Information</h2>
 
-      <div className="flex items-center justify-center mb-4">
-        <Image
-          src={imageUrl || "/default-img.png"}
-          alt="Profile Picture"
-          width={96}
-          height={96}
-          className="w-24 h-24 rounded-full"
-        />
-        <div className="ml-4">
-          <button
-            onClick={() => setIsEditingImage(true)}
-            className="primary-orange"
-          >
-            <i className="fas fa-camera"></i>
-          </button>
-          {isEditingImage && (
-            <div className="mt-2">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="mb-2"
-              />
-              <button
-                onClick={handleSavePicture}
-                className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
-              >
-                Change Picture
-              </button>
-              <button
-                onClick={deletePicture}
-                className="ml-2 bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
-              >
-                Delete Picture
-              </button>
-              <button
-                onClick={() => setIsEditingImage(false)}
-                className="px-4 py-2 bg-gray-300 text-black rounded ml-2 mt-2"
-              >
-                Cancel
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
+      <ImageDetails />
 
       <form noValidate autoComplete="off">
         <div className="mb-4">
@@ -257,7 +132,7 @@ const UserDetails: React.FC = () => {
             {!isEditing ? (
               <button
                 onClick={() => setIsEditing(true)}
-                className="px-4 py-2 bg-orange-500 text-white rounded mr-2"
+                className="primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
               >
                 Edit Profile
               </button>
@@ -265,7 +140,7 @@ const UserDetails: React.FC = () => {
               <div>
                 <button
                   onClick={handleSaveAll}
-                  className="px-4 py-2 bg-orange-500 text-white rounded mr-2"
+                  className="primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
                 >
                   Save Changes
                 </button>
@@ -282,7 +157,7 @@ const UserDetails: React.FC = () => {
           <div className="flex justify-center ml-4">
             <button
               onClick={handleOpenPasswordDialog}
-              className="px-4 py-2 bg-orange-500 text-white rounded"
+              className="primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
             >
               Change Password
             </button>
