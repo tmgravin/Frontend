@@ -57,14 +57,6 @@ const Whyus: React.FC<WhyusProps> = ({ onGetStartedClick }) => {
           </div>
         </div>
       </div>
-      <div className="m-2 text-left flex items-center justify-center mt-40"></div>
-      <button
-        type="button"
-        onClick={onGetStartedClick}
-        className="primary-orangebg bg-white hover:bg-orange-700  focus:outline-none rounded-md text-sm px-5 py-2.5 text-center "
-      >
-        Get started
-      </button>
     </div>
   );
 };

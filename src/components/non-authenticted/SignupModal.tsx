@@ -23,7 +23,7 @@ interface SignupModalProps {
 interface SignupData {
   name: string;
   email: string;
-  address: string;
+  address?: string;
   phone: string;
   password: string;
   confirmPassword: string;

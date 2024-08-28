@@ -30,12 +30,13 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
   const [budgetType, setBudgetType] = useState("");
   const [budget, setBudget] = useState("");
   const [attachment, setAttachment] = useState<File | null>(null);
-  const [paymentVerified, setPaymentVerified] = useState(false);
+  // const [paymentVerified, setPaymentVerified] = useState(false);
   const [scope, setScope] = useState("");
   const [resultModalVisible, setResultModalVisible] = useState(false);
   const [resultMessage, setResultMessage] = useState("");
   const [catagory, setCatagory] = useState("");
   const [catData, setCatData] = useState<any[]>([]);
+  const [budgetPlaceholder, setBudgetPlaceholder] = useState("");
 
   const capitalizeFirstLetter = (string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -71,6 +72,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
     formData.append("budgets", budgetType);
     formData.append("projectAmount", budget);
     formData.append("projectCategory", catagory);
+
     // formData.append('paymentVerified', paymentVerified.toString());
     if (attachment) {
       formData.append("projectUrl", attachment);
@@ -100,18 +102,17 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
     } finally {
       setIsPosting(false); // Reset loading state
     }
-
     // Clear the form
-    // setTitle('');
-    // setDescription('');
-    // setDeadline('');
+    setTitle("");
+    setDescription("");
+    setDeadline("");
     // setExperience('');
     // setSkills('');
-    // setScope([]);
-    // setBudgetType('');
-    // setBudget('');
-    // setCatagory("");
-    // setAttachment(null);
+    // setScope("");
+    setBudgetType("");
+    setBudget("");
+    setCatagory("");
+    setAttachment(null);
     // setPaymentVerified(false);
   };
   useEffect(() => {
@@ -240,9 +241,9 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
               required
             >
               <option value="">How long will work take</option>
-              <option value="LESS_THAN_ONE_MONTH">Less tha a month</option>
+              <option value="LESS_THAN_ONE_MONTH">Less than a month</option>
               <option value="ONE_TO_THREE_MONTH">One to three month</option>
-              <option value="THREE_TO_SIX_MONTH">Three top six month</option>
+              <option value="THREE_TO_SIX_MONTH">Three to six month</option>
             </select>
           </div>
 
@@ -268,21 +269,6 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
               ))}
             </select>
           </div>
-
-          {/* <div className="mb-4">
-            <label htmlFor="skills" className="block text-sm font-medium text-gray-700">
-              Skills (separate by commas)
-            </label>
-            <input
-              id="skills"
-              type="text"
-              value={skills}
-              onChange={handleSkillsChange}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-              placeholder="e.g., JavaScript, React, Node.js"
-              required
-            />
-          </div> */}
 
           <div className="mb-4">
             <label
@@ -342,7 +328,10 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
                   name="budgetType"
                   value="HOURLY_RATE"
                   checked={budgetType === "HOURLY_RATE"}
-                  onChange={(e) => setBudgetType(e.target.value)}
+                  onChange={(e) => {
+                    setBudgetType(e.target.value);
+                    setBudgetPlaceholder("/hr");
+                  }}
                   className="absolute top-0 left-0"
                 />
                 <Image
@@ -359,7 +348,10 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
                   name="budgetType"
                   value="FIXED_PRICE"
                   checked={budgetType === "FIXED_PRICE"}
-                  onChange={(e) => setBudgetType(e.target.value)}
+                  onChange={(e) => {
+                    setBudgetType(e.target.value);
+                    setBudgetPlaceholder("");
+                  }}
                   className="absolute top-0 left-0"
                 />
                 <Image
@@ -388,14 +380,20 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
                 Recurring Payment
               </label> */}
               <label className="flex flex-col items-center justify-center relative">
-                <input
-                  type="radio"
-                  name="budgetType"
-                  value="TASK_BASED"
-                  checked={budgetType === "TASK_BASED"}
-                  onChange={(e) => setBudgetType(e.target.value)}
-                  className="absolute top-0 left-0"
-                />
+                <div className="flex flex-row">
+                  {" "}
+                  <input
+                    type="radio"
+                    name="budgetType"
+                    value="TASK_BASED"
+                    checked={budgetType === "TASK_BASED"}
+                    onChange={(e) => {
+                      setBudgetType(e.target.value);
+                      setBudgetPlaceholder(" /task");
+                    }}
+                    className="absolute top-0 left-0"
+                  />
+                </div>
                 <Image
                   src="/postassignment-svg/taskbased.svg"
                   alt="Task Based"
@@ -414,15 +412,18 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
             >
               Budget (in USD)
             </label>
-            <input
-              id="budget"
-              type="number"
-              placeholder="$"
-              value={budget}
-              onChange={(e) => setBudget(e.target.value)}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-              required
-            />
+            <div className="flex flex-row items-center ">
+              <input
+                id="budget"
+                type="number"
+                placeholder="$"
+                value={budget}
+                onChange={(e) => setBudget(e.target.value)}
+                className="mt-1 block wax-w-9 border border-gray-300 rounded-md p-2"
+                required
+              />
+              <div className="mx-1">{budgetPlaceholder}</div>
+            </div>
           </div>
 
           <div className="mb-4">
