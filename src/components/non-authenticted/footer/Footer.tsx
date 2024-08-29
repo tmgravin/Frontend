@@ -53,7 +53,7 @@ function Footer() {
       </div>
 
       <hr className="text-white pt-2" />
-      <div className="flex flex-row  justify-around">
+      <div className="flex    flex-col sm:flex-row pl-4 sm:p-0 justify-around">
         <div className="flex  items-center pt-2">
           &copy;2024 | MSPacademy.co
         </div>
