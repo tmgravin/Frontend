@@ -30,10 +30,6 @@ const UserModal: React.FC = () => {
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
-  useEffect(() => {
-    fetchData();
-    fetchImage();
-  }, []);
   const handleMenuClick = (event: MouseEvent<HTMLElement>) =>
     setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);

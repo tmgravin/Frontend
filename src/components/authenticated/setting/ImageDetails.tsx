@@ -11,10 +11,6 @@ const cookieuser = getUserFromCookies();
 const ImageDetails: React.FC = () => {
   const { imageUrl, fetchImage } = useImageContext();
 
-  useEffect(() => {
-    fetchImage();
-  }, []); // Only run fetchImage once on initial render
-
   const { setFieldValues } = useUserData();
   const [isEditingImage, setIsEditingImage] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -56,7 +52,7 @@ const ImageDetails: React.FC = () => {
       toast.error("Error updating profile picture:");
     }
   };
-  
+
   const handleDeletePicture = async () => {
     try {
       const response = await axios.delete(

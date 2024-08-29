@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import { getUserFromCookies } from "@/components/auth/token"; // Adjust the path as necessary

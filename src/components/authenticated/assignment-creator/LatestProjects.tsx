@@ -50,9 +50,6 @@ const LatestProjects: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<DataItem | null>(null);
 
   const { data, loading, fetchData }: any = useProjects();
-  useEffect(() => {
-    fetchData();
-  }, []);
 
   const loadMore = () => {
     setVisibleCount((prevCount) => prevCount + 4);

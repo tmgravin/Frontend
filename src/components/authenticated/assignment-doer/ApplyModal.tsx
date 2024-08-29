@@ -45,9 +45,17 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ project, onClose }) => {
 
       toast.success("Application submitted successfully!");
       onClose(); // Close the modal after successful application
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error applying for project", error);
-      toast.error("Failed to apply for the project. Please try again.");
+
+      // Extracting error message from the response if available
+      const errorMessage =
+        error.response && error.response.data && error.response.data.message
+          ? error.response.data.message
+          : "Failed to apply for the project.";
+
+      // Displaying the error message using toast
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }

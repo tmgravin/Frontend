@@ -30,10 +30,6 @@ const Header: React.FC = () => {
 
   const cookieuser = getUserFromCookies();
 
-  useEffect(() => {
-    fetchImage();
-  });
-
   const handleMenuClick = (event: MouseEvent<HTMLElement>) =>
     setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);

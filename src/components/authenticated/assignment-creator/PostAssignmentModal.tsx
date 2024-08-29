@@ -7,7 +7,6 @@ import "react-toastify/dist/ReactToastify.css";
 import ResultModal from "./ResultModal";
 import Image from "next/image";
 import { getUserFromCookies } from "../../auth/token";
-import { Category } from "@mui/icons-material";
 import { useProjects } from "@/components/providers/ProjectProvider";
 
 const user = getUserFromCookies();
@@ -117,7 +116,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
   };
   useEffect(() => {
     // Define an async function inside useEffect to fetch the data
-    const fetchData = async () => {
+    const fetchCatagory = async () => {
       try {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_BASE_URL}/api/category/`,
@@ -132,7 +131,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
       }
     };
 
-    fetchData(); // Call the async function
+    fetchCatagory(); // Call the async function
   }, []); // Dependency array is empty, so this runs only once after the initial render
 
   const handleCloseResultModal = () => {
