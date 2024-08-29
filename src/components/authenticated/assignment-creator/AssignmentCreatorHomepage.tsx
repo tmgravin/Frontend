@@ -1,54 +1,69 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Header from "./Header";
 import LatestProjects from "./LatestProjects";
 import Applicationprocess2 from "./Applicationprocess2";
 import WorkYourWay from "@/components/non-authenticted/WorkYourWay";
 import Footer from "@/components/non-authenticted/footer/Footer";
 import axios from "axios";
-import { useState, useEffect } from "react";
 import { ProjectProvider } from "@/components/providers/ProjectProvider";
 
 function Homepage() {
-  const [backgroundImage, setBackgroundImage] = useState<string | null | []>();
+  const [backgroundImages, setBackgroundImages] = useState<string[]>([]);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
   useEffect(() => {
-    const fetchBackgroundImage = async () => {
+    const fetchBackgroundImages = async () => {
       try {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_BASE_URL}/api/featureImages/creator`,
           {
             withCredentials: true,
           }
-        ); // Replace with your API endpoint
+        );
 
-        setBackgroundImage(response.data); // Assuming the API returns an object with `imageUrl` property
-        console.log(response.data);
-        if (response.data) {
-          const image = response.data;
-          const img: any = image[image.length - 1];
-          console.log(img);
-          setBackgroundImage(img); // Adjust based on your response structure
+        setBackgroundImages(response.data); // Assuming response.data is an array of image URLs
+        if (response.data.length > 0) {
+          setCurrentImageIndex(0); // Set initial index
         }
-        console.log(backgroundImage);
       } catch (error) {
-        console.error("Error fetching background image:", error);
+        console.error("Error fetching background images:", error);
       }
     };
 
-    fetchBackgroundImage();
-  }, [backgroundImage]);
+    fetchBackgroundImages();
+  }, []);
+
+  useEffect(() => {
+    if (backgroundImages.length > 0) {
+      const interval = setInterval(() => {
+        setCurrentImageIndex((prevIndex) =>
+          prevIndex === backgroundImages.length - 1 ? 0 : prevIndex + 1
+        );
+      }, 3000); // Change the image every 3 seconds
+
+      return () => clearInterval(interval);
+    }
+  }, [backgroundImages]);
+
+  const currentBackgroundImage =
+    backgroundImages.length > 0
+      ? backgroundImages[currentImageIndex]
+      : "default_image_url"; // Replace with a default image URL if needed
+
   return (
     <ProjectProvider>
       <div className="w-full h-full">
         <Header />
 
         <div
-          className="homepage-bg w-full pb-10 homepage-bg h-full px-2 flex flex-1 flex-col justify-center items-start lg:h-screen lg:p-2"
+          className="homepage-bg w-full pb-10 h-full px-2 flex flex-1 flex-col justify-center items-start lg:h-screen lg:p-2 relative"
           style={{
-            backgroundImage: `url(${backgroundImage})`,
+            backgroundImage: `url(${currentBackgroundImage})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
+            transition: "background-image 1s ease-in-out",
           }}
         >
           <div className="text-3xl text-white lg:w-1/2 pt-10">
@@ -63,7 +78,7 @@ function Homepage() {
               <div className="relative w-full">
                 <input
                   type="text"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l-sm   w-full md:w-[500px] px-4 pr-10 p-2.5"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-l-sm w-full md:w-[500px] px-4 pr-10 p-2.5"
                   placeholder="What skills are you searching for?"
                   required
                 />
@@ -77,7 +92,7 @@ function Homepage() {
                 className="p-2.5 text-sm font-medium text-white primary-orangebg focus:ring-4 rounded-r-sm focus:outline-none focus:ring-blue-300"
               >
                 Search
-                <span className="sr-only ">Search</span>
+                <span className="sr-only">Search</span>
               </button>
             </form>
           </div>
@@ -87,6 +102,22 @@ function Homepage() {
           <button className="primary-orangebg text-white rounded-lg w-32 p-1 pb-">
             Get Started
           </button>
+
+          {/* Navigation Dots */}
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2">
+            {backgroundImages.map((_, index) => (
+              <button
+                key={index}
+                className={`w-2 h-2 rounded-full ${
+                  index === currentImageIndex
+                    ? "primary-orangebg"
+                    : "bg-gray-400"
+                }`}
+                onClick={() => setCurrentImageIndex(index)}
+                aria-label={`Slide ${index + 1}`}
+              />
+            ))}
+          </div>
         </div>
 
         <div>

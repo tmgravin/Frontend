@@ -56,7 +56,7 @@ const ImageDetails: React.FC = () => {
       toast.error("Error updating profile picture:");
     }
   };
-
+  
   const handleDeletePicture = async () => {
     try {
       const response = await axios.delete(
