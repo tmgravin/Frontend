@@ -91,7 +91,7 @@ const Homepage: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full h-screen">
+    <div className="relative w-full  sm:h-screen">
       <ToastContainer />
       <Header />
       <div className="relative overflow-hidden h-full">

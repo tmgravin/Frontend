@@ -109,9 +109,7 @@ function Homepage() {
               <button
                 key={index}
                 className={`w-2 h-2 rounded-full ${
-                  index === currentImageIndex
-                    ? "primary-orangebg"
-                    : "bg-gray-400"
+                  index === currentImageIndex ? "primary-orange" : "bg-gray-400"
                 }`}
                 onClick={() => setCurrentImageIndex(index)}
                 aria-label={`Slide ${index + 1}`}

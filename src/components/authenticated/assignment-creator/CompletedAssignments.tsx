@@ -53,6 +53,7 @@ interface DataItem {
     createdAt: string;
     updatedAt: string | null; // Handle nullable updatedAt
   };
+  message: string;
 }
 
 const CompletedAssignments: React.FC = () => {
