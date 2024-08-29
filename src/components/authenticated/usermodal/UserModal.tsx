@@ -15,7 +15,10 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useUserData from "@/components/providers/UserProvider";
+import axios from "axios";
 import { useImageContext } from "@/components/providers/ImageProvider";
+import { getUserFromCookies } from "@/components/auth/token";
+const cookieuser = getUserFromCookies();
 
 const UserModal: React.FC = () => {
   const { imageUrl, fetchImage } = useImageContext();
@@ -41,6 +44,9 @@ const UserModal: React.FC = () => {
 
   const handleLogout = async () => {
     try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/logout/${cookieuser.id}`
+      );
       removeCookie("user");
       toast.warning("logging out");
     } catch (err) {
