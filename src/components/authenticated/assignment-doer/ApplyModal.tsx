@@ -74,6 +74,7 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ project, onClose }) => {
           </p>
         </>
       )}
+
       <textarea
         value={coverLetter}
         onChange={(e) => setCoverLetter(e.target.value)}
@@ -97,6 +98,10 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ project, onClose }) => {
         </button>
       </div>
       <ToastContainer />
+
+      <div className="text-red-500  pt-4 flex items-center justify-center">
+        Note : 20% will be deducted as per service charge
+      </div>
     </div>
   );
 };

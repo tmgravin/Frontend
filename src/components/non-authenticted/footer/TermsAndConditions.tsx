@@ -26,7 +26,7 @@ function TermsAndConditions() {
         <h2 className="text-xl font-semibold mb-2">1. Introduction</h2>
         <p className="mb-4">
           Welcome to MSP Academy. These Terms and Conditions govern your use of
-          our projects system, which includes the roles of Creator, Doer, and
+          our freelancing system, which includes the roles of Creator, Doer, and
           the overarching control by the Admin. By accessing or using our
           services, you agree to comply with these Terms and Conditions.
         </p>
@@ -34,16 +34,16 @@ function TermsAndConditions() {
         <h2 className="text-xl font-semibold mb-2">2. Definitions</h2>
         <ul className="list-disc pl-5 mb-4">
           <li>
-            <strong>Creator:</strong> A user who creates and submits project
+            <strong>Creator:</strong> A user who creates and submits assignment
             requests through the MSP Academy system.
           </li>
           <li>
             <strong>Doer:</strong> A user who receives, completes, and submits
-            projects based on requests from creators.
+            assignments based on requests from Creators.
           </li>
           <li>
             <strong>Admin:</strong> The individual or entity responsible for
-            managing and overseeing the projects system, including user
+            managing and overseeing the freelancing system, including user
             management and ensuring compliance with these Terms and Conditions.
           </li>
         </ul>
@@ -64,38 +64,49 @@ function TermsAndConditions() {
           <li>
             Is accountable for reviewing and accepting the completed projects.
           </li>
+          <li>
+            Creators can make the payment upfront, partial, or after completion
+            notifications. Completed projects will be visible only after
+            complete payment.
+          </li>
+          <li>
+            Creators can choose to be fixed, hourly, or tasked based payments by
+            themselves.
+          </li>
+          <li>
+            Creators can choose their project doer by themselves from multiple
+            applicants.
+          </li>
+          <li>Can review the doer after completion of the project.</li>
         </ul>
 
-        <h3 className="font-semibold mb-1">3.2 Doer</h3>
+        <h3 className="font-semibold mb-1">3.2 Assignment Doer</h3>
         <ul className="list-disc pl-5 mb-4">
           <li>
             Responsible for completing projects according to the instructions
-            provided by the creator.
+            provided by the Creator.
           </li>
           <li>
             Must ensure that all work is original, free of plagiarism, and
             submitted on time.
           </li>
-          <li>
-            Is required to communicate with the creator if clarification or
-            additional information is needed.
-          </li>
+          <li>Must complete the projects before the deadline.</li>
         </ul>
 
         <h3 className="font-semibold mb-1">3.3 Admin</h3>
         <ul className="list-disc pl-5 mb-4">
           <li>
-            Oversees the management of the projects system, including user
+            Oversees the management of the freelancing system, including user
             registration, role assignments, and compliance with these Terms and
             Conditions.
           </li>
           <li>
             Has the authority to review, approve, or reject projects and handle
-            disputes between creators and doers.
+            disputes between Creators and Doers.
           </li>
           <li>
             Ensures the security and confidentiality of all user data and
-            projects.
+            assignments.
           </li>
         </ul>
 
@@ -103,7 +114,7 @@ function TermsAndConditions() {
 
         <h3 className="font-semibold mb-1">4.1 Registration</h3>
         <p className="mb-4">
-          Users must register and create an account to access the projects
+          Users must register and create an account to access the freelancing
           system. Registration requires providing accurate personal information
           and agreeing to these Terms and Conditions.
         </p>
@@ -119,7 +130,9 @@ function TermsAndConditions() {
         <p className="mb-4">
           The admin reserves the right to suspend or terminate any user account
           that violates these Terms and Conditions or engages in fraudulent or
-          unethical behavior.
+          unethical behavior. The admin can also suspend a creator if any
+          payment is unclear and a doer if the projects are not completed within
+          the time frame and if there are bad reviews from the creator.
         </p>
 
         <h2 className="text-xl font-semibold mb-2">
@@ -143,7 +156,7 @@ function TermsAndConditions() {
         <h3 className="font-semibold mb-1">5.3 Review and Approval</h3>
         <p className="mb-4">
           Creators must review completed projects promptly and provide feedback
-          or approval. If revisions are required, the doer must address them in
+          or approval. If revisions are required, the Doer must address them in
           a timely manner.
         </p>
 
@@ -151,22 +164,29 @@ function TermsAndConditions() {
 
         <h3 className="font-semibold mb-1">6.1 Payment Terms</h3>
         <p className="mb-4">
-          Payment terms and fees for project services will be outlined in the
+          Payment terms and fees for assignment services will be outlined in the
           user’s account and are subject to change with prior notice.
         </p>
 
         <h3 className="font-semibold mb-1">6.2 Payment Processing</h3>
         <p className="mb-4">
-          Payments for completed projects are processed through the platform,
+          Payments for completed assignments are processed through the platform,
           and users are responsible for ensuring that their payment information
           is accurate and up to date.
         </p>
-
-        <h3 className="font-semibold mb-1">6.3 Refunds and Disputes</h3>
         <p className="mb-4">
-          Refunds may be issued under specific circumstances as outlined in our
-          refund policy. Disputes regarding projects should be addressed through
-          the platform’s dispute resolution process.
+          Twenty percent (20%) of the service charge will be deducted from the
+          cost of the project. Payment will be made only after the payment is
+          received from the creator. Must be liable themselves for the payment
+          if the project is from unverified payment creators.
+        </p>
+
+        <h3 className="font-semibold mb-1">6.3 Refunds</h3>
+        <p className="mb-4">
+          Refunds may be issued under specific circumstances if the Doer does
+          not fulfill all the conditions specified in the project. MSP Academy
+          will review all the conditions. There will be a 10% deduction in
+          refund from the total project cost.
         </p>
 
         <h2 className="text-xl font-semibold mb-2">
@@ -190,48 +210,42 @@ function TermsAndConditions() {
 
         <h3 className="font-semibold mb-1">8.1 Ownership</h3>
         <p className="mb-4">
-          All intellectual property rights related to projects and content
+          All intellectual property rights related to assignments and content
           created on the platform remain with the original creator or as agreed
           upon.
         </p>
 
         <h3 className="font-semibold mb-1">8.2 Usage Rights</h3>
         <p className="mb-4">
-          Creators and Doers grant MSP Academy a non-exclusive, royalty-free
-          license to use, display, and distribute projects as needed for the
-          operation of the platform.
-        </p>
-
-        <h2 className="text-xl font-semibold mb-2">9. Dispute Resolution</h2>
-
-        <h3 className="font-semibold mb-1">9.1 Dispute Process</h3>
-        <p className="mb-4">
-          Any disputes between creators and doers should be resolved through the
-          platform’s dispute resolution process. The admin’s decision on
-          disputes is final.
-        </p>
-
-        <h3 className="font-semibold mb-1">9.2 Governing Law</h3>
-        <p className="mb-4">
-          These Terms and Conditions are governed by and construed in accordance
-          with the laws of the Government of Nepal.
+          Creators will have all rights reserved for their projects. MSP Academy
+          will not use these projects' information for others.
         </p>
 
         <h2 className="text-xl font-semibold mb-2">11. Contact Information</h2>
         <p className="mb-4">
           For any questions or concerns regarding these Terms and Conditions,
-          please contact us at{" "}
-          <a href="mailto:info@mspacademy.com">info@mspacademy.com</a>.
+          please contact us at:
         </p>
-
-        <h2 className="text-xl font-semibold mb-2">
-          12. Amendments to the Terms
-        </h2>
-        <p>
-          MSP Academy reserves the right to modify or update these Terms and
-          Conditions at any time. Changes will be effective upon posting on our
-          website, and users will be notified of any significant updates.
-        </p>
+        <ul className="list-disc pl-5 mb-4">
+          <li>
+            Email:{" "}
+            <a
+              href="mailto:info@mspacademy.co"
+              className="text-blue-500 hover:underline"
+            >
+              info@mspacademy.co
+            </a>
+          </li>
+          <li>
+            Website:{" "}
+            <a
+              href="https://mspacademy.co/"
+              className="text-blue-500 hover:underline"
+            >
+              https://mspacademy.co/
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
   );

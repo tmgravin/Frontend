@@ -11,11 +11,11 @@ function Footer() {
           <div className="py-2 font-bold underline">Contact us</div>
           <div className="flex flex-row">
             <i className="fa-regular fa-envelope"></i>{" "}
-            <div className="ml-2">mspacademy@gmail.com</div>
+            <div className="ml-2">info@mspacademy.co</div>
           </div>
           <div className="underline lg:pb-10">
             <i className="fa-solid fa-globe"></i>{" "}
-            <a href="https://www.mspacademy.co">www.mspacademy.co</a>
+            <a href="https://www.mspacademy.co">mspacademy.co</a>
           </div>
         </div>
 

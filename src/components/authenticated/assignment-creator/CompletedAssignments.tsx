@@ -90,6 +90,8 @@ const CompletedAssignments: React.FC = () => {
     setLoading(false);
   };
 
+  console.log(data);
+
   const loadMore = () => {
     setVisibleCount((prevCount) => prevCount + 4);
   };

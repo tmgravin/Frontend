@@ -15,7 +15,7 @@ import {
 import { CloudUpload } from "@mui/icons-material";
 import axios from "axios";
 import { getUserFromCookies } from "@/components/auth/token";
-import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
 
 const userid = getUserFromCookies();
 
@@ -81,100 +81,104 @@ const PaymentUploadModal: React.FC<PaymentUploadModalProps> = ({
   };
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
-      <DialogTitle>Upload Payment Data</DialogTitle>
-      <DialogContent>
-        <TextField
-          margin="dense"
-          label="User ID"
-          type="text"
-          fullWidth
-          value={userid.id}
-          disabled
-        />
-        <TextField
-          margin="dense"
-          label="Project ID"
-          type="text"
-          fullWidth
-          value={projectId}
-          disabled
-        />
-        <TextField
-          margin="dense"
-          label="Project Name"
-          type="text"
-          fullWidth
-          value={projectName}
-          disabled
-        />
-        <TextField
-          margin="dense"
-          label="Name"
-          type="text"
-          fullWidth
-          value={name}
-          disabled
-        />
-        <TextField
-          margin="dense"
-          label="Amount"
-          type="number"
-          fullWidth
-          value={amount}
-          onChange={handleAmountChange}
-          InputProps={{ inputProps: { min: 0 } }}
-        />
-        <FormControl fullWidth margin="dense">
-          <InputLabel>Payment Method</InputLabel>
-          <Select
-            value={paymentMethod}
-            onChange={handlePaymentMethodChange}
-            label="Payment Method"
-          >
-            <MenuItem value="CARD">CARD</MenuItem>
-            <MenuItem value="BANK">BANK</MenuItem>
-          </Select>
-        </FormControl>
-        <input
-          accept="image/*,application/pdf"
-          style={{ display: "none" }}
-          id="upload-file"
-          type="file"
-          onChange={handleFileChange}
-        />
-        <label htmlFor="upload-file">
-          <Button
-            variant="contained"
-            component="span"
-            startIcon={<CloudUpload />}
+    <div>
+      <ToastContainer />
+      <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
+        <DialogTitle>Upload Payment Data</DialogTitle>
+        <DialogContent>
+          <TextField
+            margin="dense"
+            label="User ID"
+            type="text"
             fullWidth
-            style={{ marginTop: "16px" }}
+            value={userid.id}
+            disabled
+          />
+          <TextField
+            margin="dense"
+            label="Project ID"
+            type="text"
+            fullWidth
+            value={projectId}
+            disabled
+          />
+          <TextField
+            margin="dense"
+            label="Project Name"
+            type="text"
+            fullWidth
+            value={projectName}
+            disabled
+          />
+          <TextField
+            margin="dense"
+            label="Name"
+            type="text"
+            fullWidth
+            value={name}
+            disabled
+          />
+          <TextField
+            margin="dense"
+            label="Amount"
+            type="number"
+            fullWidth
+            value={amount}
+            onChange={handleAmountChange}
+            InputProps={{ inputProps: { min: 0 } }}
+          />
+          <FormControl fullWidth margin="dense">
+            <InputLabel>Payment Method</InputLabel>
+            <Select
+              value={paymentMethod}
+              onChange={handlePaymentMethodChange}
+              label="Payment Method"
+            >
+              <MenuItem value="CARD">CARD</MenuItem>
+              <MenuItem value="BANK">BANK</MenuItem>
+            </Select>
+          </FormControl>
+          <input
+            accept="image/*,application/pdf"
+            style={{ display: "none" }}
+            id="upload-file"
+            type="file"
+            onChange={handleFileChange}
+            required
+          />
+          <label htmlFor="upload-file">
+            <Button
+              variant="contained"
+              component="span"
+              startIcon={<CloudUpload />}
+              fullWidth
+              style={{ marginTop: "16px" }}
+              className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+            >
+              Upload Screenshot/File
+            </Button>
+          </label>
+          {file && (
+            <div style={{ marginTop: "10px" }}>
+              <strong>Selected File:</strong> {file.name}
+            </div>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={onClose} color="secondary">
+            Cancel
+          </Button>
+          <Button
+            onClick={handleSubmit}
+            color="primary"
+            variant="contained"
             className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
           >
-            Upload Screenshot/File
+            Submit
           </Button>
-        </label>
-        {file && (
-          <div style={{ marginTop: "10px" }}>
-            <strong>Selected File:</strong> {file.name}
-          </div>
-        )}
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="secondary">
-          Cancel
-        </Button>
-        <Button
-          onClick={handleSubmit}
-          color="primary"
-          variant="contained"
-          className="bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
-        >
-          Submit
-        </Button>
-      </DialogActions>
-    </Dialog>
+        </DialogActions>
+      </Dialog>
+    </div>
   );
 };
 
