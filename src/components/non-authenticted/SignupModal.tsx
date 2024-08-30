@@ -3,7 +3,6 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import Link from "next/link";
 import "react-toastify/dist/ReactToastify.css";
-import ImageDetails from "./picture/ImageDetails";
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -135,13 +134,13 @@ const SignupModal: React.FC<SignupModalProps> = ({
 
   return (
     <div>
-      <ImageDetails />
       <div
         id="signup-modal"
         tabIndex={-1}
         aria-hidden="true"
         className="fixed inset-0 z-50 flex items-center justify-center overflow-auto"
       >
+        ``
         <div className="relative p-4 w-full max-w-md max-h-full">
           <div className="relative bg-white rounded-lg shadow overflow-y-auto max-h-[90vh]">
             <div className="flex items-center justify-between p-4 md:p-5 rounded-t dark:border-gray-600">

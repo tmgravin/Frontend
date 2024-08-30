@@ -15,7 +15,7 @@ function Footer() {
           </div>
           <div className="underline lg:pb-10">
             <i className="fa-solid fa-globe"></i>{" "}
-            <a href="https://www.mspacademy.co">mspacademy.co</a>
+            <a href="https://mspacademy.co">mspacademy.co</a>
           </div>
         </div>
 

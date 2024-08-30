@@ -218,7 +218,7 @@ function TermsAndConditions() {
         <h3 className="font-semibold mb-1">8.2 Usage Rights</h3>
         <p className="mb-4">
           Creators will have all rights reserved for their projects. MSP Academy
-          will not use these projects' information for others.
+          will not use these projects&apos; information for others.
         </p>
 
         <h2 className="text-xl font-semibold mb-2">11. Contact Information</h2>

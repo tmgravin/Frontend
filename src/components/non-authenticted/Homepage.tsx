@@ -14,6 +14,7 @@ import SignupModal from "./SignupModal";
 import { ToastContainer } from "react-toastify";
 import FQA from "./footer/FQA";
 import Tesstimonials from "./Tesstimonials";
+import Searchbar from "./search/Searchbar";
 
 const Homepage: React.FC = () => {
   const [backgroundImages, setBackgroundImages] = useState<string[]>([]);
@@ -135,7 +136,7 @@ const Homepage: React.FC = () => {
             secure, flexible, and cost-effective platform
           </div>
           <div>
-            <form className="flex items-center w-full">
+            {/* <form className="flex items-center w-full">
               <div className="relative w-full">
                 <input
                   type="text"
@@ -155,7 +156,9 @@ const Homepage: React.FC = () => {
                 Search
                 <span className="sr-only">Search</span>
               </button>
-            </form>
+              
+            </form> */}
+            <Searchbar />
           </div>
           <div className="text-white py-2">
             Academic writing | CV/Resume Writing | Copywriting
