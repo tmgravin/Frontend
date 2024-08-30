@@ -6,16 +6,28 @@ interface WhyusProps {
 
 const Whyus: React.FC<WhyusProps> = ({ onGetStartedClick }) => {
   return (
-    <div className="w-full bg-whayus-bg lg:min-h-screen text-white flex flex-col items-center px-4 lg:px-0 bg-[#0A4AC5] lg:bg-whyus-bg lg:bg-[40%] lg:bg-bottom[-14%] lg:bg-no-repeat pt-5 lg:pb-0">
-      <div className="text-white text-4xl mb-0 text-center underline">
-        Why us?
-      </div>
+    <div className="w-full lg:h-screen  text-white flex flex-row justify-around items-end px-4 pt-5  bg-blue-800">
+      {/* Apply the background image only on large screens */}
+      <div
+        className=" sm:h-screen hidden lg:block" // Ensure it takes the full height of the viewport
+        style={{
+          backgroundImage: "url('/why-us.png')", // Ensure the correct path and extension
+          backgroundSize: "contain", // Cover will ensure the image fills the div proportionally
+          backgroundPosition: "left center",
+          backgroundRepeat: "no-repeat",
+          width: "50%", // To make the div cover the left half of the screen
+        }}
+      ></div>
 
-      <div className="flex flex-col lg:flex-row w-full mt-12">
-        {/* Left Column */}
-        <div className="flex flex-col lg:w-1/2 items-start lg:items-end lg:pr-40 mb-8 lg:mb-0">
-          <div className="m-2 text-center ">
-            <div className="text-2xl">
+      <div className="w-full lg:w-1/2 h-full flex flex-col items-center justify-center  pb-10   ">
+        <div className="text-white text-4xl mb-0 text-left underline pt-5">
+          Why us?
+        </div>
+
+        <div className="flex flex-col w-full mt-12 space-y-8">
+          {/* Support Section */}
+          <div className="text-left">
+            <div className="text-2xl mb-2">
               Support <i className="fa-solid fa-headset"></i>
             </div>
             <div className="text-sm">
@@ -23,8 +35,10 @@ const Whyus: React.FC<WhyusProps> = ({ onGetStartedClick }) => {
               queries over the phone or email, no matter where you are located.
             </div>
           </div>
-          <div className="m-2 text-center ">
-            <div className="text-2xl">
+
+          {/* Credibility Section */}
+          <div className="text-left">
+            <div className="text-2xl mb-2">
               Credibility <i className="fa-solid fa-handshake text-white"></i>
             </div>
             <div>
@@ -33,21 +47,21 @@ const Whyus: React.FC<WhyusProps> = ({ onGetStartedClick }) => {
               professionals across the globe.
             </div>
           </div>
-        </div>
 
-        {/* Right Column */}
-        <div className="flex flex-col lg:w-1/2 items-center lg:items-start lg:pl-40">
-          <div className="m-2 text-center">
-            <div className="text-2xl">
-              <i className="fa-solid fa-stopwatch text-white"></i> Flexibility
+          {/* Flexibility Section */}
+          <div className="text-left">
+            <div className="text-2xl mb-2">
+              Flexibility <i className="fa-solid fa-stopwatch text-white"></i>
             </div>
             <div>
               Our platform adapts to your needs, providing the flexibility to
               work according to your schedule and preferences.
             </div>
           </div>
-          <div className="m-2 text-center ">
-            <div className="text-2xl">
+
+          {/* Security Section */}
+          <div className="text-left">
+            <div className="text-2xl mb-2">
               Security <i className="fa-solid fa-user-shield text-white"></i>
             </div>
             <div>

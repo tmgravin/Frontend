@@ -1,10 +1,10 @@
 // CustomTabModal.tsx
-"use client"
+"use client";
 
-import React from 'react';
-import * as Tabs from '@radix-ui/react-tabs';
-import AssignmentStatus from './PendingForApproval';
-import CompletedAssignments from './CompletedAssignments';
+import React from "react";
+import * as Tabs from "@radix-ui/react-tabs";
+import AssignmentStatus from "./PendingForApproval";
+import CompletedAssignments from "./CompletedAssignments";
 
 interface CustomTabModalProps {
   onClose: () => void;
@@ -13,7 +13,10 @@ interface CustomTabModalProps {
 const CustomTabModal: React.FC<CustomTabModalProps> = ({ onClose }) => {
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50">
-      <div className="absolute inset-0 bg-gray-600 opacity-50" onClick={onClose}></div>
+      <div
+        className="absolute inset-0 bg-gray-600 opacity-50"
+        onClick={onClose}
+      ></div>
       <div className="bg-white rounded-lg shadow-lg p-6 z-50 w-full max-h-[90vh] overflow-y-auto relative">
         <button
           onClick={onClose}
@@ -40,21 +43,27 @@ const CustomTabModal: React.FC<CustomTabModalProps> = ({ onClose }) => {
           <Tabs.List className="flex space-x-2 border-b border-gray-300 mb-4 justify-center items-center">
             <Tabs.Trigger
               value="tab1"
-              className="py-2 px-4 border-b-2 border-transparent cursor-pointer data-[state=active]:border-blue-500 data-[state=active]:text-blue-500"
+              className="py-2 px-4 border-b-2 border-transparent cursor-pointer data-[state=active]:border-orange-500 data-[state=active]:text-orange-500"
             >
               Completed Assignments
             </Tabs.Trigger>
             <Tabs.Trigger
               value="tab2"
-              className="py-2 px-4 border-b-2 border-transparent cursor-pointer data-[state=active]:border-blue-500 data-[state=active]:text-blue-500"
+              className="py-2 px-4 border-b-2 border-transparent cursor-pointer data-[state=active]:border-orange-500 data-[state=active]:text-orange-500"
             >
               Assignments Status
             </Tabs.Trigger>
           </Tabs.List>
-          <Tabs.Content value="tab1" className="space-y-4 flex justify-center items-center">
+          <Tabs.Content
+            value="tab1"
+            className="space-y-4 flex justify-center items-center"
+          >
             <CompletedAssignments />
           </Tabs.Content>
-          <Tabs.Content value="tab2" className="space-y-4 flex justify-center items-center">
+          <Tabs.Content
+            value="tab2"
+            className="space-y-4 flex justify-center items-center"
+          >
             <AssignmentStatus />
           </Tabs.Content>
         </Tabs.Root>

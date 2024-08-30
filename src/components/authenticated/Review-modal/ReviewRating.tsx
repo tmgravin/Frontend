@@ -152,7 +152,12 @@ const ReviewRating: React.FC<ReviewRatingProps> = ({
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h6">{doerName}</Typography>
           <Box>
-            <Button variant="outlined" onClick={handleRateClick} sx={{ mr: 1 }}>
+            <Button
+              className="primary-orangebg hover:bg-orange-600 text-white"
+              variant="outlined"
+              onClick={handleRateClick}
+              sx={{ mr: 1 }}
+            >
               Rate Teacher
             </Button>
             <IconButton onClick={onClose}>
@@ -277,7 +282,10 @@ const ReviewRating: React.FC<ReviewRatingProps> = ({
         </List>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button
+          onClick={onClose}
+          className="primary-orangebg hover:bg-orange-600 text-white"
+        >
           Close
         </Button>
       </DialogActions>

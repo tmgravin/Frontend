@@ -3,6 +3,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import Link from "next/link";
 import "react-toastify/dist/ReactToastify.css";
+import ImageDetails from "./picture/ImageDetails";
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -134,6 +135,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
 
   return (
     <div>
+      <ImageDetails />
       <div
         id="signup-modal"
         tabIndex={-1}

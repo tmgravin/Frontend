@@ -37,6 +37,11 @@
   color: #090F3A;
 
 }
+
+.primary-navy-blue-border{
+  border: #090F3A;
+
+}
 .primary-navy-bluebg{
   background-color: #090F3A;
 
@@ -134,15 +139,6 @@ color:#7F7D7D;
   width: 100%;
 }
 
-
-.whyus-bg {
-  background-color: #0A4AC5; /* Solid blue background color */
-  background-image: url('/woman-coffee.png'); /* Image overlay */
-  background-size: 40%; /* Scale the image to 50% of the element's size */
-  background-position: bottom center ; /* Position the image at the bottom center */
-  background-repeat: no-repeat; /* Prevent the image from repeating */
-  min-height: 300px; /* Fixed height for the div */
-}
 
 
 .workyourway-bg {

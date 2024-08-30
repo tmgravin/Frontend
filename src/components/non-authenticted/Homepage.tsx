@@ -114,14 +114,15 @@ const Homepage: React.FC = () => {
             ></div>
           ))}
         </div>
-        <div className="absolute bottom-4 left-0 right-0 flex justify-center space-x-2">
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-40">
           {backgroundImages.map((_, index) => (
             <button
               key={index}
-              onClick={() => handleDotClick(index)}
-              className={`h-2 w-2 rounded-full ${
-                currentImageIndex === index ? "primary-orangebg" : "bg-gray-500"
+              className={`w-2 h-2 rounded-full ${
+                index === currentImageIndex ? "primary-orangebg" : "bg-gray-400"
               }`}
+              onClick={() => setCurrentImageIndex(index)}
+              aria-label={`Slide ${index + 1}`}
             />
           ))}
         </div>
@@ -157,7 +158,7 @@ const Homepage: React.FC = () => {
             </form>
           </div>
           <div className="text-white py-2">
-            Academic writing | VC/Resume Writing | Copywriting
+            Academic writing | CV/Resume Writing | Copywriting
           </div>
           <button
             onClick={toggleSignupModal}

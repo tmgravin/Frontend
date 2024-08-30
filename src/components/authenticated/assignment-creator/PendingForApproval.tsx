@@ -133,7 +133,7 @@ const PendingForApproval: React.FC = () => {
                 </Typography>
                 <Button
                   variant="contained"
-                  color="primary"
+                  className="primary-orangebg hover:bg-orange-700"
                   onClick={() => handleViewApplicants(item)}
                   sx={{ mt: 2 }}
                 >

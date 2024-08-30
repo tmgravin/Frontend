@@ -149,17 +149,17 @@ const ApplicantsInfoModal: React.FC<ApplicantsInfoModalProps> = ({
                   <TableCell>{applicant.cv ?? "-"}</TableCell>
                   <TableCell>{assignment.coverLetter}</TableCell>
 
-                  <TableCell>
+                  <TableCell className="flex flex-row">
                     <Button
                       variant="contained"
-                      color="success"
+                      className="primary-orangebg hover:bg-orange-600"
                       onClick={() => acceptApplication(assignment.id)}
                     >
                       Accept
                     </Button>
                     <Button
                       variant="contained"
-                      color="error"
+                      className="bg-white hover:bg-slate-300 text-black ml-2"
                       onClick={() => handleReject(assignment.id)}
                     >
                       Reject
@@ -176,7 +176,10 @@ const ApplicantsInfoModal: React.FC<ApplicantsInfoModalProps> = ({
         </Table>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button
+          onClick={onClose}
+          className="primary-orangebg hover:bg-orange-600 text-white"
+        >
           Close
         </Button>
       </DialogActions>
