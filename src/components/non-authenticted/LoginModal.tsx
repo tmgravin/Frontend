@@ -5,6 +5,7 @@ import ResetPasswordModal from "./ResetPasswordModal";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getUserFromCookies } from "../auth/oldtoken"; // Adjust the path based on your file structure
 
 interface SignupData {
   email: string;
@@ -35,19 +36,25 @@ const LoginModal: React.FC<LoginModalProps> = ({
   if (!isOpen) return null;
 
   // Function to set user data in a cookie
-  function setUserCookie(data: any) {
-    const userValue = encodeURIComponent(JSON.stringify(data));
+  // function setUserCookie(data: any) {
+  //   const userValue = encodeURIComponent(JSON.stringify(data));
+  //   const expiryDate = new Date();
+  //   expiryDate.setDate(expiryDate.getDate() + 7); // Cookie expires in 7 days
+
+  //   document.cookie = `user=${userValue}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
+  // }
+  function setTokenCookie(data: any) {
+    const tokenValue = encodeURIComponent(JSON.stringify(data));
     const expiryDate = new Date();
     expiryDate.setDate(expiryDate.getDate() + 7); // Cookie expires in 7 days
-
-    document.cookie = `user=${userValue}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
+    document.cookie = `token=${tokenValue}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
   }
 
   const handleLogin = async (userRole: string) => {
     console.log(loginData);
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/login`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/security/login`,
         {
           ...loginData,
           userType: userRole,
@@ -64,15 +71,19 @@ const LoginModal: React.FC<LoginModalProps> = ({
       console.log(response.data);
 
       if (response.status === 200) {
-        // Storing user data in localStorage
-        // localStorage.setItem('user', JSON.stringify(response.data));
-        setUserCookie(response.data); // Set user data in cookie
+        setTokenCookie(response.data); // Set token data in cookie
+        const user = getUserFromCookies();
+        if (user) {
+          console.log("userd userType from login:", user.userType, user.token);
+        } else {
+          console.error("Failed to user token or token not found.");
+        }
         toast.success("Login successful!");
-        if (response.data.userType === "ASSIGNMENT_CREATOR") {
+        if (user?.userType === "ASSIGNMENT_CREATOR") {
           router.push(
             `${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-creator`
           );
-        } else if (response.data.userType === "ASSIGNMENT_DOER") {
+        } else if (user?.userType === "ASSIGNMENT_DOER") {
           router.push(
             `${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-doer`
           );

@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
-import { getUserFromCookies } from "@/components/auth/token"; // Adjust the path as necessary
+import { getUserFromCookies } from "@/components/auth/oldtoken"; // Adjust the path as necessary
 import { ToastContainer, toast } from "react-toastify";
 import ChangePasswordDialog from "./ChangePasswordDialog";
 import useUserData from "@/components/providers/UserProvider";

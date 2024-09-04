@@ -9,7 +9,7 @@ function setUserCookie(data: any) {
   const userValue = encodeURIComponent(JSON.stringify(data));
   const expiryDate = new Date();
   expiryDate.setDate(expiryDate.getDate() + 7); // Cookie expires in 7 days
-  document.cookie = `user=${userValue}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
+  document.cookie = `token=${userValue}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
 }
 
 const AdminLogin: React.FC = () => {
@@ -35,7 +35,7 @@ const AdminLogin: React.FC = () => {
           withCredentials: true,
         }
       );
-      if (response.status == 200 && response.data.userType == "ADMIN") {
+      if (response.status == 200 /* && response.data.userType == "ADMIN" */) {
         toast.success("login successful");
         setUserCookie(response.data); // Set user data in cookie
         router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/admindashboard`);

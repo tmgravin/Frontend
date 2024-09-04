@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ReviewRating from "../Review-modal/ReviewRating";
-import { getUserFromCookies } from "@/components/auth/token";
+import { getUserFromCookies } from "@/components/auth/oldtoken";
 import Image from "next/image";
 
 const user = getUserFromCookies();
@@ -89,7 +89,6 @@ const CompletedAssignments: React.FC = () => {
     }
     setLoading(false);
   };
-
 
   const loadMore = () => {
     setVisibleCount((prevCount) => prevCount + 4);

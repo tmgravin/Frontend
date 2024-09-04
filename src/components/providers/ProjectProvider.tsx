@@ -8,7 +8,7 @@ import React, {
   useEffect,
 } from "react";
 import axios from "axios";
-import { getUserFromCookies } from "../auth/token";
+import { getUserFromCookies } from "../auth/oldtoken";
 
 // Assuming `getUserFromCookies` returns an object with an `id` property
 const user = getUserFromCookies();
@@ -40,8 +40,13 @@ export const ProjectProvider: React.FC<{ children: ReactNode }> = ({
     setLoading(true);
     try {
       const response = await axios.get<ProjectDataItem[]>(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/byUser?userId=${user.id}`,
-        { withCredentials: true }
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/byUser?userId=${user?.id}`,
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        }
       );
       setData(response.data);
     } catch (error) {

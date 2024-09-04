@@ -22,7 +22,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import RateTeacherModal from "./RateTeacherModal";
 import axios from "axios";
-import { getUserFromCookies } from "@/components/auth/token";
+import { getUserFromCookies } from "@/components/auth/oldtoken";
 
 const user = getUserFromCookies();
 

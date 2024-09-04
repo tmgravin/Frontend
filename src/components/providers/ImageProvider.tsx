@@ -1,7 +1,7 @@
 "use client";
 import React, { createContext, useContext, useState, useEffect } from "react";
 import axios from "axios";
-import { getUserFromCookies } from "@/components/auth/token";
+import { getUserFromCookies } from "@/components/auth/oldtoken";
 
 // Define the context state type for managing image data
 interface ImageContextType {
@@ -30,7 +30,12 @@ export const ImageProvider: React.FC<{ children: React.ReactNode }> = ({
     try {
       if (!user?.id) return; // Ensure user exists and has an ID
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${user.id}`
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${user.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+        }
       );
       setImageUrl(response.data);
     } catch (error) {

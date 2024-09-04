@@ -2,17 +2,19 @@
 import React, { useEffect, useState } from "react";
 import UserModal from "../usermodal/UserModal";
 import Image from "next/image";
-import { getUserFromCookies } from "@/components/auth/token";
+import { getUserFromCookies } from "@/components/auth/oldtoken";
 import { useRouter } from "next/navigation";
 
 function AdminHeader() {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState("");
 
   useEffect(() => {
     // Fetch the user from cookies and set it to state
     const fetchUser = async () => {
-      const userData = await getUserFromCookies();
-      setUser(userData);
+      const userData = await getUserFromCookies() ||;
+      if (userData) {
+        setUser(userData);
+      }
     };
 
     fetchUser();

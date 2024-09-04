@@ -17,7 +17,7 @@ import "react-toastify/dist/ReactToastify.css";
 import useUserData from "@/components/providers/UserProvider";
 import axios from "axios";
 import { useImageContext } from "@/components/providers/ImageProvider";
-import { getUserFromCookies } from "@/components/auth/token";
+import { getUserFromCookies } from "@/components/auth/oldtoken";
 const cookieuser = getUserFromCookies();
 
 const UserModal: React.FC = () => {

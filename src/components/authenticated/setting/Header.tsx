@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getUserFromCookies } from "@/components/auth/token";
+import { getUserFromCookies } from "@/components/auth/oldtoken";
 import useUserData from "@/components/providers/UserProvider";
 import { useImageContext } from "@/components/providers/ImageProvider"; // Import the custom hook
 const Header: React.FC = () => {

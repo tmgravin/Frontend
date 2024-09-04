@@ -6,7 +6,7 @@ import ReadMoreModal from "./ReadMoreModal";
 import ApplyModal from "./ApplyModal";
 import "react-toastify/dist/ReactToastify.css";
 import { toast, ToastContainer } from "react-toastify";
-import { getUserFromCookies } from "../../auth/token";
+import { getUserFromCookies } from "../../auth/oldtoken";
 
 export interface DataItem {
   id: number;

@@ -9,7 +9,7 @@ import {
   CircularProgress,
 } from "@mui/material";
 import ApplicantsInfoModal from "./ApplicantsInfoModal";
-import { getUserFromCookies } from "@/components/auth/token";
+import { getUserFromCookies } from "@/components/auth/oldtoken";
 
 const user = getUserFromCookies();
 

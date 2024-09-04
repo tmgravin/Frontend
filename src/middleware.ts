@@ -1,20 +1,30 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import {jwtDecode} from 'jwt-decode'; // Ensure you have this installed
+
+// Define the interface for the decoded JWT payload
+interface DecodedToken {
+  email: string;
+  id: string;
+  userType: string;
+}
 
 export function middleware(request: NextRequest) {
   console.log("Middleware running");
 
   // Extract the user cookie
-  const userCookie = request.cookies.get('user');
+  const userCookie = request.cookies.get('token'); // Adjust the cookie name as necessary
   let userType: string | null = null;
 
   if (userCookie) {
     try {
-      // Safely parse the cookie value
-      const user = JSON.parse(userCookie.value);
-      userType = user.userType;
+      // Safely decode the token
+      const tokenValue = userCookie.value;
+      const decoded = jwtDecode<DecodedToken>(tokenValue);
+
+      userType = decoded.userType;
     } catch (error) {
-      console.error("Failed to parse user cookie:", error);
+      console.error("Failed to decode or parse user token:", error);
     }
   }
 

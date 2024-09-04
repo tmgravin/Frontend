@@ -5,7 +5,7 @@ import ReadMoreModal from "./ReadMoreModal";
 import EditAssignmentModal from "./EditAssignmentModal";
 import PaymentUploadModal from "@/components/authenticated/assignment-doer/Payment/PaymentUploadModal";
 import DeleteModal from "./DeleteModal"; // Import DeleteModal component
-import { getUserFromCookies } from "../../auth/token";
+import { getUserFromCookies } from "../../auth/oldtoken";
 import { useProjects } from "@/components/providers/ProjectProvider";
 
 const user = getUserFromCookies();

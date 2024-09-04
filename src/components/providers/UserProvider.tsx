@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { getUserFromCookies } from "@/components/auth/token";
+import { getUserFromCookies } from "@/components/auth/oldtoken";
+const cookieUser = getUserFromCookies();
+console.log(cookieUser);
 
 interface UserData {
   name: string;
@@ -27,9 +29,17 @@ const useUserData = () => {
   const fetchData = async () => {
     try {
       const cookieuser = getUserFromCookies();
+      const token = cookieUser?.token;
+      console.log(cookieUser?.token);
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/?id=${cookieuser?.id}`,
-        { withCredentials: true }
+
+        {
+          withCredentials: true,
+          headers: {
+            Authorization: `${token}`,
+          },
+        }
       );
       const userData = response.data;
       setUser({
