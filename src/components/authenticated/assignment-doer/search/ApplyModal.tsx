@@ -1,36 +1,42 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
-import { DataItem } from "./Projects";
 import { getUserFromCookies } from "@/components/auth/token";
 
+interface Project {
+  id: number;
+  projectName: string;
+  projectDeadline: string;
+  projectStatus: string;
+  scope: string;
+  experienceYear: string;
+  levelOfExperience: string;
+}
+
 interface ApplyModalProps {
-  project: DataItem | null;
+  project: Project;
   onClose: () => void;
 }
 
 const ApplyModal: React.FC<ApplyModalProps> = ({ project, onClose }) => {
   const [coverLetter, setCoverLetter] = useState("");
   const [loading, setLoading] = useState(false);
+  const user = getUserFromCookies();
+
+  const doerId = user.id;
+  const formData = new FormData();
+  formData.append("doerId", doerId.toString());
+  formData.append("projectId", project.id.toString());
+  formData.append("coverLetter", coverLetter);
 
   const handleApply = async () => {
-    if (!project) return;
+    setLoading(true);
 
     try {
-      const user = getUserFromCookies();
-
       if (!user || !user.id) {
         toast.error("User not found. Please log in.");
         return;
       }
-
-      const doerId = user.id;
-      const formData = new FormData();
-      formData.append("doerId", doerId.toString());
-      formData.append("projectId", project.projects.id.toString());
-      formData.append("coverLetter", coverLetter);
-
-      setLoading(true);
 
       await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/apply`,
@@ -67,10 +73,10 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ project, onClose }) => {
       {project && (
         <>
           <p className="mb-2">
-            <strong>Project:</strong> {project.projects.projectName}
+            <strong>Project:</strong> {project.projectName}
           </p>
           <p className="mb-4">
-            <strong>Deadline:</strong> {project.projects.projectDeadline}
+            <strong>Deadline:</strong> {project.projectDeadline}
           </p>
         </>
       )}

@@ -8,6 +8,8 @@ import WorkYourWay from "@/components/non-authenticted/WorkYourWay";
 import Footer from "@/components/non-authenticted/footer/Footer";
 import axios from "axios";
 import { ProjectProvider } from "@/components/providers/ProjectProvider";
+import { Search } from "lucide-react";
+import Searchbar from "./search/Searchbar";
 
 function Homepage() {
   const [backgroundImages, setBackgroundImages] = useState<string[]>([]);
@@ -57,7 +59,7 @@ function Homepage() {
       <div className="w-full h-full">
         <Header />
 
-        <div className="relative overflow-hidden h-full">
+        <div className="relative overflow-hidden h-full ">
           <div
             className="flex transition-transform duration-1000 ease-in-out"
             style={{
@@ -91,7 +93,7 @@ function Homepage() {
               />
             ))}
           </div>
-          <div className="absolute inset-0 px-2 flex flex-col justify-center items-start lg:p-2">
+          <div className="absolute inset-0 px-2 flex flex-col justify-center items-start lg:p-2  lg:pl-4">
             <div className="text-3xl text-white lg:w-1/2 pt-10">
               Get Freelancing Jobs Instantly Start Working for Yourself!
             </div>
@@ -100,7 +102,7 @@ function Homepage() {
               secure, flexible, and cost-effective platform
             </div>
             <div>
-              <form className="flex items-center w-full">
+              {/*   <form className="flex items-center w-full">
                 <div className="relative w-full">
                   <input
                     type="text"
@@ -120,7 +122,8 @@ function Homepage() {
                   Search
                   <span className="sr-only">Search</span>
                 </button>
-              </form>
+              </form> */}
+              <Searchbar />
             </div>
             <div className="text-white py-2">
               Academic writing | CV/Resume Writing | Copywriting

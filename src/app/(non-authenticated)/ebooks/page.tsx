@@ -1,7 +1,12 @@
+import EbookHome from "@/components/non-authenticted/ebook/EbookHome";
 import React from "react";
 
 function page() {
-  return <div>this is ebook page</div>;
+  return (
+    <div>
+      <EbookHome />
+    </div>
+  );
 }
 
 export default page;

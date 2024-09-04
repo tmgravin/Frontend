@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ReadMoreModal from "./ReadMoreModal";
+import ApplyModal from "../ApplyModal";
 
 // Define the type for category data
 interface Category {
@@ -39,6 +40,7 @@ const Searchbar: React.FC = () => {
   const [noResultsMessage, setNoResultsMessage] = useState(""); // State for no results message
   const [isModalOpen, setIsModalOpen] = useState(false); // State for modal visibility
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+  const [showApplyModal, setShowApplyModal] = useState(false);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -94,6 +96,16 @@ const Searchbar: React.FC = () => {
     };
     fetchCategory();
   }, []);
+
+  const handleApplyNow = (project: any) => {
+    setSelectedProject(project);
+    setShowApplyModal(true);
+  };
+
+  const handleCloseApplyModal = () => {
+    setShowApplyModal(false);
+    setSelectedProject(null);
+  };
 
   return (
     <div>
@@ -183,6 +195,12 @@ const Searchbar: React.FC = () => {
                         Address: {result.users.address}
                       </p>
                     </div> */}
+                      <button
+                        className="primary-orangebg rounded-sm p-1 text-white "
+                        onClick={() => handleApplyNow(result)}
+                      >
+                        <h1 className="text-xs">Apply now</h1>
+                      </button>
                     </div>
                   ))
                 : isSearchAttempted &&
@@ -194,6 +212,21 @@ const Searchbar: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {showApplyModal && selectedProject && (
+        <>
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-40"
+            onClick={handleCloseApplyModal}
+          />
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <ApplyModal
+              project={selectedProject}
+              onClose={handleCloseApplyModal}
+            />
+          </div>
+        </>
       )}
 
       {/* ReadMoreModal component */}

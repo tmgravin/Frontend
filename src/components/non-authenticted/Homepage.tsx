@@ -127,7 +127,7 @@ const Homepage: React.FC = () => {
             />
           ))}
         </div>
-        <div className="absolute inset-0 px-2 flex flex-col justify-center items-start lg:p-2">
+        <div className="absolute inset-0 px-2 flex flex-col justify-center items-start lg:p-2  lg:pl-4">
           <div className="text-3xl text-white lg:w-1/2 pt-10">
             Get Freelancing Jobs Instantly Start Working for Yourself!
           </div>

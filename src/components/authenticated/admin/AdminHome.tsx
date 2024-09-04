@@ -9,6 +9,7 @@ import UserModal from "../usermodal/UserModal";
 import FeaturedImages from "./FeaturedImages";
 import CategoryForm from "./InfoModals/AddCatagory/addCatagory";
 import PaymentsTable from "./InfoModals/PaymentsTable";
+import UploadEbook from "./UploadEbook";
 
 const AdminHome: React.FC = () => {
   return (
@@ -49,6 +50,9 @@ const AdminHome: React.FC = () => {
           <Tabs.Trigger value="category" style={tabStyle}>
             Add Category
           </Tabs.Trigger>
+          <Tabs.Trigger value="uploadebook" style={tabStyle}>
+            Upload E-Book
+          </Tabs.Trigger>
         </Tabs.List>
 
         <div style={contentContainerStyle}>
@@ -83,6 +87,10 @@ const AdminHome: React.FC = () => {
           <Tabs.Content value="category">
             <h2>Add Category</h2>
             <CategoryForm />
+          </Tabs.Content>
+          <Tabs.Content value="uploadebook">
+            <h2>Upload E-Book</h2>
+            <UploadEbook />
           </Tabs.Content>
         </div>
       </Tabs.Root>
