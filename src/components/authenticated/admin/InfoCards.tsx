@@ -41,6 +41,9 @@ const InfoCards: React.FC = () => {
             userType: "ASSIGNMENT_DOER",
           },
           {
+            headers: {
+              Authorization: `Bearer ${cookieuser?.token}`, // Replace `yourBearerToken` with your actual token
+            },
             withCredentials: true, // Include credentials with the request
           }
         );
@@ -50,6 +53,9 @@ const InfoCards: React.FC = () => {
         const projectResponse = await axios.get(
           `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/total`,
           {
+            headers: {
+              Authorization: `Bearer ${cookieuser?.token}`, // Replace `yourBearerToken` with your actual token
+            },
             withCredentials: true, // Include credentials with the request
           }
         );

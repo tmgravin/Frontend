@@ -13,8 +13,8 @@ import Footer from "./footer/Footer";
 import SignupModal from "./SignupModal";
 import { ToastContainer } from "react-toastify";
 import FQA from "./footer/FQA";
-import Tesstimonials from "./Tesstimonials";
 import Searchbar from "./search/Searchbar";
+import TestimonialShowcase from "./Tesstimonials";
 
 const Homepage: React.FC = () => {
   const [backgroundImages, setBackgroundImages] = useState<string[]>([]);
@@ -175,7 +175,8 @@ const Homepage: React.FC = () => {
       <LatestProjects />
       <Whyus onGetStartedClick={toggleSignupModal} />
       <Applicationprocess />
-      {/* <Tesstimonials /> */}
+      <TestimonialShowcase />
+
       <Applicationprocess2 startRegistration={toggleSignupModal} />
       <WorkYourWay />
       <FQA />

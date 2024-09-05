@@ -26,7 +26,7 @@ const AdminLogin: React.FC = () => {
     }
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/login`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/security/adminLogin`,
         { email: email, password: password, role: "admin" },
         {
           headers: {

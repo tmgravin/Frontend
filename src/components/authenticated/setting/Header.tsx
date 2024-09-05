@@ -19,7 +19,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { getUserFromCookies } from "@/components/auth/oldtoken";
 import useUserData from "@/components/providers/UserProvider";
 const Header: React.FC = () => {
-  const { user, fieldValues, fetchData } = useUserData();
+  const { user } = useUserData();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
   const theme = useTheme();

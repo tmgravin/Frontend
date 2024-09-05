@@ -1,88 +1,112 @@
-import React from "react";
+"use client";
 
-function Tesstimonials() {
-  return (
-    <div className="w-full mx-4 sm:mx-6 lg:mx-8 mt-6">
-      <h2 className="text-3xl font-semibold text-center text-gray-900 mb-8">
-        What Our Clients Say
-      </h2>
-      <div className="flex flex-wrap -mx-4">
-        {/* <!-- Testimonial 1 --> */}
-        <div className="w-full sm:w-1/2 lg:w-1/3 px-4 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <div className="flex items-center mb-4">
-              <img
-                className="w-16 h-16 rounded-full mr-4"
-                src="https://via.placeholder.com/64"
-                alt="Client Photo"
-              />
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800">
-                  John Doe
-                </h3>
-                <p className="text-sm text-gray-600">CEO, Example Co.</p>
-              </div>
-            </div>
-            <p className="text-gray-700">
-              &quot;Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed
-              do eiusmod tempor incididunt ut labore et dolore magna
-              aliqua.&quot;
-            </p>
-          </div>
-        </div>
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import Image from "next/image";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Autoplay } from "swiper/modules";
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/autoplay";
 
-        {/* <!-- Testimonial 2 --> */}
-        <div className="w-full sm:w-1/2 lg:w-1/3 px-4 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <div className="flex items-center mb-4">
-              <img
-                className="w-16 h-16 rounded-full mr-4"
-                src="https://via.placeholder.com/64"
-                alt="Client Photo"
-              />
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800">
-                  Jane Smith
-                </h3>
-                <p className="text-sm text-gray-600">
-                  Marketing Director, Another Co.
-                </p>
-              </div>
-            </div>
-            <p className="text-gray-700">
-              &quot;Ut enim ad minim veniam, quis nostrud exercitation ullamco
-              laboris nisi ut aliquip ex ea commodo consequat.&quot;
-            </p>
-          </div>
-        </div>
-
-        {/* <!-- Testimonial 3 --> */}
-        <div className="w-full sm:w-1/2 lg:w-1/3 px-4 mb-8">
-          <div className="bg-white p-6 rounded-lg shadow-lg">
-            <div className="flex items-center mb-4">
-              <img
-                className="w-16 h-16 rounded-full mr-4"
-                src="https://via.placeholder.com/64"
-                alt="Client Photo"
-              />
-              <div>
-                <h3 className="text-lg font-semibold text-gray-800">
-                  Alex Johnson
-                </h3>
-                <p className="text-sm text-gray-600">
-                  Product Manager, Tech Corp.
-                </p>
-              </div>
-            </div>
-            <p className="text-gray-700">
-              &quot;Duis aute irure dolor in reprehenderit in voluptate velit
-              esse cillum dolore eu fugiat nulla pariatur.&quot;
-            </p>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+interface Testimonial {
+  id: number;
+  name: string;
+  company: string;
+  position: string;
+  message: string;
+  imageUrl: string;
 }
 
-export default Tesstimonials;
+const TestimonialShowcase: React.FC = () => {
+  const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const response = await axios.get<Testimonial[]>(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/testimonial/`
+        );
+        setTestimonials(response.data);
+        setIsLoading(false);
+      } catch (err) {
+        console.error("Error fetching testimonials:", err);
+        setError("Failed to load testimonials. Please try again later.");
+        setIsLoading(false);
+      }
+    };
+
+    fetchTestimonials();
+  }, []);
+
+  if (isLoading) {
+    return <div className="text-center py-10">Loading testimonials...</div>;
+  }
+
+  if (error) {
+    return <div className="text-center py-10 text-red-500">{error}</div>;
+  }
+
+  if (testimonials.length === 0) {
+    return (
+      <div className="text-center py-10">
+        No testimonials available at the moment.
+      </div>
+    );
+  }
+
+  return (
+    <section className="bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto">
+        <h2 className="text-3xl font-extrabold text-gray-900 text-center mb-8">
+          What Our Clients Say
+        </h2>
+        <Swiper
+          modules={[Pagination, Autoplay]}
+          spaceBetween={30}
+          slidesPerView={1}
+          pagination={{ clickable: true }}
+          autoplay={{ delay: 5000 }}
+          breakpoints={{
+            640: {
+              slidesPerView: 2,
+            },
+            1024: {
+              slidesPerView: 3,
+            },
+          }}
+          className="pb-12"
+        >
+          {testimonials.map((testimonial) => (
+            <SwiperSlide key={testimonial.id}>
+              <div className="bg-white rounded-lg shadow-lg p-6 h-full flex flex-col">
+                <div className="flex items-center mb-4">
+                  <Image
+                    src={testimonial.imageUrl}
+                    alt={testimonial.name}
+                    width={60}
+                    height={60}
+                    className="rounded-full mr-4"
+                  />
+                  <div>
+                    <h3 className="text-lg font-semibold text-gray-900">
+                      {testimonial.name}
+                    </h3>
+                    <p className="text-sm text-gray-600">
+                      {testimonial.position} at {testimonial.company}
+                    </p>
+                  </div>
+                </div>
+                <p className="text-gray-700 flex-grow">{testimonial.message}</p>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </div>
+    </section>
+  );
+};
+
+export default TestimonialShowcase;
