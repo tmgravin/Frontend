@@ -5,12 +5,10 @@ import Image from "next/image";
 import { getUserFromCookies } from "@/components/auth/oldtoken";
 import { ToastContainer, toast } from "react-toastify";
 import useUserData from "@/components/providers/UserProvider";
-import { useImageContext } from "@/components/providers/ImageProvider"; // Import the custom hook
 const cookieuser = getUserFromCookies();
 
 const ImageDetails: React.FC = () => {
-  const { imageUrl, fetchImage } = useImageContext();
-
+  const { user, fetchData } = useUserData();
   const { setFieldValues } = useUserData();
   const [isEditingImage, setIsEditingImage] = useState(false);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -23,10 +21,10 @@ const ImageDetails: React.FC = () => {
 
     try {
       const formData = new FormData();
-      formData.append("imageUrl", selectedFile);
+      formData.append("profileImage", selectedFile);
 
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${cookieuser?.id}`,
+      const response = await axios.put(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/updateUser/${cookieuser?.id}`,
         formData,
         {
           headers: {
@@ -38,7 +36,7 @@ const ImageDetails: React.FC = () => {
       );
       if (response.status === 200) {
         toast.success("Profile picture updated successfully");
-        fetchImage();
+        fetchData();
         setFieldValues((prev) => ({
           ...prev,
           profilePicture: previewUrl || "",
@@ -68,7 +66,7 @@ const ImageDetails: React.FC = () => {
       );
       if (response.status === 200) {
         toast.success("Profile picture deleted successfully");
-        fetchImage();
+        fetchData();
         setFieldValues((prev) => ({ ...prev, profilePicture: undefined }));
         setShowConfirmDelete(false); // Close the confirmation dialog
         setIsEditingImage(true);
@@ -94,7 +92,7 @@ const ImageDetails: React.FC = () => {
       <ToastContainer />
       <div className="flex items-center justify-center mb-4">
         <Image
-          src={previewUrl || imageUrl || "/default-img.png"} // Show preview if available, else show the current image
+          src={previewUrl || user.profileImageUrl || "/default-img.png"} // Show preview if available, else show the current image
           alt="Profile Picture"
           width={96}
           height={96}

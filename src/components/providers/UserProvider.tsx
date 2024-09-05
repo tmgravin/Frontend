@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { getUserFromCookies } from "@/components/auth/oldtoken";
 const cookieUser = getUserFromCookies();
-console.log(cookieUser);
 
 interface UserData {
   name: string;
@@ -12,6 +11,7 @@ interface UserData {
   userType: string;
   cv: string | null | undefined;
   cvUrl: string | undefined | null;
+  profileImageUrl: null | string;
 }
 
 const useUserData = () => {
@@ -23,6 +23,7 @@ const useUserData = () => {
     userType: "",
     cv: "null",
     cvUrl: "",
+    profileImageUrl: "",
   });
 
   const [fieldValues, setFieldValues] = useState<Partial<UserData>>({});
@@ -30,7 +31,6 @@ const useUserData = () => {
     try {
       const cookieuser = getUserFromCookies();
       const token = cookieUser?.token;
-      console.log(cookieUser?.token);
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/?id=${cookieuser?.id}`,
 
@@ -48,9 +48,11 @@ const useUserData = () => {
         phone: userData.phone || "",
         address: userData.address || "",
         userType: userData.userType || "",
+        profileImageUrl: userData.profileImageUrl || null,
         cv: userData.cv || null,
         cvUrl: userData.cvUrl || null,
       });
+
       setFieldValues({
         name: userData.name || "",
         email: userData.email || "",
@@ -59,6 +61,7 @@ const useUserData = () => {
         userType: userData.userType || "",
         cv: userData.cv || null,
         cvUrl: userData.cvUrl || null,
+        profileImageUrl: userData.profileImageUrl || null,
       });
     } catch (err) {
       console.log(err);

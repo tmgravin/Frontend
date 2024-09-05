@@ -16,12 +16,10 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useUserData from "@/components/providers/UserProvider";
 import axios from "axios";
-import { useImageContext } from "@/components/providers/ImageProvider";
 import { getUserFromCookies } from "@/components/auth/oldtoken";
 const cookieuser = getUserFromCookies();
 
 const UserModal: React.FC = () => {
-  const { imageUrl, fetchImage } = useImageContext();
   const { user, setUser, fieldValues, setFieldValues, fetchData } =
     useUserData();
 
@@ -40,9 +38,9 @@ const UserModal: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/logout/${cookieuser?.id}`
-      );
+      // const response = await axios.post(
+      //   `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/logout/${cookieuser?.id}`
+      // );
       removeCookie("token");
       toast.warning("logging out");
     } catch (err) {
@@ -97,8 +95,8 @@ const UserModal: React.FC = () => {
           }}
         >
           <IconButton onClick={handleMenuClick} sx={{ ml: 0 }}>
-            {imageUrl ? (
-              <Avatar src={imageUrl} alt={user?.name || ""} />
+            {user?.profileImageUrl ? (
+              <Avatar src={user?.profileImageUrl} alt={user.name} />
             ) : (
               <AccountCircleIcon fontSize="large" />
             )}

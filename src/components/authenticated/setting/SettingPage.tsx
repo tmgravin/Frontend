@@ -9,14 +9,14 @@ import DoerDetails from "./DoerDetails";
 
 function SettingPage() {
   const router = useRouter();
-  const [userType, setUserType] = useState(null);
+  const [userType, setUserType] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserType = async () => {
       try {
         const user = await getUserFromCookies();
-        setUserType(user?.userType);
+        setUserType(user?.userType || "");
       } catch (error) {
         console.error("Error fetching user type:", error);
       } finally {

@@ -86,6 +86,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
         formData,
         {
           headers: {
+            Authorization: `Bearer ${user?.token}`,
             "Content-Type": "multipart/form-data",
           },
           withCredentials: true, // Include credentials with the request

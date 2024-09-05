@@ -18,10 +18,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getUserFromCookies } from "@/components/auth/oldtoken";
 import useUserData from "@/components/providers/UserProvider";
-import { useImageContext } from "@/components/providers/ImageProvider"; // Import the custom hook
 const Header: React.FC = () => {
-  const { imageUrl, fetchImage } = useImageContext();
-
   const { user, fieldValues, fetchData } = useUserData();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
@@ -40,12 +37,11 @@ const Header: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/logout/${cookieuser?.id}`
-      );
+      // const response = await axios.post(
+      //   `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/logout/${cookieuser?.id}`
+      // );
       removeCookie("user");
       toast.warning("Logging out");
-      console.log("User cookie has been cleared");
     } catch (err) {
       toast.error("Logout Failed");
       console.log("Error occurred", err);
@@ -99,8 +95,8 @@ const Header: React.FC = () => {
             </Typography>
           </Box>
           <IconButton onClick={handleMenuClick}>
-            {imageUrl ? (
-              <Avatar src={imageUrl} alt={user?.name} />
+            {user?.profileImageUrl ? (
+              <Avatar src={user?.profileImageUrl} alt={user?.name} />
             ) : (
               <AccountCircleIcon fontSize="large" />
             )}
