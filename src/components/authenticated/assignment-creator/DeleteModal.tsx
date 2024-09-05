@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { getUserFromCookies } from "@/components/auth/oldtoken";
+const cookieuser = getUserFromCookies();
 
 interface DeleteModalProps {
   projectId: number; // ID of the project to delete
@@ -20,7 +22,13 @@ const DeleteModal: React.FC<DeleteModalProps> = ({
     try {
       await axios.delete(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/delete?${projectId}`,
-        { withCredentials: true }
+        {
+          headers: {
+            Authorization: `Bearer ${cookieuser?.token}`,
+          },
+
+          withCredentials: true,
+        }
       );
       toast.success("Project deleted successfully!");
       onDelete(); // Refresh data in parent component

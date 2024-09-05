@@ -10,6 +10,8 @@ import axios from "axios";
 import { ProjectProvider } from "@/components/providers/ProjectProvider";
 import { Search } from "lucide-react";
 import Searchbar from "./search/Searchbar";
+import { getUserFromCookies } from "@/components/auth/oldtoken";
+const cookieuser = getUserFromCookies();
 
 function Homepage() {
   const [backgroundImages, setBackgroundImages] = useState<string[]>([]);
@@ -21,6 +23,9 @@ function Homepage() {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_BASE_URL}/api/featureImages/creator`,
           {
+            headers: {
+              Authorization: `Bearer ${cookieuser?.token}`,
+            },
             withCredentials: true,
           }
         );

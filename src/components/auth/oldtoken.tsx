@@ -1,3 +1,5 @@
+import { jwtDecode } from "jwt-decode";
+
 export interface DecodedToken {
   email: string;
   id: string;
@@ -5,7 +7,6 @@ export interface DecodedToken {
   token: string;
 }
 
-import { jwtDecode } from "jwt-decode"; // Correct import
 export function getUserFromCookies(): DecodedToken | null {
   if (typeof window !== "undefined" && document.cookie) {
     const cookies = document.cookie.split(";");
@@ -14,10 +15,17 @@ export function getUserFromCookies(): DecodedToken | null {
     );
 
     if (tokenCookie) {
+      // Extract and clean the token value
       const tokenValue = tokenCookie.split("=")[1];
+      const cleanedTokenValue = decodeURIComponent(tokenValue).replace(
+        /^"|"$/g,
+        ""
+      ); // Remove extra quotes if present
+
+      console.log(cleanedTokenValue);
       try {
         // Decode the token without verifying it
-        const decoded = jwtDecode<DecodedToken>(tokenValue);
+        const decoded = jwtDecode<DecodedToken>(cleanedTokenValue);
         console.log("Decoded payload:", decoded); // Log the decoded payload
 
         // Return the decoded payload
@@ -25,7 +33,7 @@ export function getUserFromCookies(): DecodedToken | null {
           email: decoded.email,
           id: decoded.id, // Assuming 'id' is the user ID field
           userType: decoded.userType,
-          token: tokenValue,
+          token: cleanedTokenValue,
         };
       } catch (error) {
         console.error("Failed to decode token:", error);
@@ -33,32 +41,6 @@ export function getUserFromCookies(): DecodedToken | null {
       }
     } else {
       console.error("Token cookie is not available");
-      return null;
-    }
-  } else {
-    console.error("Window or document.cookie is not available");
-    return null;
-  }
-}
-
-export function getTokenFromCookies(): any | null {
-  if (typeof window !== "undefined" && document.cookie) {
-    // Check if window and document.cookie are available
-    const cookies = document.cookie.split(";");
-    const userCookie = cookies.find((cookie) =>
-      cookie.trim().startsWith("token=")
-    );
-
-    if (userCookie) {
-      const userValue = userCookie.split("=")[1];
-      try {
-        return JSON.parse(decodeURIComponent(userValue));
-      } catch (error) {
-        console.error("Failed to parse user data from cookies:", error);
-        return null;
-      }
-    } else {
-      console.error("User cookie is not available");
       return null;
     }
   } else {

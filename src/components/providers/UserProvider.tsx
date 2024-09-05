@@ -35,10 +35,10 @@ const useUserData = () => {
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/?id=${cookieuser?.id}`,
 
         {
-          withCredentials: true,
           headers: {
-            Authorization: `${token}`,
+            Authorization: `Bearer ${token}`,
           },
+          withCredentials: true,
         }
       );
       const userData = response.data;

@@ -101,7 +101,7 @@ const ReviewRating: React.FC<ReviewRatingProps> = ({
       await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/review/likes`,
         {
-          users: { id: user.id }, // Use the correct user ID here
+          users: { id: user?.id }, // Use the correct user ID here
           reviews: { id: reviewId },
           likes: "L",
         },
@@ -126,11 +126,14 @@ const ReviewRating: React.FC<ReviewRatingProps> = ({
       await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/review/likes`,
         {
-          users: { id: user.id }, // Use the correct user ID here
+          users: { id: user?.id }, // Use the correct user ID here
           reviews: { id: reviewId },
           likes: "D",
         },
         {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
           withCredentials: true,
         }
       );
@@ -293,7 +296,7 @@ const ReviewRating: React.FC<ReviewRatingProps> = ({
         open={rateModalOpen}
         onClose={handleRateModalClose}
         doerId={doerId}
-        userId={user.id}
+        userId={user?.id}
       />
     </Dialog>
   );

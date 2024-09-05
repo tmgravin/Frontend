@@ -8,6 +8,8 @@ import WorkYourWay from "@/components/non-authenticted/WorkYourWay";
 import Footer from "@/components/non-authenticted/footer/Footer";
 import axios from "axios";
 import Searchbar from "./search/Searchbar";
+import { getUserFromCookies } from "@/components/auth/oldtoken";
+const cookieuser = getUserFromCookies();
 
 function Homepage() {
   const [backgroundImages, setBackgroundImages] = useState<string[]>([]);
@@ -19,6 +21,9 @@ function Homepage() {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_BASE_URL}/api/featureImages/doer`,
           {
+            headers: {
+              Authorization: `Bearer ${cookieuser?.token}`,
+            },
             withCredentials: true,
           }
         );

@@ -5,7 +5,7 @@ import { DataItem } from "./Projects";
 import { getUserFromCookies } from "@/components/auth/oldtoken";
 
 interface ApplyModalProps {
-  project: DataItem | null;
+  project: any;
   onClose: () => void;
 }
 
@@ -37,6 +37,7 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ project, onClose }) => {
         formData,
         {
           headers: {
+            Authorization: `Bearer ${user?.token}`,
             "Content-Type": "multipart/form-data",
           },
           withCredentials: true,

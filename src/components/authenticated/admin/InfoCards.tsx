@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import axios from "axios";
+import { getUserFromCookies } from "@/components/auth/oldtoken";
+const cookieuser = getUserFromCookies();
 
 const InfoCards: React.FC = () => {
   const [totalCreator, setTotalCreator] = useState();
@@ -25,6 +27,9 @@ const InfoCards: React.FC = () => {
             userType: "ASSIGNMENT_CREATOR",
           },
           {
+            headers: {
+              Authorization: `Bearer ${cookieuser?.token}`, // Replace `yourBearerToken` with your actual token
+            },
             withCredentials: true, // Include credentials with the request
           }
         );

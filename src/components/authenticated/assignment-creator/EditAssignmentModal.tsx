@@ -78,7 +78,7 @@ const EditAssignmentModal: React.FC<EditAssignmentModalProps> = ({
       projectAmount: budget,
       projectCategory: category,
       scope,
-      users: user.id,
+      users: user?.id,
       projectUrl: attachment,
     };
 
@@ -88,6 +88,7 @@ const EditAssignmentModal: React.FC<EditAssignmentModalProps> = ({
         formData,
         {
           headers: {
+            Authorization: `Bearer ${user?.token}`,
             "Content-Type": "multipart/form-data", // Set the Content-Type header to multipart/form-data
           },
           withCredentials: true,

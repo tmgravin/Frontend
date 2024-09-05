@@ -3,18 +3,18 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { getUserFromCookies } from "@/components/auth/oldtoken";
 
-interface Project {
-  id: number;
-  projectName: string;
-  projectDeadline: string;
-  projectStatus: string;
-  scope: string;
-  experienceYear: string;
-  levelOfExperience: string;
-}
+// interface Project {
+//   id: number;
+//   projectName: string;
+//   projectDeadline: string;
+//   projectStatus: string;
+//   scope: string;
+//   experienceYear: string;
+//   levelOfExperience: string;
+// }
 
 interface ApplyModalProps {
-  project: Project;
+  project: any;
   onClose: () => void;
 }
 
@@ -23,7 +23,7 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ project, onClose }) => {
   const [loading, setLoading] = useState(false);
   const user = getUserFromCookies();
 
-  const doerId = user.id;
+  const doerId = user?.id || "";
   const formData = new FormData();
   formData.append("doerId", doerId.toString());
   formData.append("projectId", project.id.toString());
@@ -43,6 +43,7 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ project, onClose }) => {
         formData,
         {
           headers: {
+            Authorization: `Bearer ${user?.token}`,
             "Content-Type": "multipart/form-data",
           },
           withCredentials: true,

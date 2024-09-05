@@ -58,7 +58,10 @@ const PaymentUploadModal: React.FC<PaymentUploadModalProps> = ({
     formData.append("projects", projectId.toString());
     formData.append("amount", amount.toString());
     formData.append("paymentMethod", paymentMethod);
-    formData.append("users", userid.id);
+    if (userid?.id) {
+      formData.append("users", userid?.id);
+    }
+
     if (file) {
       formData.append("screenshotUrl", file);
     }
@@ -66,6 +69,7 @@ const PaymentUploadModal: React.FC<PaymentUploadModalProps> = ({
     axios
       .post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/`, formData, {
         headers: {
+          Authorization: `Bearer ${userid?.token}`,
           "Content-Type": "multipart/form-data",
         },
         withCredentials: true, // Include credentials with the request
@@ -91,7 +95,7 @@ const PaymentUploadModal: React.FC<PaymentUploadModalProps> = ({
             label="User ID"
             type="text"
             fullWidth
-            value={userid.id}
+            value={userid?.id}
             disabled
           />
           <TextField

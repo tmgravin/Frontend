@@ -1,8 +1,10 @@
-"use client"
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import ProjectInfoModal from './InfoModals/ProjectInfoModal';
-import PaymentInfoModal from './InfoModals/PaymentInfo'; // Import the PaymentInfoModal
+"use client";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import ProjectInfoModal from "./InfoModals/ProjectInfoModal";
+import PaymentInfoModal from "./InfoModals/PaymentInfo"; // Import the PaymentInfoModal
+import { getUserFromCookies } from "@/components/auth/oldtoken";
+const cookieuser = getUserFromCookies();
 
 interface Creator {
   name: string;
@@ -41,16 +43,22 @@ const ProjectTableComponent: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isProjectModalOpen, setIsProjectModalOpen] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
-  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(null);
+  const [selectedProjectId, setSelectedProjectId] = useState<number | null>(
+    null
+  );
 
   useEffect(() => {
-    axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/`, {
-      withCredentials: true
-    })
-      .then(response => {
+    axios
+      .get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/`, {
+        headers: {
+          Authorization: `Bearer ${cookieuser?.token}`, // Replace `yourBearerToken` with your actual token
+        },
+        withCredentials: true,
+      })
+      .then((response) => {
         setProjects(response.data);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("There was an error fetching the projects!", error);
       });
   }, []);
@@ -82,18 +90,28 @@ const ProjectTableComponent: React.FC = () => {
         <table className="min-w-full bg-white border border-gray-200">
           <thead>
             <tr>
-              <th className="px-4 py-2 border-b border-gray-200">Project Name</th>
+              <th className="px-4 py-2 border-b border-gray-200">
+                Project Name
+              </th>
               <th className="px-4 py-2 border-b border-gray-200">Amount</th>
               <th className="px-4 py-2 border-b border-gray-200">Deadline</th>
               {/* <th className="px-4 py-2 border-b border-gray-200">Scope</th>
               <th className="px-4 py-2 border-b border-gray-200">Experience Year</th> */}
               <th className="px-4 py-2 border-b border-gray-200">Status</th>
               {/* <th className="px-4 py-2 border-b border-gray-200">Category</th> */}
-              <th className="px-4 py-2 border-b border-gray-200">Payment Status</th>
-              <th className="px-4 py-2 border-b border-gray-200">Creator Name</th>
-              <th className="px-4 py-2 border-b border-gray-200">Creator Email</th>
+              <th className="px-4 py-2 border-b border-gray-200">
+                Payment Status
+              </th>
+              <th className="px-4 py-2 border-b border-gray-200">
+                Creator Name
+              </th>
+              <th className="px-4 py-2 border-b border-gray-200">
+                Creator Email
+              </th>
               <th className="px-4 py-2 border-b border-gray-200">Details</th>
-              <th className="px-4 py-2 border-b border-gray-200">Payment Info</th>
+              <th className="px-4 py-2 border-b border-gray-200">
+                Payment Info
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -104,16 +122,30 @@ const ProjectTableComponent: React.FC = () => {
 
               return (
                 <tr key={projectWrapper.id} className="hover:bg-gray-100">
-                  <td className="px-4 py-2 border-b border-gray-200">{project.projectName}</td>
-                  <td className="px-4 py-2 border-b border-gray-200">{project.projectAmount}</td>
-                  <td className="px-4 py-2 border-b border-gray-200">{new Date(project.projectDeadline).toLocaleDateString()}</td>
+                  <td className="px-4 py-2 border-b border-gray-200">
+                    {project.projectName}
+                  </td>
+                  <td className="px-4 py-2 border-b border-gray-200">
+                    {project.projectAmount}
+                  </td>
+                  <td className="px-4 py-2 border-b border-gray-200">
+                    {new Date(project.projectDeadline).toLocaleDateString()}
+                  </td>
                   {/* <td className="px-4 py-2 border-b border-gray-200">{projectWrapper.scope}</td>
                   <td className="px-4 py-2 border-b border-gray-200">{projectWrapper.experienceYear}</td> */}
-                  <td className="px-4 py-2 border-b border-gray-200">{projectWrapper.projectStatus}</td>
+                  <td className="px-4 py-2 border-b border-gray-200">
+                    {projectWrapper.projectStatus}
+                  </td>
                   {/* <td className="px-4 py-2 border-b border-gray-200">{category?.category || 'N/A'}</td> */}
-                  <td className="px-4 py-2 border-b border-gray-200">{project.paymentStatus}</td>
-                  <td className="px-4 py-2 border-b border-gray-200">{creator.name}</td>
-                  <td className="px-4 py-2 border-b border-gray-200">{creator.email}</td>
+                  <td className="px-4 py-2 border-b border-gray-200">
+                    {project.paymentStatus}
+                  </td>
+                  <td className="px-4 py-2 border-b border-gray-200">
+                    {creator.name}
+                  </td>
+                  <td className="px-4 py-2 border-b border-gray-200">
+                    {creator.email}
+                  </td>
                   <td className="px-4 py-2 border-b border-gray-200">
                     <button
                       className="text-blue-500 underline"

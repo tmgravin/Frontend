@@ -3,11 +3,12 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import Link from "next/link";
 import "react-toastify/dist/ReactToastify.css";
+import Image from "next/image";
 
 interface SignupModalProps {
   isOpen: boolean;
-  toggleModal: () => void; // Ensure this is used correctly
-  toggleLoginModal?: () => void; // Optional function with default value
+  toggleModal: () => void;
+  toggleLoginModal?: () => void;
   isTeacherSignup: boolean | null;
   setIsTeacherSignup: (isTeacher: boolean | null) => void;
   teacherSignupData: SignupData;
@@ -32,7 +33,7 @@ interface SignupData {
 const SignupModal: React.FC<SignupModalProps> = ({
   isOpen,
   toggleModal,
-  toggleLoginModal = () => {}, // Default function
+  toggleLoginModal = () => {},
   isTeacherSignup,
   setIsTeacherSignup,
   teacherSignupData,
@@ -41,42 +42,57 @@ const SignupModal: React.FC<SignupModalProps> = ({
   agree,
   setAgree,
 }) => {
-  const [isLoading, setIsLoading] = useState<boolean>(false); // Add loading state
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [profilePicture, setProfilePicture] = useState<File | null>(null);
+  const [defaultPicture, setDefaultPicture] = useState<string | null>(null);
+  const defaultPictures = [
+    "/profilepic/1.jpg",
+    "/profilepic/2.jpg",
+    "/profilepic/3.jpg",
+    "/profilepic/4.jpg",
+    "/profilepic/5.jpg",
+    "/profilepic/6.jpg",
+  ];
+
+  const handlePictureUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files[0]) {
+      setProfilePicture(e.target.files[0]);
+      setDefaultPicture(null);
+    }
+  };
+
+  const handleDefaultPictureSelect = async (picturePath: string) => {
+    try {
+      const response = await fetch(picturePath);
+      const blob = await response.blob();
+      const file = new File([blob], `default_${picturePath.split("/").pop()}`, {
+        type: blob.type,
+      });
+      setProfilePicture(file);
+    } catch (error) {
+      console.error("Error fetching default picture:", error);
+      toast.error("Failed to select default picture. Please try again.");
+    }
+  };
 
   const clearForm = () => {
-    // Clear the form data
     setIsTeacherSignup(null);
-    handleSignupChange(
-      { target: { name: "name", value: "" } } as ChangeEvent<HTMLInputElement>,
-      true
-    );
-    handleSignupChange(
-      { target: { name: "email", value: "" } } as ChangeEvent<HTMLInputElement>,
-      true
-    );
-    handleSignupChange(
-      {
-        target: { name: "address", value: "" },
-      } as ChangeEvent<HTMLInputElement>,
-      true
-    );
-    handleSignupChange(
-      { target: { name: "phone", value: "" } } as ChangeEvent<HTMLInputElement>,
-      true
-    );
-    handleSignupChange(
-      {
-        target: { name: "password", value: "" },
-      } as ChangeEvent<HTMLInputElement>,
-      true
-    );
-    handleSignupChange(
-      {
-        target: { name: "confirmPassword", value: "" },
-      } as ChangeEvent<HTMLInputElement>,
-      true
-    );
+    [
+      "name",
+      "email",
+      "address",
+      "phone",
+      "password",
+      "confirmPassword",
+    ].forEach((field) => {
+      handleSignupChange(
+        { target: { name: field, value: "" } } as ChangeEvent<HTMLInputElement>,
+        true
+      );
+    });
     setAgree(false);
+    setProfilePicture(null);
+    setDefaultPicture(null);
   };
 
   const handleSignupSubmit = async (
@@ -84,27 +100,42 @@ const SignupModal: React.FC<SignupModalProps> = ({
     isTeacher: boolean
   ) => {
     e.preventDefault();
-    setIsLoading(true); // Set loading to true
+    setIsLoading(true);
     const signupData = isTeacher ? teacherSignupData : studentSignupData;
-    const userType = isTeacher ? "ASSIGNMENT_DOER" : "ASSIGNMENT_CREATOR"; // Determine the role
+    const userType = isTeacher ? "ASSIGNMENT_DOER" : "ASSIGNMENT_CREATOR";
 
     if (signupData.password !== signupData.confirmPassword) {
-      setIsLoading(false); // Set loading to false
+      setIsLoading(false);
       toast.error("Passwords do not match.");
       return;
     }
 
-    // Include the role in the signup data
-    const dataToSend = { ...signupData, userType };
+    const formData = new FormData();
+    Object.entries(signupData).forEach(([key, value]) => {
+      if (value !== undefined) {
+        formData.append(key, value);
+      }
+    });
+    formData.append("userType", userType);
+
+    if (profilePicture) {
+      formData.append("profileImage", profilePicture);
+    } else if (defaultPicture) {
+      formData.append("profileImage", defaultPicture);
+    }
 
     try {
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/signup`,
-        dataToSend
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
       );
       if (response.status === 200) {
         toast.success("Signup successful! Please verify your email and log in");
-        // Clear the form and close the modal after displaying the success message
         clearForm();
         setTimeout(() => {
           toggleModal();
@@ -114,14 +145,13 @@ const SignupModal: React.FC<SignupModalProps> = ({
       console.error("Signup failed", error);
       toast.error("Signup failed. Please try again.");
     } finally {
-      setIsLoading(false); // Set loading to false
+      setIsLoading(false);
     }
   };
 
   const handleKeyDown = (e: KeyboardEvent<HTMLFormElement>) => {
     if (e.key === "Enter") {
       e.preventDefault();
-      // Trigger form submission
       const form = e.currentTarget;
       if (form.checkValidity()) {
         const submitEvent = new Event("submit", { bubbles: true });
@@ -140,7 +170,6 @@ const SignupModal: React.FC<SignupModalProps> = ({
         aria-hidden="true"
         className="fixed inset-0 z-50 flex items-center justify-center overflow-auto"
       >
-        ``
         <div className="relative p-4 w-full max-w-md max-h-full">
           <div className="relative bg-white rounded-lg shadow overflow-y-auto max-h-[90vh]">
             <div className="flex items-center justify-between p-4 md:p-5 rounded-t dark:border-gray-600">
@@ -185,7 +214,6 @@ const SignupModal: React.FC<SignupModalProps> = ({
                   </button>
                   <div className="mt-5">
                     <div className="flex flex-row">
-                      {" "}
                       Already have an account?
                       <button
                         className="primary-orange"
@@ -208,109 +236,120 @@ const SignupModal: React.FC<SignupModalProps> = ({
                   <button
                     type="button"
                     className="text-gray-600 hover:text-gray-900"
-                    onClick={() => setIsTeacherSignup(null)}
+                    onClick={() => {
+                      setIsTeacherSignup(null);
+                      clearForm();
+                    }}
                   >
                     &larr; Back
                   </button>
-                  <div className="relative cb-shadow">
-                    <input
-                      type="text"
-                      name="name"
-                      id="signup-name"
-                      value={
-                        isTeacherSignup
-                          ? teacherSignupData.name
-                          : studentSignupData.name
-                      }
-                      onChange={(e) => handleSignupChange(e, isTeacherSignup)}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5"
-                      placeholder="Full Name"
-                      required
-                    />
+
+                  <div className="mb-4">
+                    {(profilePicture || defaultPicture) && (
+                      <div className="mt-2 flex justify-center items-center ">
+                        <img
+                          src={
+                            profilePicture
+                              ? URL.createObjectURL(profilePicture)
+                              : defaultPicture!
+                          }
+                          alt="Selected profile"
+                          className="w-24 h-24 object-cover rounded-full"
+                        />
+                      </div>
+                    )}
+                    <label className="mt-1 flex justify-center items-center text-sm font-medium text-gray-700">
+                      Choose Profile Picture
+                    </label>
+                    <div className="mt-1 flex items-center space-x-4 overflow-x-auto">
+                      {defaultPictures.map((pic, index) => (
+                        <img
+                          key={index}
+                          src={pic}
+                          alt={`Default ${index + 1}`}
+                          className={`w-12 h-12 rounded-full cursor-pointer ${
+                            defaultPicture === pic
+                              ? "border-2 border-blue-500"
+                              : ""
+                          }`}
+                          onClick={() => handleDefaultPictureSelect(pic)}
+                        />
+                      ))}
+                    </div>
+                    <div className="flex justify-center items-center mt-1">
+                      or
+                    </div>
+                    <label className="flex w-full justify-center items-center bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105 mt-1">
+                      Upload
+                      <input
+                        type="file"
+                        className="hidden "
+                        accept="image/*"
+                        onChange={handlePictureUpload}
+                      />
+                    </label>
                   </div>
-                  <div className="relative cb-shadow">
-                    <input
-                      type="email"
-                      name="email"
-                      id="signup-email"
-                      value={
-                        isTeacherSignup
-                          ? teacherSignupData.email
-                          : studentSignupData.email
-                      }
-                      onChange={(e) => handleSignupChange(e, isTeacherSignup)}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5"
-                      placeholder="Email Address"
-                      required
-                    />
-                    <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
-                      <i className="fa-regular fa-envelope text-gray-400"></i>
-                    </span>
-                  </div>
-                  <div className="relative cb-shadow">
-                    <input
-                      type="text"
-                      name="address"
-                      id="signup-address"
-                      value={
-                        isTeacherSignup
-                          ? teacherSignupData.address
-                          : studentSignupData.address
-                      }
-                      onChange={(e) => handleSignupChange(e, isTeacherSignup)}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5"
-                      placeholder="Address"
-                      required
-                    />
-                  </div>
-                  <div className="relative cb-shadow">
-                    <input
-                      type="tel"
-                      name="phone"
-                      id="signup-phone"
-                      value={
-                        isTeacherSignup
-                          ? teacherSignupData.phone
-                          : studentSignupData.phone
-                      }
-                      onChange={(e) => handleSignupChange(e, isTeacherSignup)}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5"
-                      placeholder="Phone Number"
-                      required
-                    />
-                  </div>
-                  <div className="relative cb-shadow">
-                    <input
-                      type="password"
-                      name="password"
-                      id="signup-password"
-                      value={
-                        isTeacherSignup
-                          ? teacherSignupData.password
-                          : studentSignupData.password
-                      }
-                      onChange={(e) => handleSignupChange(e, isTeacherSignup)}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5"
-                      placeholder="Password"
-                      required
-                    />
-                  </div>
-                  <div className="relative cb-shadow">
-                    <input
-                      type="password"
-                      name="confirmPassword"
-                      id="signup-confirmPassword"
-                      value={
-                        isTeacherSignup
-                          ? teacherSignupData.confirmPassword
-                          : studentSignupData.confirmPassword
-                      }
-                      onChange={(e) => handleSignupChange(e, isTeacherSignup)}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5"
-                      placeholder="Confirm Password"
-                      required
-                    />
-                  </div>
+                  {[
+                    {
+                      name: "name",
+                      type: "text",
+                      placeholder: "Full Name",
+                      required: true,
+                    },
+                    {
+                      name: "email",
+                      type: "email",
+                      placeholder: "Email Address",
+                      required: true,
+                    },
+                    {
+                      name: "address",
+                      type: "text",
+                      placeholder: "Address",
+                      required: false,
+                    }, // Address is optional
+                    {
+                      name: "phone",
+                      type: "tel",
+                      placeholder: "Phone Number",
+                      required: true,
+                    },
+                    {
+                      name: "password",
+                      type: "password",
+                      placeholder: "Password",
+                      required: true,
+                    },
+                    {
+                      name: "confirmPassword",
+                      type: "password",
+                      placeholder: "Confirm Password",
+                      required: true,
+                    },
+                  ].map((field) => (
+                    <div key={field.name} className="relative cb-shadow">
+                      <input
+                        type={field.type}
+                        name={field.name}
+                        id={`signup-${field.name}`}
+                        value={
+                          isTeacherSignup
+                            ? teacherSignupData[field.name as keyof SignupData]
+                            : studentSignupData[field.name as keyof SignupData]
+                        }
+                        onChange={(e) => handleSignupChange(e, isTeacherSignup)}
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5"
+                        placeholder={field.placeholder}
+                        required={field.required} // Dynamically set required attribute
+                      />
+                      {field.name === "email" && (
+                        <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
+                          <i className="fa-regular fa-envelope text-gray-400"></i>
+                        </span>
+                      )}
+                    </div>
+                  ))}
+
                   <div className="relative flex items-center mb-4">
                     <input
                       type="checkbox"
@@ -338,7 +377,9 @@ const SignupModal: React.FC<SignupModalProps> = ({
                     type="submit"
                     className="w-full bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
                   >
-                    {isLoading ? "Signing Up..." : "Sign Up"}
+                    {isLoading
+                      ? "Signing Up..."
+                      : `Sign Up as ${isTeacherSignup ? "DOER" : "CREATOR"}`}
                   </button>
                 </form>
               )}

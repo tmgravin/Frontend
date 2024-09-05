@@ -43,10 +43,13 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
   //   document.cookie = `user=${userValue}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
   // }
-  function setTokenCookie(data: any) {
-    const tokenValue = encodeURIComponent(JSON.stringify(data));
+  function setTokenCookie(token: string) {
+    // Encode the token value directly
+    const tokenValue = encodeURIComponent(token);
     const expiryDate = new Date();
     expiryDate.setDate(expiryDate.getDate() + 7); // Cookie expires in 7 days
+
+    // Set the cookie with the token value
     document.cookie = `token=${tokenValue}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
   }
 

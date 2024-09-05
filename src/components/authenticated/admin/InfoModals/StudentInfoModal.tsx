@@ -4,6 +4,9 @@ import { Modal, Box, Typography, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { User } from "../Creators";
 import UsersAssignment from "./UsersAssignment";
+import { getUserFromCookies } from "@/components/auth/oldtoken";
+
+const cookieuser = getUserFromCookies();
 
 interface UserModalProps {
   user: User | null;
@@ -25,12 +28,22 @@ const StudentInfoModal: React.FC<UserModalProps> = ({
         if (user?.id && open) {
           const response = await axios.get(
             `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/?id=${user.id}`,
-            { withCredentials: true }
+            {
+              headers: {
+                Authorization: `Bearer ${cookieuser?.token}`, // Replace `yourBearerToken` with your actual token
+              },
+              withCredentials: true,
+            }
           );
           setUserData(response.data);
           const totalspentresponse = await axios.get(
             `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/creator/total-spent?creatorId=1${user.id}`,
-            { withCredentials: true }
+            {
+              headers: {
+                Authorization: `Bearer ${cookieuser?.token}`, // Replace `yourBearerToken` with your actual token
+              },
+              withCredentials: true,
+            }
           );
           setTotalSpent(totalspentresponse.data);
         }

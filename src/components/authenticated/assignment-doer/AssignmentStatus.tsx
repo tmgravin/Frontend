@@ -44,8 +44,13 @@ const AssignmentStatus: React.FC = () => {
     try {
       //need to implement doer id here and ain
       const response = await axios.get<DataItem[]>(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/doer?doer=${user.id}`,
-        { withCredentials: true }
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/doer?doer=${user?.id}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+          withCredentials: true,
+        }
       );
       setData(response.data);
     } catch (error) {

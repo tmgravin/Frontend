@@ -1,11 +1,6 @@
 import React from "react";
 import dynamic from "next/dynamic";
-const SettingPage = dynamic(
-  () => import("@/components/authenticated/setting/SettingPage"),
-  {
-    ssr: false,
-  }
-);
+import SettingPage from "@/components/authenticated/setting/SettingPage";
 
 function page() {
   return (

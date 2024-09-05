@@ -4,6 +4,8 @@ import CloseIcon from "@mui/icons-material/Close";
 import { User } from "../Doers";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { getUserFromCookies } from "@/components/auth/oldtoken";
+const cookieuser = getUserFromCookies();
 
 interface UserModalProps {
   user: User | null;
@@ -31,7 +33,12 @@ const TeacherInfoModal: React.FC<UserModalProps> = ({
 
           const totalEarningResponse = await axios.get(
             `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/doer/total-earnings?doerId=${user.id}`,
-            { withCredentials: true }
+            {
+              headers: {
+                Authorization: `Bearer ${cookieuser?.token}`, // Replace `yourBearerToken` with your actual token
+              },
+              withCredentials: true,
+            }
           );
           setTotalEarning(totalEarningResponse.data);
         }

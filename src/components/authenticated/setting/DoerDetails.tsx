@@ -54,6 +54,7 @@ const UserDetails: React.FC = () => {
         {
           withCredentials: true,
           headers: {
+            Authorization: `Bearer ${cookieuser?.token}`,
             "Content-Type": "multipart/form-data", // Set header for FormData
           },
         }
@@ -236,7 +237,7 @@ const UserDetails: React.FC = () => {
       {/* Change Password Dialog */}
       {openPasswordDialog && (
         <ChangePasswordDialog
-          userId={cookieuser.id}
+          userId={cookieuser?.id}
           onClose={handleClosePasswordDialog}
         />
       )}

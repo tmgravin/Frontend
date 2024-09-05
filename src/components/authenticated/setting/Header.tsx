@@ -41,7 +41,7 @@ const Header: React.FC = () => {
   const handleLogout = async () => {
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/logout/${cookieuser.id}`
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/logout/${cookieuser?.id}`
       );
       removeCookie("user");
       toast.warning("Logging out");

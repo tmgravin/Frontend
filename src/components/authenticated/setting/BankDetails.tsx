@@ -4,8 +4,7 @@ import axios from "axios";
 import { getUserFromCookies } from "@/components/auth/oldtoken";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-const user = getUserFromCookies() || { id: null }; // Set a default value
+const user = getUserFromCookies(); // Set a default value
 
 const BankDetails: React.FC = () => {
   // State for bank details
@@ -17,7 +16,7 @@ const BankDetails: React.FC = () => {
     creditCardNumber: "",
     registeredPhoneNumber: "",
     users: {
-      id: `${user.id}`,
+      id: `${user?.id}`,
     },
   });
 
@@ -30,7 +29,7 @@ const BankDetails: React.FC = () => {
     creditCardNumber: "",
     registeredPhoneNumber: "",
     users: {
-      id: `${user.id}`,
+      id: `${user?.id}`,
     },
   });
 
@@ -42,7 +41,7 @@ const BankDetails: React.FC = () => {
   const [hasBankDetails, setHasBankDetails] = useState(false);
 
   useEffect(() => {
-    if (!user.id) {
+    if (!user?.id) {
       console.error("User ID is not available");
       return;
     }
@@ -50,8 +49,11 @@ const BankDetails: React.FC = () => {
     const fetchBankDetails = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/?userId=${user.id}`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/?userId=${user?.id}`,
           {
+            headers: {
+              Authorization: `Bearer ${user?.token}`,
+            },
             withCredentials: true,
           }
         );
@@ -105,13 +107,14 @@ const BankDetails: React.FC = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/?id=${user.id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/?id=${user?.id}`,
         {
           ...editValues,
-          users: { id: user.id },
+          users: { id: user?.id },
         },
         {
           headers: {
+            Authorization: `Bearer ${user?.token}`,
             "Content-Type": "application/json",
           },
           withCredentials: true,
@@ -151,10 +154,11 @@ const BankDetails: React.FC = () => {
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/?`,
         {
           ...bankDetails,
-          users: { id: user.id },
+          users: { id: user?.id },
         },
         {
           headers: {
+            Authorization: `Bearer ${user?.token}`,
             "Content-Type": "application/json",
           },
           withCredentials: true,

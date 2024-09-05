@@ -14,7 +14,7 @@ interface Project {
   projectDeadline: string;
   paymentStatus: string;
   file: string | null;
-  users: User;
+  users: User | any;
 }
 
 interface User {
@@ -51,7 +51,7 @@ const CompletedAssignments: React.FC = () => {
     setLoading(true);
     try {
       const response = await axios.get<CompletedAssignment[]>(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/doer?doer=${user.id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/doer?doer=${user?.id}`,
         { withCredentials: true }
       );
       setData(response.data);
@@ -86,7 +86,9 @@ const CompletedAssignments: React.FC = () => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("projectId", projectId.toString());
-    formData.append("doerId", user.id);
+    if (user?.id) {
+      formData.append("doerId", user?.id);
+    }
 
     try {
       await axios.post(
@@ -94,6 +96,7 @@ const CompletedAssignments: React.FC = () => {
         formData,
         {
           headers: {
+            Authorization: `Bearer ${user?.token}`,
             "Content-Type": "multipart/form-data",
           },
           withCredentials: true, // Include credentials with the request

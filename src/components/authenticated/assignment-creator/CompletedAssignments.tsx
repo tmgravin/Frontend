@@ -73,8 +73,11 @@ const CompletedAssignments: React.FC = () => {
     setLoading(true);
     try {
       const response = await axios.get<DataItem[]>(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/completed?userId=${user.id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/completed?userId=${user?.id}`,
         {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
           withCredentials: true, // Include credentials with the request
         }
       );

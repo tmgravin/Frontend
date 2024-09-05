@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ReadMoreModal from "./ReadMoreModal";
 import ApplyModal from "./ApplyModal";
+import { getUserFromCookies } from "@/components/auth/oldtoken";
+const cookieuser = getUserFromCookies();
 
 // Define the type for category data
 interface Category {
@@ -51,6 +53,8 @@ const Searchbar: React.FC = () => {
       const response = await axios.get(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/category/project?categoryId=${category}`,
         {
+          headers: { Authorization: `Bearer ${cookieuser?.token}` },
+
           withCredentials: true,
         }
       );

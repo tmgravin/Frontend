@@ -6,12 +6,12 @@ import { getUserFromCookies } from "@/components/auth/oldtoken";
 import { useRouter } from "next/navigation";
 
 function AdminHeader() {
-  const [user, setUser] = useState("");
+  const [user, setUser] = useState({});
 
   useEffect(() => {
     // Fetch the user from cookies and set it to state
     const fetchUser = async () => {
-      const userData = await getUserFromCookies() ||;
+      const userData = getUserFromCookies();
       if (userData) {
         setUser(userData);
       }

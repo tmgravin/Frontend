@@ -30,6 +30,7 @@ const ImageDetails: React.FC = () => {
         formData,
         {
           headers: {
+            Authorization: `Bearer ${cookieuser?.token}`,
             "Content-Type": "multipart/form-data",
           },
           withCredentials: true,
@@ -58,6 +59,9 @@ const ImageDetails: React.FC = () => {
       const response = await axios.delete(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${cookieuser?.id}`,
         {
+          headers: {
+            Authorization: `Bearer ${cookieuser?.token}`,
+          },
           withCredentials: true,
         }
       );

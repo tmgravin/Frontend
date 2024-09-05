@@ -59,9 +59,11 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     setIsPosting(true); // Set loading state to true
-    // Retrieving user data from cookies
+
     const formData = new FormData();
-    formData.append("users", user.id); //notokens yet sending form id from cookie which is stored when logged in
+    if (user?.id) {
+      formData.append("users", user?.id);
+    }
     formData.append("projectName", title);
     formData.append("projectDescription", description);
     formData.append("projectDeadline", deadline);
@@ -121,6 +123,9 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_BASE_URL}/api/category/`,
           {
+            headers: {
+              Authorization: `Bearer ${user?.token}`,
+            },
             withCredentials: true, // If you are using cookies for authentication
           }
         ); // Replace with your API endpoint

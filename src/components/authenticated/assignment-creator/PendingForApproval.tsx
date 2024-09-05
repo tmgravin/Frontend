@@ -80,9 +80,10 @@ const PendingForApproval: React.FC = () => {
     setLoading(true);
     try {
       const response = await axios.get<DataItem[]>(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/application/creator?creatorId=${user.id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/application/creator?creatorId=${user?.id}`,
         {
           headers: {
+            Authorization: `Bearer ${user?.token}`,
             "Content-Type": "application/json",
             Accept: "application/json",
           },

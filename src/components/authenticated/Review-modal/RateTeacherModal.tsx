@@ -15,7 +15,7 @@ import axios from "axios";
 interface RateTeacherModalProps {
   open: boolean;
   onClose: () => void;
-  userId: number;
+  userId: any;
   doerId: number;
 }
 

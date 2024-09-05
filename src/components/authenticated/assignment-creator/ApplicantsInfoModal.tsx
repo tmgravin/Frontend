@@ -15,6 +15,8 @@ import {
 } from "@mui/material";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getUserFromCookies } from "@/components/auth/oldtoken";
+const cookieuser = getUserFromCookies();
 
 interface Applicant {
   name: string;
@@ -85,6 +87,7 @@ const ApplicantsInfoModal: React.FC<ApplicantsInfoModalProps> = ({
         formData,
         {
           headers: {
+            Authorization: `Bearer ${cookieuser?.token}`,
             "Content-Type": "multipart/form-data",
           },
           withCredentials: true,

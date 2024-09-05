@@ -32,6 +32,8 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
+import { getUserFromCookies } from "@/components/auth/oldtoken";
+const cookieuser = getUserFromCookies();
 
 interface Ebook {
   id?: string; // Made optional if it aligns with your requirements
@@ -106,6 +108,9 @@ export default function Component() {
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/`,
         {
           method: "POST",
+          headers: {
+            Authorization: `Bearer ${cookieuser?.token}`, // Replace `yourBearerToken` with your actual token
+          },
           body: formData,
         }
       );
@@ -140,6 +145,9 @@ export default function Component() {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/?id=${editingEbook.id}`,
         {
+          headers: {
+            Authorization: `Bearer ${cookieuser?.token}`, // Replace `yourBearerToken` with your actual token
+          },
           method: "POST",
           body: formData,
         }
@@ -164,7 +172,11 @@ export default function Component() {
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/${deletingEbook.id}`,
+
         {
+          headers: {
+            Authorization: `Bearer ${cookieuser?.token}`, // Replace `yourBearerToken` with your actual token
+          },
           method: "DELETE",
         }
       );

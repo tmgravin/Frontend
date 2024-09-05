@@ -4,6 +4,8 @@ import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
+import { getUserFromCookies } from "@/components/auth/oldtoken";
+const cookieuser = getUserFromCookies();
 
 function FeaturedImages() {
   const [selectedImage, setSelectedImage] = useState<File | null>(null);
@@ -41,6 +43,8 @@ function FeaturedImages() {
         formData,
         {
           headers: {
+            Authorization: `Bearer ${cookieuser?.token}`, // Replace `yourBearerToken` with your actual token
+
             "Content-Type": "multipart/form-data",
             Accept: "multipart/form-data",
           },
