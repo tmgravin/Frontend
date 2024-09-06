@@ -12,7 +12,7 @@ import WorkYourWay from "./WorkYourWay";
 import Footer from "./footer/Footer";
 import SignupModal from "./SignupModal";
 import { ToastContainer } from "react-toastify";
-import FQA from "./footer/FQA";
+import FQA from "./footer/FAQ";
 import Searchbar from "./search/Searchbar";
 import TestimonialShowcase from "./Tesstimonials";
 
@@ -175,10 +175,12 @@ const Homepage: React.FC = () => {
       <LatestProjects />
       <Whyus onGetStartedClick={toggleSignupModal} />
       <Applicationprocess />
-      <TestimonialShowcase />
 
       <Applicationprocess2 startRegistration={toggleSignupModal} />
+
       <WorkYourWay />
+      <TestimonialShowcase />
+
       <FQA />
       <Footer />
       {isSignupModalOpen && (

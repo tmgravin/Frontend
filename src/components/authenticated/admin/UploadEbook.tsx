@@ -293,8 +293,9 @@ export default function Component() {
             <TableRow key={ebook.id}>
               <TableCell>
                 <Image
-                  height="16"
-                  width="24"
+                  width={1280} // Adjust width and height to the correct aspect ratio of your original image
+                  height={720} // These values should match the aspect ratio of the actual image
+                  quality={100}
                   src={`${ebook.coverUrl}`}
                   alt={`Cover for ${ebook.title}`}
                   className="w-16 h-24 object-cover rounded-md"

@@ -84,11 +84,12 @@ export default function Ebook() {
             </CardHeader>
             <CardContent className="flex-grow">
               <Image
-                height="16"
-                width="24"
-                src={ebook.coverUrl}
+                layout="responsive" // Ensures the image scales correctly
+                width={1920} // Adjust width and height to the correct aspect ratio of your original image
+                height={1080} // These values should match the aspect ratio of the actual image
+                src={`${ebook.coverUrl}`}
                 alt={`Cover for ${ebook.title}`}
-                className="w-full h-48 object-cover rounded-md"
+                className="w-16 h-24 object-cover rounded-md"
               />
             </CardContent>
             <CardFooter>

@@ -1,26 +1,26 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import UserModal from "../usermodal/UserModal";
+import UserModal from "@/components/authenticated/usermodal/UserModal";
 import Image from "next/image";
 import { getUserFromCookies } from "@/components/auth/oldtoken";
 import { useRouter } from "next/navigation";
+import { DecodedToken } from "@/components/auth/oldtoken"; // Import the DecodedToken type
 
-function AdminHeader() {
-  const [user, setUser] = useState({});
+function Header() {
+  // Define the state to accept either DecodedToken or null
+  const [user, setUser] = useState<DecodedToken | null>(null);
 
   useEffect(() => {
     // Fetch the user from cookies and set it to state
     const fetchUser = () => {
       const userData = getUserFromCookies();
       if (userData) {
-        setUser(userData);
+        setUser(userData); // This now works because user is DecodedToken | null
       }
     };
 
     fetchUser();
   }, []);
-
-  console.log(user);
 
   const router = useRouter();
 
@@ -29,7 +29,7 @@ function AdminHeader() {
   };
 
   return (
-    <div className="flex w-screen justify-between items-center  px-4 cb-shadow">
+    <div className="flex w-screen justify-between items-center px-4 cb-shadow">
       <div
         className="flex items-center mr-10 cursor-pointer"
         onClick={handelClick}
@@ -42,7 +42,7 @@ function AdminHeader() {
         </div>
       </div>
 
-      <div className=" p-1">
+      <div className="p-1">
         {/* Conditionally render UserModal only if the user exists */}
         {user && <UserModal />}
       </div>
@@ -50,4 +50,4 @@ function AdminHeader() {
   );
 }
 
-export default AdminHeader;
+export default Header;

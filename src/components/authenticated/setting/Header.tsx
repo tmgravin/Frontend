@@ -40,7 +40,7 @@ const Header: React.FC = () => {
       // const response = await axios.post(
       //   `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/logout/${cookieuser?.id}`
       // );
-      removeCookie("user");
+      removeCookie("token");
       toast.warning("Logging out");
     } catch (err) {
       toast.error("Logout Failed");

@@ -1,12 +1,12 @@
 import React from "react";
 import Ebook from "./Ebook";
-import AdminHeader from "@/components/authenticated/admin/AdminHeader";
+import Header from "./Header";
 
 function EbookHome() {
   return (
     <div>
       <div>
-        <AdminHeader />
+        <Header />
       </div>
       <div>
         <Ebook />
