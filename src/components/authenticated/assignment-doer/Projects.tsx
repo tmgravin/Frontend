@@ -15,6 +15,7 @@ export interface DataItem {
   experienceYear: string;
   levelOfExperience: string;
   projectUrl: string;
+  projectDescription: string;
   createdAt: string;
   updatedAt: string;
   projects: {
@@ -23,6 +24,7 @@ export interface DataItem {
     projectAmount: string;
     projectDeadline: string;
     budgets: string | null;
+    projectDescription: string;
     createdAt: string;
     updatedAt: string;
     users: {
@@ -107,7 +109,7 @@ const LatestProjects: React.FC = () => {
               {item.projects.projectName}
             </h2>
             <p>
-              {truncateDescription(item.projects.projectAmount, 100)}
+              {truncateDescription(item.projectDescription, 100)}
               <button
                 onClick={() => handleReadMore(item)}
                 className="primary-navy-blue hover:underline"

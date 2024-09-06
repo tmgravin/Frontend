@@ -12,6 +12,7 @@ export interface DataItem {
   projectUrl: string;
   createdAt: string;
   updatedAt: string;
+  projectDescription: string; // Added description field
   projects: {
     id: number;
     projectName: string;
@@ -20,7 +21,7 @@ export interface DataItem {
     budgets: string | null;
     createdAt: string;
     updatedAt: string;
-    description: string; // Added description field
+    projectDescription: string; // Added description field
     users: {
       id: number;
       name: string;
@@ -94,7 +95,7 @@ const LatestProjects: React.FC = () => {
           <div key={index} className="p-4 border rounded shadow">
             <h2 className="text-xl font-bold">{item.projects.projectName}</h2>
             <p>
-              {truncateDescription(item.projects.description, 100)}{" "}
+              {truncateDescription(item.projectDescription, 100)}{" "}
               {/* Use the description field */}
               <button
                 onClick={() => handleReadMore(item)}

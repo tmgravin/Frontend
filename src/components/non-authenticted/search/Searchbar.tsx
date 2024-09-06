@@ -104,7 +104,7 @@ const Searchbar: React.FC = () => {
               id="category"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="block w-[50-vw] border border-gray-300 rounded-l-md p-2"
+              className="block w-[35vw] border border-gray-300 rounded-l-md p-2" // Increased width
               required
             >
               <option value="">Browse Category</option>
@@ -115,14 +115,12 @@ const Searchbar: React.FC = () => {
               ))}
             </select>
 
-            <div className="flex">
-              <button
-                type="submit"
-                className="px-4 primary-orangebg text-white rounded-r-md hover:bg-orange-600"
-              >
-                Search
-              </button>
-            </div>
+            <button
+              type="submit"
+              className="px-4 primary-orangebg text-white rounded-r-md hover:bg-orange-600"
+            >
+              Search
+            </button>
           </div>
         </div>
       </form>

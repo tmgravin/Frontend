@@ -16,7 +16,7 @@ const ReadMoreModal: React.FC<ReadMoreModalProps> = ({ project, onClose }) => {
           {project.projects.projectName}
         </h2>
         <p className="mb-2">
-          <strong>Description:</strong> {project.projects.projectAmount}
+          <strong>Description:</strong> {project.projectDescription}
         </p>
         <p className="mb-2">
           <strong>Amount:</strong> {project.projects.projectAmount}

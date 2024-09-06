@@ -20,6 +20,8 @@ interface Project {
   projectName: string;
   projectAmount: string;
   projectDeadline: string;
+  projectDescription: string;
+
   paymentStatus: string;
   projectUrl: string;
   projectCategory: Category;

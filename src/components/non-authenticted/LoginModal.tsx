@@ -84,12 +84,10 @@ const LoginModal: React.FC<LoginModalProps> = ({
         toast.success("Login successful!");
         if (user?.userType === "ASSIGNMENT_CREATOR") {
           router.push(
-            `${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-creator`
+            `${process.env.NEXT_PUBLIC_FRONTEND_URL}/project-creator`
           );
         } else if (user?.userType === "ASSIGNMENT_DOER") {
-          router.push(
-            `${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-doer`
-          );
+          router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/project-doer`);
         }
       }
     } catch (error: any) {

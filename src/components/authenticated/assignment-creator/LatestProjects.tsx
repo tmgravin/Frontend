@@ -127,7 +127,7 @@ const LatestProjects: React.FC = () => {
               {item.projects.projectName}
             </h2>
             <p>
-              {truncateDescription(item.projects.projectAmount, 100)}
+              {truncateDescription(item.projectDescription, 100)}
               <button
                 onClick={() => handleReadMore(item)}
                 className=" primary-navy-blue hover:underline"
