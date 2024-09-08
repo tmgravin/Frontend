@@ -46,6 +46,7 @@ const LatestProjects: React.FC = () => {
   const [selectedProject, setSelectedProject] = useState<DataItem | null>(null);
   const [showApplyModal, setShowApplyModal] = useState(false);
   const [showReadMoreModal, setShowReadMoreModal] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   useEffect(() => {
     fetchData();
@@ -94,13 +95,31 @@ const LatestProjects: React.FC = () => {
     setSelectedProject(null);
   };
 
-  const displayedData = data.slice(0, visibleCount);
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+  };
+
+  // Filter data based on the search query
+  const filteredData = data.filter((item) =>
+    item.projects.projectName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const displayedData = filteredData.slice(0, visibleCount);
 
   return (
     <div className="container mx-auto p-4 cb-shadow cbg-color py-5">
       <ToastContainer />
       <div className="flex justify-center items-center primary-green p-2">
-        Latest Projects
+        <h1>Latest Projects</h1>
+      </div>
+      <div className=" flex justify-start mb-4 ">
+        <input
+          type="text"
+          placeholder="Search  projects..."
+          value={searchQuery}
+          onChange={handleSearchChange}
+          className="border px-4 py-2 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+        />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {displayedData.map((item, index) => (
@@ -131,7 +150,7 @@ const LatestProjects: React.FC = () => {
         ))}
       </div>
       <div className="flex items-center justify-center">
-        {visibleCount < data.length && (
+        {visibleCount < filteredData.length && (
           <button
             onClick={loadMore}
             className="mt-4 px-4 py-2 text-white rounded hover:bg-orange-600 primary-orangebg"
