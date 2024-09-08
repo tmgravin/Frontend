@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import ReadMoreModal from "./ReadMoreModal";
 import ApplyModal from "../ApplyModal";
-import { getUserFromCookies } from "@/components/auth/oldtoken";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
 const cookieuser = getUserFromCookies();
 
 // Define the type for category data

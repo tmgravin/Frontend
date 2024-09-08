@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import UserModal from "../usermodal/UserModal";
 import Image from "next/image";
-import { getUserFromCookies } from "@/components/auth/oldtoken";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
 import { useRouter } from "next/navigation";
 
 function AdminHeader() {

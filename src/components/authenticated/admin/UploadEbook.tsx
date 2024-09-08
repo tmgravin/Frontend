@@ -32,7 +32,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { ToastContainer, toast } from "react-toastify";
-import { getUserFromCookies } from "@/components/auth/oldtoken";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
 const cookieuser = getUserFromCookies();
 
 interface Ebook {

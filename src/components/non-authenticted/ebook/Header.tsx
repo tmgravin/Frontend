@@ -2,9 +2,9 @@
 import React, { useEffect, useState } from "react";
 import UserModal from "@/components/authenticated/usermodal/UserModal";
 import Image from "next/image";
-import { getUserFromCookies } from "@/components/auth/oldtoken";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
 import { useRouter } from "next/navigation";
-import { DecodedToken } from "@/components/auth/oldtoken"; // Import the DecodedToken type
+import { DecodedToken } from "@/components/cookie/oldtoken"; // Import the DecodedToken type
 
 function Header() {
   // Define the state to accept either DecodedToken or null

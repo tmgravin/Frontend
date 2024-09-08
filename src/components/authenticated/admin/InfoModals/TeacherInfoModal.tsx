@@ -4,7 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { User } from "../Doers";
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { getUserFromCookies } from "@/components/auth/oldtoken";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
 const cookieuser = getUserFromCookies();
 
 interface UserModalProps {

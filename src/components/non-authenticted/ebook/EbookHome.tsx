@@ -1,6 +1,7 @@
 import React from "react";
 import Ebook from "./Ebook";
 import Header from "./Header";
+import Footer from "../footer/Footer";
 
 function EbookHome() {
   return (
@@ -11,6 +12,7 @@ function EbookHome() {
       <div>
         <Ebook />
       </div>
+      <Footer />
     </div>
   );
 }

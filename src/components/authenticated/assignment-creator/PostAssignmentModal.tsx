@@ -6,7 +6,7 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ResultModal from "./ResultModal";
 import Image from "next/image";
-import { getUserFromCookies } from "../../auth/oldtoken";
+import { getUserFromCookies } from "../../cookie/oldtoken";
 import { useProjects } from "@/components/providers/ProjectProvider";
 
 const user = getUserFromCookies();

@@ -10,7 +10,7 @@ import axios from "axios";
 import { ProjectProvider } from "@/components/providers/ProjectProvider";
 import { Search } from "lucide-react";
 import Searchbar from "./search/Searchbar";
-import { getUserFromCookies } from "@/components/auth/oldtoken";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
 const cookieuser = getUserFromCookies();
 
 function Homepage() {

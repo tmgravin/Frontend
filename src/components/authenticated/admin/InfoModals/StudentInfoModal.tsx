@@ -4,7 +4,7 @@ import { Modal, Box, Typography, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { User } from "../Creators";
 import UsersAssignment from "./UsersAssignment";
-import { getUserFromCookies } from "@/components/auth/oldtoken";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
 
 const cookieuser = getUserFromCookies();
 

@@ -8,7 +8,7 @@ import React, {
   useEffect,
 } from "react";
 import axios from "axios";
-import { getUserFromCookies } from "../auth/oldtoken";
+import { getUserFromCookies } from "../cookie/oldtoken";
 
 // Assuming `getUserFromCookies` returns an object with an `id` property
 const user = getUserFromCookies();

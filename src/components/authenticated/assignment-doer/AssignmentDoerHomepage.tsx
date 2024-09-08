@@ -8,7 +8,7 @@ import WorkYourWay from "@/components/non-authenticted/WorkYourWay";
 import Footer from "@/components/non-authenticted/footer/Footer";
 import axios from "axios";
 import Searchbar from "./search/Searchbar";
-import { getUserFromCookies } from "@/components/auth/oldtoken";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
 const cookieuser = getUserFromCookies();
 
 function Homepage() {

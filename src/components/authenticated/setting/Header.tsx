@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getUserFromCookies } from "@/components/auth/oldtoken";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
 import useUserData from "@/components/providers/UserProvider";
 const Header: React.FC = () => {
   const { user } = useUserData();

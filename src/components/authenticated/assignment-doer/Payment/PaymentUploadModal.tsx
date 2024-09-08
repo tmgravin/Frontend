@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { CloudUpload } from "@mui/icons-material";
 import axios from "axios";
-import { getUserFromCookies } from "@/components/auth/oldtoken";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
 import { toast, ToastContainer } from "react-toastify";
 
 const userid = getUserFromCookies();

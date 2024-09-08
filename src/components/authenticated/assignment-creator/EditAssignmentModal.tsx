@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getUserFromCookies } from "../../auth/oldtoken";
+import { getUserFromCookies } from "../../cookie/oldtoken";
 import { DataItem } from "./LatestProjects";
 import Image from "next/image";
 

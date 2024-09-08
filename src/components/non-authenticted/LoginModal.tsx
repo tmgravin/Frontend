@@ -5,7 +5,7 @@ import ResetPasswordModal from "./ResetPasswordModal";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getUserFromCookies } from "../auth/oldtoken"; // Adjust the path based on your file structure
+import { getUserFromCookies } from "../cookie/oldtoken"; // Adjust the path based on your file structure
 
 interface SignupData {
   email: string;

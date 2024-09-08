@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import BankDetails from "./BankDetails";
 import UserDetails from "./UserDetails";
-import { getUserFromCookies } from "@/components/auth/oldtoken";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
 import DoerDetails from "./DoerDetails";
 
 function SettingPage() {

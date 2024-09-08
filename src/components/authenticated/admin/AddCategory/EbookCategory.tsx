@@ -1,10 +1,9 @@
 "use client";
-
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getUserFromCookies } from "@/components/auth/oldtoken";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
 import { PencilIcon, TrashIcon } from "lucide-react";
 
 interface Category {
@@ -13,7 +12,7 @@ interface Category {
   createdAt: string;
 }
 
-const CategoryForm: React.FC = () => {
+const EbookCategoryForm: React.FC = () => {
   const [categoryName, setCategoryName] = useState<string>("");
   const [categories, setCategories] = useState<Category[]>([]);
   const [editingCategory, setEditingCategory] = useState<Category | null>(null);
@@ -22,7 +21,7 @@ const CategoryForm: React.FC = () => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/category/`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/category/`,
         {
           headers: {
             Authorization: `Bearer ${cookieuser?.token}`,
@@ -55,7 +54,7 @@ const CategoryForm: React.FC = () => {
     try {
       if (editingCategory) {
         await axios.post(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/category/?categoryId=${editingCategory.id}`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/category?categoryId=${editingCategory.id}`,
           formData,
           {
             headers: {
@@ -69,7 +68,8 @@ const CategoryForm: React.FC = () => {
         setEditingCategory(null);
       } else {
         await axios.post(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/category/`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/category/`,
+
           formData,
           {
             headers: {
@@ -98,7 +98,7 @@ const CategoryForm: React.FC = () => {
     if (window.confirm("Are you sure you want to delete this category?")) {
       try {
         await axios.delete(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/category/${id}`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/${id}`,
           {
             headers: {
               Authorization: `Bearer ${cookieuser?.token}`,
@@ -190,4 +190,4 @@ const CategoryForm: React.FC = () => {
   );
 };
 
-export default CategoryForm;
+export default EbookCategoryForm;

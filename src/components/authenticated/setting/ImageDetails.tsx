@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Image from "next/image";
-import { getUserFromCookies } from "@/components/auth/oldtoken";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
 import { ToastContainer, toast } from "react-toastify";
 import useUserData from "@/components/providers/UserProvider";
 const cookieuser = getUserFromCookies();
