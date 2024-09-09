@@ -1,11 +1,28 @@
-"use client"
+"use client";
 
-import React from 'react';
-import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, Title, Tooltip, Legend, PointElement } from 'chart.js';
+import React from "react";
+import { Line } from "react-chartjs-2";
+import {
+  Chart as ChartJS,
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+  PointElement,
+} from "chart.js";
 
 // Register chart components
-ChartJS.register(LineElement, CategoryScale, LinearScale, Title, Tooltip, Legend, PointElement);
+ChartJS.register(
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  Title,
+  Tooltip,
+  Legend,
+  PointElement
+);
 
 // Function to generate mock data for the past month
 const generateMockData = () => {
@@ -37,17 +54,17 @@ const AssignmentChart: React.FC = () => {
     labels,
     datasets: [
       {
-        label: 'Total Assignments',
+        label: "Total Assignments",
         data: totalAssignments,
-        borderColor: 'rgba(75, 192, 192, 1)',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
         fill: true,
       },
       {
-        label: 'Ongoing Assignments',
+        label: "Ongoing Assignments",
         data: ongoingAssignments,
-        borderColor: 'rgba(255, 99, 132, 1)',
-        backgroundColor: 'rgba(255, 99, 132, 0.2)',
+        borderColor: "rgba(255, 99, 132, 1)",
+        backgroundColor: "rgba(255, 99, 132, 0.2)",
         fill: true,
       },
     ],
@@ -57,7 +74,7 @@ const AssignmentChart: React.FC = () => {
     responsive: true,
     plugins: {
       legend: {
-        position: 'top' as const,
+        position: "top" as const,
       },
       tooltip: {
         callbacks: {
@@ -71,7 +88,7 @@ const AssignmentChart: React.FC = () => {
       x: {
         title: {
           display: true,
-          text: 'Date',
+          text: "Date",
         },
         ticks: {
           autoSkip: true,
@@ -81,7 +98,7 @@ const AssignmentChart: React.FC = () => {
       y: {
         title: {
           display: true,
-          text: 'Number of Assignments',
+          text: "Number of Assignments",
         },
       },
     },
@@ -90,7 +107,7 @@ const AssignmentChart: React.FC = () => {
   return (
     <div>
       <h2>Assignments Overview - Past Month</h2>
-      <Line data={data} options={options} />
+      <Line data={data} options={options} className="" />
     </div>
   );
 };

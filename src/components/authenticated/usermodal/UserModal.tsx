@@ -101,7 +101,7 @@ const UserModal: React.FC = () => {
               <AccountCircleIcon fontSize="large" />
             )}
           </IconButton>
-          <div className="flex flex-col items-end justify-center">
+          <div className="md:flex flex-col items-end justify-center hidden">
             {/* Align text to the right */}
             <Typography
               variant={isSmallScreen ? "body1" : "h6"} // Responsive typography

@@ -7,12 +7,7 @@ function page() {
 
   return (
     <div>
-      <div>
-        <AdminHeader />
-      </div>
-      <div>
-        <HomePage />
-      </div>
+      <HomePage />
     </div>
   );
 }

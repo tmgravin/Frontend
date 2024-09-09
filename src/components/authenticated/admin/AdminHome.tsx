@@ -1,152 +1,224 @@
-import React from "react";
+"use client";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import * as Tabs from "@radix-ui/react-tabs";
-import StudentComponent from "./Creators";
-import TeacherComponent from "./Doers";
-import ProjectsTableComponent from "./Projects";
-import Dashboard from "./Dashboard";
 import Image from "next/image";
-import UserModal from "../usermodal/UserModal";
-import FeaturedImages from "./FeaturedImages";
+import React, { useState } from "react";
+import { RiMenuFold3Line } from "react-icons/ri";
 import CategoryForm from "./AddCategory/addCategory";
-import PaymentsTable from "./InfoModals/PaymentsTable";
-import UploadEbook from "./UploadEbook";
-import TestimonialForm from "./Testimonials";
 import EbookCategoryForm from "./AddCategory/EbookCategory";
+import AdminHeader from "./AdminHeader";
+import StudentComponent from "./Creators";
+import Dashboard from "./Dashboard";
+import TeacherComponent from "./Doers";
+import FeaturedImages from "./FeaturedImages";
+import MaxWidthWrapper from "./maxWidthWrapper";
+import ProjectsTableComponent from "./Projects";
+import TestimonialForm from "./Testimonials";
+import UploadEbook from "./UploadEbook";
+import { useRouter } from "next/navigation";
 
 const AdminHome: React.FC = () => {
+  // Check activation of tab
+  const [activeSection, setActiveSection] = useState<string>("dashboard");
+  const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
+
+  const toggleSidebar = () => {
+    setIsSidebarOpen(!isSidebarOpen);
+  };
+
+  const router = useRouter();
+
+  const handelClick = () => {
+    router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/homepage`);
+  };
+
   return (
-    <div style={{ display: "flex" }}>
+    <div className="overflow-hidden">
       <Tabs.Root
         defaultValue="dashboard"
         orientation="vertical"
         style={{ display: "flex", width: "100%" }}
       >
-        <Tabs.List style={tabsListStyle}>
-          <Tabs.Trigger value="">
-            <div>
-              <Image
-                src="/admin-icons/adminmenuimg.png"
-                alt="Total doers"
-                width={250}
-                height={150}
-                className="m-1"
-              />
-            </div>
-          </Tabs.Trigger>
-          <Tabs.Trigger value="dashboard" style={tabStyle}>
-            Dashboard
-          </Tabs.Trigger>
-          <Tabs.Trigger value="creators" style={tabStyle}>
-            Creators
-          </Tabs.Trigger>
-          <Tabs.Trigger value="doers" style={tabStyle}>
-            Doers
-          </Tabs.Trigger>
-          <Tabs.Trigger value="projects" style={tabStyle}>
-            Projects
-          </Tabs.Trigger>
-          {/* <Tabs.Trigger value="paymenttable" style={tabStyle}>Payment Table</Tabs.Trigger> */}
-          <Tabs.Trigger value="update" style={tabStyle}>
-            Update Images
-          </Tabs.Trigger>
-          <Tabs.Trigger value="category" style={tabStyle}>
-            Project Category
-          </Tabs.Trigger>
-          <Tabs.Trigger value="uploadebook" style={tabStyle}>
-            Upload E-Book
-          </Tabs.Trigger>
-          <Tabs.Trigger value="testimonials" style={tabStyle}>
-            Tesitmonials
-          </Tabs.Trigger>
-          <Tabs.Trigger value="ebookcategory" style={tabStyle}>
-            E-book Category
-          </Tabs.Trigger>
-        </Tabs.List>
+        {/* --------------------------------- Sidebar ----------------------------------- */}
 
-        <div style={contentContainerStyle}>
-          <Tabs.Content value="dashboard">
-            <h2>Dashboard</h2>
-            <Dashboard />
-          </Tabs.Content>
-          <Tabs.Content value="creators">
-            <h2>Creators</h2>
-            <StudentComponent />
-          </Tabs.Content>
-          <Tabs.Content value="doers">
-            <h2>Doers</h2>
-            <TeacherComponent />
-          </Tabs.Content>
-          <Tabs.Content value="projects">
-            <h2>Projects</h2>
-            <div style={scrollableContentStyle}>
-              <ProjectsTableComponent />
-            </div>
-          </Tabs.Content>
-          {/* <Tabs.Content value="paymenttable">
+        <aside>
+          <div className="w-full   ">
+            <Tabs.List
+              className={` px-4 pt-[11px] pb-10 flex flex-col gap-5 h-full bg-white dark:bg-black duration-300  z-50  fixed   overflow-y-auto scrollbar-hide  ${
+                isSidebarOpen ? "ml-0 w-full min-[400px]:w-80" : "-ml-80 w-80"
+              }`}
+            >
+              {/* --------------------------------- Sidebar Toggle Button ----------------------------------- */}
+              <div className="flex items-center">
+                <div
+                  className="flex  items-center mx-auto cursor-pointer "
+                  onClick={handelClick}
+                >
+                  <Image
+                    src="/notextlogo.png"
+                    height={50}
+                    width={50}
+                    alt="msp logo"
+                    className="h-10 w-auto"
+                  />
+                  <div className=" px-3">
+                    <h1 className=" font-bold text-lg primary-navy-blue">
+                      MSP ACADEMY
+                    </h1>
+                  </div>
+                </div>
+                <div className="ml-auto">
+                  <Button
+                    onClick={toggleSidebar}
+                    className={`${
+                      isSidebarOpen ? "" : "transition-opacity opacity-0 "
+                    }`}
+                  >
+                    <RiMenuFold3Line className="text-2xl" />
+                  </Button>
+                </div>
+              </div>
+              {/* --------------------------------- Sidebar Image ----------------------------------- */}
+
+              <Tabs.Trigger value="">
+                <div className="border-b-2">
+                  <Image
+                    src="/admin-icons/adminmenuimg.png"
+                    alt="Total doers"
+                    width={250}
+                    height={150}
+                    className="m-1 w-full"
+                  />
+                </div>
+              </Tabs.Trigger>
+
+              {/* --------------------------------- Sidebar Item List ----------------------------------- */}
+
+              <div className="flex flex-col gap-1 ">
+                {[
+                  "dashboard",
+                  "creators",
+                  "doers",
+                  "projects",
+                  "update",
+                  "category",
+                  "uploadebook",
+                  "testimonials",
+                  "ebookcategory",
+                ].map((section) => (
+                  <Tabs.Trigger
+                    key={section}
+                    value={section}
+                    className={cn(
+                      " p-2.5 cursor-pointer bg-gray-200 border border-gray-300 rounded  text-left w-full h-12 flex items-start justify-start  ease-in",
+                      `${
+                        activeSection === section
+                          ? "bg-primary  text-white "
+                          : " hover:bg-primary/70 hover:text-white"
+                      }`
+                    )}
+                    onClick={() => {
+                      setActiveSection(section);
+                      if (window.innerWidth < 1024) {
+                        toggleSidebar();
+                      }
+                    }}
+                  >
+                    {section.charAt(0).toUpperCase() + section.slice(1)}
+                  </Tabs.Trigger>
+                ))}
+              </div>
+            </Tabs.List>
+          </div>
+        </aside>
+
+        {/* --------------------------------- Content Side  ----------------------------------- */}
+
+        <div
+          className={`flex flex-col flex-grow w-full ease-in-out duration-300 ${
+            isSidebarOpen ? "pl-80 min-w-max sm:min-w-full " : "pl-0"
+          }`}
+        >
+          {/* --------------------------------- Dark Overlay that toggles sidebar ----------------------------------- */}
+          <div
+            className={cn(
+              `fixed hidden z-20 top-0 left-0 bg-black transition-all duration-300 w-full h-full border  `,
+              {
+                "bg-opacity-70 block md:hidden ": isSidebarOpen,
+              }
+            )}
+            onClick={() => toggleSidebar()}
+          ></div>
+
+          {/* --------------------------------- Admin Navbar ----------------------------------- */}
+
+          <div>
+            <AdminHeader
+              isSidebarOpen={isSidebarOpen}
+              toggleSidebar={toggleSidebar}
+            />
+          </div>
+
+          {/* --------------------------------- Main Content ----------------------------------- */}
+          <div className="overflow-x-auto">
+            <MaxWidthWrapper
+              className={` pt-8 transition-all duration-300 min-w-max  ${
+                isSidebarOpen ? "px-2.5 md:px-5 " : ""
+              }`}
+            >
+              <div className="">
+                <Tabs.Content value="dashboard">
+                  <h2>Dashboard</h2>
+                  <Dashboard />
+                </Tabs.Content>
+                <Tabs.Content value="creators">
+                  <h2>Creators</h2>
+                  <StudentComponent />
+                </Tabs.Content>
+                <Tabs.Content value="doers">
+                  <h2>Doers</h2>
+                  <TeacherComponent />
+                </Tabs.Content>
+                <Tabs.Content value="projects">
+                  <h2>Projects</h2>
+                  <div>
+                    <ProjectsTableComponent />
+                  </div>
+                </Tabs.Content>
+                {/* <Tabs.Content value="paymenttable">
             <h2>Payment Table</h2>
             <div style={scrollableContentStyle}>
               <PaymentsTable />
             </div>
           </Tabs.Content> */}
-          <Tabs.Content value="update">
-            <h2>Featured Images</h2>
-            <FeaturedImages />
-          </Tabs.Content>
-          <Tabs.Content value="category">
-            <h2>Project Category</h2>
-            <CategoryForm />
-          </Tabs.Content>
-          <Tabs.Content value="uploadebook">
-            <h2>Upload E-Book</h2>
-            <UploadEbook />
-          </Tabs.Content>
-          <Tabs.Content value="testimonials">
-            <h2>Testimonials</h2>
-            <TestimonialForm />
-          </Tabs.Content>
-          <Tabs.Content value="ebookcategory">
-            <h2>E-Book Category</h2>
-            <EbookCategoryForm />
-          </Tabs.Content>
+                <Tabs.Content value="update">
+                  <h2>Featured Images</h2>
+                  <FeaturedImages />
+                </Tabs.Content>
+                <Tabs.Content value="category">
+                  <h2>Project Category</h2>
+                  <CategoryForm />
+                </Tabs.Content>
+                <Tabs.Content value="uploadebook">
+                  <h2>Upload E-Book</h2>
+                  <UploadEbook />
+                </Tabs.Content>
+                <Tabs.Content value="testimonials">
+                  <h2>Testimonials</h2>
+                  <TestimonialForm />
+                </Tabs.Content>
+                <Tabs.Content value="ebookcategory">
+                  <h2>E-Book Category</h2>
+                  <EbookCategoryForm />
+                </Tabs.Content>
+              </div>
+            </MaxWidthWrapper>
+          </div>
         </div>
       </Tabs.Root>
     </div>
   );
-};
-
-const tabsListStyle: React.CSSProperties = {
-  display: "flex",
-  flexDirection: "column",
-  width: "200px",
-  borderRight: "1px solid #ddd",
-  paddingRight: "10px",
-};
-
-const contentContainerStyle: React.CSSProperties = {
-  flex: 1,
-  padding: "20px",
-  overflow: "hidden", // Prevent overflow of content
-};
-
-const scrollableContentStyle: React.CSSProperties = {
-  maxHeight: "calc(100vh - 60px)", // Adjust based on header height
-  overflowY: "auto", // Enable vertical scrolling if content overflows
-};
-
-const tabStyle: React.CSSProperties = {
-  padding: "10px",
-  cursor: "pointer",
-  backgroundColor: "#f1f1f1",
-  border: "1px solid #ccc",
-  borderRadius: "4px",
-  marginBottom: "4px",
-  textAlign: "left",
-  width: "200px", // Fixed width for the tab
-  height: "50px", // Fixed height for the tab
-  display: "flex",
-  alignItems: "start",
-  justifyContent: "start",
-  transition: "background-color 0.3s ease",
 };
 
 export default AdminHome;
