@@ -27,7 +27,7 @@ const StudentInfoModal: React.FC<UserModalProps> = ({
       try {
         if (user?.id && open) {
           const response = await axios.get(
-            `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/?id=${user.id}`,
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/?id=${user.id}`,
             {
               headers: {
                 Authorization: `Bearer ${cookieuser?.token}`, // Replace `yourBearerToken` with your actual token
@@ -76,7 +76,7 @@ const StudentInfoModal: React.FC<UserModalProps> = ({
             <CloseIcon />
           </IconButton>
           <Typography variant="h6" id="user-modal-title" className="mb-4">
-            User Details
+            {userData.name}'s Details
           </Typography>
           {userData ? (
             <>

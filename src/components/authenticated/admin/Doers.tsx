@@ -13,6 +13,7 @@ export interface User {
   phone: string;
   createdAt: string;
   address: string;
+  cvUrl: string;
 }
 
 const TeacherComponent: React.FC = () => {
@@ -94,7 +95,7 @@ const TeacherComponent: React.FC = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Assignment Doer Details</h2>
+      <h2 className="text-2xl font-bold mb-4">Project Doer Details</h2>
       <div className="flex justify-between items-center mb-4">
         <input
           type="text"
@@ -128,6 +129,7 @@ const TeacherComponent: React.FC = () => {
             <th className="border px-4 py-2">Phone</th>
             <th className="border px-4 py-2">Registration Date</th>
             <th className="border px-4 py-2">Address</th>
+            <th className="border px-4 py-2">CV</th>
             <th className="border px-4 py-2">Action</th>
           </tr>
         </thead>
@@ -140,6 +142,7 @@ const TeacherComponent: React.FC = () => {
               <td className="border px-4 py-2">{user.phone}</td>
               <td className="border px-4 py-2">{user.createdAt}</td>
               <td className="border px-4 py-2">{user.address}</td>
+              <td className="border px-4 py-2">{user.cvUrl}</td>
               <td className="border px-4 py-2">
                 <button
                   onClick={() => handleActionClick(user)}
