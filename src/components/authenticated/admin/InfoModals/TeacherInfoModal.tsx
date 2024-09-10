@@ -25,11 +25,11 @@ const TeacherInfoModal: React.FC<UserModalProps> = ({
     const fetchUserData = async () => {
       try {
         if (user?.id && open) {
-            const response = await axios.get(
-              `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/?id=${user.id}`,
-              { withCredentials: true }
-            );
-            setUserData(response.data);
+          const response = await axios.get(
+            `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/?id=${user.id}`,
+            { withCredentials: true }
+          );
+          setUserData(response.data);
 
           const totalEarningResponse = await axios.get(
             `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/doer/total-earnings?doerId=${user.id}`,
@@ -71,7 +71,7 @@ const TeacherInfoModal: React.FC<UserModalProps> = ({
             <CloseIcon />
           </IconButton>
           <Typography variant="h6" id="user-modal-title" className="mb-4">
-            {user.name}'s Details
+            {user.name}&apos;s Details
           </Typography>
           <Typography id="user-modal-description" className="mb-2">
             <strong>Doer ID:</strong> {user.id}
@@ -92,7 +92,8 @@ const TeacherInfoModal: React.FC<UserModalProps> = ({
             <strong>Address:</strong> {user.address}
           </Typography>
           <Typography id="user-modal-description" className="mb-2">
-            <strong>CV:</strong>{user.cvUrl}
+            <strong>CV:</strong>
+            {user.cvUrl}
           </Typography>
           <Typography id="user-modal-description" className="mb-2">
             <strong>Cover letter:</strong>

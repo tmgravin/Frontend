@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import Image from "next/image";
 
 export interface Ebook {
   title: string;
@@ -50,17 +49,15 @@ function EbookManager() {
             {ebooks.map((ebook) => (
               <li
                 key={ebook.id}
-                className="border p-4 flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                className="border p-4 flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow "
               >
-                <div className="cb-shadow">
+                <div className="cb-shadow px-2">
                   {" "}
                   {ebook.coverImageUrl && (
-                    <Image
+                    <img
                       src={ebook.coverImageUrl}
                       alt={ebook.bookTitle}
-                      width={128} // Adjust the width to match your desired size
-                      height={128} // Adjust the height to match your desired size
-                      className="w-full md:w-32 h-32 object-cover rounded"
+                      className="w-full md:w-40 h-25 object-cover rounded"
                     />
                   )}
                   <div className="flex-1 ">
@@ -78,19 +75,20 @@ function EbookManager() {
                     <p className="text-gray-600">
                       Category: {ebook.category.category}
                     </p>
-                    <p className="text-gray-600">
+                    {/* <p className="text-gray-600">
                       Added On: {new Date(ebook.createdAt).toLocaleDateString()}
-                    </p>
-                    {ebook.bookUrl && (
-                      <a
-                        href={ebook.bookUrl}
-                        className="text-blue-500 underline mt-2 block"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        Download E-Book
-                      </a>
-                    )}
+                    </p> */}
+                    <div className="w-full my-3  bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105">
+                      {ebook.bookUrl && (
+                        <a
+                          href={ebook.bookUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          Download E-Book
+                        </a>
+                      )}
+                    </div>
                   </div>
                 </div>
               </li>

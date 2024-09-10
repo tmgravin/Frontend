@@ -3,8 +3,6 @@ import React, { useState, useEffect } from "react";
 import AddEbookModal from "./AddEbookModal";
 import EditEbookModal from "./EditEbookModal";
 import DeleteEbookModal from "./DeleteEbookModal";
-import { ToastContainer } from "react-toastify";
-import Image from "next/image";
 
 export interface Ebook {
   title: string;
@@ -56,13 +54,14 @@ function EbookManager() {
 
   return (
     <div className="p-6">
-      <ToastContainer />
-      <button
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-        onClick={() => setIsAddModalOpen(true)}
-      >
-        Add Ebook
-      </button>
+      <div className="flex justify-end ">
+        <button
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+          onClick={() => setIsAddModalOpen(true)}
+        >
+          + Add Ebook
+        </button>
+      </div>
 
       <div className="mt-4">
         {ebooks.length === 0 ? (
@@ -76,12 +75,10 @@ function EbookManager() {
               >
                 <div className="flex items-center">
                   {ebook.coverImageUrl && (
-                    <Image
+                    <img
                       src={ebook.coverImageUrl}
                       alt={ebook.bookTitle}
-                      width={128} // Adjust width as needed
-                      height={128} // Adjust height as needed
-                      className="object-cover rounded"
+                      className="w-30 h-20 object-cover mr-4"
                     />
                   )}
                   <div>
@@ -114,7 +111,7 @@ function EbookManager() {
                 </div>
                 <div className="mt-4 md:mt-0 md:flex md:items-center">
                   <button
-                    className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
+                    className="bg-blue-500 text-white px-4 py-2 rounded mr-2"
                     onClick={() => {
                       setEditingEbook(ebook);
                       setIsEditModalOpen(true);

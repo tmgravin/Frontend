@@ -76,7 +76,7 @@ const StudentInfoModal: React.FC<UserModalProps> = ({
             <CloseIcon />
           </IconButton>
           <Typography variant="h6" id="user-modal-title" className="mb-4">
-            {userData.name}'s Details
+            {user.name}&apos;s Details
           </Typography>
           {userData ? (
             <>
