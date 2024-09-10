@@ -3,6 +3,7 @@ import axios from "axios";
 import { getUserFromCookies } from "@/components/cookie/oldtoken";
 import { toast, ToastContainer } from "react-toastify";
 const cookieuser = getUserFromCookies();
+import Image from "next/image";
 
 interface Category {
   id: number;
@@ -227,12 +228,15 @@ function EditEbookModal({
               Cover Image
             </label>
             {editedEbook.coverImagePreviewUrl && (
-              <img
+              <Image
                 src={editedEbook.coverImagePreviewUrl}
                 alt="Current Cover"
+                width={128} // Adjust the width as needed
+                height={128} // Adjust the height as needed
                 className="mb-2 w-full h-32 object-cover"
               />
             )}
+
             <input
               id="coverFile"
               type="file"

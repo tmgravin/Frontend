@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 
 export interface Ebook {
   title: string;
@@ -54,9 +55,11 @@ function EbookManager() {
                 <div className="cb-shadow">
                   {" "}
                   {ebook.coverImageUrl && (
-                    <img
+                    <Image
                       src={ebook.coverImageUrl}
                       alt={ebook.bookTitle}
+                      width={128} // Adjust the width to match your desired size
+                      height={128} // Adjust the height to match your desired size
                       className="w-full md:w-32 h-32 object-cover rounded"
                     />
                   )}

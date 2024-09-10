@@ -4,6 +4,7 @@ import AddEbookModal from "./AddEbookModal";
 import EditEbookModal from "./EditEbookModal";
 import DeleteEbookModal from "./DeleteEbookModal";
 import { ToastContainer } from "react-toastify";
+import Image from "next/image";
 
 export interface Ebook {
   title: string;
@@ -75,10 +76,12 @@ function EbookManager() {
               >
                 <div className="flex items-center">
                   {ebook.coverImageUrl && (
-                    <img
+                    <Image
                       src={ebook.coverImageUrl}
                       alt={ebook.bookTitle}
-                      className="w-20 h-20 object-cover mr-4"
+                      width={128} // Adjust width as needed
+                      height={128} // Adjust height as needed
+                      className="object-cover rounded"
                     />
                   )}
                   <div>
