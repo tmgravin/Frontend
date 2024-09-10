@@ -19,16 +19,6 @@ export interface Ebook {
 }
 
 function EbookManager() {
-  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
-  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
-  const [newEbook, setNewEbook] = useState({
-    bookTitle: "",
-    cover: null as File | null,
-    ebook: null as File | null,
-  });
-  const [editingEbook, setEditingEbook] = useState<Ebook | null>(null);
-  const [deletingEbook, setDeletingEbook] = useState<Ebook | null>(null);
   const [ebooks, setEbooks] = useState<Ebook[]>([]);
   const [error, setError] = useState<string>("");
 
@@ -50,34 +40,30 @@ function EbookManager() {
   }, []);
 
   return (
-    <div className="p-6">
-      <button
-        className="bg-blue-500 text-white px-4 py-2 rounded"
-        onClick={() => setIsAddModalOpen(true)}
-      >
-        Add Ebook
-      </button>
-
+    <div className="p-4 sm:p-6">
       <div className="mt-4">
         {ebooks.length === 0 ? (
-          <p>No eBooks available</p>
+          <p className="text-center text-gray-600">No eBooks available</p>
         ) : (
-          <ul>
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
             {ebooks.map((ebook) => (
               <li
                 key={ebook.id}
-                className="border p-4 mb-4 flex flex-col md:flex-row md:justify-between"
+                className="border p-4 flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow"
               >
-                <div className="flex items-center">
+                <div className="cb-shadow">
+                  {" "}
                   {ebook.coverImageUrl && (
                     <img
                       src={ebook.coverImageUrl}
                       alt={ebook.bookTitle}
-                      className="w-20 h-20 object-cover mr-4"
+                      className="w-full md:w-32 h-32 object-cover rounded"
                     />
                   )}
-                  <div>
-                    <h3 className="font-semibold text-lg">{ebook.bookTitle}</h3>
+                  <div className="flex-1 ">
+                    <h3 className="font-semibold text-lg text-gray-800">
+                      {ebook.bookTitle}
+                    </h3>
                     <p className="text-gray-600">Author: {ebook.authorName}</p>
                     <p className="text-gray-600">
                       Publication: {ebook.publicationName}
@@ -95,34 +81,14 @@ function EbookManager() {
                     {ebook.bookUrl && (
                       <a
                         href={ebook.bookUrl}
-                        className="text-blue-500 underline"
+                        className="text-blue-500 underline mt-2 block"
                         target="_blank"
                         rel="noopener noreferrer"
                       >
-                        Read Book
+                        Download E-Book
                       </a>
                     )}
                   </div>
-                </div>
-                <div className="mt-4 md:mt-0 md:flex md:items-center">
-                  <button
-                    className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
-                    onClick={() => {
-                      setEditingEbook(ebook);
-                      setIsEditModalOpen(true);
-                    }}
-                  >
-                    Edit
-                  </button>
-                  <button
-                    className="bg-red-500 text-white px-4 py-2 rounded"
-                    onClick={() => {
-                      setDeletingEbook(ebook);
-                      setIsDeleteModalOpen(true);
-                    }}
-                  >
-                    Delete
-                  </button>
                 </div>
               </li>
             ))}
@@ -130,7 +96,7 @@ function EbookManager() {
         )}
       </div>
 
-      {error && <p className="text-red-500 mt-2">{error}</p>}
+      {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
     </div>
   );
 }
