@@ -15,8 +15,8 @@ import FeaturedImages from "./FeaturedImages";
 import MaxWidthWrapper from "./maxWidthWrapper";
 import ProjectsTableComponent from "./Projects";
 import TestimonialForm from "./Testimonials";
-import UploadEbook from "./UploadEbook";
 import { useRouter } from "next/navigation";
+import EbookManager from "./Ebook/EbookManager";
 
 const AdminHome: React.FC = () => {
   // Check activation of tab
@@ -202,7 +202,7 @@ const AdminHome: React.FC = () => {
                 </Tabs.Content>
                 <Tabs.Content value="uploadebook">
                   <h2>Upload E-Book</h2>
-                  <UploadEbook />
+                  <EbookManager/>
                 </Tabs.Content>
                 <Tabs.Content value="testimonials">
                   <h2>Testimonials</h2>
