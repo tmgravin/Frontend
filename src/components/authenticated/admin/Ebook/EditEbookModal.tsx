@@ -112,13 +112,17 @@ function EditEbookModal({
       formData.append("authorName", editedEbook.authorName);
       formData.append("publicationName", editedEbook.publicationName);
       formData.append("category", editedEbook.category);
-      formData.append("publishedDate", editedEbook.publishedDate);
+
+      // Format the date as 'YYYY-MM-DD HH:MM:SS'
+      const formattedDate = `${editedEbook.publishedDate} 00:00:00`;
+      formData.append("publishedDate", formattedDate);
+
       if (editedEbook.coverImageUrl)
         formData.append("cover", editedEbook.coverImageUrl);
       if (editedEbook.bookUrl) formData.append("ebook", editedEbook.bookUrl);
 
       const res = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/${editedEbook.id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/?id=${editedEbook.id}`,
         formData,
         {
           headers: {
@@ -127,13 +131,14 @@ function EditEbookModal({
           },
         }
       );
-      if ((res.status = 200)) {
-        toast.success("E-Book Added Successfully");
+
+      if (res.status === 200) {
+        toast.success("E-Book Updated Successfully");
         onClose();
       }
     } catch (error) {
       console.error("Error updating ebook:", error);
-      toast.update("Failed to update ebook. Please try again.");
+      toast.error("Failed to update ebook. Please try again.");
     } finally {
       setIsLoading(false);
     }

@@ -202,7 +202,7 @@ const AdminHome: React.FC = () => {
                 </Tabs.Content>
                 <Tabs.Content value="uploadebook">
                   <h2>Upload E-Book</h2>
-                  <EbookManager/>
+                  <EbookManager />
                 </Tabs.Content>
                 <Tabs.Content value="testimonials">
                   <h2>Testimonials</h2>

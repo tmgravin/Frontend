@@ -114,7 +114,7 @@ function AddEbookModal({ isOpen, onClose }: AddEbookModalProps) {
           },
         }
       );
-      if ((res.status = 200)) {
+      if (res.status == 200) {
         toast.success("Ebook Added Successfully");
         // Reset form fields and close the modal
         setNewEbook({

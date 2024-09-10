@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import { getUserFromCookies } from "@/components/cookie/oldtoken";
 import { toast, ToastContainer } from "react-toastify";
 import axios from "axios";
+
 const cookieuser = getUserFromCookies();
 
 // Define the type for the Ebook
@@ -23,10 +24,14 @@ const DeleteEbookModal: React.FC<DeleteEbookModalProps> = ({
   onClose,
   deletingEbook,
 }) => {
+  const [loading, setLoading] = useState<boolean>(false); // Add loading state
+
   if (!isOpen) return null;
 
   const handleDeleteEbook = async () => {
     if (!deletingEbook) return;
+
+    setLoading(true); // Set loading to true when starting delete
 
     try {
       // Replace with actual delete logic, such as an API call
@@ -40,7 +45,9 @@ const DeleteEbookModal: React.FC<DeleteEbookModalProps> = ({
         }
       );
 
-      if ((res.status = 200)) {
+      if (res.status === 200) {
+        // Fix status check
+        onClose();
         toast.success("E-Book Deleted Successfully");
       }
 
@@ -48,6 +55,8 @@ const DeleteEbookModal: React.FC<DeleteEbookModalProps> = ({
     } catch (error) {
       toast.error("Error deleting ebook");
       console.error("Error deleting ebook:", error);
+    } finally {
+      setLoading(false); // Set loading to false after request
     }
   };
 
@@ -65,14 +74,19 @@ const DeleteEbookModal: React.FC<DeleteEbookModalProps> = ({
           <button
             className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2"
             onClick={onClose}
+            disabled={loading} // Disable button if loading
           >
             Cancel
           </button>
           <button
-            className="bg-red-500 text-white px-4 py-2 rounded"
+            className={`bg-red-500 text-white px-4 py-2 rounded ${
+              loading ? "opacity-50 cursor-not-allowed" : ""
+            }`}
             onClick={handleDeleteEbook}
+            disabled={loading} // Disable button if loading
           >
-            Delete
+            {loading ? "Deleting..." : "Delete"}{" "}
+            {/* Change button text based on loading state */}
           </button>
         </div>
       </div>

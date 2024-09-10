@@ -79,13 +79,9 @@ function AdminHeader({
 
         <div className=" p-1">
           {/* Conditionally render UserModal only if the user exists */}
-          {user && <UserModal />}
+          {user && <AdminUserModal />}
         </div>
       </MaxWidthWrapper>
-      <div className=" p-1">
-        {/* Conditionally render UserModal only if the user exists */}
-        {user && <AdminUserModal />}
-      </div>
     </div>
   );
 }
