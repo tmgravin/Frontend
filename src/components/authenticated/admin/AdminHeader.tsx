@@ -4,6 +4,7 @@ import UserModal from "../usermodal/UserModal";
 import Image from "next/image";
 import { getUserFromCookies } from "@/components/cookie/oldtoken";
 import { useRouter } from "next/navigation";
+import AdminUserModal from "../usermodal/AdminUserModal";
 
 function AdminHeader() {
   const [user, setUser] = useState({});
@@ -44,7 +45,7 @@ function AdminHeader() {
 
       <div className=" p-1">
         {/* Conditionally render UserModal only if the user exists */}
-        {user && <UserModal />}
+        {user && <AdminUserModal />}
       </div>
     </div>
   );
