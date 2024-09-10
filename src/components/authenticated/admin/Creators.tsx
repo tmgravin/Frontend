@@ -16,16 +16,7 @@ export interface User {
 }
 
 const StudentComponent: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([
-    // {
-    //   id: 1,
-    //   name: 'John Doe',
-    //   email: 'johndoe@example.com',
-    //   phone: '123-456-7890',
-    //   registrationDate: '2023-01-01',
-    //   address: '123 Main St, Anytown, USA'
-    // },
-  ]);
+  const [users, setUsers] = useState<User[]>([]);
   const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);

@@ -1,11 +1,10 @@
-import GoogleSignIn from "@/components/non-authenticted/GoogleSignin";
-
+import GoogleLoginButton from "@/components/non-authenticted/GoogleLoginBtton";
 import React from "react";
 
 function page() {
   return (
     <div>
-      <GoogleSignIn />
+      <GoogleLoginButton />
     </div>
   );
 }

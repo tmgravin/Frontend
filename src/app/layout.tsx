@@ -23,6 +23,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Script src="https://kit.fontawesome.com/deb7916e2f.js"></Script>
+      <Script src="https://accounts.google.com/gsi/client"></Script>
 
       <GoogleOAuthProvider
         clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string}
