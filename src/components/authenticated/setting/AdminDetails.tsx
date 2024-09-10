@@ -5,8 +5,9 @@ import Image from "next/image";
 import { getUserFromCookies } from "@/components/cookie/oldtoken"; // Adjust the path as necessary
 import { ToastContainer, toast } from "react-toastify";
 import ChangePasswordDialog from "./ChangePasswordDialog";
-import useUserData from "@/components/providers/UserProvider";
+import useAdminData from "@/components/providers/AdminProvides";
 import ImageDetails from "./ImageDetails";
+import AdminImageDetails from "./AdminImageDetails";
 
 // Default user object if getUserFromCookies returns null
 const cookieuser = getUserFromCookies();
@@ -21,9 +22,9 @@ interface User {
   profilePicture?: string;
 }
 
-const UserDetails: React.FC = () => {
+const AdminDetails: React.FC = () => {
   const { user, setUser, fieldValues, setFieldValues, fetchData } =
-    useUserData();
+    useAdminData();
   const [isEditing, setIsEditing] = useState(false);
   const [openPasswordDialog, setOpenPasswordDialog] = useState(false);
   const handleFieldChange = (
@@ -45,7 +46,7 @@ const UserDetails: React.FC = () => {
     try {
       // Send PUT request with FormData
       const response = await axios.put(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/updateUser/${cookieuser?.id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/updateAdmin/${cookieuser?.id}`,
         formData,
         {
           withCredentials: true,
@@ -83,7 +84,7 @@ const UserDetails: React.FC = () => {
       <ToastContainer />
       <h2 className="text-2xl mb-4">Personal Information</h2>
 
-      <ImageDetails />
+      <AdminImageDetails />
 
       <form noValidate autoComplete="off">
         <div className="mb-4">
@@ -177,4 +178,4 @@ const UserDetails: React.FC = () => {
   );
 };
 
-export default UserDetails;
+export default AdminDetails;

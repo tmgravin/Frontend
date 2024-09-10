@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { RiMenuUnfold3Line } from "react-icons/ri";
 import MaxWidthWrapper from "./maxWidthWrapper";
+import AdminUserModal from "../usermodal/AdminUserModal";
 
 function AdminHeader({
   isSidebarOpen,
@@ -81,6 +82,10 @@ function AdminHeader({
           {user && <UserModal />}
         </div>
       </MaxWidthWrapper>
+      <div className=" p-1">
+        {/* Conditionally render UserModal only if the user exists */}
+        {user && <AdminUserModal />}
+      </div>
     </div>
   );
 }
