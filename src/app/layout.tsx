@@ -5,7 +5,6 @@ import Script from "next/script";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { ProjectProvider } from "@/components/providers/ProjectProvider";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const inter = Poppins({ weight: "500", subsets: ["latin"] });
 
@@ -22,15 +21,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Script src="https://kit.fontawesome.com/deb7916e2f.js"></Script>
+      <Script src="https://accounts.google.com/gsi/client"></Script>
 
-      <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}>
-        <ProjectProvider>
-          <body className={inter.className}>
-            {children}
-            <ToastContainer />
-          </body>
-        </ProjectProvider>
-      </GoogleOAuthProvider>
+      <ProjectProvider>
+        <body className={inter.className}>
+          {children}
+          <ToastContainer />
+        </body>
+      </ProjectProvider>
     </html>
   );
 }

@@ -9,9 +9,9 @@ import UserModal from "../usermodal/UserModal";
 import FeaturedImages from "./FeaturedImages";
 import CategoryForm from "./AddCategory/addCategory";
 import PaymentsTable from "./InfoModals/PaymentsTable";
-import UploadEbook from "./UploadEbook";
 import TestimonialForm from "./Testimonials";
 import EbookCategoryForm from "./AddCategory/EbookCategory";
+import EbookManager from "./Ebook/EbookManager";
 
 const AdminHome: React.FC = () => {
   return (
@@ -98,7 +98,7 @@ const AdminHome: React.FC = () => {
           </Tabs.Content>
           <Tabs.Content value="uploadebook">
             <h2>Upload E-Book</h2>
-            <UploadEbook />
+            <EbookManager />
           </Tabs.Content>
           <Tabs.Content value="testimonials">
             <h2>Testimonials</h2>
