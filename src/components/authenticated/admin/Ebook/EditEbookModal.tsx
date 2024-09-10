@@ -3,29 +3,29 @@ import axios from "axios";
 import { getUserFromCookies } from "@/components/cookie/oldtoken";
 const cookieuser = getUserFromCookies();
 
-// Define the type for the Category
 interface Category {
   id: number;
   category: string;
   createdAt: string;
 }
 
-// Define the type for the Ebook
 interface Ebook {
   id: string;
   bookTitle: string;
   authorName: string;
   publicationName: string;
-  publishedDate: Date;
+  publishedDate: string;
   coverImageUrl: File | null;
   bookUrl: File | null;
+  coverImagePreviewUrl: string | null; // For displaying existing cover image
+  existingEbookUrl: string | null; // For displaying existing ebook file link
   category: string;
 }
 
 interface EditEbookModalProps {
   isOpen: boolean;
   onClose: () => void;
-  editingEbook?: Ebook | null;
+  editingEbook?: any;
 }
 
 function EditEbookModal({
@@ -38,9 +38,11 @@ function EditEbookModal({
     bookTitle: "",
     authorName: "",
     publicationName: "",
-    publishedDate: new Date(),
+    publishedDate: new Date().toISOString().split("T")[0],
     coverImageUrl: null,
     bookUrl: null,
+    coverImagePreviewUrl: null,
+    existingEbookUrl: null,
     category: "",
   });
   const [isLoading, setIsLoading] = useState(false);
@@ -61,17 +63,20 @@ function EditEbookModal({
   }, []);
 
   useEffect(() => {
-    console.log("ebookToEdit in EditEbookModal:", editingEbook);
     if (editingEbook) {
       setEditedEbook({
-        id: editingEbook.id.toString(), // Convert id to string if it's a number
+        id: editingEbook.id.toString(),
         bookTitle: editingEbook.bookTitle,
         authorName: editingEbook.authorName,
         publicationName: editingEbook.publicationName,
-        publishedDate: editingEbook.publishedDate,
-        coverImageUrl: null, // Keep the previous cover file or set a default if necessary
-        bookUrl: null, // Keep the previous ebook file or set a default if necessary
-        category: editingEbook.category,
+        publishedDate: editingEbook.publishedDate
+          ? new Date(editingEbook.publishedDate).toISOString().split("T")[0]
+          : new Date().toISOString().split("T")[0],
+        coverImageUrl: null,
+        bookUrl: null,
+        coverImagePreviewUrl: editingEbook.coverImageUrl || null, // Set existing cover image URL
+        existingEbookUrl: editingEbook.bookUrl || null, // Set existing ebook URL
+        category: editingEbook.category.category || "",
       });
     }
   }, [editingEbook]);
@@ -110,7 +115,6 @@ function EditEbookModal({
         formData.append("cover", editedEbook.coverImageUrl);
       if (editedEbook.bookUrl) formData.append("ebook", editedEbook.bookUrl);
 
-      // Assuming the API endpoint for updating an ebook is /api/ebooks/:id
       await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/${editedEbook.id}`,
         formData,
@@ -122,7 +126,6 @@ function EditEbookModal({
         }
       );
 
-      // Optionally trigger a callback to inform the parent component
       onClose();
     } catch (error) {
       console.error("Error updating ebook:", error);
@@ -219,6 +222,13 @@ function EditEbookModal({
             <label htmlFor="coverFile" className="block font-medium">
               Cover Image
             </label>
+            {editedEbook.coverImagePreviewUrl && (
+              <img
+                src={editedEbook.coverImagePreviewUrl}
+                alt="Current Cover"
+                className="mb-2 w-full h-32 object-cover"
+              />
+            )}
             <input
               id="coverFile"
               type="file"
@@ -231,6 +241,16 @@ function EditEbookModal({
             <label htmlFor="ebookFile" className="block font-medium">
               Ebook File
             </label>
+            {editedEbook.existingEbookUrl && (
+              <a
+                href={editedEbook.existingEbookUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 hover:underline block mb-2"
+              >
+                View Current Ebook
+              </a>
+            )}
             <input
               id="ebookFile"
               type="file"
@@ -242,9 +262,8 @@ function EditEbookModal({
           <div className="flex justify-end">
             <button
               type="button"
-              className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2"
+              className="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2"
               onClick={onClose}
-              disabled={isLoading}
             >
               Cancel
             </button>
@@ -253,7 +272,7 @@ function EditEbookModal({
               className="bg-blue-500 text-white px-4 py-2 rounded"
               disabled={isLoading}
             >
-              {isLoading ? "Updating..." : "Update"}
+              {isLoading ? "Saving..." : "Save"}
             </button>
           </div>
         </form>

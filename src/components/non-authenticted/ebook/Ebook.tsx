@@ -1,108 +1,138 @@
 "use client";
+import React, { useState, useEffect } from "react";
 
-import { useState, useEffect } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Loader2, Download, AlertCircle } from "lucide-react";
-import Image from "next/image";
-
-interface Ebook {
-  id: string;
+export interface Ebook {
   title: string;
-  coverUrl: string;
-  downloadUrl: string;
+  id: number;
+  bookTitle: string;
+  authorName: string;
+  publicationName: string;
+  publishedDate: Date;
+  coverImageUrl: string;
+  bookUrl: string;
+  createdAt: string;
+  category: {
+    id: number;
+    category: string;
+    createdAt: string;
+  };
 }
 
-export default function Ebook() {
+function EbookManager() {
+  const [isAddModalOpen, setIsAddModalOpen] = useState<boolean>(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState<boolean>(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+  const [newEbook, setNewEbook] = useState({
+    bookTitle: "",
+    cover: null as File | null,
+    ebook: null as File | null,
+  });
+  const [editingEbook, setEditingEbook] = useState<Ebook | null>(null);
+  const [deletingEbook, setDeletingEbook] = useState<Ebook | null>(null);
   const [ebooks, setEbooks] = useState<Ebook[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
+    const fetchEbooks = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/`
+        );
+        const data: Ebook[] = await response.json();
+        setEbooks(data);
+      } catch (error) {
+        setError("Failed to load eBooks");
+        console.error(error);
+      }
+    };
+
     fetchEbooks();
   }, []);
 
-  const fetchEbooks = async () => {
-    setIsLoading(true);
-    setError(null);
-    try {
-      // Replace 'YOUR_API_ENDPOINT' with your actual API endpoint
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/`
-      );
-      if (!response.ok) throw new Error("Failed to fetch ebooks");
-      const data = await response.json();
-
-      // Map the API response to the expected format
-      const mappedEbooks = data.map((ebook: any) => ({
-        id: ebook.id.toString(),
-        title: ebook.bookTitle,
-        coverUrl: ebook.coverImageUrl,
-        downloadUrl: ebook.bookUrl,
-      }));
-
-      setEbooks(mappedEbooks);
-    } catch (err) {
-      setError("Error fetching ebooks. Please try again later.");
-      console.error("Error fetching ebooks:", err);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <Loader2 className="h-8 w-8 animate-spin" />
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="flex justify-center items-center h-screen text-red-600">
-        <AlertCircle className="h-8 w-8 mr-2" />
-        <p>{error}</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Ebook Library</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {ebooks.map((ebook) => (
-          <Card key={ebook.id} className="flex flex-col">
-            <CardHeader>
-              <CardTitle className="truncate">{ebook.title}</CardTitle>
-            </CardHeader>
-            <CardContent className="flex-grow">
-              <Image
-                layout="responsive" // Ensures the image scales correctly
-                width={1920} // Adjust width and height to the correct aspect ratio of your original image
-                height={1080} // These values should match the aspect ratio of the actual image
-                src={`${ebook.coverUrl}`}
-                alt={`Cover for ${ebook.title}`}
-                className="w-16 h-24 object-cover rounded-md"
-              />
-            </CardContent>
-            <CardFooter>
-              <Button
-                className="w-full"
-                onClick={() => window.open(ebook.downloadUrl, "_blank")}
+    <div className="p-6">
+      <button
+        className="bg-blue-500 text-white px-4 py-2 rounded"
+        onClick={() => setIsAddModalOpen(true)}
+      >
+        Add Ebook
+      </button>
+
+      <div className="mt-4">
+        {ebooks.length === 0 ? (
+          <p>No eBooks available</p>
+        ) : (
+          <ul>
+            {ebooks.map((ebook) => (
+              <li
+                key={ebook.id}
+                className="border p-4 mb-4 flex flex-col md:flex-row md:justify-between"
               >
-                <Download className="mr-2 h-4 w-4" /> Download
-              </Button>
-            </CardFooter>
-          </Card>
-        ))}
+                <div className="flex items-center">
+                  {ebook.coverImageUrl && (
+                    <img
+                      src={ebook.coverImageUrl}
+                      alt={ebook.bookTitle}
+                      className="w-20 h-20 object-cover mr-4"
+                    />
+                  )}
+                  <div>
+                    <h3 className="font-semibold text-lg">{ebook.bookTitle}</h3>
+                    <p className="text-gray-600">Author: {ebook.authorName}</p>
+                    <p className="text-gray-600">
+                      Publication: {ebook.publicationName}
+                    </p>
+                    <p className="text-gray-600">
+                      Published Date:{" "}
+                      {new Date(ebook.publishedDate).toLocaleDateString()}
+                    </p>
+                    <p className="text-gray-600">
+                      Category: {ebook.category.category}
+                    </p>
+                    <p className="text-gray-600">
+                      Added On: {new Date(ebook.createdAt).toLocaleDateString()}
+                    </p>
+                    {ebook.bookUrl && (
+                      <a
+                        href={ebook.bookUrl}
+                        className="text-blue-500 underline"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Read Book
+                      </a>
+                    )}
+                  </div>
+                </div>
+                <div className="mt-4 md:mt-0 md:flex md:items-center">
+                  <button
+                    className="bg-yellow-500 text-white px-4 py-2 rounded mr-2"
+                    onClick={() => {
+                      setEditingEbook(ebook);
+                      setIsEditModalOpen(true);
+                    }}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="bg-red-500 text-white px-4 py-2 rounded"
+                    onClick={() => {
+                      setDeletingEbook(ebook);
+                      setIsDeleteModalOpen(true);
+                    }}
+                  >
+                    Delete
+                  </button>
+                </div>
+              </li>
+            ))}
+          </ul>
+        )}
       </div>
+
+      {error && <p className="text-red-500 mt-2">{error}</p>}
     </div>
   );
 }
+
+export default EbookManager;

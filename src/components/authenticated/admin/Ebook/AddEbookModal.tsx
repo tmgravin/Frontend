@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import axios from "axios";
 import { getUserFromCookies } from "@/components/cookie/oldtoken";
+
 const cookieuser = getUserFromCookies();
 
 // Define the type for the Category
@@ -31,7 +32,7 @@ function AddEbookModal({ isOpen, onClose }: AddEbookModalProps) {
     bookTitle: "",
     authorName: "",
     publicationName: "",
-    publishedDate: "", // Initialize as empty string
+    publishedDate: "",
     coverImageUrl: null,
     bookUrl: null,
     category: "",
@@ -86,10 +87,20 @@ function AddEbookModal({ isOpen, onClose }: AddEbookModalProps) {
       formData.append("authorName", newEbook.authorName);
       formData.append("publicationName", newEbook.publicationName);
       formData.append("category", newEbook.category);
-      formData.append("publishedDate", newEbook.publishedDate);
-      if (newEbook.coverImageUrl)
+
+      // Convert date to the correct format (yyyy-MM-dd HH:mm:ss)
+      const publishedDate = new Date(newEbook.publishedDate);
+      const formattedDate = `${
+        publishedDate.toISOString().split("T")[0]
+      } 00:00:00`;
+      formData.append("publishedDate", formattedDate);
+
+      if (newEbook.coverImageUrl) {
         formData.append("coverImageUrl", newEbook.coverImageUrl);
-      if (newEbook.bookUrl) formData.append("bookUrl", newEbook.bookUrl);
+      }
+      if (newEbook.bookUrl) {
+        formData.append("bookUrl", newEbook.bookUrl);
+      }
 
       // Assuming the API endpoint for adding an ebook is /api/ebooks
       await axios.post(
@@ -122,7 +133,7 @@ function AddEbookModal({ isOpen, onClose }: AddEbookModalProps) {
     }
   };
 
-  return (
+  return isOpen ? (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
       <div className="bg-white p-6 rounded w-full max-w-md overflow-scroll h-4/5">
         <h2 className="text-xl font-bold mb-4">Add Ebook</h2>
@@ -262,7 +273,7 @@ function AddEbookModal({ isOpen, onClose }: AddEbookModalProps) {
         </form>
       </div>
     </div>
-  );
+  ) : null;
 }
 
 export default AddEbookModal;
