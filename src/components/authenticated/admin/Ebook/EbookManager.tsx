@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import AddEbookModal from "./AddEbookModal";
 import EditEbookModal from "./EditEbookModal";
 import DeleteEbookModal from "./DeleteEbookModal";
+import { ToastContainer } from "react-toastify";
 
 export interface Ebook {
   title: string;
@@ -54,6 +55,7 @@ function EbookManager() {
 
   return (
     <div className="p-6">
+      <ToastContainer />
       <button
         className="bg-blue-500 text-white px-4 py-2 rounded"
         onClick={() => setIsAddModalOpen(true)}

@@ -1,5 +1,7 @@
 import React from "react";
 import { getUserFromCookies } from "@/components/cookie/oldtoken";
+import { toast, ToastContainer } from "react-toastify";
+import axios from "axios";
 const cookieuser = getUserFromCookies();
 
 // Define the type for the Ebook
@@ -28,24 +30,30 @@ const DeleteEbookModal: React.FC<DeleteEbookModalProps> = ({
 
     try {
       // Replace with actual delete logic, such as an API call
-      await fetch(
+      const res = await axios.delete(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/${deletingEbook.id}`,
         {
-          method: "DELETE",
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${cookieuser?.token}`,
           },
         }
       );
+
+      if ((res.status = 200)) {
+        toast.success("E-Book Deleted Successfully");
+      }
+
       // Optionally, you can add logic to notify the user or refresh the list
     } catch (error) {
+      toast.error("Error deleting ebook");
       console.error("Error deleting ebook:", error);
     }
   };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+      <ToastContainer />
       <div className="bg-white p-6 rounded w-full max-w-md">
         <h2 className="text-xl font-bold mb-4">
           Are you sure you want to delete this ebook?

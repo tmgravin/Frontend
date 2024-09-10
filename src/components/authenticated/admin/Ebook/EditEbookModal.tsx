@@ -1,6 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import axios from "axios";
 import { getUserFromCookies } from "@/components/cookie/oldtoken";
+import { toast, ToastContainer } from "react-toastify";
 const cookieuser = getUserFromCookies();
 
 interface Category {
@@ -115,7 +116,7 @@ function EditEbookModal({
         formData.append("cover", editedEbook.coverImageUrl);
       if (editedEbook.bookUrl) formData.append("ebook", editedEbook.bookUrl);
 
-      await axios.post(
+      const res = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/${editedEbook.id}`,
         formData,
         {
@@ -125,11 +126,13 @@ function EditEbookModal({
           },
         }
       );
-
-      onClose();
+      if ((res.status = 200)) {
+        toast.success("E-Book Added Successfully");
+        onClose();
+      }
     } catch (error) {
       console.error("Error updating ebook:", error);
-      alert("Failed to update ebook. Please try again.");
+      toast.update("Failed to update ebook. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -137,6 +140,7 @@ function EditEbookModal({
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
+      <ToastContainer />
       <div className="bg-white p-6 rounded w-full max-w-md overflow-scroll h-4/5">
         <h2 className="text-xl font-bold mb-4">Edit Ebook</h2>
         <form onSubmit={onEditEbook} className="space-y-4">
