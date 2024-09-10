@@ -6,7 +6,6 @@ import { getUserFromCookies } from "@/components/cookie/oldtoken"; // Adjust the
 import { ToastContainer, toast } from "react-toastify";
 import ChangePasswordDialog from "./ChangePasswordDialog";
 import useAdminData from "@/components/providers/AdminProvides";
-import ImageDetails from "./ImageDetails";
 import AdminImageDetails from "./AdminImageDetails";
 
 // Default user object if getUserFromCookies returns null
@@ -46,7 +45,7 @@ const AdminDetails: React.FC = () => {
     try {
       // Send PUT request with FormData
       const response = await axios.put(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/updateAdmin/${cookieuser?.id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/${cookieuser?.id}`,
         formData,
         {
           withCredentials: true,

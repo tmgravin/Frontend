@@ -23,7 +23,7 @@ const AdminImageDetails: React.FC = () => {
       formData.append("profileImage", selectedFile);
 
       const response = await axios.put(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/updateAdmin/${cookieuser?.id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/${cookieuser?.id}`,
         formData,
         {
           headers: {

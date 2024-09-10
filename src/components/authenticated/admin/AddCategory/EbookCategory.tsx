@@ -54,7 +54,7 @@ const EbookCategoryForm: React.FC = () => {
     try {
       if (editingCategory) {
         await axios.post(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/category?categoryId=${editingCategory.id}`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/category?id=${editingCategory.id}`,
           formData,
           {
             headers: {
