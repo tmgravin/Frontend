@@ -91,14 +91,6 @@ function ApplicationProcess2() {
         {/* Custom Swiper Pagination - Outside the Box */}
         <div className="custom-swiper-pagination absolute bottom-[-30px] left-0 right-0 flex justify-center"></div>
       </div>
-
-      <div className="flex justify-center items-center pt-10">
-        <button
-          /* onClick={toggleSignupModal} */ className="primary-orangebg  text-white font-bold py-2 px-4 rounded"
-        >
-          START REGISTRATION
-        </button>
-      </div>
     </div>
   );
 }

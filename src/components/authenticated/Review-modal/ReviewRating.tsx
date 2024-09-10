@@ -22,7 +22,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import RateTeacherModal from "./RateTeacherModal";
 import axios from "axios";
-import { getUserFromCookies } from "@/components/auth/token";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
 
 const user = getUserFromCookies();
 
@@ -101,7 +101,7 @@ const ReviewRating: React.FC<ReviewRatingProps> = ({
       await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/review/likes`,
         {
-          users: { id: user.id }, // Use the correct user ID here
+          users: { id: user?.id }, // Use the correct user ID here
           reviews: { id: reviewId },
           likes: "L",
         },
@@ -126,11 +126,14 @@ const ReviewRating: React.FC<ReviewRatingProps> = ({
       await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/review/likes`,
         {
-          users: { id: user.id }, // Use the correct user ID here
+          users: { id: user?.id }, // Use the correct user ID here
           reviews: { id: reviewId },
           likes: "D",
         },
         {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
           withCredentials: true,
         }
       );
@@ -152,7 +155,12 @@ const ReviewRating: React.FC<ReviewRatingProps> = ({
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography variant="h6">{doerName}</Typography>
           <Box>
-            <Button variant="outlined" onClick={handleRateClick} sx={{ mr: 1 }}>
+            <Button
+              className="primary-orangebg hover:bg-orange-600 text-white"
+              variant="outlined"
+              onClick={handleRateClick}
+              sx={{ mr: 1 }}
+            >
               Rate Teacher
             </Button>
             <IconButton onClick={onClose}>
@@ -277,7 +285,10 @@ const ReviewRating: React.FC<ReviewRatingProps> = ({
         </List>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">
+        <Button
+          onClick={onClose}
+          className="primary-orangebg hover:bg-orange-600 text-white"
+        >
           Close
         </Button>
       </DialogActions>
@@ -285,7 +296,7 @@ const ReviewRating: React.FC<ReviewRatingProps> = ({
         open={rateModalOpen}
         onClose={handleRateModalClose}
         doerId={doerId}
-        userId={user.id}
+        userId={user?.id}
       />
     </Dialog>
   );

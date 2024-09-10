@@ -1,79 +1,135 @@
-// src/components/authenticated/assignment-creator/ApplicantsInfoModal.tsx
-import React from 'react';
-import axios from 'axios';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Table, TableHead, TableRow, TableCell, TableBody, Button, Typography } from '@mui/material';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState } from "react";
+import axios from "axios";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Table,
+  TableHead,
+  TableRow,
+  TableCell,
+  TableBody,
+  Button,
+  Typography,
+} from "@mui/material";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
+const cookieuser = getUserFromCookies();
 
 interface Applicant {
   name: string;
   email: string;
   appliedDate?: string; // Mark as optional
   status?: string;
+  createdAt: string;
+  cv: any;
 }
 
 interface Project {
   projectName: string;
   projectAmount: number;
   projectDeadline: string;
- 
-  // Include other fields as needed
 }
 
 interface DataItem {
   id: number;
   projects: Project;
-  doer: Applicant; // Changed from { name: string; email: string; } to Applicant
+  doer: Applicant;
   status: string;
   createdAt: string;
   updatedAt: string;
-  
-  applicants?: Applicant[]; // Made optional
+  applicants?: Applicant[];
+  coverLetter?: String;
 }
 
 interface ApplicantsInfoModalProps {
   open: boolean;
   onClose: () => void;
-  assignment: DataItem | null;
-  handleAccept: (applicationId: number) => void;
-  handleReject: (applicationId: number) => void;
+  assignment: any;
 }
 
-const ApplicantsInfoModal: React.FC<ApplicantsInfoModalProps> = ({ open, onClose, assignment, handleAccept, handleReject }) => {
-  if (!assignment) return null;
+const ApplicantsInfoModal: React.FC<ApplicantsInfoModalProps> = ({
+  open,
+  onClose,
+  assignment,
+}) => {
+  // Initialize state outside of any conditionals
+  const [applicants, setApplicants] = useState<Applicant[]>([]);
 
-  const applicants = [assignment.doer, ...(assignment.applicants ?? [])];
+  // Update the applicants whenever the assignment changes
+  React.useEffect(() => {
+    if (assignment) {
+      setApplicants([assignment.doer, ...(assignment.applicants ?? [])]);
+    }
+  }, [assignment]);
+
+  const handleReject = async (applicationId: number) => {
+    // Placeholder logic for rejection
+    setApplicants((prev) =>
+      prev.map((applicant) =>
+        applicant.email === assignment?.doer.email
+          ? { ...applicant, status: "Rejected" }
+          : applicant
+      )
+    );
+    toast.error("Application rejected successfully!");
+  };
 
   const acceptApplication = async (applicationId: number) => {
     try {
-      // Use FormData to send the application ID as form data
       const formData = new FormData();
-      formData.append('applicationId', applicationId.toString());
+      formData.append("applicationId", applicationId.toString());
 
-      await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/acceptApplication`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        withCredentials: true // Include credentials with the request
-      });
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/acceptApplication`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${cookieuser?.token}`,
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
+      );
 
-      toast.success('Application accepted successfully!');
+      setApplicants((prev) =>
+        prev.map((applicant) =>
+          applicant.email === assignment?.doer.email
+            ? { ...applicant, status: "Accepted" }
+            : { ...applicant, status: "Rejected" }
+        )
+      );
+
+      toast.success("Application accepted successfully!");
     } catch (error) {
-      console.error('Error accepting application', error);
-      toast.error('Error accepting application. Please try again.');
+      console.error("Error accepting application", error);
+      toast.error("Error accepting application. Please try again.");
     }
   };
+
+  if (!assignment) return null;
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="md">
       <DialogTitle>Applicants Information</DialogTitle>
       <DialogContent>
         <Typography variant="h6">Project Details</Typography>
-        <Typography variant="body1"><strong>Project Name:</strong> {assignment.projects.projectName}</Typography>
-        <Typography variant="body1"><strong>Project Amount:</strong> ${assignment.projects.projectAmount}</Typography>
-        <Typography variant="body1"><strong>Project Deadline:</strong> {assignment.projects.projectDeadline}</Typography>
+        <Typography variant="body1">
+          <strong>Project Name:</strong> {assignment.projects.projectName}
+        </Typography>
+        <Typography variant="body1">
+          <strong>Project Amount:</strong> ${assignment.projects.projectAmount}
+        </Typography>
+        <Typography variant="body1">
+          <strong>Project Deadline:</strong>{" "}
+          {assignment.projects.projectDeadline}
+        </Typography>
 
-        <Typography variant="h6" sx={{ mt: 2 }}>Applicants Information</Typography>
+        <Typography variant="h6" sx={{ mt: 2 }}>
+          Applicants Information
+        </Typography>
         <Table sx={{ mt: 2 }}>
           <TableHead>
             <TableRow>
@@ -81,7 +137,8 @@ const ApplicantsInfoModal: React.FC<ApplicantsInfoModalProps> = ({ open, onClose
               <TableCell>Email</TableCell>
               <TableCell>Applied Date</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell>Actions</TableCell>
+              <TableCell>cv</TableCell>
+              <TableCell>coverletter</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -90,20 +147,23 @@ const ApplicantsInfoModal: React.FC<ApplicantsInfoModalProps> = ({ open, onClose
                 <TableRow key={index}>
                   <TableCell>{applicant.name}</TableCell>
                   <TableCell>{applicant.email}</TableCell>
-                  <TableCell>{applicant.appliedDate ?? '-'}</TableCell>
-                  <TableCell>{applicant.status ?? '-'}</TableCell>
-                  <TableCell>
+                  <TableCell>{applicant.createdAt}</TableCell>
+                  <TableCell>{applicant.status ?? "Pending"}</TableCell>
+                  <TableCell>{applicant.cv ?? "-"}</TableCell>
+                  <TableCell>{assignment.coverLetter}</TableCell>
+
+                  <TableCell className="flex flex-row">
                     <Button
                       variant="contained"
-                      color="success"
-                      onClick={() => acceptApplication(assignment.id)} // Pass the application ID
+                      className="primary-orangebg hover:bg-orange-600"
+                      onClick={() => acceptApplication(assignment.id)}
                     >
                       Accept
                     </Button>
                     <Button
                       variant="contained"
-                      color="error"
-                      onClick={() => handleReject(assignment.id)} // Pass the application ID
+                      className="bg-white hover:bg-slate-300 text-black ml-2"
+                      onClick={() => handleReject(assignment.id)}
                     >
                       Reject
                     </Button>
@@ -119,9 +179,14 @@ const ApplicantsInfoModal: React.FC<ApplicantsInfoModalProps> = ({ open, onClose
         </Table>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">Close</Button>
+        <Button
+          onClick={onClose}
+          className="primary-orangebg hover:bg-orange-600 text-white"
+        >
+          Close
+        </Button>
       </DialogActions>
-      <ToastContainer /> {/* Add ToastContainer here */}
+      <ToastContainer />
     </Dialog>
   );
 };

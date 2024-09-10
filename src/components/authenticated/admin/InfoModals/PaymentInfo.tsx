@@ -13,7 +13,8 @@ import {
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
+const cookieuser = getUserFromCookies();
 interface PaymentInfoModalProps {
   open: boolean;
   onClose: () => void;
@@ -54,7 +55,13 @@ const PaymentInfoModal: React.FC<PaymentInfoModalProps> = ({
       axios
         .get(
           `${process.env.NEXT_PUBLIC_BASE_URL}/api/payment/?projectId=${projectId}`,
-          { withCredentials: true }
+          {
+            headers: {
+              Authorization: `Bearer ${cookieuser?.token}`,
+              "Content-Type": "application/json",
+            },
+            withCredentials: true,
+          }
         )
         .then((response) => {
           if (response.data.length > 0) {
@@ -82,9 +89,7 @@ const PaymentInfoModal: React.FC<PaymentInfoModalProps> = ({
         })
         .catch((error) => {
           console.error("Error fetching payment info:", error);
-          setError(
-            "An error occurred while fetching payment information."
-          );
+          setError("An error occurred while fetching payment information.");
         })
         .finally(() => {
           setLoading(false);
@@ -97,9 +102,12 @@ const PaymentInfoModal: React.FC<PaymentInfoModalProps> = ({
       axios
         .post(
           `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/payment/approve?id=${paymentInfo.id}`,
-          {},
+
           {
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              Authorization: `Bearer ${cookieuser?.token}`,
+              "Content-Type": "application/json",
+            },
             withCredentials: true,
           }
         )
@@ -151,7 +159,8 @@ const PaymentInfoModal: React.FC<PaymentInfoModalProps> = ({
                 {new Date(paymentInfo.createdAt).toLocaleDateString()}
               </Typography>
               <Typography variant="body1">
-                <strong>Project Name:</strong> {paymentInfo.projects.projectName}
+                <strong>Project Name:</strong>{" "}
+                {paymentInfo.projects.projectName}
               </Typography>
               <Typography variant="body1">
                 <strong>Project Amount:</strong> $
@@ -159,7 +168,9 @@ const PaymentInfoModal: React.FC<PaymentInfoModalProps> = ({
               </Typography>
               <Typography variant="body1">
                 <strong>Project Deadline:</strong>{" "}
-                {new Date(paymentInfo.projects.projectDeadline).toLocaleDateString()}
+                {new Date(
+                  paymentInfo.projects.projectDeadline
+                ).toLocaleDateString()}
               </Typography>
               <Typography variant="body1">
                 <strong>Payment Status:</strong>{" "}

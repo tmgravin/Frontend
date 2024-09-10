@@ -1,8 +1,10 @@
-"use client"
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import ReactPaginate from 'react-paginate';
-import TeacherInfoModal from './InfoModals/TeacherInfoModal';
+"use client";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import ReactPaginate from "react-paginate";
+import TeacherInfoModal from "./InfoModals/TeacherInfoModal";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
+const cookieuser = getUserFromCookies();
 
 export interface User {
   id: number;
@@ -11,7 +13,7 @@ export interface User {
   phone: string;
   createdAt: string;
   address: string;
-
+  cvUrl: string;
 }
 
 const TeacherComponent: React.FC = () => {
@@ -27,7 +29,7 @@ const TeacherComponent: React.FC = () => {
     // },
   ]);
 
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
@@ -36,11 +38,17 @@ const TeacherComponent: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/role?userType=ASSIGNMENT_DOER`,
-        {  withCredentials: true}
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/role?userType=ASSIGNMENT_DOER`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookieuser?.token}`, // Replace `yourBearerToken` with your actual token
+          },
+          withCredentials: true,
+        }
       );
-    
-      console.log(response)
+
+      console.log(response);
       setUsers(response.data);
       setFilteredUsers(response.data);
     };
@@ -50,10 +58,11 @@ const TeacherComponent: React.FC = () => {
 
   useEffect(() => {
     setFilteredUsers(
-      users.filter(user =>
-        user.name.toLowerCase().includes(search.toLowerCase()) ||
-        user.email.toLowerCase().includes(search.toLowerCase()) ||
-        user.phone.includes(search)
+      users.filter(
+        (user) =>
+          user.name.toLowerCase().includes(search.toLowerCase()) ||
+          user.email.toLowerCase().includes(search.toLowerCase()) ||
+          user.phone.includes(search)
       )
     );
   }, [search, users]);
@@ -62,7 +71,9 @@ const TeacherComponent: React.FC = () => {
     setCurrentPage(data.selected);
   };
 
-  const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleItemsPerPageChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     setItemsPerPage(Number(e.target.value));
     setCurrentPage(0); // Reset to first page when items per page changes
   };
@@ -84,7 +95,7 @@ const TeacherComponent: React.FC = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Assignment Doer Details</h2>
+      <h2 className="text-2xl font-bold mb-4">Project Doer Details</h2>
       <div className="flex justify-between items-center mb-4">
         <input
           type="text"
@@ -94,7 +105,9 @@ const TeacherComponent: React.FC = () => {
           className="border border-gray-300 rounded-md p-2"
         />
         <div>
-          <label htmlFor="itemsPerPage" className="mr-2">Items per page:</label>
+          <label htmlFor="itemsPerPage" className="mr-2">
+            Items per page:
+          </label>
           <select
             id="itemsPerPage"
             value={itemsPerPage}
@@ -116,11 +129,12 @@ const TeacherComponent: React.FC = () => {
             <th className="border px-4 py-2">Phone</th>
             <th className="border px-4 py-2">Registration Date</th>
             <th className="border px-4 py-2">Address</th>
+            <th className="border px-4 py-2">CV</th>
             <th className="border px-4 py-2">Action</th>
           </tr>
         </thead>
         <tbody>
-          {currentItems.map(user => (
+          {currentItems.map((user) => (
             <tr key={user.id}>
               <td className="border px-4 py-2">{user.id}</td>
               <td className="border px-4 py-2">{user.name}</td>
@@ -128,6 +142,7 @@ const TeacherComponent: React.FC = () => {
               <td className="border px-4 py-2">{user.phone}</td>
               <td className="border px-4 py-2">{user.createdAt}</td>
               <td className="border px-4 py-2">{user.address}</td>
+              <td className="border px-4 py-2">{user.cvUrl}</td>
               <td className="border px-4 py-2">
                 <button
                   onClick={() => handleActionClick(user)}

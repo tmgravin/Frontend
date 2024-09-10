@@ -1,7 +1,13 @@
 // src/ReadMoreModal.tsx
-import React from 'react';
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
-import { DataItem } from './UsersAssignment';
+import React from "react";
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+} from "@mui/material";
+import { DataItem } from "./UsersAssignment";
 
 interface ReadMoreModalProps {
   project: DataItem | null;
@@ -9,7 +15,11 @@ interface ReadMoreModalProps {
   onEdit: () => void;
 }
 
-const ReadMoreModal: React.FC<ReadMoreModalProps> = ({ project, onClose, onEdit }) => {
+const ReadMoreModal: React.FC<ReadMoreModalProps> = ({
+  project,
+  onClose,
+  onEdit,
+}) => {
   return (
     <Dialog open={!!project} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle>{project?.title}</DialogTitle>
@@ -17,10 +27,14 @@ const ReadMoreModal: React.FC<ReadMoreModalProps> = ({ project, onClose, onEdit 
         <p>{project?.description}</p>
         <p className="text-sm">Project Amount: {project?.amount}</p>
         <p className="text-sm">Deadline: {project?.deadline}</p>
-        <button onClick={onEdit} className='primary-btn-blue'>Edit Details</button>
+        <button onClick={onEdit} className="primary-btn-blue">
+          Edit Details
+        </button>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="primary">Close</Button>
+        <Button onClick={onClose} color="primary">
+          Close
+        </Button>
       </DialogActions>
     </Dialog>
   );

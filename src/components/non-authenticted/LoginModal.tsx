@@ -5,6 +5,7 @@ import ResetPasswordModal from "./ResetPasswordModal";
 import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { getUserFromCookies } from "../cookie/oldtoken"; // Adjust the path based on your file structure
 
 interface SignupData {
   email: string;
@@ -35,19 +36,28 @@ const LoginModal: React.FC<LoginModalProps> = ({
   if (!isOpen) return null;
 
   // Function to set user data in a cookie
-  function setUserCookie(data: any) {
-    const userValue = encodeURIComponent(JSON.stringify(data));
+  // function setUserCookie(data: any) {
+  //   const userValue = encodeURIComponent(JSON.stringify(data));
+  //   const expiryDate = new Date();
+  //   expiryDate.setDate(expiryDate.getDate() + 7); // Cookie expires in 7 days
+
+  //   document.cookie = `user=${userValue}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
+  // }
+  function setTokenCookie(token: string) {
+    // Encode the token value directly
+    const tokenValue = encodeURIComponent(token);
     const expiryDate = new Date();
     expiryDate.setDate(expiryDate.getDate() + 7); // Cookie expires in 7 days
 
-    document.cookie = `user=${userValue}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
+    // Set the cookie with the token value
+    document.cookie = `token=${tokenValue}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
   }
 
   const handleLogin = async (userRole: string) => {
     console.log(loginData);
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/login`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/security/login`,
         {
           ...loginData,
           userType: userRole,
@@ -64,26 +74,21 @@ const LoginModal: React.FC<LoginModalProps> = ({
       console.log(response.data);
 
       if (response.status === 200) {
-        // Storing user data in localStorage
-        // localStorage.setItem('user', JSON.stringify(response.data));
-        setUserCookie(response.data); // Set user data in cookie
-
+        setTokenCookie(response.data); // Set token data in cookie
+        const user = getUserFromCookies();
+        if (user) {
+          console.log("userd userType from login:", user.userType, user.token);
+        } else {
+          console.error("Failed to user token or token not found.");
+        }
         toast.success("Login successful!");
-        setTimeout(() => {
-          if (response.data.userType === "ASSIGNMENT_CREATOR") {
-            router.push(
-              `${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-creator`
-            );
-          } else if (response.data.userType === "ASSIGNMENT_DOER") {
-            router.push(
-              `${process.env.NEXT_PUBLIC_FRONTEND_URL}/assignment-doer`
-            );
-          } else if (response.data.userType === "ADMIN") {
-            router.push(
-              `${process.env.NEXT_PUBLIC_FRONTEND_URL}/admindashboard`
-            );
-          }
-        }, 500);
+        if (user?.userType === "ASSIGNMENT_CREATOR") {
+          router.push(
+            `${process.env.NEXT_PUBLIC_FRONTEND_URL}/project-creator`
+          );
+        } else if (user?.userType === "ASSIGNMENT_DOER") {
+          router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/project-doer`);
+        }
       }
     } catch (error: any) {
       console.error(
@@ -202,7 +207,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
               <button
                 type="submit"
-                className="w-full text-white primary-orangebg hover:secondary-btn-blue focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:primary-btn-blue dark:focus:ring-blue-800"
+                className="w-full bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
                 onClick={() => handleLogin("ASSIGNMENT_CREATOR")}
               >
                 Login {/* as Assignment Creator */}

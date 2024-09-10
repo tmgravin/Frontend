@@ -6,8 +6,8 @@ import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ResultModal from "./ResultModal";
 import Image from "next/image";
-import { getUserFromCookies } from "../../auth/token";
-import { Category } from "@mui/icons-material";
+import { getUserFromCookies } from "../../cookie/oldtoken";
+import { useProjects } from "@/components/providers/ProjectProvider";
 
 const user = getUserFromCookies();
 
@@ -18,6 +18,8 @@ interface PostAssignmentModalProps {
 const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
   onClose,
 }) => {
+  const [isPosting, setIsPosting] = useState<boolean>(false);
+  const { fetchData }: any = useProjects();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [deadline, setDeadline] = useState("");
@@ -27,12 +29,13 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
   const [budgetType, setBudgetType] = useState("");
   const [budget, setBudget] = useState("");
   const [attachment, setAttachment] = useState<File | null>(null);
-  const [paymentVerified, setPaymentVerified] = useState(false);
+  // const [paymentVerified, setPaymentVerified] = useState(false);
   const [scope, setScope] = useState("");
   const [resultModalVisible, setResultModalVisible] = useState(false);
   const [resultMessage, setResultMessage] = useState("");
   const [catagory, setCatagory] = useState("");
   const [catData, setCatData] = useState<any[]>([]);
+  const [budgetPlaceholder, setBudgetPlaceholder] = useState("");
 
   const capitalizeFirstLetter = (string: string) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
@@ -42,8 +45,6 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
     const value = e.target.value;
     setTitle(capitalizeFirstLetter(value));
   };
-
-  console.log(catData);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
@@ -57,9 +58,12 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
-    // Retrieving user data from cookies
+    setIsPosting(true); // Set loading state to true
+
     const formData = new FormData();
-    formData.append("users", user.id); //notokens yet sending form id from cookie which is stored when logged in
+    if (user?.id) {
+      formData.append("users", user?.id);
+    }
     formData.append("projectName", title);
     formData.append("projectDescription", description);
     formData.append("projectDeadline", deadline);
@@ -69,17 +73,20 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
     formData.append("budgets", budgetType);
     formData.append("projectAmount", budget);
     formData.append("projectCategory", catagory);
+
     // formData.append('paymentVerified', paymentVerified.toString());
     if (attachment) {
       formData.append("projectUrl", attachment);
     }
 
     try {
+      setIsPosting(true); // Set loading state to true
       const response = await axios.post(
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/`,
         formData,
         {
           headers: {
+            Authorization: `Bearer ${user?.token}`,
             "Content-Type": "multipart/form-data",
           },
           withCredentials: true, // Include credentials with the request
@@ -88,33 +95,38 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
       console.log(response);
       setResultMessage("Assignment posted successfully!");
       setResultModalVisible(true);
+      fetchData();
       console.log("Assignment posted successfully:", response.data);
     } catch (error) {
       // setResultMessage('Error posting assignment. Please try again.');
       // setResultModalVisible(true);
       console.error("Error posting assignment:", error);
+    } finally {
+      setIsPosting(false); // Reset loading state
     }
-
     // Clear the form
-    // setTitle('');
-    // setDescription('');
-    // setDeadline('');
+    setTitle("");
+    setDescription("");
+    setDeadline("");
     // setExperience('');
     // setSkills('');
-    // setScope([]);
-    // setBudgetType('');
-    // setBudget('');
-    // setCatagory("");
-    // setAttachment(null);
+    // setScope("");
+    setBudgetType("");
+    setBudget("");
+    setCatagory("");
+    setAttachment(null);
     // setPaymentVerified(false);
   };
   useEffect(() => {
     // Define an async function inside useEffect to fetch the data
-    const fetchData = async () => {
+    const fetchCatagory = async () => {
       try {
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_BASE_URL}/api/category/`,
           {
+            headers: {
+              Authorization: `Bearer ${user?.token}`,
+            },
             withCredentials: true, // If you are using cookies for authentication
           }
         ); // Replace with your API endpoint
@@ -125,7 +137,7 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
       }
     };
 
-    fetchData(); // Call the async function
+    fetchCatagory(); // Call the async function
   }, []); // Dependency array is empty, so this runs only once after the initial render
 
   const handleCloseResultModal = () => {
@@ -234,9 +246,9 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
               required
             >
               <option value="">How long will work take</option>
-              <option value="LESS_THAN_ONE_MONTH">Less tha a month</option>
+              <option value="LESS_THAN_ONE_MONTH">Less than a month</option>
               <option value="ONE_TO_THREE_MONTH">One to three month</option>
-              <option value="THREE_TO_SIX_MONTH">Three top six month</option>
+              <option value="THREE_TO_SIX_MONTH">Three to six month</option>
             </select>
           </div>
 
@@ -262,21 +274,6 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
               ))}
             </select>
           </div>
-
-          {/* <div className="mb-4">
-            <label htmlFor="skills" className="block text-sm font-medium text-gray-700">
-              Skills (separate by commas)
-            </label>
-            <input
-              id="skills"
-              type="text"
-              value={skills}
-              onChange={handleSkillsChange}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-              placeholder="e.g., JavaScript, React, Node.js"
-              required
-            />
-          </div> */}
 
           <div className="mb-4">
             <label
@@ -336,7 +333,10 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
                   name="budgetType"
                   value="HOURLY_RATE"
                   checked={budgetType === "HOURLY_RATE"}
-                  onChange={(e) => setBudgetType(e.target.value)}
+                  onChange={(e) => {
+                    setBudgetType(e.target.value);
+                    setBudgetPlaceholder("/hr");
+                  }}
                   className="absolute top-0 left-0"
                 />
                 <Image
@@ -353,7 +353,10 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
                   name="budgetType"
                   value="FIXED_PRICE"
                   checked={budgetType === "FIXED_PRICE"}
-                  onChange={(e) => setBudgetType(e.target.value)}
+                  onChange={(e) => {
+                    setBudgetType(e.target.value);
+                    setBudgetPlaceholder("");
+                  }}
                   className="absolute top-0 left-0"
                 />
                 <Image
@@ -382,14 +385,20 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
                 Recurring Payment
               </label> */}
               <label className="flex flex-col items-center justify-center relative">
-                <input
-                  type="radio"
-                  name="budgetType"
-                  value="TASK_BASED"
-                  checked={budgetType === "TASK_BASED"}
-                  onChange={(e) => setBudgetType(e.target.value)}
-                  className="absolute top-0 left-0"
-                />
+                <div className="flex flex-row">
+                  {" "}
+                  <input
+                    type="radio"
+                    name="budgetType"
+                    value="TASK_BASED"
+                    checked={budgetType === "TASK_BASED"}
+                    onChange={(e) => {
+                      setBudgetType(e.target.value);
+                      setBudgetPlaceholder(" /task");
+                    }}
+                    className="absolute top-0 left-0"
+                  />
+                </div>
                 <Image
                   src="/postassignment-svg/taskbased.svg"
                   alt="Task Based"
@@ -408,15 +417,18 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
             >
               Budget (in USD)
             </label>
-            <input
-              id="budget"
-              type="number"
-              placeholder="$"
-              value={budget}
-              onChange={(e) => setBudget(e.target.value)}
-              className="mt-1 block w-full border border-gray-300 rounded-md p-2"
-              required
-            />
+            <div className="flex flex-row items-center ">
+              <input
+                id="budget"
+                type="number"
+                placeholder="$"
+                value={budget}
+                onChange={(e) => setBudget(e.target.value)}
+                className="mt-1 block wax-w-9 border border-gray-300 rounded-md p-2"
+                required
+              />
+              <div className="mx-1">{budgetPlaceholder}</div>
+            </div>
           </div>
 
           <div className="mb-4">
@@ -468,9 +480,10 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
           <div className="flex justify-end">
             <button
               type="submit"
-              className=" text-white px-4 py-2 rounded hover:bg-orange-600 primary-orangebg"
+              className="text-white px-4 py-2 rounded hover:bg-orange-600 primary-orangebg"
+              disabled={isPosting}
             >
-              Post Assignment
+              {isPosting ? "Posting..." : "Post Assignment"}
             </button>
           </div>
         </form>

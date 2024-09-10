@@ -1,7 +1,7 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import ReadMoreModal from './ReadMoreModal';
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import ReadMoreModal from "./ReadMoreModal";
 
 export interface DataItem {
   id: number;
@@ -12,15 +12,16 @@ export interface DataItem {
   projectUrl: string;
   createdAt: string;
   updatedAt: string;
+  projectDescription: string;
   projects: {
     id: number;
     projectName: string;
-    projectAmount: string; // Assuming projectAmount is a string representing amount
+    projectAmount: string;
     projectDeadline: string;
     budgets: string | null;
     createdAt: string;
     updatedAt: string;
-    description: string; // Added description field
+    projectDescription: string;
     users: {
       id: number;
       name: string;
@@ -38,6 +39,7 @@ const LatestProjects: React.FC = () => {
   const [visibleCount, setVisibleCount] = useState(8);
   const [loading, setLoading] = useState(false);
   const [selectedProject, setSelectedProject] = useState<DataItem | null>(null);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search input
 
   useEffect(() => {
     fetchData();
@@ -46,15 +48,16 @@ const LatestProjects: React.FC = () => {
   const fetchData = async () => {
     setLoading(true);
     try {
-      const response = await axios.get<DataItem[]>(`${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/pending`, 
-        
+      const response = await axios.get<DataItem[]>(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/pending`,
         {
           headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            "Content-Type": "application/json",
+            Accept: "application/json",
           },
-        withCredentials: true
-      });
+          withCredentials: true,
+        }
+      );
       setData(response.data);
     } catch (error) {
       console.error("Error fetching data", error);
@@ -67,9 +70,9 @@ const LatestProjects: React.FC = () => {
   };
 
   const truncateDescription = (description: string, length: number) => {
-    if (typeof description !== 'string') return ''; // Return empty string if description is not a string
+    if (typeof description !== "string") return "";
     if (description.length <= length) return description;
-    return description.slice(0, length) + '...';
+    return description.slice(0, length) + "...";
   };
 
   const handleReadMore = (project: DataItem) => {
@@ -80,17 +83,34 @@ const LatestProjects: React.FC = () => {
     setSelectedProject(null);
   };
 
-  const displayedData = data.slice(0, visibleCount);
+  // Filter projects based on the search query
+  const filteredData = data.filter((item) =>
+    item.projects.projectName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  // Slice the filtered data to display only the visible count
+  const displayedData = filteredData.slice(0, visibleCount);
 
   return (
     <div className="container mx-auto p-4 cb-shadow cbg-color py-5">
-      <div className='flex justify-center items-center primary-green p-2'>Latest Projects</div>
+      <div className="flex justify-center items-center primary-green p-2">
+        Latest Projects
+      </div>
+      <div className="flex justify-center mb-4">
+        <input
+          type="text"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          placeholder="Search by project name..."
+          className="border px-4 py-2 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+        />
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {displayedData.map((item, index) => (
           <div key={index} className="p-4 border rounded shadow">
             <h2 className="text-xl font-bold">{item.projects.projectName}</h2>
             <p>
-              {truncateDescription(item.projects.description, 100)} {/* Use the description field */}
+              {truncateDescription(item.projectDescription, 100)}
               <button
                 onClick={() => handleReadMore(item)}
                 className="primary-orange hover:underline"
@@ -98,26 +118,27 @@ const LatestProjects: React.FC = () => {
                 Read More
               </button>
             </p>
-            <p className="text-sm">Project Amount: {item.projects.projectAmount}</p>
+            <p className="text-sm">
+              Project Amount: {item.projects.projectAmount}
+            </p>
             <p className="text-sm">Deadline: {item.projects.projectDeadline}</p>
           </div>
         ))}
       </div>
-      <div className='flex items-center justify-center'>
-        {visibleCount < data.length && (
+      <div className="flex items-center justify-center">
+        {visibleCount < filteredData.length && (
           <button
             onClick={loadMore}
-            className="mt-4 px-4 py-2  text-white rounded hover:bg-orange-600 primary-orangebg"
+            className="mt-4 px-4 py-2 text-white rounded hover:bg-orange-600 primary-orangebg"
             disabled={loading}
           >
-            {loading ? 'Loading...' : 'Load More'}
+            {loading ? "Loading..." : "Load More"}
           </button>
         )}
       </div>
-      <ReadMoreModal 
-        project={selectedProject} 
-        onClose={handleClose} 
-      />
+      {selectedProject && (
+        <ReadMoreModal project={selectedProject} onClose={handleClose} />
+      )}
     </div>
   );
 };

@@ -6,65 +6,74 @@ interface WhyusProps {
 
 const Whyus: React.FC<WhyusProps> = ({ onGetStartedClick }) => {
   return (
-    <div className="w-full bg-whayus-bg lg:min-h-screen text-white flex flex-col items-center px-4 lg:px-0 bg-[#0A4AC5] lg:bg-whyus-bg lg:bg-[40%] lg:bg-bottom[-14%] lg:bg-no-repeat pt-5 lg:pb-0">
-      <div className="text-white text-4xl mb-0 text-center underline">
-        Why us?
-      </div>
+    <div className="w-full lg:h-screen text-white flex flex-col lg:flex-row justify-center items-center px-4 pt-5 bg-blue-800">
+      {/* Apply the background image only on large screens */}
+      <div
+        className="hidden lg:block lg:w-1/2 lg:h-full"
+        style={{
+          backgroundImage: "url('/why-us.png')", // Ensure the correct path and extension
+          backgroundSize: "80% auto", // Adjust the size as needed
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+        }}
+      ></div>
 
-      <div className="flex flex-col lg:flex-row w-full mt-12">
-        {/* Left Column */}
-        <div className="flex flex-col lg:w-1/2 items-start lg:items-end lg:pr-40 mb-8 lg:mb-0">
-          <div className="m-2 text-center ">
-            <div className="text-2xl">
+      <div className="w-full lg:w-1/2 h-full flex flex-col items-center lg:items-start justify-center lg:justify-center lg:space-y-8 pb-10">
+        <div className="text-white text-4xl mb-5 text-center flex items-center lg:text-left underline">
+          Why us?
+        </div>
+
+        <div className="flex flex-col lg:grid lg:grid-cols-2 lg:gap-8 w-full space-y-8 lg:space-y-0">
+          {/* Support Section */}
+          <div className="text-left lg:col-span-1">
+            <div className="text-2xl mb-2">
               Support <i className="fa-solid fa-headset"></i>
             </div>
-            <div className="text-sm">
+            <div className="text-sm flex items-center justify-center">
               Our dedicated support team works 24/7 to resolve all of your
               queries over the phone or email, no matter where you are located.
             </div>
           </div>
-          <div className="m-2 text-center ">
-            <div className="text-2xl">
+
+          {/* Credibility Section */}
+          <div className="text-left lg:col-span-1">
+            <div className="text-2xl mb-2">
               Credibility <i className="fa-solid fa-handshake text-white"></i>
             </div>
-            <div>
+            <div className="flex items-center justify-center">
               We verify freelancers, publish their feedback, scores, and
               All-Time Transactions Data to help you identify time-tested
               professionals across the globe.
             </div>
           </div>
-        </div>
 
-        {/* Right Column */}
-        <div className="flex flex-col lg:w-1/2 items-center lg:items-start lg:pl-40">
-          <div className="m-2 text-center">
-            <div className="text-2xl">
-              <i className="fa-solid fa-stopwatch text-white"></i> Flexibility
+          {/* Flexibility Section */}
+          <div className="text-left lg:col-span-1">
+            <div className="text-2xl mb-2">
+              Flexibility <i className="fa-solid fa-stopwatch text-white"></i>
             </div>
-            <div>
+            <div className="flex items-center justify-center">
               Our platform adapts to your needs, providing the flexibility to
               work according to your schedule and preferences.
             </div>
           </div>
-          <div className="m-2 text-center ">
-            <div className="text-2xl">
+
+          {/* Security Section */}
+          <div className="text-left lg:col-span-1">
+            <div className="text-2xl mb-2">
               Security <i className="fa-solid fa-user-shield text-white"></i>
             </div>
-            <div>
+            <div className="flex items-center justify-center">
               We offer safe payment protection and your choice of preferred
               payment method for financial peace of mind.
             </div>
           </div>
+
+          {/* Additional Section */}
+          <div className="text-left lg:col-span-1">
+            {/* Add your additional section content here */}
+          </div>
         </div>
-      </div>
-      <div className="m-2 text-left flex items-center justify-center mt-40">
-        <button
-          type="button"
-          onClick={onGetStartedClick}
-          className="primary-orangebg bg-white hover:bg-orange-700  focus:outline-none rounded-md text-sm px-5 py-2.5 text-center "
-        >
-          Get started
-        </button>
       </div>
     </div>
   );

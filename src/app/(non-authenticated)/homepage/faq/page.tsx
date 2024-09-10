@@ -1,10 +1,10 @@
-import FQA from "@/components/non-authenticted/footer/FQA";
+import FAQWITHBUTTON from "@/components/non-authenticted/footer/FAQWITHBUTTON";
 import React from "react";
 
 function page() {
   return (
     <div>
-      <FQA />
+      <FAQWITHBUTTON />
     </div>
   );
 }

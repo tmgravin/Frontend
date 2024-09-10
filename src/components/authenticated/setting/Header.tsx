@@ -16,16 +16,16 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getUserFromCookies } from "@/components/auth/token";
-
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
+import useUserData from "@/components/providers/UserProvider";
 const Header: React.FC = () => {
+  const { user } = useUserData();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [imageUrl, setImageUrl] = useState<string>("");
   const router = useRouter();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
-  const user = getUserFromCookies();
+  const cookieuser = getUserFromCookies();
 
   const handleMenuClick = (event: MouseEvent<HTMLElement>) =>
     setAnchorEl(event.currentTarget);
@@ -37,9 +37,11 @@ const Header: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      removeCookie("user");
+      // const response = await axios.post(
+      //   `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/logout/${cookieuser?.id}`
+      // );
+      removeCookie("token");
       toast.warning("Logging out");
-      console.log("User cookie has been cleared");
     } catch (err) {
       toast.error("Logout Failed");
       console.log("Error occurred", err);
@@ -47,22 +49,6 @@ const Header: React.FC = () => {
       router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/homepage`);
     }
   };
-
-  const fetchImage = async () => {
-    try {
-      const userId = user.id;
-      const response = await axios.get(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${userId}`
-      );
-      setImageUrl(response.data);
-    } catch (error) {
-      console.error("Error fetching the image URL:", error);
-    }
-  };
-
-  useEffect(() => {
-    fetchImage();
-  });
 
   const getUserTypeLabel = (userType: string) => {
     switch (userType) {
@@ -73,7 +59,7 @@ const Header: React.FC = () => {
       case "ADMIN":
         return "Admin";
       default:
-        return "User";
+        return "Loading...";
     }
   };
 
@@ -83,10 +69,10 @@ const Header: React.FC = () => {
   };
 
   return (
-    <header className=" cb-shadow rounded-sm">
+    <header className="cb-shadow rounded-sm">
       <ToastContainer />
-      <div className="sm:flex flex-row justify-between ">
-        <div className="flex flex-row items-center">
+      <div className="flex justify-between items-center">
+        <div className="flex items-center">
           <Image
             src="/notextlogo.png" // Path relative to the public directory
             alt="logo"
@@ -99,8 +85,8 @@ const Header: React.FC = () => {
             </h1>
           </div>
         </div>
-        <div className="flex items-center ml-4">
-          <Box>
+        <div className="flex items-center">
+          <Box className="text-right mr-2">
             <Typography variant="h6">
               {formatName(user?.name || "Loading...")}
             </Typography>
@@ -108,9 +94,9 @@ const Header: React.FC = () => {
               {getUserTypeLabel(user?.userType || "USER")}
             </Typography>
           </Box>
-          <IconButton onClick={handleMenuClick} sx={{ ml: 2 }}>
-            {imageUrl ? (
-              <Avatar src={imageUrl} alt={user?.name} />
+          <IconButton onClick={handleMenuClick}>
+            {user?.profileImageUrl ? (
+              <Avatar src={user?.profileImageUrl} alt={user?.name} />
             ) : (
               <AccountCircleIcon fontSize="large" />
             )}

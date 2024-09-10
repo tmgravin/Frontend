@@ -1,20 +1,30 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
+import {jwtDecode} from 'jwt-decode'; // Ensure you have this installed
+
+// Define the interface for the decoded JWT payload
+interface DecodedToken {
+  email: string;
+  id: string;
+  userType: string;
+}
 
 export function middleware(request: NextRequest) {
   console.log("Middleware running");
 
   // Extract the user cookie
-  const userCookie = request.cookies.get('user');
+  const userCookie = request.cookies.get('token'); // Adjust the cookie name as necessary
   let userType: string | null = null;
 
   if (userCookie) {
     try {
-      // Safely parse the cookie value
-      const user = JSON.parse(userCookie.value);
-      userType = user.userType;
+      // Safely decode the token
+      const tokenValue = userCookie.value;
+      const decoded = jwtDecode<DecodedToken>(tokenValue);
+
+      userType = decoded.userType;
     } catch (error) {
-      console.error("Failed to parse user cookie:", error);
+      console.error("Failed to decode or parse user token:", error);
     }
   }
 
@@ -27,12 +37,12 @@ export function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/homepage', request.url));
   }
 
-  if (pathname.startsWith('/assignment-doer') && userType !== 'ASSIGNMENT_DOER') {
+  if (pathname.startsWith('/project-doer') && userType !== 'ASSIGNMENT_DOER') {
     console.log("User is not a doer, redirecting to /homepage");
     return NextResponse.redirect(new URL('/homepage', request.url));
   }
 
-  if (pathname.startsWith('/assignment-creator') && userType !== 'ASSIGNMENT_CREATOR') {
+  if (pathname.startsWith('/project-creator') && userType !== 'ASSIGNMENT_CREATOR') {
     console.log("User is not a creator, redirecting to /homepage");
     return NextResponse.redirect(new URL('/homepage', request.url));
   }
@@ -49,8 +59,8 @@ export function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/admindashboard/:path*',  // Protect all routes under /admindashboard/
-    '/assignment-creator/:path*', // Protect all routes under /assignment-creator/
-    '/assignment-doer/:path*',  // Protect all routes under /assignment-doer/
+    '/project-creator/:path*', // Protect all routes under /assignment-creator/
+    '/project-doer/:path*',  // Protect all routes under /assignment-doer/
     '/setting/:path*',         // Protect all routes under /setting/
   ],
 };

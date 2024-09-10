@@ -1,57 +1,34 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import Image from "next/image";
-import { getUserFromCookies } from "@/components/auth/token"; // Adjust the path as necessary
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
 import { ToastContainer, toast } from "react-toastify";
 import ChangePasswordDialog from "./ChangePasswordDialog";
+import useUserData from "@/components/providers/UserProvider";
+import ImageDetails from "./ImageDetails";
+const cookieuser = getUserFromCookies();
 
-// Default user object if getUserFromCookies returns null
-const user = getUserFromCookies() || {
-  id: "",
-  name: "",
-  email: "",
-  address: "",
-  phone: "",
-  profilePicture: "",
-  userType: "",
-};
-
-// Updated Profile interface
-interface Profile {
+interface User {
   name: string;
-  email: string;
+  email?: string;
   address: string;
-  contact: string;
-  profilePicture?: string; // Made optional
+  phone: string;
+  userType: string;
+  cv: string | null;
+  profilePicture?: string;
+  cvUrl?: string;
 }
 
-const DoerDetails: React.FC = () => {
-  // State for user profile data
-  const [profile, setProfile] = useState<Profile>({
-    name: user.name,
-    email: user.email,
-    address: user.address,
-    contact: user.phone,
-    profilePicture: user.profilePicture,
-  });
-
-  // State for editing mode
+const UserDetails: React.FC = () => {
+  const { user, setUser, fieldValues, setFieldValues, fetchData } =
+    useUserData();
   const [isEditing, setIsEditing] = useState(false);
-
-  // State for field values
-  const [fieldValues, setFieldValues] = useState<Profile>(profile);
-
-  // State for change password dialog
+  const [selectedCV, setSelectedCV] = useState<File | null>(null); // New state for CV file
   const [openPasswordDialog, setOpenPasswordDialog] = useState(false);
-
-  // State for file upload
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [cvFile, setCvFile] = useState<File | null>(null);
 
   const handleFieldChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    field: keyof Profile
+    field: keyof User
   ) => {
     const { value } = e.target;
     setFieldValues((prev) => ({ ...prev, [field]: value }));
@@ -59,89 +36,42 @@ const DoerDetails: React.FC = () => {
 
   const handleSaveAll = async (e: React.MouseEvent) => {
     e.preventDefault();
+
+    // Create FormData instance
     const formData = new FormData();
-    if (cvFile) {
-      formData.append("cv", cvFile);
+    formData.append("name", fieldValues.name || "");
+    formData.append("phone", fieldValues.phone || "");
+    formData.append("address", fieldValues.address || "");
+    if (selectedCV) {
+      formData.append("cv", selectedCV);
     }
-    formData.append("name", fieldValues.name);
-    formData.append("phone", fieldValues.contact);
-    formData.append("address", fieldValues.address);
 
     try {
+      // Send PUT request with FormData
       const response = await axios.put(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/updateUser/${user.id}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/updateUser/${cookieuser?.id}`,
         formData,
         {
-          headers: { "Content-Type": "multipart/form-data" },
           withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${cookieuser?.token}`,
+            "Content-Type": "multipart/form-data", // Set header for FormData
+          },
         }
       );
+
       if (response.status === 200) {
         toast.success("Profile updated successfully");
-        setProfile(fieldValues);
+        //  setUser(fieldValues);
         setIsEditing(false);
+        setSelectedCV(null);
+        fetchData();
       } else {
-        toast.error("Failed to update profile");
+        console.error("Failed to update profile");
       }
     } catch (error) {
       toast.error("Error updating profile");
       console.error("Error updating profile:", error);
-    }
-  };
-
-  const handleSavePicture = async (e: React.MouseEvent) => {
-    e.preventDefault();
-    if (!selectedFile) return;
-
-    const formData = new FormData();
-    formData.append("imageUrl", selectedFile);
-
-    try {
-      const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${user.id}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-          withCredentials: true,
-        }
-      );
-      if (response.status === 200) {
-        const pictureUrl = URL.createObjectURL(selectedFile);
-        setProfile((prev) => ({ ...prev, profilePicture: pictureUrl }));
-        setFieldValues((prev) => ({ ...prev, profilePicture: pictureUrl }));
-        setSelectedFile(null);
-        toast.success("Profile picture updated successfully");
-      } else {
-        toast.error("Failed to update profile picture");
-      }
-    } catch (error) {
-      toast.error("Error updating profile picture");
-      console.error("Error updating profile picture:", error);
-    }
-  };
-
-  const deletePicture = async (e: React.MouseEvent) => {
-    e.preventDefault();
-
-    try {
-      const response = await axios.delete(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${user.id}`,
-        {
-          withCredentials: true,
-        }
-      );
-      if (response.status === 200) {
-        setProfile((prev) => ({ ...prev, profilePicture: "" }));
-        setFieldValues((prev) => ({ ...prev, profilePicture: "" }));
-        toast.success("Profile picture deleted successfully");
-      } else {
-        toast.error("Failed to delete profile picture");
-      }
-    } catch (error) {
-      toast.error("Error deleting profile picture");
-      console.error("Error deleting profile picture:", error);
     }
   };
 
@@ -156,104 +86,50 @@ const DoerDetails: React.FC = () => {
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setSelectedFile(e.target.files[0]);
+      setSelectedCV(e.target.files[0]); // Set the selected CV file
     }
   };
 
-  const handleCvChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCVChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
-      setCvFile(e.target.files[0]);
+      setSelectedCV(e.target.files[0]); // Set the selected CV file
     }
   };
 
-  const [imageUrl, setImageUrl] = useState("");
-  useEffect(() => {
-    const fetchImage = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${user.id}`
-        );
-        const imageUrl = response.data; // Assuming the URL is returned directly
-        setImageUrl(imageUrl);
-      } catch (error) {
-        console.error("Error fetching the image URL:", error);
-      }
-    };
-
-    fetchImage();
-  }, []);
+  const getFileNameFromUrl = (url: string) => {
+    const parts = url.split("/");
+    return parts[parts.length - 1];
+  };
 
   return (
     <div className="container mx-auto font-bold p-4 max-w-lg">
       <ToastContainer />
       <h2 className="text-2xl mb-4">Personal Information</h2>
 
-      {/* Profile Picture */}
-      <div className="flex items-center justify-center mb-4">
-        <Image
-          src={imageUrl || "/default-img.png"} // Default profile picture if none provided
-          alt="Profile Picture"
-          width={96} // Set width and height for optimization
-          height={96}
-          className="w-24 h-24 rounded-full"
-        />
-        <div className="ml-4">
-          <button onClick={() => setIsEditing(true)} className="primary-orange">
-            <i className="fas fa-camera"></i>
-          </button>
-          {isEditing && (
-            <div className="mt-2">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="mb-2"
-              />
-              <button
-                onClick={handleSavePicture}
-                className="px-4 py-2 primary-orangebg text-white rounded ml-2"
-              >
-                Save Picture
-              </button>
-              <button
-                onClick={deletePicture}
-                className="px-4 py-2 primary-orangebg text-white rounded ml-2"
-              >
-                Delete Picture
-              </button>
-              <button
-                onClick={() => setIsEditing(false)}
-                className="px-4 py-2 bg-gray-300 text-black rounded ml-2 mt-2"
-              >
-                Cancel
-              </button>
-            </div>
-          )}
-        </div>
-      </div>
+      <ImageDetails />
 
       <form noValidate autoComplete="off">
         <div className="mb-4">
           <label className="block text-gray-700">Email</label>
           <input
             type="text"
-            value={fieldValues.email}
-            className="w-full p-2 border border-gray-300 rounded"
-            disabled
+            value={fieldValues.email || ""}
+            readOnly
+            className="w-full bg-gray-100 rounded-md py-2 px-4"
           />
         </div>
-
         <div className="mb-4">
-          <label className="block text-gray-700">Name</label>
+          <label className="block text-gray-700">Full Name</label>
           <input
             type="text"
             value={fieldValues.name}
             onChange={(e) => handleFieldChange(e, "name")}
-            className="w-full p-2 border border-gray-300 rounded"
-            disabled={!isEditing}
+            readOnly={!isEditing}
+            className={`w-full ${
+              isEditing ? "bg-white" : "bg-gray-100"
+            } rounded-md py-2 px-4`}
           />
         </div>
-
         <div className="mb-4">
           <label className="block text-gray-700">Address</label>
           <input
@@ -266,74 +142,102 @@ const DoerDetails: React.FC = () => {
         </div>
 
         <div className="mb-4">
-          <label className="block text-gray-700">Contact Number</label>
+          <label className="block text-gray-700">Contact</label>
           <input
             type="text"
-            value={fieldValues.contact}
-            onChange={(e) => handleFieldChange(e, "contact")}
+            value={fieldValues.phone}
+            onChange={(e) => handleFieldChange(e, "phone")}
             className="w-full p-2 border border-gray-300 rounded"
             disabled={!isEditing}
           />
         </div>
 
-        <div className="mb-4">
-          <label className="block text-gray-700">CV</label>
-          <input
-            type="file"
-            accept=".pdf,.doc,.docx"
-            onChange={handleCvChange}
-            disabled={!isEditing}
-            className="mb-2"
-          />
-          {/* <button
-            onClick={handleSaveAll}
-            className="px-4 py-2 primary-orangebg text-white rounded"
-            disabled={!isEditing}
-          >
-            Save CV
-          </button> */}
-        </div>
+        {/* Other fields... */}
 
-        {isEditing ? (
-          <div className="flex  mt-4">
+        <div className="mb-4">
+          <label className="block text-gray-700">
+            <div className="flex flex-row">
+              <label className="block text-gray-700">Your CV:</label>
+              <div className="ml-2 text-green-500">
+                {fieldValues.cvUrl ? (
+                  <a href={fieldValues.cvUrl} download>
+                    {getFileNameFromUrl(fieldValues.cvUrl)}
+                  </a>
+                ) : (
+                  <span>No CV available</span>
+                )}
+              </div>
+            </div>
+          </label>
+          {fieldValues.cvUrl ? (
+            <div>
+              {isEditing && (
+                <div className="mt-2">
+                  <input
+                    type="file"
+                    onChange={handleFileChange}
+                    className="w-full p-2 border border-gray-300 rounded"
+                  />
+                </div>
+              )}
+            </div>
+          ) : (
+            isEditing && (
+              <div>
+                <input
+                  type="file"
+                  onChange={handleFileChange}
+                  className="w-full p-2 border border-gray-300 rounded"
+                  disabled={!isEditing}
+                />
+                <p className="mt-2 text-gray-600">Choose file to upload</p>
+              </div>
+            )
+          )}
+        </div>
+        {/* Save and cancel buttons */}
+        <div className="flex flex-row">
+          <div className="flex justify-center">
+            {!isEditing ? (
+              <button
+                onClick={() => setIsEditing(true)}
+                className="primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+              >
+                Edit Profile
+              </button>
+            ) : (
+              <div>
+                <button
+                  onClick={handleSaveAll}
+                  className="primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+                >
+                  Save Changes
+                </button>
+                <button
+                  onClick={() => setIsEditing(false)}
+                  className="px-4 py-2 bg-gray-300 text-black rounded"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+          </div>
+
+          <div className="flex justify-center ml-4">
             <button
-              type="button"
-              onClick={handleSaveAll}
-              className="px-4 py-2 primary-orangebg text-white rounded mr-2"
+              onClick={handleOpenPasswordDialog}
+              className="primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
             >
-              Save All
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsEditing(false)}
-              className="px-4 py-2 bg-gray-300 text-black rounded"
-            >
-              Cancel
+              Change Password
             </button>
           </div>
-        ) : (
-          <button
-            type="button"
-            onClick={() => setIsEditing(true)}
-            className="px-4 py-2 primary-orangebg text-white rounded"
-          >
-            Edit
-          </button>
-        )}
+        </div>
       </form>
 
-      <div className="mt-4">
-        <button
-          onClick={handleOpenPasswordDialog}
-          className="px-4 py-2 primary-orangebg text-white rounded"
-        >
-          Change Password
-        </button>
-      </div>
-
+      {/* Change Password Dialog */}
       {openPasswordDialog && (
         <ChangePasswordDialog
-          userId={user.id}
+          userId={cookieuser?.id}
           onClose={handleClosePasswordDialog}
         />
       )}
@@ -341,4 +245,4 @@ const DoerDetails: React.FC = () => {
   );
 };
 
-export default DoerDetails;
+export default UserDetails;

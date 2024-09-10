@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import axios from "axios";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
+const cookieuser = getUserFromCookies();
 
 const InfoCards: React.FC = () => {
   const [totalCreator, setTotalCreator] = useState();
@@ -25,6 +27,9 @@ const InfoCards: React.FC = () => {
             userType: "ASSIGNMENT_CREATOR",
           },
           {
+            headers: {
+              Authorization: `Bearer ${cookieuser?.token}`, // Replace `yourBearerToken` with your actual token
+            },
             withCredentials: true, // Include credentials with the request
           }
         );
@@ -36,6 +41,9 @@ const InfoCards: React.FC = () => {
             userType: "ASSIGNMENT_DOER",
           },
           {
+            headers: {
+              Authorization: `Bearer ${cookieuser?.token}`, // Replace `yourBearerToken` with your actual token
+            },
             withCredentials: true, // Include credentials with the request
           }
         );
@@ -45,6 +53,9 @@ const InfoCards: React.FC = () => {
         const projectResponse = await axios.get(
           `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/total`,
           {
+            headers: {
+              Authorization: `Bearer ${cookieuser?.token}`, // Replace `yourBearerToken` with your actual token
+            },
             withCredentials: true, // Include credentials with the request
           }
         );

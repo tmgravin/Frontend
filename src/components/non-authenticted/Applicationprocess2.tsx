@@ -7,7 +7,11 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
 
-function ApplicationProcess2() {
+interface Props {
+  startRegistration: () => void;
+}
+
+function ApplicationProcess2({ startRegistration }: any) {
   return (
     <div className="cb-shadow applicationprocess2-bgcolor pb-10">
       <div className=" py-10 relative">
@@ -94,7 +98,8 @@ function ApplicationProcess2() {
 
       <div className="flex justify-center items-center pt-10">
         <button
-          /* onClick={toggleSignupModal} */ className="primary-orangebg  text-white font-bold py-2 px-4 rounded"
+          onClick={startRegistration}
+          className="primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
         >
           START REGISTRATION
         </button>

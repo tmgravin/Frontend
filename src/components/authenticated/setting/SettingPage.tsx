@@ -1,23 +1,22 @@
 "use client";
-
 import Header from "./Header";
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import BankDetails from "./BankDetails";
 import UserDetails from "./UserDetails";
-import { getUserFromCookies } from "@/components/auth/token";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
 import DoerDetails from "./DoerDetails";
 
 function SettingPage() {
   const router = useRouter();
-  const [userType, setUserType] = useState(null);
+  const [userType, setUserType] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUserType = async () => {
       try {
         const user = await getUserFromCookies();
-        setUserType(user?.userType);
+        setUserType(user?.userType || "");
       } catch (error) {
         console.error("Error fetching user type:", error);
       } finally {

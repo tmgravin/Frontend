@@ -12,15 +12,17 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { getUserFromCookies } from "../../auth/token"; // Adjust the path as necessary
-import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-// Fetch user from cookies
-const user = getUserFromCookies();
+import useUserData from "@/components/providers/UserProvider";
+import axios from "axios";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
+const cookieuser = getUserFromCookies();
 
 const UserModal: React.FC = () => {
+  const { user, setUser, fieldValues, setFieldValues, fetchData } =
+    useUserData();
+
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const theme = useTheme();
@@ -30,16 +32,17 @@ const UserModal: React.FC = () => {
     setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
 
-  // Function to remove a cookie
   const removeCookie = (name: string) => {
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
   };
 
   const handleLogout = async () => {
     try {
-      removeCookie("user");
+      // const response = await axios.post(
+      //   `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/logout/${cookieuser?.id}`
+      // );
+      removeCookie("token");
       toast.warning("logging out");
-      console.log("User cookie has been cleared");
     } catch (err) {
       toast.error("Logout Failed");
       console.log("Error occurred", err);
@@ -53,23 +56,6 @@ const UserModal: React.FC = () => {
   };
 
   const openMenu = Boolean(anchorEl);
-  const [imageUrl, setImageUrl] = useState("");
-
-  useEffect(() => {
-    const fetchImage = async () => {
-      try {
-        const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/image/${user.id}`
-        );
-        const imageUrl = await response.data;
-        setImageUrl(imageUrl);
-      } catch (error) {
-        console.error("Error fetching the image URL:", error);
-      }
-    };
-
-    fetchImage();
-  }, []);
 
   // Function to map userType to a readable label
   const getUserTypeLabel = (userType: string) => {
@@ -81,7 +67,7 @@ const UserModal: React.FC = () => {
       case "ADMIN":
         return "Admin";
       default:
-        return "User";
+        return "Loading..";
     }
   };
 
@@ -109,8 +95,8 @@ const UserModal: React.FC = () => {
           }}
         >
           <IconButton onClick={handleMenuClick} sx={{ ml: 0 }}>
-            {imageUrl ? (
-              <Avatar src={imageUrl} alt={user.name} />
+            {user?.profileImageUrl ? (
+              <Avatar src={user?.profileImageUrl} alt={user.name} />
             ) : (
               <AccountCircleIcon fontSize="large" />
             )}
@@ -128,7 +114,7 @@ const UserModal: React.FC = () => {
                 textTransform: "capitalize", // Capitalize first letter
               }}
             >
-              {formatName(user?.name)}
+              {formatName(user?.name || "")}
             </Typography>
             {!isSmallScreen && (
               <Typography

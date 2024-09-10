@@ -1,11 +1,10 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { getUserFromCookies } from "@/components/auth/token";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-const user = getUserFromCookies() || { id: null }; // Set a default value
+const user = getUserFromCookies(); // Set a default value
 
 const BankDetails: React.FC = () => {
   // State for bank details
@@ -17,7 +16,7 @@ const BankDetails: React.FC = () => {
     creditCardNumber: "",
     registeredPhoneNumber: "",
     users: {
-      id: `${user.id}`,
+      id: `${user?.id}`,
     },
   });
 
@@ -30,7 +29,7 @@ const BankDetails: React.FC = () => {
     creditCardNumber: "",
     registeredPhoneNumber: "",
     users: {
-      id: `${user.id}`,
+      id: `${user?.id}`,
     },
   });
 
@@ -39,10 +38,10 @@ const BankDetails: React.FC = () => {
   const [openPostDialog, setOpenPostDialog] = useState(false);
   const [isPostDisabled, setIsPostDisabled] = useState(false);
   const [isEditDisabled, setIsEditDisabled] = useState(true);
-  const [hasBankDetails, setHasBankDetails] = useState(false); // New state
+  const [hasBankDetails, setHasBankDetails] = useState(false);
 
   useEffect(() => {
-    if (!user.id) {
+    if (!user?.id) {
       console.error("User ID is not available");
       return;
     }
@@ -50,8 +49,11 @@ const BankDetails: React.FC = () => {
     const fetchBankDetails = async () => {
       try {
         const response = await axios.get(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/?userId=${user.id}`,
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/?userId=${user?.id}`,
           {
+            headers: {
+              Authorization: `Bearer ${user?.token}`,
+            },
             withCredentials: true,
           }
         );
@@ -73,11 +75,11 @@ const BankDetails: React.FC = () => {
           });
           setIsPostDisabled(true);
           setIsEditDisabled(false);
-          setHasBankDetails(true); // Set hasBankDetails to true
+          setHasBankDetails(true);
         } else {
           setIsPostDisabled(false);
           setIsEditDisabled(true);
-          setHasBankDetails(false); // Set hasBankDetails to false
+          setHasBankDetails(false);
         }
       } catch (error) {
         console.error("Error fetching bank details:", error);
@@ -104,17 +106,21 @@ const BankDetails: React.FC = () => {
   ) => {
     e.preventDefault();
     try {
-      const response = await axios.put(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/${user.id}`,
-        editValues,
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/?id=${user?.id}`,
+        {
+          ...editValues,
+          users: { id: user?.id },
+        },
         {
           headers: {
+            Authorization: `Bearer ${user?.token}`,
             "Content-Type": "application/json",
           },
           withCredentials: true,
         }
       );
-      if (response.data) {
+      if (response.status === 200) {
         toast.success("Bank details updated successfully");
         setBankDetails(editValues);
         handleEditToggle(e);
@@ -145,26 +151,31 @@ const BankDetails: React.FC = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/`,
-        bankDetails,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/account/?`,
+        {
+          ...bankDetails,
+          users: { id: user?.id },
+        },
         {
           headers: {
+            Authorization: `Bearer ${user?.token}`,
             "Content-Type": "application/json",
           },
           withCredentials: true,
         }
       );
-      if (response.status == 200) {
-        toast.success("Bank details posted successfully");
+
+      if (response.status === 200) {
+        toast.success("Bank details added successfully");
         handlePostToggle(e);
         setIsPostDisabled(true);
         setIsEditDisabled(false);
-        setHasBankDetails(true); // Set hasBankDetails to true
+        setHasBankDetails(true);
       } else {
         console.error("Failed to post bank details");
       }
     } catch (error) {
-      toast.error("Error posting bank details");
+      toast.error("Error adding bank details");
       console.error("Error posting bank details:", error);
     }
   };
@@ -213,15 +224,15 @@ const BankDetails: React.FC = () => {
           <button
             onClick={handlePostToggle}
             disabled={isPostDisabled}
-            className="primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+            className="primary-orangebg rounded-sm px-3 py-1 font-bold text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
           >
-            Post Bank Details
+            Add Bank Details
           </button>
         ) : (
           <button
             onClick={handleEditToggle}
             disabled={isEditDisabled}
-            className="primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+            className="primary-orangebg rounded-sm px-3 font-bold py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
           >
             Edit Bank Details
           </button>
@@ -231,7 +242,7 @@ const BankDetails: React.FC = () => {
       {/* Edit Bank Details Dialog */}
       {openEditDialog && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow-lg">
+          <div className="bg-white p-6 rounded shadow-lg w-full max-w-md">
             <h3 className="text-xl mb-4">Edit Bank Details</h3>
             <input
               type="text"
@@ -281,29 +292,28 @@ const BankDetails: React.FC = () => {
               className="w-full p-2 border border-gray-300 rounded mb-4"
               placeholder="Registered Phone Number"
             />
-            <div className="flex justify-end">
-              <button
-                onClick={(e) => handleSave(e)}
-                className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
-              >
-                Save
-              </button>
-              <button
-                onClick={handleEditToggle}
-                className="bg-gray-500 text-white px-4 py-2 rounded ml-2 hover:bg-gray-600"
-              >
-                Cancel
-              </button>
-            </div>
+
+            <button
+              onClick={handleSave}
+              className="primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+            >
+              Update
+            </button>
+            <button
+              onClick={handleEditToggle}
+              className="ml-2 px-3 py-1 text-gray-600 border border-gray-300 rounded-md"
+            >
+              Cancel
+            </button>
           </div>
         </div>
       )}
 
-      {/* Post Bank Details Dialog */}
+      {/* Add Bank Details Dialog */}
       {openPostDialog && (
         <div className="fixed inset-0 flex items-center justify-center bg-gray-900 bg-opacity-50">
-          <div className="bg-white p-6 rounded shadow-lg">
-            <h3 className="text-xl mb-4">Post Bank Details</h3>
+          <div className="bg-white p-6 rounded shadow-lg  max-w-md">
+            <h3 className="text-xl mb-4">Add Bank Details</h3>
             <input
               type="text"
               name="firstName"
@@ -352,20 +362,19 @@ const BankDetails: React.FC = () => {
               className="w-full p-2 border border-gray-300 rounded mb-4"
               placeholder="Registered Phone Number"
             />
-            <div className="flex justify-end">
-              <button
-                onClick={(e) => handlePost(e)}
-                className="primary-orange-bg text-white px-4 py-2 rounded "
-              >
-                Post
-              </button>
-              <button
-                onClick={handlePostToggle}
-                className="bg-gray-500 text-white px-4 py-2 rounded ml-2 hover:bg-gray-600"
-              >
-                Cancel
-              </button>
-            </div>
+
+            <button
+              onClick={handlePost}
+              className="primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+            >
+              Add
+            </button>
+            <button
+              onClick={handlePostToggle}
+              className="ml-2 px-3 py-1 text-gray-600 border border-gray-300 rounded-md"
+            >
+              Cancel
+            </button>
           </div>
         </div>
       )}

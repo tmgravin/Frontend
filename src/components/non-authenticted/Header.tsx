@@ -5,6 +5,7 @@ import LoginModal from "./LoginModal";
 import Image from "next/image";
 import { ToastContainer } from "react-toastify";
 import { Menu, MenuItem, Button, IconButton } from "@mui/material";
+import Link from "next/link";
 import {
   Menu as MenuIcon,
   Login as LoginIcon,
@@ -120,8 +121,8 @@ const Header: React.FC = () => {
     <header>
       <ToastContainer />
       <div className="flex flex-row sm:flex-row justify-between items-center px-2 py-1">
-        <div>
-          <div className="flex items-center">
+        <div className="flex justify-evenly flex-row">
+          <div className="flex items-center mr-10">
             <Image
               src="/notextlogo.png"
               height={50}
@@ -134,6 +135,13 @@ const Header: React.FC = () => {
               </h1>
             </div>
           </div>
+          <Link href={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/ebooks`}>
+            <div className="flex items-center justify-center pt-4 hover:underline ">
+              <i className="fas fa-book mr-2"></i>{" "}
+              {/* Example icon, ensure you have Font Awesome or another icon library */}
+              <span className="text-lg font-semibold">E-book</span>
+            </div>
+          </Link>
         </div>
 
         {/* Dropdown menu for small screens */}

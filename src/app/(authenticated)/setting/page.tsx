@@ -1,12 +1,13 @@
-import React from 'react'
-import SettingPage from '@/components/authenticated/setting/SettingPage'
+import React from "react";
+import dynamic from "next/dynamic";
+import SettingPage from "@/components/authenticated/setting/SettingPage";
 
 function page() {
   return (
     <div>
-        <SettingPage/>
+      <SettingPage />
     </div>
-  )
+  );
 }
 
-export default page
+export default page;

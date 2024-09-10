@@ -1,10 +1,12 @@
-"use client"
-import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import ReactPaginate from 'react-paginate';
-import StudentInfoModal from './InfoModals/StudentInfoModal'; // Adjust the import path as necessary
+"use client";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import ReactPaginate from "react-paginate";
+import StudentInfoModal from "./InfoModals/StudentInfoModal"; // Adjust the import path as necessary
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
+const cookieuser = getUserFromCookies();
 
- export interface User {
+export interface User {
   id: number;
   name: string;
   email: string;
@@ -14,18 +16,8 @@ import StudentInfoModal from './InfoModals/StudentInfoModal'; // Adjust the impo
 }
 
 const StudentComponent: React.FC = () => {
-  const [users, setUsers] = useState<User[]>([
-    // {
-    //   id: 1,
-    //   name: 'John Doe',
-    //   email: 'johndoe@example.com',
-    //   phone: '123-456-7890',
-    //   registrationDate: '2023-01-01',
-    //   address: '123 Main St, Anytown, USA'
-    // },
-
-  ]);
-  const [search, setSearch] = useState('');
+  const [users, setUsers] = useState<User[]>([]);
+  const [search, setSearch] = useState("");
   const [currentPage, setCurrentPage] = useState(0);
   const [itemsPerPage, setItemsPerPage] = useState(10);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
@@ -34,9 +26,15 @@ const StudentComponent: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/role?userType=ASSIGNMENT_CREATOR`,{
-        withCredentials: true // Include credentials with the request
-      });
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/admin/role?userType=ASSIGNMENT_CREATOR`,
+        {
+          headers: {
+            Authorization: `Bearer ${cookieuser?.token}`, // Replace `yourBearerToken` with your actual token
+          },
+          withCredentials: true, // Include credentials with the request
+        }
+      );
       setUsers(response.data);
       setFilteredUsers(response.data);
     };
@@ -46,10 +44,11 @@ const StudentComponent: React.FC = () => {
 
   useEffect(() => {
     setFilteredUsers(
-      users.filter(user =>
-        user.name.toLowerCase().includes(search.toLowerCase()) ||
-        user.email.toLowerCase().includes(search.toLowerCase()) ||
-        user.phone.includes(search)
+      users.filter(
+        (user) =>
+          user.name.toLowerCase().includes(search.toLowerCase()) ||
+          user.email.toLowerCase().includes(search.toLowerCase()) ||
+          user.phone.includes(search)
       )
     );
   }, [search, users]);
@@ -58,7 +57,9 @@ const StudentComponent: React.FC = () => {
     setCurrentPage(data.selected);
   };
 
-  const handleItemsPerPageChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleItemsPerPageChange = (
+    e: React.ChangeEvent<HTMLSelectElement>
+  ) => {
     setItemsPerPage(Number(e.target.value));
     setCurrentPage(0); // Reset to first page when items per page changes
   };
@@ -80,7 +81,7 @@ const StudentComponent: React.FC = () => {
 
   return (
     <div className="p-6">
-      <h2 className="text-2xl font-bold mb-4">Assigment Creators Details</h2>
+      <h2 className="text-2xl font-bold mb-4">Project Creator Details</h2>
       <div className="flex justify-between items-center mb-4">
         <input
           type="text"
@@ -90,7 +91,9 @@ const StudentComponent: React.FC = () => {
           className="border border-gray-300 rounded-md p-2"
         />
         <div>
-          <label htmlFor="itemsPerPage" className="mr-2">Items per page:</label>
+          <label htmlFor="itemsPerPage" className="mr-2">
+            Items per page:
+          </label>
           <select
             id="itemsPerPage"
             value={itemsPerPage}
@@ -116,7 +119,7 @@ const StudentComponent: React.FC = () => {
           </tr>
         </thead>
         <tbody>
-          {currentItems.map(user => (
+          {currentItems.map((user) => (
             <tr key={user.id}>
               <td className="border px-4 py-2">{user.id}</td>
               <td className="border px-4 py-2">{user.name}</td>
@@ -152,7 +155,11 @@ const StudentComponent: React.FC = () => {
         previousLinkClassName={"px-3 py-1 border rounded"}
         nextLinkClassName={"px-3 py-1 border rounded"}
       />
-      <StudentInfoModal user={selectedUser} open={isModalOpen} onClose={handleModalClose} />
+      <StudentInfoModal
+        user={selectedUser}
+        open={isModalOpen}
+        onClose={handleModalClose}
+      />
     </div>
   );
 };

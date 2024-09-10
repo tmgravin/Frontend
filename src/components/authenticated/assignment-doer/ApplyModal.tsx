@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import { DataItem } from "./Projects";
-import { getUserFromCookies } from "@/components/auth/token";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
 
 interface ApplyModalProps {
-  project: DataItem | null;
+  project: any;
   onClose: () => void;
 }
 
@@ -37,6 +37,7 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ project, onClose }) => {
         formData,
         {
           headers: {
+            Authorization: `Bearer ${user?.token}`,
             "Content-Type": "multipart/form-data",
           },
           withCredentials: true,
@@ -45,9 +46,17 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ project, onClose }) => {
 
       toast.success("Application submitted successfully!");
       onClose(); // Close the modal after successful application
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error applying for project", error);
-      toast.error("Failed to apply for the project. Please try again.");
+
+      // Extracting error message from the response if available
+      const errorMessage =
+        error.response && error.response.data && error.response.data
+          ? error.response.data
+          : "Failed to apply for the project.";
+
+      // Displaying the error message using toast
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -66,6 +75,7 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ project, onClose }) => {
           </p>
         </>
       )}
+
       <textarea
         value={coverLetter}
         onChange={(e) => setCoverLetter(e.target.value)}
@@ -89,6 +99,10 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ project, onClose }) => {
         </button>
       </div>
       <ToastContainer />
+
+      <div className="text-red-500  pt-4 flex items-center justify-center">
+        Note : 20% will be deducted as per service charge
+      </div>
     </div>
   );
 };

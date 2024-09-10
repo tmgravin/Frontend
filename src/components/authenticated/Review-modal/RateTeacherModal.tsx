@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   Dialog,
   DialogActions,
@@ -8,43 +8,49 @@ import {
   TextField,
   Typography,
   Box,
-  Rating
-} from '@mui/material';
-import axios from 'axios';
-
+  Rating,
+} from "@mui/material";
+import axios from "axios";
 
 interface RateTeacherModalProps {
   open: boolean;
   onClose: () => void;
-  userId: number;
-  doerId:number;
+  userId: any;
+  doerId: number;
 }
 
-const RateTeacherModal: React.FC<RateTeacherModalProps> = ({ open, onClose, doerId,userId }) => {
+const RateTeacherModal: React.FC<RateTeacherModalProps> = ({
+  open,
+  onClose,
+  doerId,
+  userId,
+}) => {
   const [rating, setRating] = useState<number | null>(null);
-  const [comment, setComment] = useState<string>('');
+  const [comment, setComment] = useState<string>("");
 
-  
   const handleSave = async () => {
     if (rating === null) {
       // Show error message or alert
       return;
     }
 
-
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/review/`, {
-        users: {id:userId},
-        doer: {id:doerId},
-        rating,
-        comment
-      }, {
-        withCredentials: true
-      });
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/review/`,
+        {
+          users: { id: userId },
+          doer: { id: doerId },
+          rating,
+          comment,
+        },
+        {
+          withCredentials: true,
+        }
+      );
 
       onClose();
     } catch (error) {
-      console.error('Error saving review:', error);
+      console.error("Error saving review:", error);
       // Handle the error here, e.g., show a notification to the user
     }
   };
@@ -68,15 +74,21 @@ const RateTeacherModal: React.FC<RateTeacherModalProps> = ({ open, onClose, doer
             variant="outlined"
             value={comment}
             onChange={(e) => setComment(e.target.value)}
-            sx={{ mt: 2, width: '100%' }}
+            sx={{ mt: 2, width: "100%" }}
           />
         </Box>
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} color="secondary">
+        <Button
+          onClick={onClose}
+          className="text-black bg-slate-200 hover:bg-slate-300"
+        >
           Cancel
         </Button>
-        <Button onClick={handleSave} color="primary">
+        <Button
+          onClick={handleSave}
+          className="primary-orangebg hover:bg-orange-600 text-white"
+        >
           Save
         </Button>
       </DialogActions>

@@ -2,9 +2,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
+const cookieuser = getUserFromCookies();
 
 interface ChangePasswordDialogProps {
-  userId: string;
+  userId: any;
   onClose: () => void;
 }
 
@@ -32,6 +34,9 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
           newPassword: newPassword,
         },
         {
+          headers: {
+            Authorization: `Bearer ${cookieuser?.token}`,
+          },
           withCredentials: true, // Include credentials with the request
         }
       );

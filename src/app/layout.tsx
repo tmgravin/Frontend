@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import Script from "next/script";
-import { ToastContainer, toast } from "react-toastify"; // Import ToastContainer
-import "react-toastify/dist/ReactToastify.css"; // Import the Toastify CSS
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { ProjectProvider } from "@/components/providers/ProjectProvider";
 
 const inter = Poppins({ weight: "500", subsets: ["latin"] });
 
@@ -20,12 +21,14 @@ export default function RootLayout({
   return (
     <html lang="en">
       <Script src="https://kit.fontawesome.com/deb7916e2f.js"></Script>
-      <body className={inter.className}>
-        {children}
-        <div>
+      <Script src="https://accounts.google.com/gsi/client"></Script>
+
+      <ProjectProvider>
+        <body className={inter.className}>
+          {children}
           <ToastContainer />
-        </div>
-      </body>
+        </body>
+      </ProjectProvider>
     </html>
   );
 }

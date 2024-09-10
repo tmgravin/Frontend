@@ -11,11 +11,11 @@ function Footer() {
           <div className="py-2 font-bold underline">Contact us</div>
           <div className="flex flex-row">
             <i className="fa-regular fa-envelope"></i>{" "}
-            <div className="ml-2">mspacademy@gmail.com</div>
+            <div className="ml-2">info@mspacademy.co</div>
           </div>
           <div className="underline lg:pb-10">
             <i className="fa-solid fa-globe"></i>{" "}
-            <a href="https://www.mspacademy.co">www.mspacademy.co</a>
+            <a href="https://mspacademy.co">mspacademy.co</a>
           </div>
         </div>
 
@@ -27,7 +27,7 @@ function Footer() {
           <Link href="/about-us">
             <div className="cursor-pointer">About Us</div>
           </Link>
-          <Link href="/ebook">
+          <Link href="/ebooks">
             <div className="cursor-pointer">e-book</div>
           </Link>
           <Link href="/feedback">
@@ -53,7 +53,7 @@ function Footer() {
       </div>
 
       <hr className="text-white pt-2" />
-      <div className="flex flex-row  justify-around">
+      <div className="flex    flex-col sm:flex-row pl-4 sm:p-0 justify-around">
         <div className="flex  items-center pt-2">
           &copy;2024 | MSPacademy.co
         </div>

@@ -5,7 +5,8 @@ import ReadMoreModal from "./ReadMoreModal";
 import EditAssignmentModal from "./EditAssignmentModal";
 import PaymentUploadModal from "@/components/authenticated/assignment-doer/Payment/PaymentUploadModal";
 import DeleteModal from "./DeleteModal"; // Import DeleteModal component
-import { getUserFromCookies } from "../../auth/token";
+import { getUserFromCookies } from "../../cookie/oldtoken";
+import { useProjects } from "@/components/providers/ProjectProvider";
 
 const user = getUserFromCookies();
 
@@ -45,28 +46,11 @@ const LatestProjects: React.FC = () => {
   const [editModalVisible, setEditModalVisible] = useState(false);
   const [paymentModalVisible, setPaymentModalVisible] = useState(false);
   const [deleteModalVisible, setDeleteModalVisible] = useState(false); // State for DeleteModal
-  const [data, setData] = useState<DataItem[]>([]);
   const [visibleCount, setVisibleCount] = useState(8);
-  const [loading, setLoading] = useState(false);
   const [selectedProject, setSelectedProject] = useState<DataItem | null>(null);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search query
 
-  useEffect(() => {
-    fetchData();
-  }, []);
-
-  const fetchData = async () => {
-    setLoading(true);
-    try {
-      const response = await axios.get<DataItem[]>(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/projects/byUser?userId=${user.id}`,
-        { withCredentials: true }
-      );
-      setData(response.data);
-    } catch (error) {
-      console.error("Error fetching data", error);
-    }
-    setLoading(false);
-  };
+  const { data, loading, fetchData }: any = useProjects();
 
   const loadMore = () => {
     setVisibleCount((prevCount) => prevCount + 4);
@@ -121,32 +105,49 @@ const LatestProjects: React.FC = () => {
   };
 
   const handleDelete = () => {
-    fetchData();
     closeDeleteModal();
+    fetchData();
   };
 
   const handleSave = () => {
     closeEditModal();
+    fetchData();
   };
 
-  const displayedData = data.slice(0, visibleCount);
+  // Filter projects based on the search query
+  const filteredData = data.filter((item: DataItem) =>
+    item.projects.projectName.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const displayedData = filteredData.slice(0, visibleCount);
 
   return (
     <div className="container mx-auto p-4 cb-shadow cbg-color py-5">
       <div className="flex justify-center items-center primary-green p-2">
         Assignments You Have Posted
       </div>
+      {/* Search input field */}
+      <div className="flex justify-start mb-4">
+        <input
+          type="text"
+          placeholder="Search projects..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="border px-4 py-2 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+          aria-label="Search projects by name"
+        />
+      </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {displayedData.map((item, index) => (
+        {displayedData.map((item: DataItem, index: number) => (
           <div key={index} className="p-4 border rounded shadow">
             <h2 className="text-xl font-bold underline">
               {item.projects.projectName}
             </h2>
             <p>
-              {truncateDescription(item.projects.projectAmount, 100)}
+              {truncateDescription(item.projectDescription, 100)}
               <button
                 onClick={() => handleReadMore(item)}
-                className=" primary-navy-blue hover:underline"
+                className="primary-navy-blue hover:underline"
                 aria-label={`Read more about ${item.projects.projectName}`}
               >
                 Read More
@@ -171,7 +172,7 @@ const LatestProjects: React.FC = () => {
             </button>
 
             <button
-              className="  mt-2 px-4 py-2 primary-navy-blue text-white text-sm rounded-lg underline hover:text-orange-500"
+              className="mt-2 px-4 py-2 primary-navy-blue text-white text-sm rounded-lg underline hover:text-orange-500"
               onClick={() => openPaymentModal(item)}
               aria-label={`Add payment for ${item.projects.projectName}`}
             >
@@ -187,11 +188,11 @@ const LatestProjects: React.FC = () => {
           </div>
         ))}
       </div>
-      {visibleCount < data.length && (
+      {visibleCount < filteredData.length && (
         <div className="flex items-center justify-center">
           <button
             onClick={loadMore}
-            className="mt-4 px-4 py-2  text-white rounded hover:bg-orange-600 primary-orangebg"
+            className="mt-4 px-4 py-2 text-white rounded hover:bg-orange-600 primary-orangebg"
             disabled={loading}
           >
             {loading ? "Loading..." : "Load More"}

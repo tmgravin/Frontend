@@ -7,8 +7,11 @@ import Dashboard from "./Dashboard";
 import Image from "next/image";
 import UserModal from "../usermodal/UserModal";
 import FeaturedImages from "./FeaturedImages";
-import CategoryForm from "./InfoModals/AddCatagory/addCatagory";
+import CategoryForm from "./AddCategory/addCategory";
 import PaymentsTable from "./InfoModals/PaymentsTable";
+import TestimonialForm from "./Testimonials";
+import EbookCategoryForm from "./AddCategory/EbookCategory";
+import EbookManager from "./Ebook/EbookManager";
 
 const AdminHome: React.FC = () => {
   return (
@@ -47,7 +50,16 @@ const AdminHome: React.FC = () => {
             Update Images
           </Tabs.Trigger>
           <Tabs.Trigger value="category" style={tabStyle}>
-            Add Category
+            Project Category
+          </Tabs.Trigger>
+          <Tabs.Trigger value="uploadebook" style={tabStyle}>
+            Upload E-Book
+          </Tabs.Trigger>
+          <Tabs.Trigger value="testimonials" style={tabStyle}>
+            Tesitmonials
+          </Tabs.Trigger>
+          <Tabs.Trigger value="ebookcategory" style={tabStyle}>
+            E-book Category
           </Tabs.Trigger>
         </Tabs.List>
 
@@ -81,8 +93,20 @@ const AdminHome: React.FC = () => {
             <FeaturedImages />
           </Tabs.Content>
           <Tabs.Content value="category">
-            <h2>Add Category</h2>
+            <h2>Project Category</h2>
             <CategoryForm />
+          </Tabs.Content>
+          <Tabs.Content value="uploadebook">
+            <h2>Upload E-Book</h2>
+            <EbookManager />
+          </Tabs.Content>
+          <Tabs.Content value="testimonials">
+            <h2>Testimonials</h2>
+            <TestimonialForm />
+          </Tabs.Content>
+          <Tabs.Content value="ebookcategory">
+            <h2>E-Book Category</h2>
+            <EbookCategoryForm />
           </Tabs.Content>
         </div>
       </Tabs.Root>
@@ -116,12 +140,12 @@ const tabStyle: React.CSSProperties = {
   border: "1px solid #ccc",
   borderRadius: "4px",
   marginBottom: "4px",
-  textAlign: "center",
+  textAlign: "left",
   width: "200px", // Fixed width for the tab
   height: "50px", // Fixed height for the tab
   display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
+  alignItems: "start",
+  justifyContent: "start",
   transition: "background-color 0.3s ease",
 };
 
