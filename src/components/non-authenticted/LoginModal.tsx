@@ -117,7 +117,6 @@ const LoginModal: React.FC<LoginModalProps> = ({
       aria-hidden="true"
       className="fixed inset-0 z-50 flex items-center justify-center overflow-auto"
     >
-      <ToastContainer />
       <div className="relative p-4 w-full max-w-md max-h-full">
         <div className="relative bg-white rounded-lg shadow overflow-y-auto max-h-[90vh]">
           <div className="flex justify-end px-4 md:px-5 rounded-t dark:border-gray-600">
@@ -234,7 +233,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
                   <span className="primary-text-gray">Login with Google</span>
                 </button>
               </div> */}
-              <GoogleLoginButton />
+              {/* <GoogleLoginButton /> */}
 
               {/* <div className="flex flex-row justify-start items-start">
                 <button

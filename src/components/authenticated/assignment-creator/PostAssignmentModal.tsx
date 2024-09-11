@@ -492,8 +492,6 @@ const PostAssignmentModal: React.FC<PostAssignmentModalProps> = ({
       {resultModalVisible && (
         <ResultModal message={resultMessage} onClose={handleCloseResultModal} />
       )}
-
-      <ToastContainer />
     </div>
   );
 };

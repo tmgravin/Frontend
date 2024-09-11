@@ -412,7 +412,6 @@ const EditAssignmentModal: React.FC<EditAssignmentModalProps> = ({
             </button>
           </div>
         </form>
-        <ToastContainer />
       </div>
     </div>
   );

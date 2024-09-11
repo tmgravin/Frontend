@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
 import axios from "axios";
 import { getUserFromCookies } from "@/components/cookie/oldtoken";
-import { toast, ToastContainer } from "react-toastify";
+import { toast} from "react-toastify";
 
 const cookieuser = getUserFromCookies();
 
@@ -138,7 +138,6 @@ function AddEbookModal({ isOpen, onClose }: AddEbookModalProps) {
 
   return isOpen ? (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-      <ToastContainer />
       <div className="bg-white p-6 rounded w-full max-w-md overflow-scroll h-4/5">
         <h2 className="text-xl font-bold mb-4">Add Ebook</h2>
         <form onSubmit={onAddEbook} className="space-y-4">

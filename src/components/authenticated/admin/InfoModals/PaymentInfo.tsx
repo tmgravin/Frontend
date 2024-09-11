@@ -132,7 +132,6 @@ const PaymentInfoModal: React.FC<PaymentInfoModalProps> = ({
 
   return (
     <div>
-      <ToastContainer />
       <Dialog open={open} onClose={onClose}>
         <DialogTitle>Payment Information</DialogTitle>
         <DialogContent>

@@ -387,7 +387,6 @@ const SignupModal: React.FC<SignupModalProps> = ({
           </div>
         </div>
       </div>
-      <ToastContainer />
     </div>
   );
 };

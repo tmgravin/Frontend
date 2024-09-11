@@ -186,7 +186,6 @@ const ApplicantsInfoModal: React.FC<ApplicantsInfoModalProps> = ({
           Close
         </Button>
       </DialogActions>
-      <ToastContainer />
     </Dialog>
   );
 };

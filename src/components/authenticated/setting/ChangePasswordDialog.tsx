@@ -54,7 +54,6 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <ToastContainer />
       <div className="bg-white p-4 rounded-lg shadow-lg w-80">
         <h3 className="text-lg mb-4">Change Password</h3>
         <form noValidate autoComplete="off">

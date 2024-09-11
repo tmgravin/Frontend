@@ -70,7 +70,6 @@ const Header: React.FC = () => {
 
   return (
     <header className="cb-shadow rounded-sm">
-      <ToastContainer />
       <div className="flex justify-between items-center">
         <div className="flex items-center">
           <Image

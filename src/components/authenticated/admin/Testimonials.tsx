@@ -325,7 +325,6 @@ const TestimonialForm: React.FC = () => {
           </div>
         ))}
       </div>
-      <ToastContainer />
     </div>
   );
 };

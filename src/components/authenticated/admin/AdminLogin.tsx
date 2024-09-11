@@ -97,7 +97,6 @@ const AdminLogin: React.FC = () => {
           </button>
         </form>
       </div>
-      <ToastContainer />
     </div>
   );
 };

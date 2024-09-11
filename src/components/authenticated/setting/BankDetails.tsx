@@ -182,7 +182,6 @@ const BankDetails: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4 max-w-lg">
-      <ToastContainer />
       <h2 className="text-2xl mb-4">Bank Details</h2>
 
       <form noValidate autoComplete="off">

@@ -86,7 +86,6 @@ const PaymentUploadModal: React.FC<PaymentUploadModalProps> = ({
 
   return (
     <div>
-      <ToastContainer />
       <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
         <DialogTitle>Upload Payment Data</DialogTitle>
         <DialogContent>

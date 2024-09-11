@@ -184,8 +184,6 @@ function FeaturedImages() {
           </div>
         ))}
       </div>
-
-      <ToastContainer />
     </div>
   );
 }

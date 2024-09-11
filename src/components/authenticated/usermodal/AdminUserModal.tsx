@@ -81,7 +81,6 @@ const AdminUserModal: React.FC = () => {
 
   return (
     <div>
-      <ToastContainer />
       <Box
         sx={{
           display: "flex",

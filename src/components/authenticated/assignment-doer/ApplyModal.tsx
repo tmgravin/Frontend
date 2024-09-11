@@ -98,7 +98,6 @@ const ApplyModal: React.FC<ApplyModalProps> = ({ project, onClose }) => {
           {loading ? "Applying..." : "Apply"}
         </button>
       </div>
-      <ToastContainer />
 
       <div className="text-red-500  pt-4 flex items-center justify-center">
         Note : 20% will be deducted as per service charge

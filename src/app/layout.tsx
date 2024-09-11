@@ -23,14 +23,12 @@ export default function RootLayout({
     <html lang="en">
       <Script src="https://kit.fontawesome.com/deb7916e2f.js"></Script>
 
-        <ProjectProvider>
-          <body
-            className={cn(inter.className, "antialiased overflow-x-hidden")}
-          >
-            {children}
-            <ToastContainer />
-          </body>
-        </ProjectProvider>
+      <ProjectProvider>
+        <body className={cn(inter.className, "antialiased overflow-x-hidden")}>
+          {children}
+          <ToastContainer />
+        </body>
+      </ProjectProvider>
     </html>
   );
 }

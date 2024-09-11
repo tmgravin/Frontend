@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getUserFromCookies } from "@/components/cookie/oldtoken";
 import { PencilIcon, TrashIcon } from "lucide-react";
@@ -185,7 +185,6 @@ const EbookCategoryForm: React.FC = () => {
           </tbody>
         </table>
       </div>
-      <ToastContainer />
     </div>
   );
 };

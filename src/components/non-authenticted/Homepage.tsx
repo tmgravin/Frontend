@@ -11,7 +11,6 @@ import Whyus from "./Whyus";
 import WorkYourWay from "./WorkYourWay";
 import Footer from "./footer/Footer";
 import SignupModal from "./SignupModal";
-import { ToastContainer } from "react-toastify";
 import FQA from "./footer/FAQ";
 import Searchbar from "./search/Searchbar";
 import TestimonialShowcase from "./Tesstimonials";
@@ -96,7 +95,6 @@ const Homepage: React.FC = () => {
       <div className="absolute w-full z-50">
         <Header />
       </div>
-      <ToastContainer />
       <div className="relative overflow-hidden h-full">
         <div
           className="flex transition-transform duration-1000 ease-in-out"

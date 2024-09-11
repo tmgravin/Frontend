@@ -88,7 +88,6 @@ const AdminImageDetails: React.FC = () => {
 
   return (
     <div className="container mx-auto font-bold p-4 max-w-lg">
-      <ToastContainer />
       <div className="flex items-center justify-center mb-4">
         <Image
           src={previewUrl || user.profileImageUrl || "/default-img.png"} // Show preview if available, else show the current image

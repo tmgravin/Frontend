@@ -80,7 +80,6 @@ const UserDetails: React.FC = () => {
 
   return (
     <div className="container mx-auto font-bold p-4 max-w-lg">
-      <ToastContainer />
       <h2 className="text-2xl mb-4">Personal Information</h2>
 
       <ImageDetails />

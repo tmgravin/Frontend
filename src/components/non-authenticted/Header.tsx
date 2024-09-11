@@ -119,7 +119,6 @@ const Header: React.FC = () => {
 
   return (
     <header>
-      <ToastContainer />
       <div className="flex flex-row sm:flex-row justify-between items-center px-2 py-1 bg-transparent">
         <div className="flex justify-evenly flex-row">
           <div className="flex items-center mr-10">

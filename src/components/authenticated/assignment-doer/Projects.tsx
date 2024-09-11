@@ -108,7 +108,6 @@ const LatestProjects: React.FC = () => {
 
   return (
     <div className="container mx-auto p-4 cb-shadow cbg-color py-5">
-      <ToastContainer />
       <div className="flex justify-center items-center primary-green p-2">
         <h1>Latest Projects</h1>
       </div>

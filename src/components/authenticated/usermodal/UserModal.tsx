@@ -79,7 +79,6 @@ const UserModal: React.FC = () => {
 
   return (
     <div>
-      <ToastContainer />
       <Box
         sx={{
           display: "flex",
