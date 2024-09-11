@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getUserFromCookies } from "../cookie/oldtoken"; // Adjust the path based on your file structure
+import GoogleLoginButton from "./GoogleLogin";
 
 interface SignupData {
   email: string;
@@ -233,6 +234,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
                   <span className="primary-text-gray">Login with Google</span>
                 </button>
               </div> */}
+              <GoogleLoginButton />
 
               {/* <div className="flex flex-row justify-start items-start">
                 <button

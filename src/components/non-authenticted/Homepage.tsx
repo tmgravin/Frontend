@@ -93,8 +93,10 @@ const Homepage: React.FC = () => {
 
   return (
     <div className="relative w-full  sm:h-screen">
+      <div className="absolute w-full z-50">
+        <Header />
+      </div>
       <ToastContainer />
-      <Header />
       <div className="relative overflow-hidden h-full">
         <div
           className="flex transition-transform duration-1000 ease-in-out"
@@ -115,6 +117,7 @@ const Homepage: React.FC = () => {
             ></div>
           ))}
         </div>
+
         <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-40">
           {backgroundImages.map((_, index) => (
             <button
@@ -127,10 +130,12 @@ const Homepage: React.FC = () => {
             />
           ))}
         </div>
+
         <div className="absolute inset-0 px-2 flex flex-col justify-center items-start lg:p-2  lg:pl-4">
           <div className="text-3xl text-white lg:w-1/2 pt-10">
             Get Freelancing Jobs Instantly Start Working for Yourself!
           </div>
+
           <div className="text-white py-2">
             Work with the best freelance talent from around the world on our
             secure, flexible, and cost-effective platform

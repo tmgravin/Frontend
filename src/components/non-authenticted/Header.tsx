@@ -120,7 +120,7 @@ const Header: React.FC = () => {
   return (
     <header>
       <ToastContainer />
-      <div className="flex flex-row sm:flex-row justify-between items-center px-2 py-1">
+      <div className="flex flex-row sm:flex-row justify-between items-center px-2 py-1 bg-transparent">
         <div className="flex justify-evenly flex-row">
           <div className="flex items-center mr-10">
             <Image
@@ -130,16 +130,16 @@ const Header: React.FC = () => {
               alt="msp logo"
             />
             <div className="mt-4 px-3">
-              <h1 className="text-xs font-bold sm:text-2xl primary-navy-blue">
+              <h1 className="text-xs font-bold sm:text-2xl text-orange-600">
                 MSP ACADEMY
               </h1>
             </div>
           </div>
           <Link href={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/ebooks`}>
-            <div className="flex items-center justify-center pt-4 hover:underline ">
+            <div className="flex items-center text-white justify-center pt-4 hover:underline ">
               <i className="fas fa-book mr-2"></i>{" "}
               {/* Example icon, ensure you have Font Awesome or another icon library */}
-              <span className="text-lg font-semibold">E-book</span>
+              <span className="text-lg font-semibold">E-Books</span>
             </div>
           </Link>
         </div>
