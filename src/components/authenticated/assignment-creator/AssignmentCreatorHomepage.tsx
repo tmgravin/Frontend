@@ -61,7 +61,7 @@ function Homepage() {
 
   return (
     <ProjectProvider>
-      <div className="w-full h-full">
+      <div className="w-full h-[70vh] sm:h-screen ">
         <Header />
 
         <div className="relative overflow-hidden h-full ">

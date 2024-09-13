@@ -17,14 +17,14 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getUserFromCookies } from "@/components/cookie/oldtoken";
-import useUserData from "@/components/providers/UserProvider";
+import useAdminData from "@/components/providers/AdminProvides";
+
 const Header: React.FC = () => {
-  const { user } = useUserData();
+  const { user } = useAdminData();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const router = useRouter();
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
-
   const cookieuser = getUserFromCookies();
 
   const handleMenuClick = (event: MouseEvent<HTMLElement>) =>

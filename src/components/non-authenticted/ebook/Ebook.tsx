@@ -1,5 +1,16 @@
 "use client";
-import React, { useState, useEffect } from "react";
+
+import React, { useState, useEffect, useMemo } from "react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Card, CardContent } from "@/components/ui/card";
 
 export interface Ebook {
   title: string;
@@ -18,8 +29,10 @@ export interface Ebook {
   };
 }
 
-function EbookManager() {
+export default function EbookManager() {
   const [ebooks, setEbooks] = useState<Ebook[]>([]);
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [sortOption, setSortOption] = useState<string>("title");
   const [error, setError] = useState<string>("");
 
   useEffect(() => {
@@ -28,78 +41,124 @@ function EbookManager() {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/`
         );
+        if (!response.ok) {
+          throw new Error("Failed to fetch ebooks");
+        }
         const data: Ebook[] = await response.json();
         setEbooks(data);
       } catch (error) {
         setError("Failed to load eBooks");
-        console.error(error);
+        console.error("Fetch error:", error);
       }
     };
 
     fetchEbooks();
   }, []);
 
+  const filteredAndSortedEbooks = useMemo(() => {
+    return ebooks
+      .filter(
+        (ebook) =>
+          ebook.bookTitle.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          ebook.authorName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          ebook.category.category
+            .toLowerCase()
+            .includes(searchQuery.toLowerCase())
+      )
+      .sort((a, b) => {
+        if (sortOption === "title") {
+          return a.bookTitle.localeCompare(b.bookTitle);
+        } else if (sortOption === "author") {
+          return a.authorName.localeCompare(b.authorName);
+        } else if (sortOption === "publishedDate") {
+          return (
+            new Date(a.publishedDate).getTime() -
+            new Date(b.publishedDate).getTime()
+          );
+        }
+        return 0;
+      });
+  }, [ebooks, searchQuery, sortOption]);
+
   return (
     <div className="p-4 sm:p-6">
+      <div className="flex flex-col sm:flex-row justify-between items-center mb-4 gap-4">
+        <Input
+          type="text"
+          placeholder="Search eBooks"
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full sm:w-64"
+        />
+        <Select value={sortOption} onValueChange={setSortOption}>
+          <SelectTrigger className="w-full sm:w-[180px]">
+            <SelectValue placeholder="Sort by" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="title">Sort by Title</SelectItem>
+            <SelectItem value="author">Sort by Author</SelectItem>
+            <SelectItem value="publishedDate">
+              Sort by Published Date
+            </SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+
       <div className="mt-4">
-        {ebooks.length === 0 ? (
+        {filteredAndSortedEbooks.length === 0 ? (
           <p className="text-center text-gray-600">No eBooks available</p>
         ) : (
-          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 ">
-            {ebooks.map((ebook) => (
-              <li
-                key={ebook.id}
-                className="border p-4 flex flex-col md:flex-row items-start space-y-4 md:space-y-0 md:space-x-4 bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow "
-              >
-                <div className="cb-shadow px-2">
-                  {" "}
+          <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredAndSortedEbooks.map((ebook) => (
+              <Card key={ebook.id}>
+                <CardContent className="p-4 flex flex-col space-y-4">
                   {ebook.coverImageUrl && (
                     <img
                       src={ebook.coverImageUrl}
                       alt={ebook.bookTitle}
-                      className="w-full md:w-40 h-25 object-cover rounded"
+                      height={400}
+                      width={200}
+                      className=" object-fill rounded"
                     />
                   )}
-                  <div className="flex-1 ">
-                    <h3 className="font-semibold text-lg text-gray-800">
-                      {ebook.bookTitle}
-                    </h3>
-                    <p className="text-gray-600">Author: {ebook.authorName}</p>
-                    <p className="text-gray-600">
+                  <div>
+                    <h3 className="font-semibold text-lg">{ebook.bookTitle}</h3>
+                    <p className="text-sm text-gray-600">
+                      Author: {ebook.authorName}
+                    </p>
+                    <p className="text-sm text-gray-600">
                       Publication: {ebook.publicationName}
                     </p>
-                    <p className="text-gray-600">
+                    <p className="text-sm text-gray-600">
                       Published Date:{" "}
                       {new Date(ebook.publishedDate).toLocaleDateString()}
                     </p>
-                    <p className="text-gray-600">
+                    <p className="text-sm text-gray-600">
                       Category: {ebook.category.category}
                     </p>
-                    {/* <p className="text-gray-600">
-                      Added On: {new Date(ebook.createdAt).toLocaleDateString()}
-                    </p> */}
-                    <div className="w-full my-3  bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105">
-                      {ebook.bookUrl && (
-                        <a
-                          href={ebook.bookUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          Download E-Book
-                        </a>
-                      )}
-                    </div>
                   </div>
-                </div>
-              </li>
+                  {ebook.bookUrl && (
+                    <Button
+                      asChild
+                      className="w-full primary-orangebg hover:bg-orange-700"
+                    >
+                      <a
+                        href={ebook.bookUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Download E-Book
+                      </a>
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
             ))}
           </ul>
         )}
       </div>
 
-      {error && <p className="text-red-500 mt-2 text-center">{error}</p>}
+      {error && <p className="text-destructive mt-2 text-center">{error}</p>}
     </div>
   );
 }
-
-export default EbookManager;

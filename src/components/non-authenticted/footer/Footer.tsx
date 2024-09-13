@@ -3,7 +3,7 @@ import Link from "next/link";
 
 function Footer() {
   return (
-    <div className="flex flex-col w-full text-white primary-navy-bluebg pb-8 pt-10">
+    <footer className="flex flex-col w-full text-white primary-navy-bluebg pb-8 pt-10  ">
       <div className="flex flex-col lg:flex-row lg:justify-around px-2">
         {/* Column 1 */}
         <div className="flex flex-col px-2">
@@ -82,7 +82,7 @@ function Footer() {
           </div>
         </div>
       </div>
-    </div>
+    </footer>
   );
 }
 

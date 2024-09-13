@@ -49,9 +49,9 @@ function Homepage() {
   }, [backgroundImages]);
 
   return (
-    <div className="w-full h-full">
+    <div className="w-full sm:h-screen h-[70vh] ">
       <Header />
-      <div className="relative overflow-hidden h-[50vh] md:h-screen">
+      <div className="relative overflow-hidden  md:h-screen">
         <div
           className="flex transition-transform duration-1000 ease-in-out"
           style={{

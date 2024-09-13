@@ -8,7 +8,7 @@ function WorkYourWay() {
         Work Your Way
       </div>
 
-      <div className="flex flex-col lg:flex-row justify-evenly items-center mt-6">
+      <div className="flex flex-col lg:flex-row justify-evenly items-center ">
         <div className="workyourway-bg w-full lg:w-1/2 h-64 lg:h-auto mb-6 lg:mb-0">
           {/* Background image or any content */}
         </div>

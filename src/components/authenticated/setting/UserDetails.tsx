@@ -140,13 +140,13 @@ const UserDetails: React.FC = () => {
               <div>
                 <button
                   onClick={handleSaveAll}
-                  className="primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+                  className="my-4 sm:my-0 primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
                 >
                   Save Changes
                 </button>
                 <button
                   onClick={() => setIsEditing(false)}
-                  className="px-4 py-2 bg-gray-300 text-black rounded"
+                  className="ml-2 bg-gray-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-gray-500 hover:scale-105"
                 >
                   Cancel
                 </button>
@@ -157,7 +157,7 @@ const UserDetails: React.FC = () => {
           <div className="flex justify-center ml-4">
             <button
               onClick={handleOpenPasswordDialog}
-              className="primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+              className="ml-2 primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
             >
               Change Password
             </button>

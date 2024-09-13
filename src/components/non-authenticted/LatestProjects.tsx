@@ -96,13 +96,14 @@ const LatestProjects: React.FC = () => {
       <div className="flex justify-center items-center primary-green p-2">
         Latest Projects
       </div>
-      <div className="flex justify-center mb-4">
+      <div className="flex justify-start mb-4">
         <input
           type="text"
+          placeholder="Search projects..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          placeholder="Search by project name..."
-          className="border px-4 py-2 rounded-lg focus:outline-none focus:ring focus:border-blue-300"
+          className="border px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-300 focus:border-orange-300"
+          aria-label="Search projects by name"
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">

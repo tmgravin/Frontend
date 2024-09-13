@@ -12,11 +12,8 @@ import {
   useTheme,
 } from "@mui/material";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
+import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
-import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import { getUserFromCookies } from "@/components/cookie/oldtoken";
 import useAdminData from "@/components/providers/AdminProvides";
 
 const AdminSettingHeader: React.FC = () => {
@@ -36,9 +33,6 @@ const AdminSettingHeader: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      // const response = await axios.post(
-      //   `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/logout/${cookieuser?.id}`
-      // );
       removeCookie("token");
       toast.warning("Logging out");
     } catch (err) {

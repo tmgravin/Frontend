@@ -15,10 +15,12 @@
     "@fortawesome/fontawesome-svg-core": "^6.6.0",
     "@fortawesome/free-solid-svg-icons": "^6.6.0",
     "@fortawesome/react-fontawesome": "^0.2.2",
+    "@headlessui/react": "^2.1.8",
     "@mui/icons-material": "^5.16.4",
     "@mui/material": "^5.16.5",
     "@radix-ui/react-dialog": "^1.1.1",
     "@radix-ui/react-label": "^2.1.0",
+    "@radix-ui/react-select": "^2.1.1",
     "@radix-ui/react-slot": "^1.1.0",
     "@radix-ui/react-tabs": "^1.1.0",
     "@react-oauth/google": "^0.12.1",
@@ -31,6 +33,7 @@
     "font-awesome": "^4.7.0",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
+    "lodash.debounce": "^4.0.8",
     "lucide-react": "^0.412.0",
     "next": "^14.2.9",
     "next-cookies": "^2.0.3",
@@ -58,7 +61,7 @@
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1",
+    "tailwindcss": "^3.4.11",
     "typescript": "^5"
   }
 }

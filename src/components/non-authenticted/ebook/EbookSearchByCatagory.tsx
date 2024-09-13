@@ -1,285 +1,199 @@
-// "use client";
+"use client";
 
-// import React, { useState, ChangeEvent, FormEvent, useEffect } from "react";
-// import axios from "axios";
-// import { getUserFromCookies } from "@/components/cookie/oldtoken";
-// import { toast, ToastContainer } from "react-toastify";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-// const cookieuser = getUserFromCookies();
+interface Category {
+  id: number;
+  category: string;
+}
 
-// // Define the type for the Category
-// interface Category {
-//   id: number;
-//   category: string;
-//   createdAt: string;
-// }
+export interface Ebook {
+  title: string;
+  id: number;
+  bookTitle: string;
+  authorName: string;
+  publicationName: string;
+  publishedDate: Date;
+  coverImageUrl: string;
+  bookUrl: string;
+  createdAt: string;
+  category: {
+    id: number;
+    category: string;
+    createdAt: string;
+  };
+}
 
-// // Define the type for the Ebook
-// interface Ebook {
-//   bookTitle: string;
-//   authorName: string;
-//   publicationName: string;
-//   publishedDate: string; // Use string for input and convert to Date later
-//   coverImageUrl: File | null;
-//   bookUrl: File | null;
-//   category: string;
-// }
+const Searchbar: React.FC = () => {
+  const [catData, setCatData] = useState<Category[]>([]);
+  const [category, setCategory] = useState<Category | null>(null);
+  const [ebook, setEbook] = useState<Ebook[]>([]);
+  const [isSearchAttempted, setIsSearchAttempted] = useState(false);
+  const [noResultsMessage, setNoResultsMessage] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-// interface AddEbookModalProps {
-//   isOpen: boolean;
-//   onClose: () => void;
-// }
+  const handleCategoryChange = (
+    event: React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const selectedCategory = catData.find(
+      (cat) => cat.id === parseInt(event.target.value)
+    );
+    setCategory(selectedCategory || null);
+  };
 
-// function SearchEbookModal({ isOpen, onClose }: AddEbookModalProps) {
-//   const [newEbook, setNewEbook] = useState<Ebook>({
-//     bookTitle: "",
-//     authorName: "",
-//     publicationName: "",
-//     publishedDate: "",
-//     coverImageUrl: null,
-//     bookUrl: null,
-//     category: "",
-//   });
-//   const [isLoading, setIsLoading] = useState(false);
-//   const [categories, setCategories] = useState<Category[]>([]);
+  const handleSubmit = async (event: React.FormEvent) => {
+    event.preventDefault();
+    if (!category) return;
+    setIsSearchAttempted(true);
+    setNoResultsMessage("");
+    setIsLoading(true);
 
-//   useEffect(() => {
-//     const fetchCategories = async () => {
-//       try {
-//         const response = await axios.get<Category[]>(
-//           `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/category/`
-//         );
-//         setCategories(response.data);
-//       } catch (error) {
-//         console.error(error);
-//       }
-//     };
-//     fetchCategories();
-//   }, []);
+    try {
+      const response = await axios.get(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/category?category=${category.category}`,
+        {
+          withCredentials: true,
+        }
+      );
 
-//   // Prevent rendering if not open
-//   if (!isOpen) return null;
+      if (response.data.length === 0) {
+        setNoResultsMessage("No E-Book found for the selected category.");
+        setEbook([]);
+        setIsModalOpen(false);
+      } else {
+        setEbook(response.data);
+        setIsModalOpen(true);
+      }
+    } catch (error) {
+      console.error("Error fetching search results:", error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-//   const onFileChange = (
-//     e: ChangeEvent<HTMLInputElement>,
-//     field: keyof Ebook
-//   ) => {
-//     const file = e.target.files?.[0] || null;
-//     setNewEbook((prev) => ({ ...prev, [field]: file }));
-//   };
+  const handleClear = () => {
+    setCategory(null);
+    setEbook([]);
+    setIsSearchAttempted(false);
+    setNoResultsMessage("");
+    setIsModalOpen(false);
+  };
 
-//   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-//     const { name, value } = e.target;
-//     setNewEbook((prev) => ({
-//       ...prev,
-//       [name]: value,
-//     }));
-//   };
+  useEffect(() => {
+    const fetchCategory = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/category/`,
+          {
+            withCredentials: true,
+          }
+        );
+        setCatData(response.data);
+      } catch (err) {
+        console.error("Error fetching categories:", err);
+      }
+    };
+    fetchCategory();
+  }, []);
 
-//   const handleCategoryChange = (e: ChangeEvent<HTMLSelectElement>) => {
-//     setNewEbook((prev) => ({ ...prev, category: e.target.value }));
-//   };
+  return (
+    <div className="container mx-auto px-4 py-4">
+      <form onSubmit={handleSubmit}>
+        <div className="my-2">
+          <div className="flex flex-col md:flex-row w-full">
+            <select
+              id="category"
+              value={category?.id || ""}
+              onChange={handleCategoryChange}
+              className="block w-full md:w-[35vw] border border-gray-300 rounded-l-md p-2 mb-2 md:mb-0"
+              required
+            >
+              <option value="">Browse Category</option>
+              {catData.map((cat) => (
+                <option key={cat.id} value={cat.id}>
+                  {cat.category}
+                </option>
+              ))}
+            </select>
+            <button
+              type="submit"
+              className="px-4 primary-orangebg text-white rounded-md md:rounded-r-md hover:bg-orange-600 w-full md:w-auto"
+              disabled={isLoading}
+            >
+              {isLoading ? "Loading..." : "Search"}
+            </button>
+          </div>
+        </div>
+      </form>
 
-//   const onAddEbook = async (e: FormEvent<HTMLFormElement>) => {
-//     e.preventDefault();
-//     setIsLoading(true);
+      {isSearchAttempted && noResultsMessage && (
+        <p className="text-red-500 text-center">{noResultsMessage}</p>
+      )}
 
-//     try {
-//       const formData = new FormData();
-//       formData.append("bookTitle", newEbook.bookTitle);
-//       formData.append("authorName", newEbook.authorName);
-//       formData.append("publicationName", newEbook.publicationName);
-//       formData.append("category", newEbook.category);
+      {isModalOpen && ebook.length > 0 && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white rounded-lg p-4 md:p-6 w-full sm:w-[90%] md:w-[80%] lg:w-[70%] max-w-3xl relative overflow-hidden">
+            <button
+              onClick={() => setIsModalOpen(false)}
+              className="absolute  top-2 right-2 text-white font-bold bg-orange-500 p-1 rounded-full hover:bg-orange-600 transition"
+            >
+              Close
+            </button>
 
-//       // Convert date to the correct format (yyyy-MM-dd HH:mm:ss)
-//       const publishedDate = new Date(newEbook.publishedDate);
-//       const formattedDate = `${
-//         publishedDate.toISOString().split("T")[0]
-//       } 00:00:00`;
-//       formData.append("publishedDate", formattedDate);
+            <div className="max-h-[80vh] overflow-y-auto px-4 py-4">
+              <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                {ebook.map((ebook) => (
+                  <li
+                    key={ebook.id}
+                    className="border p-4 flex flex-col items-center bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow"
+                  >
+                    {ebook.coverImageUrl && (
+                      <img
+                        src={ebook.coverImageUrl}
+                        alt={ebook.bookTitle}
+                        className="w-full h-40 object-cover rounded mb-3"
+                      />
+                    )}
+                    <div className="w-full">
+                      <h3 className="font-semibold text-lg text-gray-800 text-center">
+                        {ebook.bookTitle}
+                      </h3>
+                      <p className="text-gray-600 text-center">
+                        Author: {ebook.authorName}
+                      </p>
+                      <p className="text-gray-600 text-center">
+                        Publication: {ebook.publicationName}
+                      </p>
+                      <p className="text-gray-600 text-center">
+                        Published Date:{" "}
+                        {new Date(ebook.publishedDate).toLocaleDateString()}
+                      </p>
+                      <p className="text-gray-600 text-center">
+                        Category: {ebook.category.category}
+                      </p>
+                      <div className="w-full my-3 bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105 text-center">
+                        {ebook.bookUrl && (
+                          <a
+                            href={ebook.bookUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            Download E-Book
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
-//       if (newEbook.coverImageUrl) {
-//         formData.append("coverImageUrl", newEbook.coverImageUrl);
-//       }
-//       if (newEbook.bookUrl) {
-//         formData.append("bookUrl", newEbook.bookUrl);
-//       }
-
-//       // Assuming the API endpoint for adding an ebook is /api/ebooks
-//       const res = await axios.post(
-//         `${process.env.NEXT_PUBLIC_BASE_URL}/api/ebooks/`,
-//         formData,
-//         {
-//           headers: {
-//             Authorization: `Bearer ${cookieuser?.token}`,
-//             "Content-Type": "multipart/form-data",
-//           },
-//         }
-//       );
-//       if (res.status == 200) {
-//         toast.success("Ebook Added Successfully");
-//         // Reset form fields and close the modal
-//         setNewEbook({
-//           bookTitle: "",
-//           authorName: "",
-//           publicationName: "",
-//           publishedDate: "",
-//           coverImageUrl: null,
-//           bookUrl: null,
-//           category: "",
-//         });
-//         onClose();
-//       }
-//     } catch (error) {
-//       console.error("Error adding ebook:", error);
-//       toast.error("Failed to add ebook. Please try again.");
-//     } finally {
-//       setIsLoading(false);
-//     }
-//   };
-
-//   return isOpen ? (
-//     <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center">
-//       <ToastContainer />
-//       <div className="bg-white p-6 rounded w-full max-w-md overflow-scroll h-4/5">
-//         <h2 className="text-xl font-bold mb-4">Add Ebook</h2>
-//         <form onSubmit={onAddEbook} className="space-y-4">
-//           <div>
-//             <label htmlFor="bookTitle" className="block font-medium">
-//               Title
-//             </label>
-//             <input
-//               id="bookTitle"
-//               type="text"
-//               name="bookTitle"
-//               className="border border-gray-300 rounded px-3 py-2 w-full"
-//               value={newEbook.bookTitle}
-//               onChange={handleChange}
-//               required
-//             />
-//           </div>
-//           <div>
-//             <label htmlFor="authorName" className="block font-medium">
-//               Author Name
-//             </label>
-//             <input
-//               id="authorName"
-//               type="text"
-//               name="authorName"
-//               className="border border-gray-300 rounded px-3 py-2 w-full"
-//               value={newEbook.authorName}
-//               onChange={handleChange}
-//               required
-//             />
-//           </div>
-//           <div>
-//             <label htmlFor="publicationName" className="block font-medium">
-//               Publication Name
-//             </label>
-//             <input
-//               id="publicationName"
-//               type="text"
-//               name="publicationName"
-//               className="border border-gray-300 rounded px-3 py-2 w-full"
-//               value={newEbook.publicationName}
-//               onChange={handleChange}
-//               required
-//             />
-//           </div>
-//           <div>
-//             <label htmlFor="category" className="block font-medium">
-//               Category
-//             </label>
-//             <select
-//               id="category"
-//               name="category"
-//               className="border border-gray-300 rounded px-3 py-2 w-full"
-//               value={newEbook.category}
-//               onChange={handleCategoryChange}
-//               required
-//             >
-//               <option value="" disabled>
-//                 Select a category
-//               </option>
-//               {categories.map((cat) => (
-//                 <option key={cat.id} value={cat.category}>
-//                   {cat.category}
-//                 </option>
-//               ))}
-//             </select>
-//           </div>
-//           <div>
-//             <label htmlFor="publishedDate" className="block font-medium">
-//               Published Date
-//             </label>
-//             <input
-//               id="publishedDate"
-//               type="date"
-//               name="publishedDate"
-//               className="border border-gray-300 rounded px-3 py-2 w-full"
-//               value={newEbook.publishedDate}
-//               onChange={handleChange}
-//               required
-//             />
-//           </div>
-//           <div>
-//             <label htmlFor="coverFile" className="block font-medium">
-//               Cover Image
-//             </label>
-//             <input
-//               id="coverFile"
-//               type="file"
-//               className="border border-gray-300 rounded px-3 py-2 w-full"
-//               accept="image/*"
-//               onChange={(e) => onFileChange(e, "coverImageUrl")}
-//               required
-//             />
-//           </div>
-//           <div>
-//             <label htmlFor="ebookFile" className="block font-medium">
-//               Ebook File
-//             </label>
-//             <input
-//               id="ebookFile"
-//               type="file"
-//               className="border border-gray-300 rounded px-3 py-2 w-full"
-//               accept=".pdf"
-//               onChange={(e) => onFileChange(e, "bookUrl")}
-//               required
-//             />
-//           </div>
-//           <div className="flex justify-end">
-//             <button
-//               type="button"
-//               className="bg-gray-300 text-gray-800 px-4 py-2 rounded mr-2"
-//               onClick={() => {
-//                 setNewEbook({
-//                   bookTitle: "",
-//                   authorName: "",
-//                   publicationName: "",
-//                   publishedDate: "",
-//                   coverImageUrl: null,
-//                   bookUrl: null,
-//                   category: "",
-//                 });
-//                 onClose();
-//               }}
-//               disabled={isLoading}
-//             >
-//               Cancel
-//             </button>
-//             <button
-//               type="submit"
-//               className="bg-blue-500 text-white px-4 py-2 rounded"
-//               disabled={isLoading}
-//             >
-//               {isLoading ? "Adding..." : "Add"}
-//             </button>
-//           </div>
-//         </form>
-//       </div>
-//     </div>
-//   ) : null;
-// }
-
-// export default SearchEbookModal;
+export default Searchbar;

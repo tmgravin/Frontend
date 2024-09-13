@@ -60,14 +60,14 @@ const TestimonialShowcase: React.FC = () => {
   return (
     <section className="bg-gray-100 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl font-extrabold text-gray-900 text-center mb-8">
+        <h2 className="font-bold text-2xl text-gray-900 text-center mb-8">
           What Our Clients Say
         </h2>
         <Swiper
           modules={[Pagination, Autoplay]}
           spaceBetween={30}
           slidesPerView={1}
-          pagination={{ clickable: true }}
+          pagination={{ clickable: true, el: ".custom-pagination" }} // Use custom pagination element
           autoplay={{ delay: 5000 }}
           breakpoints={{
             640: {
@@ -81,7 +81,7 @@ const TestimonialShowcase: React.FC = () => {
         >
           {testimonials.map((testimonial) => (
             <SwiperSlide key={testimonial.id}>
-              <div className="bg-white rounded-lg shadow-lg p-6 h-full flex flex-col">
+              <div className="primary-orangebg  text-white rounded-lg shadow-lg p-6 h-64 flex flex-col">
                 <div className="flex items-center mb-4">
                   <Image
                     src={testimonial.imageUrl}
@@ -91,19 +91,21 @@ const TestimonialShowcase: React.FC = () => {
                     className="rounded-full mr-4"
                   />
                   <div>
-                    <h3 className="text-lg font-semibold text-gray-900">
+                    <h3 className="text-lg font-semibold ">
                       {testimonial.name}
                     </h3>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm ">
                       {testimonial.position} at {testimonial.company}
                     </p>
                   </div>
                 </div>
-                <p className="text-gray-700 flex-grow">{testimonial.message}</p>
+                <p className=" flex-grow">{testimonial.message}</p>
               </div>
             </SwiperSlide>
           ))}
         </Swiper>
+        <div className="custom-pagination mt-4 flex justify-center"></div>{" "}
+        {/* Custom pagination container */}
       </div>
     </section>
   );

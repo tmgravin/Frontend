@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Image from "next/image";
 import { getUserFromCookies } from "@/components/cookie/oldtoken";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import useAdminData from "@/components/providers/AdminProvides";
 const cookieuser = getUserFromCookies();
 

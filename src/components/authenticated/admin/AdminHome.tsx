@@ -17,6 +17,7 @@ import ProjectsTableComponent from "./Projects";
 import TestimonialForm from "./Testimonials";
 import EbookManager from "./Ebook/EbookManager";
 import { useRouter } from "next/navigation";
+import HelpAndSupport from "./HelpAndSupport/HelpAndSupport";
 
 const AdminHome: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>("dashboard");
@@ -105,6 +106,7 @@ const AdminHome: React.FC = () => {
                   "Ebook Category",
                   "Testimonials",
                   "Feature Images",
+                  "Help And Support",
                 ].map((section) => (
                   <Tabs.Trigger
                     key={section}
@@ -202,6 +204,9 @@ const AdminHome: React.FC = () => {
                 <Tabs.Content value="featureimages">
                   <h2>Feature Images</h2>
                   <FeaturedImages />
+                </Tabs.Content>
+                <Tabs.Content value="helpandsupport">
+                  <HelpAndSupport />
                 </Tabs.Content>
               </div>
             </MaxWidthWrapper>

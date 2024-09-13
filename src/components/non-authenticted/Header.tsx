@@ -119,7 +119,7 @@ const Header: React.FC = () => {
 
   return (
     <header>
-      <div className="flex flex-row sm:flex-row justify-between items-center px-2 py-1 bg-transparent">
+      <div className="flex flex-row sm:flex-row justify-between items-center px-2 py-1">
         <div className="flex justify-evenly flex-row">
           <div className="flex items-center mr-10">
             <Image
@@ -155,6 +155,8 @@ const Header: React.FC = () => {
             PaperProps={{
               style: {
                 width: 140,
+                backgroundColor: "white", // "trasnparent" Make the Menu background transparent
+                boxShadow: "none", // Remove any shadow if present
               },
             }}
           >
@@ -164,7 +166,7 @@ const Header: React.FC = () => {
                 toggleSignupModal();
               }}
             >
-              <div className="primary-orangebg text-white rounded-sm p-2 ">
+              <div className="text-white rounded-sm p-2 primary-orangebg flex items-center">
                 Sign up <EditIcon style={{ marginLeft: 8 }} />
               </div>
             </MenuItem>
@@ -174,13 +176,13 @@ const Header: React.FC = () => {
                 toggleLoginModal();
               }}
             >
-              <div className="primary-orangebg text-white rounded-sm py-2 px-4 ">
-                {" "}
+              <div className="text-white rounded-sm py-2 px-4 primary-orangebg flex items-center">
                 Login <LoginIcon style={{ marginLeft: 8 }} />
               </div>
             </MenuItem>
           </Menu>
         </div>
+
         {/* Desktop menu items */}
         <div className="hidden sm:flex flex-row sm:flex-row space-x-4">
           <button

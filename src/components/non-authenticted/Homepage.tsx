@@ -91,55 +91,57 @@ const Homepage: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full  sm:h-screen">
-      <div className="absolute w-full z-50">
-        <Header />
-      </div>
-      <div className="relative overflow-hidden h-full">
-        <div
-          className="flex transition-transform duration-1000 ease-in-out"
-          style={{
-            transform: `translateX(-${currentImageIndex * 100}vw)`, // Move by 100vw to slide one image at a time
-          }}
-        >
-          {backgroundImages.map((image, index) => (
-            <div
-              key={index}
-              className="w-screen h-screen flex-shrink-0" // Ensures each image takes the full width of the screen
-              style={{
-                backgroundImage: `url(${image})`,
-                backgroundSize: "cover",
-                backgroundPosition: "center",
-                backgroundRepeat: "no-repeat",
-              }}
-            ></div>
-          ))}
-        </div>
+    <div>
+      <Header />
 
-        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-40">
-          {backgroundImages.map((_, index) => (
-            <button
-              key={index}
-              className={`w-2 h-2 rounded-full ${
-                index === currentImageIndex ? "primary-orangebg" : "bg-gray-400"
-              }`}
-              onClick={() => setCurrentImageIndex(index)}
-              aria-label={`Slide ${index + 1}`}
-            />
-          ))}
-        </div>
-
-        <div className="absolute inset-0 px-2 flex flex-col justify-center items-start lg:p-2  lg:pl-4">
-          <div className="text-3xl text-white lg:w-1/2 pt-10">
-            Get Freelancing Jobs Instantly Start Working for Yourself!
+      <div className="relative w-full h-[70vh]  sm:h-screen">
+        <div className="relative overflow-hidden h-full">
+          <div
+            className="flex transition-transform duration-1000 ease-in-out"
+            style={{
+              transform: `translateX(-${currentImageIndex * 100}vw)`, // Move by 100vw to slide one image at a time
+            }}
+          >
+            {backgroundImages.map((image, index) => (
+              <div
+                key={index}
+                className="w-screen h-screen flex-shrink-0" // Ensures each image takes the full width of the screen
+                style={{
+                  backgroundImage: `url(${image})`,
+                  backgroundSize: "cover",
+                  backgroundPosition: "center",
+                  backgroundRepeat: "no-repeat",
+                }}
+              ></div>
+            ))}
           </div>
 
-          <div className="text-white py-2">
-            Work with the best freelance talent from around the world on our
-            secure, flexible, and cost-effective platform
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-40">
+            {backgroundImages.map((_, index) => (
+              <button
+                key={index}
+                className={`w-2 h-2 rounded-full ${
+                  index === currentImageIndex
+                    ? "primary-orangebg"
+                    : "bg-gray-400"
+                }`}
+                onClick={() => setCurrentImageIndex(index)}
+                aria-label={`Slide ${index + 1}`}
+              />
+            ))}
           </div>
-          <div>
-            {/* <form className="flex items-center w-full">
+
+          <div className="absolute inset-0 px-2 flex flex-col justify-center items-start lg:p-2  lg:pl-4">
+            <div className="text-3xl text-white lg:w-1/2 pt-10">
+              Get Freelancing Jobs Instantly Start Working for Yourself!
+            </div>
+
+            <div className="text-white py-2">
+              Work with the best freelance talent from around the world on our
+              secure, flexible, and cost-effective platform
+            </div>
+            <div>
+              {/* <form className="flex items-center w-full">
               <div className="relative w-full">
                 <input
                   type="text"
@@ -161,45 +163,46 @@ const Homepage: React.FC = () => {
               </button>
               
             </form> */}
-            <Searchbar />
+              <Searchbar />
+            </div>
+            <div className="text-white py-2">
+              Academic writing | CV/Resume Writing | Copywriting
+            </div>
+            <button
+              onClick={toggleSignupModal}
+              className="primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+            >
+              Get Started
+            </button>
           </div>
-          <div className="text-white py-2">
-            Academic writing | CV/Resume Writing | Copywriting
-          </div>
-          <button
-            onClick={toggleSignupModal}
-            className="primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
-          >
-            Get Started
-          </button>
         </div>
+        <Achievements />
+        <LatestProjects />
+        <Whyus onGetStartedClick={toggleSignupModal} />
+        <Applicationprocess />
+
+        <Applicationprocess2 startRegistration={toggleSignupModal} />
+
+        <WorkYourWay />
+        <TestimonialShowcase />
+
+        <FQA />
+        <Footer />
+        {isSignupModalOpen && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 z-30"></div>
+        )}
+        <SignupModal
+          isOpen={isSignupModalOpen}
+          toggleModal={toggleSignupModal}
+          isTeacherSignup={isTeacherSignup}
+          setIsTeacherSignup={setIsTeacherSignup}
+          teacherSignupData={teacherSignupData}
+          studentSignupData={studentSignupData}
+          handleSignupChange={handleSignupChange}
+          agree={agree}
+          setAgree={setAgree}
+        />
       </div>
-      <Achievements />
-      <LatestProjects />
-      <Whyus onGetStartedClick={toggleSignupModal} />
-      <Applicationprocess />
-
-      <Applicationprocess2 startRegistration={toggleSignupModal} />
-
-      <WorkYourWay />
-      <TestimonialShowcase />
-
-      <FQA />
-      <Footer />
-      {isSignupModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-30"></div>
-      )}
-      <SignupModal
-        isOpen={isSignupModalOpen}
-        toggleModal={toggleSignupModal}
-        isTeacherSignup={isTeacherSignup}
-        setIsTeacherSignup={setIsTeacherSignup}
-        teacherSignupData={teacherSignupData}
-        studentSignupData={studentSignupData}
-        handleSignupChange={handleSignupChange}
-        agree={agree}
-        setAgree={setAgree}
-      />
     </div>
   );
 };
