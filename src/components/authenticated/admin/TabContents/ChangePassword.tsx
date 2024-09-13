@@ -4,16 +4,9 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import { getUserFromCookies } from "@/components/cookie/oldtoken";
 const cookieuser = getUserFromCookies();
+const userId = cookieuser?.id;
 
-interface ChangePasswordDialogProps {
-  userId: any;
-  onClose: () => void;
-}
-
-const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
-  userId,
-  onClose,
-}) => {
+const ChangePasswordDialog: React.FC = ({}) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmNewPassword, setConfirmNewPassword] = useState("");
@@ -42,7 +35,6 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
       );
       if (response.status === 200) {
         toast.success("Password changed successfully");
-        onClose(); // Close the dialog after a successful change
       } else {
         toast.error("Failed to change password");
       }
@@ -91,10 +83,7 @@ const ChangePasswordDialog: React.FC<ChangePasswordDialogProps> = ({
             >
               Save
             </button>
-            <button
-              onClick={onClose}
-              className="px-4 py-2 bg-gray-300 text-black rounded"
-            >
+            <button className="px-4 py-2 bg-gray-300 text-black rounded">
               Cancel
             </button>
           </div>

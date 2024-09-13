@@ -24,8 +24,8 @@ const AchievementItem = ({
       <Image
         src={imgSrc}
         alt={title}
-        width={isFirst ? 30 : 50} // Make the first image smaller
-        height={isFirst ? 30 : 50} // Make the first image smaller
+        width={50} // Make the first image smaller
+        height={50} // Make the first image smaller
       />
     </div>
     <div className="ml-3 text-center">

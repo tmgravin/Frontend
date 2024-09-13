@@ -18,6 +18,10 @@ import TestimonialForm from "./Testimonials";
 import EbookManager from "./Ebook/EbookManager";
 import { useRouter } from "next/navigation";
 import HelpAndSupport from "./HelpAndSupport/HelpAndSupport";
+import SettingPage from "../setting/SettingPage";
+import AdminDetails from "../setting/AdminDetails";
+import ChangePasswordDialog from "./TabContents/ChangePassword";
+import { toast } from "react-toastify";
 
 const AdminHome: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>("dashboard");
@@ -28,6 +32,25 @@ const AdminHome: React.FC = () => {
   };
 
   const router = useRouter();
+
+  const removeCookie = (name: string) => {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  };
+
+  const handleLogout = async () => {
+    try {
+      // const response = await axios.post(
+      //   `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/logout/${cookieuser?.id}`
+      // );
+      removeCookie("token");
+      toast.warning("logging out");
+    } catch (err) {
+      toast.error("Logout Failed");
+      console.log("Error occurred", err);
+    } finally {
+      router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/homepage`);
+    }
+  };
 
   const handleClick = () => {
     router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/homepage`);
@@ -101,12 +124,18 @@ const AdminHome: React.FC = () => {
                   "Project Doers",
                   "Project Creators",
                   "All Projects",
+                  "Payment Table",
                   "Project Category",
                   "All Ebooks",
                   "Ebook Category",
                   "Testimonials",
                   "Feature Images",
                   "Help And Support",
+                  "Setting",
+                  "Admin Details",
+                  "Change Password",
+
+                  "Logout",
                 ].map((section) => (
                   <Tabs.Trigger
                     key={section}
@@ -120,6 +149,9 @@ const AdminHome: React.FC = () => {
                       }`
                     )}
                     onClick={() => {
+                      if (section === "logout") {
+                        handleLogout();
+                      }
                       setActiveSection(section);
                       if (window.innerWidth < 1024) {
                         toggleSidebar();
@@ -185,6 +217,9 @@ const AdminHome: React.FC = () => {
                   <h2>All Projects</h2>
                   <ProjectsTableComponent />
                 </Tabs.Content>
+                <Tabs.Content value="payment">
+                  <h2>Payment Table</h2>
+                </Tabs.Content>
                 <Tabs.Content value="projectcategory">
                   <h2>Project Category</h2>
                   <CategoryForm />
@@ -207,6 +242,21 @@ const AdminHome: React.FC = () => {
                 </Tabs.Content>
                 <Tabs.Content value="helpandsupport">
                   <HelpAndSupport />
+                </Tabs.Content>
+                <Tabs.Content value="setting">
+                  <h2>Setting</h2>
+                  <SettingPage />
+                </Tabs.Content>
+                <Tabs.Content value="admindetails">
+                  <h2>Admin Details</h2>
+                  <AdminDetails />
+                </Tabs.Content>
+                <Tabs.Content value="changepassword">
+                  <h2>ChangePassword</h2>
+                  <ChangePasswordDialog />
+                </Tabs.Content>
+                <Tabs.Content value="logout" onClick={handleLogout}>
+                  <h2>Logout</h2>
                 </Tabs.Content>
               </div>
             </MaxWidthWrapper>
