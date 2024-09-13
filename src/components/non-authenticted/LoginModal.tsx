@@ -233,7 +233,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
                   <span className="primary-text-gray">Login with Google</span>
                 </button>
               </div> */}
-              {/* <GoogleLoginButton /> */}
+              <GoogleLoginButton />
 
               {/* <div className="flex flex-row justify-start items-start">
                 <button

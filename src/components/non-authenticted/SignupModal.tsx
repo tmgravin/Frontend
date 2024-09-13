@@ -4,6 +4,7 @@ import { ToastContainer, toast } from "react-toastify";
 import Link from "next/link";
 import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
+import GoogleLoginWrapper from "./GoogleSignup/GoogleLoginWrapper";
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -95,6 +96,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
     setDefaultPicture(null);
   };
 
+  const [type, setType] = useState("");
   const handleSignupSubmit = async (
     e: FormEvent<HTMLFormElement>,
     isTeacher: boolean
@@ -202,13 +204,19 @@ const SignupModal: React.FC<SignupModalProps> = ({
                 <div>
                   <button
                     className="w-full bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
-                    onClick={() => setIsTeacherSignup(true)}
+                    onClick={() => {
+                      setIsTeacherSignup(true);
+                      setType("ASSIGNMENT_DOER");
+                    }}
                   >
                     Sign up as Doer
                   </button>
                   <button
                     className="w-full mt-2 bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
-                    onClick={() => setIsTeacherSignup(false)}
+                    onClick={() => {
+                      setIsTeacherSignup(false);
+                      setType("ASSIGNMENT_CREATOR");
+                    }}
                   >
                     Sign up as Creator
                   </button>
@@ -381,6 +389,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
                       ? "Signing Up..."
                       : `Sign Up as ${isTeacherSignup ? "DOER" : "CREATOR"}`}
                   </button>
+                  <GoogleLoginWrapper type={type} />
                 </form>
               )}
             </div>

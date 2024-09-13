@@ -87,7 +87,7 @@ function AboutUs() {
                 Mission
               </h2>
             </div>
-            <div className="bg-orange-500 p-6 rounded-t-3xl rounded-tr-3xl rounded-br-[2.5rem] -mt-3">
+            <div className="bg-orange-500 p-2 pb-6 rounded-t-3xl rounded-tr-3xl rounded-br-[2.5rem] -mt-3">
               <div className="bg-[#1a1a4b] text-white p-6 rounded-t-3xl ">
                 <p className="text-center text-lg">
                   lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum
@@ -102,7 +102,7 @@ function AboutUs() {
                 Vision
               </h2>
             </div>
-            <div className="bg-orange-500 p-6 rounded-t-3xl rounded-tr-3xl rounded-br-[2.5rem] -mt-3">
+            <div className="bg-orange-500 p-2 pb-6 rounded-t-3xl rounded-tr-3xl rounded-br-[2.5rem] -mt-3">
               <div className="bg-[#1a1a4b] text-white p-6 rounded-t-3xl ">
                 <p className="text-center text-lg">
                   lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum
@@ -117,7 +117,7 @@ function AboutUs() {
                 Our Philosophy
               </h2>
             </div>
-            <div className="bg-orange-500 p-6 rounded-t-3xl rounded-tr-3xl rounded-br-[2.5rem] -mt-3">
+            <div className="bg-orange-500 p-2 pb-6 rounded-t-3xl rounded-tr-3xl rounded-br-[2.5rem] -mt-3">
               <div className="bg-[#1a1a4b] text-white p-6 rounded-t-3xl ">
                 <p className="text-center text-lg">
                   lorem ipsum lorem ipsum lorem ipsum lorem ipsum lorem ipsum

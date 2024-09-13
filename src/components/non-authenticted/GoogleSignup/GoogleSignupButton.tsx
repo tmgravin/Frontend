@@ -1,24 +1,19 @@
 "use client";
-
 import React from "react";
-import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
+import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import Image from "next/image";
 
-// Define the shape of the decoded JWT token
-interface DecodedToken {
-  email: string;
-  name: string;
-  picture?: string;
+interface Props {
+  userType: string;
 }
 
-const GoogleLoginButton: React.FC = () => {
+const GoogleSignupButton: React.FC<Props> = ({ userType }) => {
+  console.log(userType, "from button");
   const handleSuccess = async (tokenResponse: any) => {
     console.log("Token Response:", tokenResponse);
 
     try {
-      // Fetch user info using the access token
       const userInfoResponse = await axios.get(
         "https://www.googleapis.com/oauth2/v3/userinfo",
         { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } }
@@ -27,9 +22,11 @@ const GoogleLoginButton: React.FC = () => {
       const userData = userInfoResponse.data;
       console.log("User Data:", userData);
 
-      // Send user data to the backend
       axios
-        .post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/googlesignup`, userData)
+        .post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/googlesignup`, {
+          ...userData,
+          userType,
+        })
         .then((response) => {
           console.log("Backend Response:", response.data);
         })
@@ -58,17 +55,9 @@ const GoogleLoginButton: React.FC = () => {
         width={20}
         height={20}
       />
-      <span>Login with Google</span>
+      <span>Signup with Google</span>
     </button>
   );
 };
 
-const GoogleLoginWrapper: React.FC = () => (
-  <GoogleOAuthProvider
-    clientId={process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID as string}
-  >
-    <GoogleLoginButton />
-  </GoogleOAuthProvider>
-);
-
-export default GoogleLoginWrapper;
+export default GoogleSignupButton;
