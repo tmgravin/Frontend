@@ -132,7 +132,7 @@ const AdminHome: React.FC = () => {
                   "Feature Images",
                   "Help And Support",
                   "Setting",
-                  "Admin Details",
+                  /*   "Admin Details", */
                   "Change Password",
 
                   "Logout",
@@ -245,18 +245,30 @@ const AdminHome: React.FC = () => {
                 </Tabs.Content>
                 <Tabs.Content value="setting">
                   <h2>Setting</h2>
-                  <SettingPage />
-                </Tabs.Content>
-                <Tabs.Content value="admindetails">
-                  <h2>Admin Details</h2>
                   <AdminDetails />
+                  {/* <SettingPage /> */}
                 </Tabs.Content>
+                {/*   <Tabs.Content value="admindetails">
+                  <h2>Admin Details</h2>
+                   <AdminDetails />
+                  
+                </Tabs.Content> */}
                 <Tabs.Content value="changepassword">
                   <h2>ChangePassword</h2>
                   <ChangePasswordDialog />
                 </Tabs.Content>
-                <Tabs.Content value="logout" onClick={handleLogout}>
-                  <h2>Logout</h2>
+                <Tabs.Content value="logout">
+                  <div className="flex justify-center items-center flex-col">
+                    <h2 className="text-3xl">
+                      Are You Sure You Want To Logout?
+                    </h2>
+                    <h1
+                      className="text-white text-4xl bg-red-600 rounded-md mt-5 hover:cursor-pointer"
+                      onClick={handleLogout}
+                    >
+                      LOGOUT
+                    </h1>
+                  </div>
                 </Tabs.Content>
               </div>
             </MaxWidthWrapper>

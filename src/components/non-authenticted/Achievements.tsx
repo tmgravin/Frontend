@@ -7,25 +7,27 @@ import { Swiper, SwiperSlide } from "swiper/react";
 // Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
-
+import "./Acheivements.css";
 const AchievementItem = ({
   imgSrc,
   title,
   subtitle,
-  isFirst,
+  imgWidth,
+  imgHeight,
 }: {
   imgSrc: string;
   title: string;
   subtitle: string;
-  isFirst?: boolean;
+  imgWidth?: number;
+  imgHeight?: number;
 }) => (
   <div className="flex flex-col items-center p-2">
     <div>
       <Image
         src={imgSrc}
         alt={title}
-        width={50} // Make the first image smaller
-        height={50} // Make the first image smaller
+        width={imgWidth || 50} // Use the provided width or default to 50
+        height={imgHeight || 50} // Use the provided height or default to 50
       />
     </div>
     <div className="ml-3 text-center">
@@ -47,6 +49,7 @@ export default function Achievements() {
           spaceBetween={10}
           slidesPerView={1}
           pagination={{ clickable: true }}
+          className="swiper-pagination-below" // Add custom class for Swiper
           breakpoints={{
             640: {
               slidesPerView: 2,
@@ -63,7 +66,8 @@ export default function Achievements() {
               imgSrc="/pngs/rocket.svg"
               title="100+"
               subtitle="Ongoing Projects"
-              isFirst={true} // Set to true for the first image
+              imgWidth={40} // Set specific width
+              imgHeight={40} // Set specific height
             />
           </SwiperSlide>
           <SwiperSlide>
@@ -71,6 +75,8 @@ export default function Achievements() {
               imgSrc="/pngs/freelancers.svg"
               title="100+"
               subtitle="Live Freelancers"
+              imgWidth={66}
+              imgHeight={66}
             />
           </SwiperSlide>
           <SwiperSlide>
@@ -78,6 +84,8 @@ export default function Achievements() {
               imgSrc="/pngs/paid.svg"
               title="$100"
               subtitle="Paid to Freelancers"
+              imgWidth={50}
+              imgHeight={50}
             />
           </SwiperSlide>
           <SwiperSlide>
@@ -85,6 +93,8 @@ export default function Achievements() {
               imgSrc="/pngs/Loyalty_customer.svg"
               title="100%"
               subtitle="Customer Satisfaction"
+              imgWidth={53}
+              imgHeight={53}
             />
           </SwiperSlide>
         </Swiper>
@@ -94,22 +104,29 @@ export default function Achievements() {
             imgSrc="/pngs/rocket.svg"
             title="100+"
             subtitle="Ongoing Projects"
-            isFirst={true} // Set to true for the first image
+            imgWidth={40} // Set specific width
+            imgHeight={40} // Set specific height
           />
           <AchievementItem
             imgSrc="/pngs/freelancers.svg"
             title="100+"
             subtitle="Live Freelancers"
+            imgWidth={66}
+            imgHeight={66}
           />
           <AchievementItem
             imgSrc="/pngs/paid.svg"
             title="$100"
             subtitle="Paid to Freelancers"
+            imgWidth={50}
+            imgHeight={50}
           />
           <AchievementItem
             imgSrc="/pngs/Loyalty_customer.svg"
             title="100%"
             subtitle="Customer Satisfaction"
+            imgWidth={53}
+            imgHeight={53}
           />
         </div>
       )}

@@ -1,0 +1,16 @@
+.swiper-pagination-below {
+    padding-bottom: 40px; /* Add space for pagination dots */
+  }
+  
+  .swiper-pagination {
+    bottom: 10px !important; /* Position the dots at the bottom */
+  }
+  
+  .swiper-pagination-bullet {
+    background-color: #000; /* Customize pagination dot color */
+  }
+  
+  .swiper-pagination-bullet-active {
+    background-color: #007bff; /* Customize active dot color */
+  }
+  

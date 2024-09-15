@@ -95,7 +95,7 @@ export default function HelpAndSupport() {
 
   return (
     <div className="p-6 bg-gray-50 min-h-screen">
-      <h1 className="text-3xl font-bold mb-6">Help and Support Requests</h1>
+      <h2 className="mb-6">Help and Support Requests</h2>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         {data.map((item) => (
           <div
