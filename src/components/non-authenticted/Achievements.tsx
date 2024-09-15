@@ -93,8 +93,8 @@ export default function Achievements() {
               imgSrc="/pngs/Loyalty_customer.svg"
               title="100%"
               subtitle="Customer Satisfaction"
-              imgWidth={53}
-              imgHeight={53}
+              imgWidth={55}
+              imgHeight={55}
             />
           </SwiperSlide>
         </Swiper>
@@ -125,8 +125,8 @@ export default function Achievements() {
             imgSrc="/pngs/Loyalty_customer.svg"
             title="100%"
             subtitle="Customer Satisfaction"
-            imgWidth={53}
-            imgHeight={53}
+            imgWidth={55}
+            imgHeight={55}
           />
         </div>
       )}

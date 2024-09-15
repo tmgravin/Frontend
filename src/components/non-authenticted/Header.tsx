@@ -135,7 +135,7 @@ const Header: React.FC = () => {
             </div>
           </div>
           <Link href={`${process.env.NEXT_PUBLIC_FRONTEND_URL}/ebooks`}>
-            <div className="flex items-center text-white justify-center pt-4 hover:underline ">
+            <div className="flex items-center text-black justify-center pt-4 hover:underline ">
               <i className="fas fa-book mr-2"></i>{" "}
               {/* Example icon, ensure you have Font Awesome or another icon library */}
               <span className="text-lg font-semibold">E-Books</span>

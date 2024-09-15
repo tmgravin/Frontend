@@ -6,7 +6,7 @@ interface WhyusProps {
 
 const Whyus: React.FC<WhyusProps> = ({ onGetStartedClick }) => {
   return (
-    <div className="w-full lg:h-screen text-white flex flex-col lg:flex-row justify-center items-center px-4 pt-5 bg-blue-800">
+    <div className="w-full lg:h-screen text-white flex flex-col lg:flex-row justify-center items-center px-4 pt-5 primary-navy-bluebg">
       {/* Apply the background image only on large screens */}
       <div
         className="hidden lg:block lg:w-1/2 lg:h-full"
