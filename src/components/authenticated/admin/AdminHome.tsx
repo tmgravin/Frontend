@@ -86,7 +86,7 @@ const AdminHome: React.FC = () => {
                     className="h-10 w-auto"
                   />
                   <div className="px-3">
-                    <h1 className="font-bold text-lg primary-navy-blue">
+                    <h1 className="font-bold text-lg text-orange-600">
                       MSP ACADEMY
                     </h1>
                   </div>

@@ -69,7 +69,7 @@ const Header: React.FC = () => {
                 height={50} // Provide appropriate height
               />
               <div className="mt-4 px-3">
-                <h1 className="text-xs font-bold sm:text-2xl primary-navy-blue">
+                <h1 className="text-xs font-bold sm:text-2xl text-orange-600">
                   MSP ACADEMY
                 </h1>
               </div>

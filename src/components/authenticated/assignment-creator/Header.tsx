@@ -79,7 +79,7 @@ const Header: React.FC = () => {
         <div className="flex flex-row justify-between items-center p-2">
           <div className="flex items-center">
             <Image src="/notextlogo.png" alt="logo" width={50} height={50} />
-            <div className="  text-sm sm:text-2xl font-potta font-bold primary-navy-blue mt-4 ml-2">
+            <div className="  text-sm sm:text-2xl font-potta font-bold text-orange-600 mt-4 ml-2">
               MSP ACADEMY
             </div>
           </div>
