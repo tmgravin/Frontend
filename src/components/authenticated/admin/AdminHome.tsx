@@ -48,12 +48,12 @@ const AdminHome: React.FC = () => {
       toast.error("Logout Failed");
       console.log("Error occurred", err);
     } finally {
-      router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/homepage`);
+      router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/mapacadey-admin`);
     }
   };
 
   const handleClick = () => {
-    router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/homepage`);
+    router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/mapacadey-admin`);
   };
 
   return (
@@ -162,6 +162,9 @@ const AdminHome: React.FC = () => {
                   </Tabs.Trigger>
                 ))}
               </div>
+              <Tabs.Trigger value="logout">
+                <button>asdaldkjalkdjaslk</button>
+              </Tabs.Trigger>
             </Tabs.List>
           </div>
         </aside>
