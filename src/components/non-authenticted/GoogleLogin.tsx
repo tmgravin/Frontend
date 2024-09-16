@@ -28,7 +28,7 @@ const GoogleLoginButton: React.FC = () => {
 
       // Create a FormData object and append user data with custom keys
       const formData = new FormData();
-      formData.append("googleaccesstoken", tokenResponse); // Google ID (unique)
+      formData.append("googleaccesstoken", tokenResponse.access_token); // Google ID (unique)
       formData.append("googleId", userData.sub); // Google ID (unique)
       formData.append("fullName", userData.name); // Full name
       formData.append("email", userData.email); // Email address

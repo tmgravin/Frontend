@@ -22,7 +22,7 @@ const GoogleSignupButton: React.FC<Props> = ({ userType }) => {
       // console.log("User Data:", userData);
       // Create a FormData object and append values
       const formData = new FormData();
-      formData.append("googleaccesstoken", tokenResponse); // Google ID (unique)
+      formData.append("googleaccesstoken", tokenResponse.access_token); // Google ID (unique)
 
       // formData.append("googleId", userData.sub); // Unique Google ID
       formData.append("name", userData.name); // Full name
