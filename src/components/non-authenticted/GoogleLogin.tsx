@@ -2,7 +2,6 @@
 
 import React from "react";
 import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
 import axios from "axios";
 import Image from "next/image";
 
@@ -27,9 +26,24 @@ const GoogleLoginButton: React.FC = () => {
       const userData = userInfoResponse.data;
       console.log("User Data:", userData);
 
-      // Send user data to the backend
+      // Create a FormData object and append user data with custom keys
+      const formData = new FormData();
+      formData.append("googleId", userData.sub); // Google ID (unique)
+      formData.append("fullName", userData.name); // Full name
+      formData.append("email", userData.email); // Email address
+      formData.append("profilePic", userData.picture); // Profile picture URL
+
+      // Send the FormData to the backend
       axios
-        .post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/googlesignup`, userData)
+        .post(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/googlesignup`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data", // Specify form-data content type
+            },
+          }
+        )
         .then((response) => {
           console.log("Backend Response:", response.data);
         })

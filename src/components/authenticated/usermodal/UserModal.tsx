@@ -12,16 +12,19 @@ import {
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useUserData from "@/components/providers/UserProvider";
-import axios from "axios";
 import { getUserFromCookies } from "@/components/cookie/oldtoken";
 const cookieuser = getUserFromCookies();
 
 const UserModal: React.FC = () => {
   const { user, setUser, fieldValues, setFieldValues, fetchData } =
     useUserData();
+
+  useEffect(() => {
+    fetchData;
+  }, []);
 
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

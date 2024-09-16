@@ -153,20 +153,18 @@ const ApplicantsInfoModal: React.FC<ApplicantsInfoModalProps> = ({
                   <TableCell>{assignment.coverLetter}</TableCell>
 
                   <TableCell className="flex flex-row">
-                    <Button
-                      variant="contained"
-                      className="primary-orangebg hover:bg-orange-600"
+                    <button
+                      className="bg-orange-500 hover:bg-orange-600 text-white m-2 rounded-sm p-1 text-xl"
                       onClick={() => acceptApplication(assignment.id)}
                     >
                       Accept
-                    </Button>
-                    <Button
-                      variant="contained"
-                      className="bg-white hover:bg-slate-300 text-black ml-2"
+                    </button>
+                    <button
+                      className="bg-red-500 hover:bg-red-600 text-white m-2 rounded-sm px-2 py-1 text-xl"
                       onClick={() => handleReject(assignment.id)}
                     >
                       Reject
-                    </Button>
+                    </button>
                   </TableCell>
                 </TableRow>
               ))

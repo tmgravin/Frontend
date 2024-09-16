@@ -9,7 +9,6 @@ interface Props {
 }
 
 const GoogleSignupButton: React.FC<Props> = ({ userType }) => {
-  console.log(userType, "from button");
   const handleSuccess = async (tokenResponse: any) => {
     console.log("Token Response:", tokenResponse);
 
@@ -20,13 +19,30 @@ const GoogleSignupButton: React.FC<Props> = ({ userType }) => {
       );
 
       const userData = userInfoResponse.data;
-      console.log("User Data:", userData);
+      // console.log("User Data:", userData);
+      // Create a FormData object and append values
+      const formData = new FormData();
+      // formData.append("googleId", userData.sub); // Unique Google ID
+      formData.append("name", userData.name); // Full name
+      formData.append("email", userData.email); // Email address
+      formData.append("picture", userData.picture); // Profile picture URL
+      formData.append("is-emailVerified", "Y");
+      formData.append("loginType", "googleLogin");
+      formData.append("userType", userType); // The userType passed as a prop
 
+      // Optionally, add more fields if needed
+
+      // Send the formData using axios
       axios
-        .post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/googlesignup`, {
-          ...userData,
-          userType,
-        })
+        .post(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/googlesignup`,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data", // Specify form-data content type
+            },
+          }
+        )
         .then((response) => {
           console.log("Backend Response:", response.data);
         })

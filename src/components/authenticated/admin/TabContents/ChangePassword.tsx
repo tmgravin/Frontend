@@ -45,50 +45,47 @@ const ChangePasswordDialog: React.FC = ({}) => {
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-4 rounded-lg shadow-lg w-80">
-        <h3 className="text-lg mb-4">Change Password</h3>
-        <form noValidate autoComplete="off">
-          <div className="mb-4">
-            <label className="block text-gray-700">Current Password</label>
-            <input
-              type="password"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">New Password</label>
-            <input
-              type="password"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-          </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Confirm New Password</label>
-            <input
-              type="password"
-              value={confirmNewPassword}
-              onChange={(e) => setConfirmNewPassword(e.target.value)}
-              className="w-full p-2 border border-gray-300 rounded"
-            />
-          </div>
-          <div className="flex justify-end">
-            <button
-              onClick={handleChangePassword}
-              className="px-4 py-2 primary-orangebg text-white rounded mr-2"
-            >
-              Save
-            </button>
-            <button className="px-4 py-2 bg-gray-300 text-black rounded">
-              Cancel
-            </button>
-          </div>
-        </form>
-      </div>
+    <div className=" flex items-start justify-center h-full w-full flex-col">
+      <form noValidate autoComplete="off">
+        <div className="mb-4">
+          <label className="block text-gray-700 ">Current Password</label>
+          <input
+            type="password"
+            value={currentPassword}
+            onChange={(e) => setCurrentPassword(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">New Password</label>
+          <input
+            type="password"
+            value={newPassword}
+            onChange={(e) => setNewPassword(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700">Confirm New Password</label>
+          <input
+            type="password"
+            value={confirmNewPassword}
+            onChange={(e) => setConfirmNewPassword(e.target.value)}
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
+        <div className="flex justify-end">
+          <button
+            onClick={handleChangePassword}
+            className="px-4 py-2 primary-orangebg text-white rounded mr-2"
+          >
+            Change Password
+          </button>
+          <button className="px-4 py-2 bg-gray-300 text-black rounded">
+            Cancel
+          </button>
+        </div>
+      </form>
     </div>
   );
 };

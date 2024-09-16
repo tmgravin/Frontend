@@ -10,7 +10,9 @@ function EbookHome() {
     <div>
       <Header />
       <Searchbar />
-      <EbookManager />
+      <div className="min-h-screen">
+        <EbookManager />
+      </div>
 
       <Footer />
     </div>

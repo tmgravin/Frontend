@@ -164,7 +164,7 @@ const CompletedAssignments: React.FC = () => {
                 Download Assignment:
                 <button
                   onClick={() => handleDownloadClick(item.file)}
-                  className="text-blue-500 underline ml-2"
+                  className="text-orange-500 underline ml-2"
                 >
                   Download
                 </button>
@@ -192,7 +192,7 @@ const CompletedAssignments: React.FC = () => {
         {visibleCount < data.length && (
           <button
             onClick={loadMore}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-700"
+            className="mt-4 px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-700"
             disabled={loading}
           >
             {loading ? "Loading..." : "Load More"}

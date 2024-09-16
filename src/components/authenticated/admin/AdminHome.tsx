@@ -263,7 +263,7 @@ const AdminHome: React.FC = () => {
                       Are You Sure You Want To Logout?
                     </h2>
                     <h1
-                      className="text-white text-4xl bg-red-600 rounded-md mt-5 hover:cursor-pointer"
+                      className="text-white text-4xl bg-red-600 rounded-md mt-5 hover:cursor-pointer p-2"
                       onClick={handleLogout}
                     >
                       LOGOUT

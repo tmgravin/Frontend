@@ -132,14 +132,12 @@ const PendingForApproval: React.FC = () => {
                 <Typography variant="body2">
                   Deadline: {item.projects.projectDeadline}
                 </Typography>
-                <Button
-                  variant="contained"
-                  className="primary-orangebg hover:bg-orange-700"
+                <button
+                  className="primary-orangebg hover:bg-orange-700 p-1 rounded-sm text-white"
                   onClick={() => handleViewApplicants(item)}
-                  sx={{ mt: 2 }}
                 >
                   View Applicants
-                </Button>
+                </button>
               </Box>
             </Grid>
           ))

@@ -92,7 +92,7 @@ const AssignmentStatus: React.FC = () => {
         {visibleCount < data.length && (
           <button
             onClick={loadMore}
-            className="mt-4 px-4 py-2 primary-orange-bg text-white rounded hover:bg-orange-600"
+            className="mt-4 px-4 py-2 bg-orange-500 text-white rounded hover:bg-orange-600"
             disabled={loading}
           >
             {loading ? "Loading..." : "Load More"}
