@@ -79,7 +79,7 @@ const AdminDetails: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto font-bold p-4 max-w-lg">
+    <div className="container mx-auto  p-4 max-w-lg">
       <h2 className="text-2xl mb-4">Personal Information</h2>
 
       <AdminImageDetails />

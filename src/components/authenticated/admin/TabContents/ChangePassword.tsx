@@ -45,7 +45,7 @@ const ChangePasswordDialog: React.FC = ({}) => {
   };
 
   return (
-    <div className=" flex items-start justify-center h-full w-full flex-col">
+    <div className=" flex items-center justify-center h-full w-full flex-col">
       <form noValidate autoComplete="off">
         <div className="mb-4">
           <label className="block text-gray-700 ">Current Password</label>

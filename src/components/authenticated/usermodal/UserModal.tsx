@@ -19,15 +19,15 @@ import { getUserFromCookies } from "@/components/cookie/oldtoken";
 const cookieuser = getUserFromCookies();
 
 const UserModal: React.FC = () => {
-  const { user, setUser, fieldValues, setFieldValues, fetchData } =
-    useUserData();
+  const { user, fetchData } = useUserData();
 
   useEffect(() => {
-    fetchData;
-  }, []);
+    fetchData();
+  }, [fetchData]);
 
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // State for modal visibility
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -45,7 +45,7 @@ const UserModal: React.FC = () => {
       //   `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/logout/${cookieuser?.id}`
       // );
       removeCookie("token");
-      toast.warning("logging out");
+      toast.warning("Logging out");
     } catch (err) {
       toast.error("Logout Failed");
       console.log("Error occurred", err);
@@ -78,6 +78,20 @@ const UserModal: React.FC = () => {
   const formatName = (name: string) => {
     if (!name) return "Loading...";
     return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+  };
+
+  const handleLogoutClick = () => {
+    setIsModalOpen(true); // Open the confirmation modal
+    setAnchorEl(null);
+  };
+
+  const confirmLogout = () => {
+    handleLogout();
+    setIsModalOpen(false); // Close the modal after logout
+  };
+
+  const cancelLogout = () => {
+    setIsModalOpen(false); // Just close the modal
   };
 
   return (
@@ -148,9 +162,33 @@ const UserModal: React.FC = () => {
           }}
         >
           <MenuItem onClick={handleSetting}>Settings</MenuItem>
-          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
         </Menu>
       </Box>
+
+      {/* Confirmation Modal */}
+      {isModalOpen && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+          <div className="bg-white p-6 rounded shadow-lg w-80">
+            <h3 className="text-lg font-semibold mb-4">Confirm Logout</h3>
+            <p className="mb-4">Are you sure you want to logout?</p>
+            <div className="flex justify-end space-x-2">
+              <button
+                onClick={confirmLogout}
+                className="bg-orange-500 text-white hover:bg-orange-600 px-4 py-2 rounded"
+              >
+                Logout
+              </button>
+              <button
+                onClick={cancelLogout}
+                className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

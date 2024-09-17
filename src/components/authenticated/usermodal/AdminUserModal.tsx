@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, MouseEvent, useEffect } from "react";
+import React, { useState, MouseEvent } from "react";
 import {
   Box,
   IconButton,
@@ -9,6 +9,11 @@ import {
   Avatar,
   useMediaQuery,
   useTheme,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Button,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
@@ -22,15 +27,22 @@ const cookieuser = getUserFromCookies();
 const AdminUserModal: React.FC = () => {
   const { user, setUser, fieldValues, setFieldValues, fetchData } =
     useAdminData();
-
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [openConfirmLogout, setOpenConfirmLogout] = useState(false);
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const handleMenuClick = (event: MouseEvent<HTMLElement>) =>
     setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
+
+  const handleOpenConfirmLogout = () => {
+    handleMenuClose();
+    setOpenConfirmLogout(true);
+  };
+
+  const handleCloseConfirmLogout = () => setOpenConfirmLogout(false);
 
   const removeCookie = (name: string) => {
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
@@ -42,7 +54,7 @@ const AdminUserModal: React.FC = () => {
       //   `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/logout/${cookieuser?.id}`
       // );
       removeCookie("token");
-      toast.warning("logging out");
+      toast.warning("Logging out...");
     } catch (err) {
       toast.error("Logout Failed");
       console.log("Error occurred", err);
@@ -135,7 +147,7 @@ const AdminUserModal: React.FC = () => {
         </Box>
         <Menu
           anchorEl={anchorEl}
-          open={openMenu}
+          open={Boolean(anchorEl)}
           onClose={handleMenuClose}
           anchorOrigin={{
             vertical: "bottom",
@@ -147,9 +159,36 @@ const AdminUserModal: React.FC = () => {
           }}
         >
           <MenuItem onClick={handleSetting}>Settings</MenuItem>
-          <MenuItem onClick={handleLogout}>Logout</MenuItem>
+          <MenuItem onClick={handleOpenConfirmLogout}>Logout</MenuItem>
         </Menu>
       </Box>
+
+      {/* Confirmation Modal */}
+      <Dialog open={openConfirmLogout} onClose={handleCloseConfirmLogout}>
+        <DialogTitle>Confirm Logout</DialogTitle>
+        <DialogContent>
+          <Typography>Are you sure you want to log out?</Typography>
+        </DialogContent>
+        <DialogActions>
+          <button
+            onClick={handleCloseConfirmLogout}
+            className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => {
+              handleLogout();
+              handleCloseConfirmLogout();
+            }}
+            className="bg-red-500 text-white hover:bg-red-600 px-4 py-2 rounded"
+          >
+            Logout
+          </button>
+        </DialogActions>
+      </Dialog>
+
+      <ToastContainer />
     </div>
   );
 };

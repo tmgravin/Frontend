@@ -22,10 +22,12 @@ import SettingPage from "../setting/SettingPage";
 import AdminDetails from "../setting/AdminDetails";
 import ChangePasswordDialog from "./TabContents/ChangePassword";
 import { toast } from "react-toastify";
+import FeedbackForm from "./TabContents/Feedback";
 
 const AdminHome: React.FC = () => {
   const [activeSection, setActiveSection] = useState<string>("dashboard");
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(true);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // State for modal visibility
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -48,12 +50,25 @@ const AdminHome: React.FC = () => {
       toast.error("Logout Failed");
       console.log("Error occurred", err);
     } finally {
-      router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/mapacadey-admin`);
+      router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/mspacademy-admin`);
     }
   };
 
+  const handleLogoutClick = () => {
+    setIsModalOpen(true); // Open the modal
+  };
+
+  const confirmLogout = () => {
+    handleLogout();
+    setIsModalOpen(false); // Close the modal after logout
+  };
+
+  const cancelLogout = () => {
+    setIsModalOpen(false); // Just close the modal
+  };
+
   const handleClick = () => {
-    router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/mapacadey-admin`);
+    router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/mspacademy-admin`);
   };
 
   return (
@@ -131,11 +146,9 @@ const AdminHome: React.FC = () => {
                   "Testimonials",
                   "Feature Images",
                   "Help And Support",
+                  "Feedback",
                   "Setting",
-                  /*   "Admin Details", */
                   "Change Password",
-
-                  "Logout",
                 ].map((section) => (
                   <Tabs.Trigger
                     key={section}
@@ -149,22 +162,28 @@ const AdminHome: React.FC = () => {
                       }`
                     )}
                     onClick={() => {
-                      if (section === "logout") {
-                        handleLogout();
-                      }
-                      setActiveSection(section);
-                      if (window.innerWidth < 1024) {
-                        toggleSidebar();
+                      if (section === "Logout") {
+                        handleLogoutClick();
+                      } else {
+                        setActiveSection(section);
+                        if (window.innerWidth < 1024) {
+                          toggleSidebar();
+                        }
                       }
                     }}
                   >
                     {section}
                   </Tabs.Trigger>
                 ))}
+                <button
+                  onClick={handleLogoutClick}
+                  className={cn(
+                    "p-2.5 cursor-pointer bg-gray-200 border border-gray-300 rounded text-left w-full h-12 flex items-start justify-start ease-in hover:bg-primary/70 hover:text-white"
+                  )}
+                >
+                  Logout
+                </button>
               </div>
-              <Tabs.Trigger value="logout">
-                <button>asdaldkjalkdjaslk</button>
-              </Tabs.Trigger>
             </Tabs.List>
           </div>
         </aside>
@@ -246,37 +265,48 @@ const AdminHome: React.FC = () => {
                 <Tabs.Content value="helpandsupport">
                   <HelpAndSupport />
                 </Tabs.Content>
+                <Tabs.Content value="feedback">
+                  <h2>Feedback</h2>
+
+                  <FeedbackForm />
+                </Tabs.Content>
                 <Tabs.Content value="setting">
                   <h2>Setting</h2>
+
                   <AdminDetails />
-                  {/* <SettingPage /> */}
                 </Tabs.Content>
-                {/*   <Tabs.Content value="admindetails">
-                  <h2>Admin Details</h2>
-                   <AdminDetails />
-                  
-                </Tabs.Content> */}
                 <Tabs.Content value="changepassword">
-                  <h2>ChangePassword</h2>
+                  <h2>Change Password</h2>
                   <ChangePasswordDialog />
-                </Tabs.Content>
-                <Tabs.Content value="logout">
-                  <div className="flex justify-center items-center flex-col">
-                    <h2 className="text-3xl">
-                      Are You Sure You Want To Logout?
-                    </h2>
-                    <h1
-                      className="text-white text-4xl bg-red-600 rounded-md mt-5 hover:cursor-pointer p-2"
-                      onClick={handleLogout}
-                    >
-                      LOGOUT
-                    </h1>
-                  </div>
                 </Tabs.Content>
               </div>
             </MaxWidthWrapper>
           </div>
         </div>
+
+        {/* --------------------------------- Confirmation Modal ----------------------------------- */}
+        {isModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white p-6 rounded shadow-lg w-80">
+              <h3 className="text-lg font-semibold mb-4">Confirm Logout</h3>
+              <p className="mb-4">Are you sure you want to logout?</p>
+              <div className="flex justify-end space-x-2">
+                <Button
+                  onClick={confirmLogout}
+                  className="bg-red-500 text-white hover:bg-red-600"
+                >
+                  Logout
+                </Button>
+                <Button
+                  onClick={cancelLogout}
+                  className="bg-gray-300 hover:bg-gray-400"
+                >
+                  Cancel
+                </Button>
+              </div>
+            </div>
+          </div>
+        )}
       </Tabs.Root>
     </div>
   );

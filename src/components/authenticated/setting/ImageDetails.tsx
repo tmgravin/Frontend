@@ -88,7 +88,7 @@ const ImageDetails: React.FC = () => {
   };
 
   return (
-    <div className="container mx-auto font-bold p-4 max-w-lg">
+    <div className="container mx-auto p-4 max-w-lg">
       <div className="flex items-center justify-center mb-4">
         <Image
           src={previewUrl || user.profileImageUrl || "/default-img.png"} // Show preview if available, else show the current image

@@ -223,7 +223,7 @@ const BankDetails: React.FC = () => {
           <button
             onClick={handlePostToggle}
             disabled={isPostDisabled}
-            className="primary-orangebg rounded-sm px-3 py-1 font-bold text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+            className="primary-orangebg rounded-sm px-3 py-1  text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
           >
             Add Bank Details
           </button>
@@ -231,7 +231,7 @@ const BankDetails: React.FC = () => {
           <button
             onClick={handleEditToggle}
             disabled={isEditDisabled}
-            className="primary-orangebg rounded-sm px-3 font-bold py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+            className="primary-orangebg rounded-sm px-3  py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
           >
             Edit Bank Details
           </button>

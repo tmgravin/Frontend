@@ -11,8 +11,8 @@ interface FormData {
   firstName: string;
   lastName: string;
   email: string;
-  feedback: string;
-  rating: string;
+  message: string;
+  quality: string;
 }
 
 const FeedbackForm: React.FC = () => {
@@ -25,8 +25,8 @@ const FeedbackForm: React.FC = () => {
     firstName: "",
     lastName: "",
     email: "",
-    feedback: "",
-    rating: "",
+    message: "",
+    quality: "",
   });
 
   const [responseMessage, setResponseMessage] = useState<string>("");
@@ -48,7 +48,7 @@ const FeedbackForm: React.FC = () => {
 
     try {
       const response = await axios.post<{ message: string }>(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/feedback`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/feedback/`,
         formData
       );
       setResponseMessage(response.data.message);
@@ -143,9 +143,9 @@ const FeedbackForm: React.FC = () => {
               <label className="block">
                 <input
                   type="radio"
-                  name="rating"
+                  name="quality"
                   value="Excellent"
-                  checked={formData.rating === "Excellent"}
+                  checked={formData.quality === "Excellent"}
                   onChange={handleChange}
                   className="mr-2"
                 />
@@ -154,9 +154,9 @@ const FeedbackForm: React.FC = () => {
               <label className="block">
                 <input
                   type="radio"
-                  name="rating"
+                  name="quality"
                   value="Very Good"
-                  checked={formData.rating === "Very Good"}
+                  checked={formData.quality === "Very Good"}
                   onChange={handleChange}
                   className="mr-2"
                 />
@@ -165,9 +165,9 @@ const FeedbackForm: React.FC = () => {
               <label className="block">
                 <input
                   type="radio"
-                  name="rating"
+                  name="quality"
                   value="Good"
-                  checked={formData.rating === "Good"}
+                  checked={formData.quality === "Good"}
                   onChange={handleChange}
                   className="mr-2"
                 />
@@ -176,9 +176,9 @@ const FeedbackForm: React.FC = () => {
               <label className="block">
                 <input
                   type="radio"
-                  name="rating"
+                  name="quality"
                   value="Average"
-                  checked={formData.rating === "Average"}
+                  checked={formData.quality === "Average"}
                   onChange={handleChange}
                   className="mr-2"
                 />
@@ -187,9 +187,9 @@ const FeedbackForm: React.FC = () => {
               <label className="block">
                 <input
                   type="radio"
-                  name="rating"
+                  name="quality"
                   value="Poor"
-                  checked={formData.rating === "Poor"}
+                  checked={formData.quality === "Poor"}
                   onChange={handleChange}
                   className="mr-2"
                 />
@@ -201,7 +201,7 @@ const FeedbackForm: React.FC = () => {
           {/* Feedback Suggestion */}
           <div>
             <label
-              htmlFor="feedback"
+              htmlFor="message"
               className="block text-sm font-medium text-gray-700"
             >
               Do you have any suggestion on what we can do to provide you with a
@@ -209,9 +209,9 @@ const FeedbackForm: React.FC = () => {
             </label>
             <textarea
               id="feedback"
-              name="feedback"
+              name="message"
               placeholder="Type here...."
-              value={formData.feedback}
+              value={formData.message}
               onChange={handleChange}
               rows={4}
               required

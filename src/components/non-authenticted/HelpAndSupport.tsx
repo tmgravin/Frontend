@@ -11,6 +11,7 @@ const HelpAndSupport: React.FC = () => {
   const handleBackClick = () => {
     router.back();
   };
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -20,7 +21,9 @@ const HelpAndSupport: React.FC = () => {
   });
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData({
@@ -37,16 +40,16 @@ const HelpAndSupport: React.FC = () => {
         `${process.env.NEXT_PUBLIC_BASE_URL}/api/help/`,
         formData
       );
-      if (response.status == 200)
-        toast.success("message sumbitted successfully");
-      setFormData({
-        firstName: "",
-        lastName: "",
-        email: "",
-        issueType: "",
-        message: "",
-      });
-      // console.log("Form submitted successfully:", response.data);
+      if (response.status === 200) {
+        toast.success("Message submitted successfully");
+        setFormData({
+          firstName: "",
+          lastName: "",
+          email: "",
+          issueType: "",
+          message: "",
+        });
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -129,15 +132,21 @@ const HelpAndSupport: React.FC = () => {
             >
               Issue Type
             </label>
-            <input
-              type="text"
+            <select
               id="issueType"
               name="issueType"
               value={formData.issueType}
               onChange={handleChange}
               required
               className="cb-shadow mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
+            >
+              <option value="">Select an issue type</option>
+              <option value="technical">Technical Issue</option>
+              <option value="billing">Billing Issue</option>
+              <option value="account">Account Issue</option>
+              <option value="general">General Inquiry</option>
+              <option value="other">General Inquiry</option>
+            </select>
           </div>
 
           <div>
