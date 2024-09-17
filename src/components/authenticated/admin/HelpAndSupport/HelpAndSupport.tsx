@@ -1,4 +1,3 @@
-// HelpAndSupport.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -90,6 +89,27 @@ export default function HelpAndSupport() {
     }
   };
 
+  const handleDelete = async (id: string) => {
+    if (!window.confirm("Are you sure you want to delete this feedback?")) {
+      return;
+    }
+
+    try {
+      await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/api/help/${id}`, {
+        headers: {
+          Authorization: `Bearer ${cookieuser?.token}`,
+        },
+        withCredentials: true,
+      });
+
+      setData(data.filter((item) => item.id !== id)); // Remove the deleted item from state
+      toast.success("Feedback deleted successfully!");
+    } catch (error) {
+      toast.error("Failed to delete feedback.");
+      console.error("Error occurred while deleting feedback:", error);
+    }
+  };
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>{error}</p>;
 
@@ -118,12 +138,21 @@ export default function HelpAndSupport() {
               <strong>Created At:</strong>{" "}
               {new Date(item.createdAt).toLocaleString()}
             </p>
-            <button
-              className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-              onClick={() => openModal(item.id, item.email)}
-            >
-              Reply
-            </button>
+
+            <div className="flex flex-row justify-around">
+              <button
+                className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
+                onClick={() => openModal(item.id, item.email)}
+              >
+                Reply
+              </button>
+              <button
+                className="mt-4 bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
+                onClick={() => handleDelete(item.id)}
+              >
+                Delete
+              </button>
+            </div>
           </div>
         ))}
       </div>

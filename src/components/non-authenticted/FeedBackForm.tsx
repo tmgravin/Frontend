@@ -233,7 +233,9 @@ const FeedbackForm: React.FC = () => {
           <p className="mt-4 text-center text-green-600">{responseMessage}</p>
         )}
       </div>
-      <Footer />
+      <div className="mt-10">
+        <Footer />
+      </div>
     </div>
   );
 };

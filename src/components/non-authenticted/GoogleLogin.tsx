@@ -4,6 +4,9 @@ import React from "react";
 import { GoogleOAuthProvider, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import Image from "next/image";
+import { toast } from "react-toastify";
+import { getUserFromCookies } from "../cookie/oldtoken";
+import { useRouter } from "next/navigation";
 
 // Define the shape of the decoded JWT token
 interface DecodedToken {
@@ -13,6 +16,16 @@ interface DecodedToken {
 }
 
 const GoogleLoginButton: React.FC = () => {
+  const router = useRouter();
+  function setTokenCookie(token: string) {
+    // Encode the token value directly
+    const tokenValue = encodeURIComponent(token);
+    const expiryDate = new Date();
+    expiryDate.setDate(expiryDate.getDate() + 7); // Cookie expires in 7 days
+
+    // Set the cookie with the token value
+    document.cookie = `token=${tokenValue}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
+  }
   const handleSuccess = async (tokenResponse: any) => {
     console.log("Token Response:", tokenResponse);
 
@@ -26,33 +39,49 @@ const GoogleLoginButton: React.FC = () => {
       const userData = userInfoResponse.data;
       console.log("User Data:", userData);
 
-      // Create a FormData object and append user data with custom keys
       const formData = new FormData();
-      formData.append("googleaccesstoken", tokenResponse.access_token); // Google ID (unique)
-      formData.append("googleId", userData.sub); // Google ID (unique)
-      formData.append("fullName", userData.name); // Full name
-      formData.append("email", userData.email); // Email address
-      formData.append("profilePic", userData.picture); // Profile picture URL
+      formData.append("googleAccessToken", tokenResponse.access_token);
 
-      // Send the FormData to the backend
-      axios
-        .post(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/googlesignup`,
+      try {
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/google/login`,
           formData,
           {
             headers: {
-              "Content-Type": "multipart/form-data", // Specify form-data content type
+              "Content-Type": "multipart/form-data",
             },
           }
-        )
-        .then((response) => {
-          console.log("Backend Response:", response.data);
-        })
-        .catch((error) => {
-          console.error("Error sending data to backend:", error);
-        });
+        );
+
+        if (response.status === 200) {
+          setTokenCookie(response.data); // Set token data in cookie
+          const user = getUserFromCookies();
+          if (user) {
+            console.log("User from login:", user.userType, user.token);
+            toast.success("Login successful!");
+            if (user.userType === "ASSIGNMENT_CREATOR") {
+              router.push(
+                `${process.env.NEXT_PUBLIC_FRONTEND_URL}/project-creator`
+              );
+            } else if (user.userType === "ASSIGNMENT_DOER") {
+              router.push(
+                `${process.env.NEXT_PUBLIC_FRONTEND_URL}/project-doer`
+              );
+            }
+          } else {
+            console.error("Failed to retrieve user token or token not found.");
+          }
+        }
+      } catch (error: any) {
+        console.error("Login failed:", error);
+        const errorMessage =
+          error.response?.data?.message ||
+          "Login failed. Please check your email and credentials.";
+        toast.error(errorMessage);
+      }
     } catch (error) {
-      console.error("Failed to fetch user data:", error);
+      console.error("Error fetching user info:", error);
+      toast.error("Failed to retrieve user info from Google.");
     }
   };
 

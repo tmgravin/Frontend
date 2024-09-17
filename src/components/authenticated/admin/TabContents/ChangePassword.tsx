@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { getUserFromCookies } from "@/components/cookie/oldtoken";
 const cookieuser = getUserFromCookies();
 const userId = cookieuser?.id;

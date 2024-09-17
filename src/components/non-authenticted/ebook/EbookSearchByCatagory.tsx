@@ -119,7 +119,7 @@ const Searchbar: React.FC = () => {
             </select>
             <button
               type="submit"
-              className="px-4 primary-orangebg text-white rounded-md md:rounded-r-md hover:bg-orange-600 w-full md:w-auto"
+              className="px-4 primary-orangebg text-white md:rounded-r-md hover:bg-orange-600 w-full md:w-auto"
               disabled={isLoading}
             >
               {isLoading ? "Loading..." : "Search"}

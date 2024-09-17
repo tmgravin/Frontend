@@ -6,7 +6,7 @@ function page() {
   return (
     <div className="">
       <HelpAndSupport />
-      <div className="">
+      <div className="mt-10">
         <Footer />
       </div>
     </div>

@@ -3,12 +3,25 @@ import React from "react";
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import Image from "next/image";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
+import { getUserFromCookies } from "@/components/cookie/oldtoken";
 
 interface Props {
   userType: string;
 }
 
 const GoogleSignupButton: React.FC<Props> = ({ userType }) => {
+  const router = useRouter();
+  function setTokenCookie(token: string) {
+    // Encode the token value directly
+    const tokenValue = encodeURIComponent(token);
+    const expiryDate = new Date();
+    expiryDate.setDate(expiryDate.getDate() + 7); // Cookie expires in 7 days
+
+    // Set the cookie with the token value
+    document.cookie = `token=${tokenValue}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
+  }
   const handleSuccess = async (tokenResponse: any) => {
     console.log("Token Response:", tokenResponse);
 
@@ -19,40 +32,50 @@ const GoogleSignupButton: React.FC<Props> = ({ userType }) => {
       );
 
       const userData = userInfoResponse.data;
-      // console.log("User Data:", userData);
-      // Create a FormData object and append values
       const formData = new FormData();
-      formData.append("googleaccesstoken", tokenResponse.access_token); // Google ID (unique)
+      formData.append("googleAccessToken", tokenResponse.access_token);
+      formData.append("userType", userType);
 
-      // formData.append("googleId", userData.sub); // Unique Google ID
-      formData.append("name", userData.name); // Full name
-      formData.append("email", userData.email); // Email address
-      formData.append("picture", userData.picture); // Profile picture URL
-      formData.append("is-emailVerified", "Y");
-      formData.append("loginType", "googleLogin");
-      formData.append("userType", userType); // The userType passed as a prop
-
-      // Optionally, add more fields if needed
-
-      // Send the formData using axios
-      axios
-        .post(
-          `${process.env.NEXT_PUBLIC_BASE_URL}/api/googlesignup`,
+      try {
+        const response = await axios.post(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/api/google/signup`,
           formData,
           {
             headers: {
-              "Content-Type": "multipart/form-data", // Specify form-data content type
+              "Content-Type": "multipart/form-data",
             },
           }
-        )
-        .then((response) => {
-          console.log("Backend Response:", response.data);
-        })
-        .catch((error) => {
-          console.error("Error sending data to backend:", error);
-        });
+        );
+
+        if (response.status === 200) {
+          setTokenCookie(response.data); // Set token data in cookie
+          const user = getUserFromCookies();
+          if (user) {
+            console.log("User from login:", user.userType, user.token);
+            toast.success("Login successful!");
+            if (user.userType === "ASSIGNMENT_CREATOR") {
+              router.push(
+                `${process.env.NEXT_PUBLIC_FRONTEND_URL}/project-creator`
+              );
+            } else if (user.userType === "ASSIGNMENT_DOER") {
+              router.push(
+                `${process.env.NEXT_PUBLIC_FRONTEND_URL}/project-doer`
+              );
+            }
+          } else {
+            console.error("Failed to retrieve user token or token not found.");
+          }
+        }
+      } catch (error: any) {
+        console.error("Login failed:", error);
+        const errorMessage =
+          error.response?.data?.message ||
+          "Login failed. Please check your email and credentials.";
+        toast.error(errorMessage);
+      }
     } catch (error) {
-      console.error("Failed to fetch user data:", error);
+      console.error("Error fetching user info:", error);
+      toast.error("Failed to retrieve user info from Google.");
     }
   };
 
@@ -73,7 +96,7 @@ const GoogleSignupButton: React.FC<Props> = ({ userType }) => {
         width={20}
         height={20}
       />
-      <span>Signup with Google</span>
+      <span>Continue with Google</span>
     </button>
   );
 };

@@ -36,14 +36,13 @@ const AdminLogin: React.FC = () => {
         }
       );
       if (response.status == 200 /* && response.data.userType == "ADMIN" */) {
-        toast.success("login successful");
+        toast.success("Login Successful.");
         setUserCookie(response.data); // Set user data in cookie
         router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/admindashboard`);
       }
     } catch (error: any) {
       const errorMessage =
-        error.response?.data ||
-        "Login failed. Please verify email and check your credentials.";
+        error.response?.data || "Login failed. Please check your credentials.";
       toast.error(errorMessage);
     }
   };

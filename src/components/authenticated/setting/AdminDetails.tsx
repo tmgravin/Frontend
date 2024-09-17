@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import { getUserFromCookies } from "@/components/cookie/oldtoken"; // Adjust the path as necessary
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import ChangePasswordDialog from "./ChangePasswordDialog";
 import useAdminData from "@/components/providers/AdminProvides";
 import AdminImageDetails from "./AdminImageDetails";

@@ -143,11 +143,11 @@ const SignupModal: React.FC<SignupModalProps> = ({
           toggleModal();
         }, 400);
       }
-    } catch (error) {
-      console.error("Signup failed", error);
-      toast.error("Signup failed. Please try again.");
-    } finally {
-      setIsLoading(false);
+    } catch (error: any) {
+      console.error("Signup failed. Please try again.", error);
+      const errorMessage =
+        error.response?.data || "Signup failed. Please try again.";
+      toast.error(errorMessage);
     }
   };
 

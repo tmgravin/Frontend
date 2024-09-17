@@ -65,7 +65,7 @@ const HelpAndSupport: React.FC = () => {
         Back
       </button>
 
-      <div className="max-w-lg mx-auto p-4 cb-shadow">
+      <div className="max-w-lg mx-auto p-4 ">
         <h1 className="text-2xl font-bold mb-4 text-center">
           Help and Support
         </h1>
@@ -145,7 +145,7 @@ const HelpAndSupport: React.FC = () => {
               <option value="billing">Billing Issue</option>
               <option value="account">Account Issue</option>
               <option value="general">General Inquiry</option>
-              <option value="other">General Inquiry</option>
+              <option value="other">Others</option>
             </select>
           </div>
 
