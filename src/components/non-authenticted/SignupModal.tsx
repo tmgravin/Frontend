@@ -5,6 +5,7 @@ import Link from "next/link";
 import "react-toastify/dist/ReactToastify.css";
 import Image from "next/image";
 import GoogleLoginWrapper from "./GoogleSignup/GoogleLoginWrapper";
+import { Padding } from "@mui/icons-material";
 
 interface SignupModalProps {
   isOpen: boolean;
@@ -34,7 +35,7 @@ interface SignupData {
 const SignupModal: React.FC<SignupModalProps> = ({
   isOpen,
   toggleModal,
-  toggleLoginModal = () => {},
+  toggleLoginModal = () => { },
   isTeacherSignup,
   setIsTeacherSignup,
   teacherSignupData,
@@ -46,6 +47,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [profilePicture, setProfilePicture] = useState<File | null>(null);
   const [defaultPicture, setDefaultPicture] = useState<string | null>(null);
+  const [currentPictureIndex, setCurrentPictureIndex] = useState(0);
   const defaultPictures = [
     "/profilepic/1.jpg",
     "/profilepic/2.jpg",
@@ -53,6 +55,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
     "/profilepic/4.jpg",
     "/profilepic/5.jpg",
     "/profilepic/6.jpg",
+    "/profilepic/7.png",
   ];
 
   const handlePictureUpload = (e: ChangeEvent<HTMLInputElement>) => {
@@ -62,18 +65,22 @@ const SignupModal: React.FC<SignupModalProps> = ({
     }
   };
 
-  const handleDefaultPictureSelect = async (picturePath: string) => {
-    try {
-      const response = await fetch(picturePath);
-      const blob = await response.blob();
-      const file = new File([blob], `default_${picturePath.split("/").pop()}`, {
-        type: blob.type,
+  const handleDefaultPictureSelect = (index: number) => {
+    setCurrentPictureIndex(index);
+    const picturePath = defaultPictures[index];
+    fetch(picturePath)
+      .then(response => response.blob())
+      .then(blob => {
+        const file = new File([blob], `default_${picturePath.split("/").pop()}`, {
+          type: blob.type,
+        });
+        setProfilePicture(file);
+        setDefaultPicture(picturePath);
+      })
+      .catch(error => {
+        console.error("Error fetching default picture:", error);
+        toast.error("Failed to select default picture. Please try again.");
       });
-      setProfilePicture(file);
-    } catch (error) {
-      console.error("Error fetching default picture:", error);
-      toast.error("Failed to select default picture. Please try again.");
-    }
   };
 
   const clearForm = () => {
@@ -137,7 +144,8 @@ const SignupModal: React.FC<SignupModalProps> = ({
         }
       );
       if (response.status === 200) {
-        toast.success("Signup successful! Please verify your email and log in");
+        const successMessage = response.data.message || "Signup successful! Please verify your email for log in";
+        toast.success(successMessage);
         clearForm();
         setTimeout(() => {
           toggleModal();
@@ -145,8 +153,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
       }
     } catch (error: any) {
       console.error("Signup failed. Please try again.", error);
-      const errorMessage =
-        error.response?.data || "Signup failed. Please try again.";
+      const errorMessage = "Signup failed. Please try again.";
       toast.error(errorMessage);
     }
   };
@@ -174,8 +181,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
       >
         <div className="relative p-4 w-full max-w-md max-h-full">
           <div className="relative bg-white rounded-lg shadow overflow-y-auto max-h-[90vh]">
-            <div className="flex items-center justify-between p-4 md:p-5 rounded-t dark:border-gray-600">
-              <h3 className="text-xl font-semibold">Sign up</h3>
+            <div className="flex justify-end px-4 md:px-5 rounded-t dark:border-gray-600">
               <button
                 type="button"
                 className="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white"
@@ -198,6 +204,15 @@ const SignupModal: React.FC<SignupModalProps> = ({
                 </svg>
                 <span className="sr-only">Close modal</span>
               </button>
+            </div>
+            <div className="flex flex-col justify-center items-center">
+              <Image src="/notextlogo.png" alt="logo" width={50} height={50} />
+              <div className="text-xl font-semibold primary-navy-blue">
+                Welcome to
+              </div>
+              <div className="text-xl font-semibold primary-navy-blue">
+                MSP Academy
+              </div>
             </div>
             <div className="p-4 md:p-5">
               {isTeacherSignup === null ? (
@@ -241,6 +256,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
                   onSubmit={(e) => handleSignupSubmit(e, isTeacherSignup)}
                   onKeyDown={handleKeyDown}
                 >
+                  <div className="mb-4">
                   <button
                     type="button"
                     className="text-gray-600 hover:text-gray-900"
@@ -249,93 +265,66 @@ const SignupModal: React.FC<SignupModalProps> = ({
                       clearForm();
                     }}
                   >
-                    &larr; Back
+                    Back
                   </button>
-
-                  <div className="mb-4">
-                    {(profilePicture || defaultPicture) && (
-                      <div className="mt-2 flex justify-center items-center ">
-                        <img
-                          src={
-                            profilePicture
-                              ? URL.createObjectURL(profilePicture)
-                              : defaultPicture!
-                          }
-                          alt="Selected profile"
-                          className="w-24 h-24 object-cover rounded-full"
-                        />
-                      </div>
-                    )}
-                    <label className="mt-1 flex justify-center items-center text-sm font-medium text-gray-700">
-                      Choose Profile Picture
+                    <label style={{ padding: "5px" }} className="flex justify-center items-center text-sm font-medium text-gray-700">
+                      Choose Profile for signup
                     </label>
-                    <div className="mt-1 flex items-center space-x-4 overflow-x-auto">
-                      {defaultPictures.map((pic, index) => (
-                        <img
-                          key={index}
-                          src={pic}
-                          alt={`Default ${index + 1}`}
-                          className={`w-12 h-12 rounded-full cursor-pointer ${
-                            defaultPicture === pic
-                              ? "border-2 border-blue-500"
-                              : ""
-                          }`}
-                          onClick={() => handleDefaultPictureSelect(pic)}
-                        />
-                      ))}
+                    <div className="relative flex items-center justify-center space-x-4 overflow-x-auto whitespace-nowrap">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCurrentPictureIndex((prevIndex) =>
+                            prevIndex === 0 ? defaultPictures.length - 1 : prevIndex - 1
+                          );
+                        }}
+                        className=" left-0"
+                      >
+                        &lt;
+                      </button>
+                      <img
+                        src={defaultPictures[currentPictureIndex]}
+                        alt={`Default ${currentPictureIndex + 1}`}
+                        className="w-24 h-24 justify-center items-center rounded-full cursor-pointer border-2"
+                        onClick={() => handleDefaultPictureSelect(currentPictureIndex)}
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCurrentPictureIndex((prevIndex) =>
+                            prevIndex === defaultPictures.length - 1 ? 0 : prevIndex + 1
+                          );
+                        }}
+                        className=" right-0"
+                      >
+                        &gt;
+                      </button>
                     </div>
-                    <div className="flex justify-center items-center mt-1">
-                      or
-                    </div>
-                    <label className="flex w-full justify-center items-center bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105 mt-1">
-                      Upload
+
+                    <label className="flex w-full justify-center items-center bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105 mt-2">
+                      Upload your own
                       <input
                         type="file"
-                        className="hidden "
+                        className="hidden"
                         accept="image/*"
                         onChange={handlePictureUpload}
                       />
                     </label>
                   </div>
-                  {[
-                    {
-                      name: "name",
-                      type: "text",
-                      placeholder: "Full Name",
-                      required: true,
-                    },
-                    {
-                      name: "email",
-                      type: "email",
-                      placeholder: "Email Address",
-                      required: true,
-                    },
-                    {
-                      name: "address",
-                      type: "text",
-                      placeholder: "Address",
-                      required: false,
-                    }, // Address is optional
-                    {
-                      name: "phone",
-                      type: "tel",
-                      placeholder: "Phone Number",
-                      required: true,
-                    },
-                    {
-                      name: "password",
-                      type: "password",
-                      placeholder: "Password",
-                      required: true,
-                    },
-                    {
-                      name: "confirmPassword",
-                      type: "password",
-                      placeholder: "Confirm Password",
-                      required: true,
-                    },
-                  ].map((field) => (
-                    <div key={field.name} className="relative cb-shadow">
+                  {[...Object.entries({
+                    name: "Full Name",
+                    email: "Email Address",
+                    address: "Address",
+                    phone: "Phone Number",
+                    password: "Password",
+                    confirmPassword: "Confirm Password",
+                  }).map(([name, placeholder], index) => ({
+                    name,
+                    type: name == "password" || name == "confirmPassword" ? "password" : "text",
+                    placeholder,
+                    required: true,
+                  }))].map((field) => (
+                    <div key={field.name} className="relative">
                       <input
                         type={field.type}
                         name={field.name}
@@ -346,9 +335,9 @@ const SignupModal: React.FC<SignupModalProps> = ({
                             : studentSignupData[field.name as keyof SignupData]
                         }
                         onChange={(e) => handleSignupChange(e, isTeacherSignup)}
-                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pr-10 p-2.5"
+                        className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-blue-500 block w-full pr-10 p-2.5"
                         placeholder={field.placeholder}
-                        required={field.required} // Dynamically set required attribute
+                        required={field.required}
                       />
                       {field.name === "email" && (
                         <span className="absolute inset-y-0 right-0 pr-3 flex items-center pointer-events-none">
@@ -389,6 +378,11 @@ const SignupModal: React.FC<SignupModalProps> = ({
                       ? "Signing Up..."
                       : `Sign Up as ${isTeacherSignup ? "DOER" : "CREATOR"}`}
                   </button>
+                  <div className="flex items-center">
+                    <div className="flex-grow border-t border-black"></div>
+                    <span className="mx-4" >or</span>
+                    <div className="flex-grow border-t border-black"></div>
+                  </div>
                   <GoogleLoginWrapper type={type} />
                 </form>
               )}

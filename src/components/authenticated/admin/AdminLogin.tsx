@@ -41,8 +41,7 @@ const AdminLogin: React.FC = () => {
         router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/admindashboard`);
       }
     } catch (error: any) {
-      const errorMessage =
-        error.response?.data || "Login failed. Please check your credentials.";
+      const errorMessage = "Login failed. Please check your credentials.";
       toast.error(errorMessage);
     }
   };

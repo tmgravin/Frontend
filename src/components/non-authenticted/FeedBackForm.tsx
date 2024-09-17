@@ -72,12 +72,12 @@ const FeedbackForm: React.FC = () => {
       >
         Back
       </button>
-      <div className="max-w-lg mx-auto pb-6 bg-white shadow-lg rounded-lg ">
-        <h2 className="text-2xl font-bold text-center mb-6 flex items-start">
-          Feedback Form
-        </h2>
+      <div className="max-w-lg mx-auto pb-4">
+      <h1 className="text-2xl mb-4 text-center">
+          Feedback Section
+        </h1>
+        <br/>
         <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Name Fields */}
           <div className="flex space-x-4">
             <div className="w-1/2">
               <label
@@ -210,7 +210,7 @@ const FeedbackForm: React.FC = () => {
             <textarea
               id="feedback"
               name="message"
-              placeholder="Type here...."
+              placeholder="Suggestion here...."
               value={formData.message}
               onChange={handleChange}
               rows={4}
@@ -219,13 +219,14 @@ const FeedbackForm: React.FC = () => {
             />
           </div>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full primary-orangebg text-white py-2 rounded-lg hover:bg-orange-600 focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
-          >
-            Submit
-          </button>
+          <div className="flex justify-center">
+            <button
+              type="submit"
+              className="ml-2 primary-orangebg rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
+            >
+              Submit
+            </button>
+          </div>
         </form>
 
         {/* Response Message */}

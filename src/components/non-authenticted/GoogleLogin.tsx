@@ -29,19 +29,6 @@ const GoogleLoginButton: React.FC = () => {
   const handleSuccess = async (tokenResponse: any) => {
     console.log("Token Response:", tokenResponse);
 
-    // try {
-    //   // Fetch user info using the access token
-    //   const userInfoResponse = await axios.get(
-    //     "https://www.googleapis.com/oauth2/v3/userinfo",
-    //     { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } }
-    //   );
-
-    //   const userData = userInfoResponse.data;
-    //   console.log("User Data:", userData);
-    // } catch (error) {
-    //   console.error("Error fetching user info:", error);
-    //   toast.error("Failed to retrieve user info from Google.");
-    // }
     const formData = new FormData();
     formData.append("googleAccessToken", tokenResponse.access_token);
     try {
@@ -74,9 +61,7 @@ const GoogleLoginButton: React.FC = () => {
       }
     } catch (error: any) {
       console.error("Login failed:", error);
-      const errorMessage =
-        error.response?.data?.message ||
-        "Login failed. Please check your email and credentials.";
+      const errorMessage = "Login failed. Please try again later.";
       toast.error(errorMessage);
     }
   };

@@ -66,12 +66,13 @@ const HelpAndSupport: React.FC = () => {
       </button>
 
       <div className="max-w-lg mx-auto p-4 ">
-        <h1 className="text-2xl font-bold mb-4 text-center">
-          Help and Support
+        <h1 className="text-2xl mb-4 text-center">
+          Help and Support Section
         </h1>
+        <br/>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex space-x-4">
-            <div className="flex-1">
+            <div className="w-1/2">
               <label
                 htmlFor="firstName"
                 className="block text-sm font-medium text-gray-700"
@@ -85,10 +86,10 @@ const HelpAndSupport: React.FC = () => {
                 value={formData.firstName}
                 onChange={handleChange}
                 required
-                className="cb-shadow mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="mt-1 p-2 w-full border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
-            <div className="flex-1">
+            <div className="w-1/2">
               <label
                 htmlFor="lastName"
                 className="block text-sm font-medium text-gray-700"
@@ -102,7 +103,7 @@ const HelpAndSupport: React.FC = () => {
                 value={formData.lastName}
                 onChange={handleChange}
                 required
-                className="cb-shadow mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                className="mt-1 p-2 w-full border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
             </div>
           </div>
@@ -121,7 +122,7 @@ const HelpAndSupport: React.FC = () => {
               value={formData.email}
               onChange={handleChange}
               required
-              className="cb-shadow mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="mt-1 p-2 w-full border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 
@@ -138,7 +139,7 @@ const HelpAndSupport: React.FC = () => {
               value={formData.issueType}
               onChange={handleChange}
               required
-              className="cb-shadow mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="mt-1 p-2 w-full border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             >
               <option value="">Select an issue type</option>
               <option value="technical">Technical Issue</option>
@@ -154,16 +155,17 @@ const HelpAndSupport: React.FC = () => {
               htmlFor="message"
               className="block text-sm font-medium text-gray-700"
             >
-              Issue Details
+              Having an issue? Submit here for solution.
             </label>
             <textarea
               id="message"
               name="message"
+              placeholder="Issue here...."
               value={formData.message}
               onChange={handleChange}
               required
               rows={4}
-              className="cb-shadow mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+              className="mt-1 p-2 w-full border rounded-lg border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             />
           </div>
 

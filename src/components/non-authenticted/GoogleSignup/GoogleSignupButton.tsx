@@ -23,19 +23,6 @@ const GoogleSignupButton: React.FC<Props> = ({ userType }) => {
     document.cookie = `token=${tokenValue}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
   }
   const handleSuccess = async (tokenResponse: any) => {
-    // console.log("Token Response:", tokenResponse);
-
-    // try {
-    //   const userInfoResponse = await axios.get(
-    //     "https://www.googleapis.com/oauth2/v3/userinfo",
-    //     { headers: { Authorization: `Bearer ${tokenResponse.access_token}` } }
-    //   );
-    //   const userData = userInfoResponse.data;
-    //   console.log(userData);
-    // } catch (error) {
-    //   console.error("Error fetching user info:", error);
-    //   toast.error("Failed to retrieve user info from Google.");
-    // }
 
     const formData = new FormData();
     formData.append("googleAccessToken", tokenResponse.access_token);
@@ -57,7 +44,7 @@ const GoogleSignupButton: React.FC<Props> = ({ userType }) => {
         const user = getUserFromCookies();
         if (user) {
           console.log("User from login:", user.userType, user.token);
-          toast.success("Signup successful! ");
+          toast.success("Login successful! ");
           if (user.userType === "ASSIGNMENT_CREATOR") {
             router.push(
               `${process.env.NEXT_PUBLIC_FRONTEND_URL}/project-creator`
@@ -71,9 +58,7 @@ const GoogleSignupButton: React.FC<Props> = ({ userType }) => {
       }
     } catch (error: any) {
       console.error("Login failed:", error);
-      const errorMessage =
-        error.response?.data?.message ||
-        "Login failed. Please check your email and credentials.";
+      const errorMessage = "Login failed. Please try again later.";
       toast.error(errorMessage);
     }
   };

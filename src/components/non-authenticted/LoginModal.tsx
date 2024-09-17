@@ -36,14 +36,6 @@ const LoginModal: React.FC<LoginModalProps> = ({
 
   if (!isOpen) return null;
 
-  // Function to set user data in a cookie
-  // function setUserCookie(data: any) {
-  //   const userValue = encodeURIComponent(JSON.stringify(data));
-  //   const expiryDate = new Date();
-  //   expiryDate.setDate(expiryDate.getDate() + 7); // Cookie expires in 7 days
-
-  //   document.cookie = `user=${userValue}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
-  // }
   function setTokenCookie(token: string) {
     // Encode the token value directly
     const tokenValue = encodeURIComponent(token);
@@ -96,9 +88,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
         "Login failed, Please check your email and password. Also, check if email is verified.",
         error
       );
-      const errorMessage =
-        error.response?.data ||
-        "Login failed. Please verify email and check your credentials.";
+      const errorMessage = "Login failed. Please verify email and check your credentials.";
       toast.error(errorMessage);
     }
   };
@@ -151,11 +141,10 @@ const LoginModal: React.FC<LoginModalProps> = ({
             <div className="text-xl font-semibold primary-navy-blue">
               MSP Academy
             </div>
-            <div className="underline">Login to continue</div>
           </div>
           <div className="p-4 md:p-5">
             <form className="space-y-4" onSubmit={handleSubmit}>
-              <div className="relative cb-shadow">
+              <div className="relative">
                 <input
                   type="email"
                   name="email"
@@ -171,7 +160,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
                 </span>
               </div>
 
-              <div className="cb-shadow">
+              <div className="relative">
                 <input
                   type="password"
                   name="password"
@@ -210,46 +199,14 @@ const LoginModal: React.FC<LoginModalProps> = ({
                 className="w-full bg-orange-500 rounded-sm px-3 py-1 text-white transition-transform duration-300 ease-in-out hover:bg-orange-600 hover:scale-105"
                 onClick={() => handleLogin("ASSIGNMENT_CREATOR")}
               >
-                Login {/* as Assignment Creator */}
+                Login
               </button>
-
               <div className="flex items-center my-4">
                 <div className="flex-grow border-t border-black"></div>
                 <span className="mx-4">or</span>
                 <div className="flex-grow border-t border-black"></div>
               </div>
-
-              {/* <div className="flex flex-row justify-center items-center">
-                <button
-                  type="button"
-                  className="w-full border border-black font-medium rounded-lg text-sm flex items-center justify-center space-x-2 px-4 py-1"
-                >
-                  <Image
-                    src="/pngs/googleicon.svg"
-                    alt="google icon"
-                    width={15}
-                    height={15}
-                  />
-                  <span className="primary-text-gray">Login with Google</span>
-                </button>
-              </div> */}
               <GoogleLoginButton />
-
-              {/* <div className="flex flex-row justify-start items-start">
-                <button
-                  type="button"
-                  className="w-full border border-black font-medium rounded-lg text-sm flex items-center justify-center space-x-2 px-4 py-1"
-                >
-                  <Image
-                    src="/pngs/facebookicon.svg"
-                    alt="facebook icon"
-                    width={15}
-                    height={15}
-                  />
-                  <span className="primary-text-gray">Login with Facebook</span>
-                </button>
-              </div> */}
-
               <div className="flex justify-center items-center">
                 <p className="text-sm text-gray-500 dark:text-gray-400">
                   Don&apos;t have an account?{" "}
