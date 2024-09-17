@@ -28,7 +28,7 @@ function Footer() {
             <div className="cursor-pointer">About Us</div>
           </Link>
           <Link href="/ebooks">
-            <div className="cursor-pointer">e-book</div>
+            <div className="cursor-pointer">E-Book</div>
           </Link>
           <Link href="/feedback">
             <div className="cursor-pointer">Feedback</div>

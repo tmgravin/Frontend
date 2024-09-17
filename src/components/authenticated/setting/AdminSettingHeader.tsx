@@ -61,6 +61,22 @@ const AdminSettingHeader: React.FC = () => {
     return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
   };
 
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // State for modal visibility
+
+  const handleLogoutClick = () => {
+    setIsModalOpen(true); // Open the confirmation modal
+    setAnchorEl(null);
+  };
+
+  const confirmLogout = () => {
+    handleLogout();
+    setIsModalOpen(false); // Close the modal after logout
+  };
+
+  const cancelLogout = () => {
+    setIsModalOpen(false); // Just close the modal
+  };
+
   return (
     <header className="cb-shadow rounded-sm">
       <div className="flex justify-between items-center">
@@ -106,9 +122,32 @@ const AdminSettingHeader: React.FC = () => {
               horizontal: "right",
             }}
           >
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
           </Menu>
         </div>
+        {/* Confirmation Modal */}
+        {isModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white p-6 rounded shadow-lg w-80">
+              <h3 className="text-lg font-semibold mb-4">Confirm Logout</h3>
+              <p className="mb-4">Are you sure you want to logout?</p>
+              <div className="flex justify-end space-x-2">
+                <button
+                  onClick={confirmLogout}
+                  className="bg-red-500 text-white hover:bg-red-600 px-4 py-2 rounded"
+                >
+                  Logout
+                </button>
+                <button
+                  onClick={cancelLogout}
+                  className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );

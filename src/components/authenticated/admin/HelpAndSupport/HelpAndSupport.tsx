@@ -14,9 +14,8 @@ interface SupportRequest {
   issueType: string;
   message: string;
   createdAt: string;
+  status: string; // Added status field
 }
-
-const cookieuser = getUserFromCookies();
 
 export default function HelpAndSupport() {
   const [data, setData] = useState<SupportRequest[]>([]);
@@ -27,10 +26,22 @@ export default function HelpAndSupport() {
     undefined
   );
   const [currentId, setCurrentId] = useState<string | null>(null);
+  const [currentStatus, setCurrentStatus] = useState<string | null>(null); // New state for status
 
+  const cookieuser = getUserFromCookies(); // Moved inside the component to avoid SSR issues
+
+  // Fetch data on component mount
   useEffect(() => {
     const fetchData = async () => {
+      if (!cookieuser?.token) {
+        setError("User not authenticated.");
+        setLoading(false);
+        return;
+      }
+
       try {
+        console.log("Fetching help and support data...");
+
         const response = await axios.get(
           `${process.env.NEXT_PUBLIC_BASE_URL}/api/help/`,
           {
@@ -40,8 +51,13 @@ export default function HelpAndSupport() {
             withCredentials: true,
           }
         );
+        console.log("Response data:", response.data);
         setData(response.data);
-      } catch (error) {
+      } catch (error: any) {
+        console.error(
+          "Error fetching data:",
+          error.response?.data || error.message
+        );
         setError("Error fetching data.");
       } finally {
         setLoading(false);
@@ -49,16 +65,45 @@ export default function HelpAndSupport() {
     };
 
     fetchData();
-  }, []);
+  }, [cookieuser?.token]);
 
-  const openModal = (id: string, email: string) => {
+  const openModal = (id: string, email: string, status: string) => {
     setCurrentId(id);
     setCurrentEmail(email);
+    setCurrentStatus(status); // Set the current status
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const handleStatusChange = async (id: string, newStatus: string) => {
+    try {
+      await axios.post(
+        `${process.env.NEXT_PUBLIC_BASE_URL}/api/help/?id=${id}`,
+        { id, status: newStatus },
+        {
+          headers: {
+            Authorization: `Bearer ${cookieuser?.token}`,
+            "Content-Type": "application/json",
+          },
+          withCredentials: true,
+        }
+      );
+      setData(
+        data.map((item) =>
+          item.id === id ? { ...item, status: newStatus } : item
+        )
+      );
+      toast.success("Status updated successfully!");
+    } catch (error: any) {
+      console.error(
+        "Failed to update status:",
+        error.response?.data || error.message
+      );
+      toast.error("Failed to update status.");
+    }
   };
 
   const handleReplySubmit = async (replyMessage: string) => {
@@ -82,7 +127,11 @@ export default function HelpAndSupport() {
       );
 
       toast.success("Reply sent successfully!");
-    } catch (error) {
+    } catch (error: any) {
+      console.error(
+        "Failed to send reply:",
+        error.response?.data || error.message
+      );
       toast.error("Failed to send reply.");
     } finally {
       closeModal();
@@ -104,9 +153,12 @@ export default function HelpAndSupport() {
 
       setData(data.filter((item) => item.id !== id)); // Remove the deleted item from state
       toast.success("Feedback deleted successfully!");
-    } catch (error) {
+    } catch (error: any) {
+      console.error(
+        "Error occurred while deleting feedback:",
+        error.response?.data || error.message
+      );
       toast.error("Failed to delete feedback.");
-      console.error("Error occurred while deleting feedback:", error);
     }
   };
 
@@ -138,11 +190,23 @@ export default function HelpAndSupport() {
               <strong>Created At:</strong>{" "}
               {new Date(item.createdAt).toLocaleString()}
             </p>
+            <p>
+              <strong>Status:</strong>{" "}
+              <select
+                value={item.status}
+                onChange={(e) => handleStatusChange(item.id, e.target.value)}
+                className="mt-2 px-2 py-1 border border-gray-300 rounded-md"
+              >
+                <option value="REPLIED">Replied</option>
+                <option value="FIXED">Fixed</option>
+                <option value="PENDING">Pending</option>
+              </select>
+            </p>
 
             <div className="flex flex-row justify-around">
               <button
                 className="mt-4 bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600"
-                onClick={() => openModal(item.id, item.email)}
+                onClick={() => openModal(item.id, item.email, item.status)}
               >
                 Reply
               </button>

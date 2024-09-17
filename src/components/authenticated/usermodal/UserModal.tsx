@@ -27,7 +27,6 @@ const UserModal: React.FC = () => {
 
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // State for modal visibility
   const theme = useTheme();
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -79,6 +78,8 @@ const UserModal: React.FC = () => {
     if (!name) return "Loading...";
     return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
   };
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // State for modal visibility
 
   const handleLogoutClick = () => {
     setIsModalOpen(true); // Open the confirmation modal

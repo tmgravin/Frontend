@@ -26,6 +26,7 @@ const Header: React.FC = () => {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
 
   const cookieuser = getUserFromCookies();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // State for modal visibility
 
   const handleMenuClick = (event: MouseEvent<HTMLElement>) =>
     setAnchorEl(event.currentTarget);
@@ -48,6 +49,20 @@ const Header: React.FC = () => {
     } finally {
       router.push(`${process.env.NEXT_PUBLIC_FRONTEND_URL}/homepage`);
     }
+  };
+
+  const handleLogoutClick = () => {
+    setIsModalOpen(true); // Open the confirmation modal
+    setAnchorEl(null);
+  };
+
+  const confirmLogout = () => {
+    handleLogout();
+    setIsModalOpen(false); // Close the modal after logout
+  };
+
+  const cancelLogout = () => {
+    setIsModalOpen(false); // Just close the modal
   };
 
   const getUserTypeLabel = (userType: string) => {
@@ -113,9 +128,31 @@ const Header: React.FC = () => {
               horizontal: "right",
             }}
           >
-            <MenuItem onClick={handleLogout}>Logout</MenuItem>
+            <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
           </Menu>
         </div>
+        {isModalOpen && (
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white p-6 rounded shadow-lg w-80">
+              <h3 className="text-lg font-semibold mb-4">Confirm Logout</h3>
+              <p className="mb-4">Are you sure you want to logout?</p>
+              <div className="flex justify-end space-x-2">
+                <button
+                  onClick={confirmLogout}
+                  className="bg-orange-500 text-white hover:bg-orange-600 px-4 py-2 rounded"
+                >
+                  Logout
+                </button>
+                <button
+                  onClick={cancelLogout}
+                  className="bg-gray-300 hover:bg-gray-400 px-4 py-2 rounded"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </header>
   );
