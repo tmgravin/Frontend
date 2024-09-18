@@ -29,7 +29,7 @@ COPY --from=build /app/package.json /app/package.json
 COPY --from=build /app/node_modules /app/node_modules
 
 # Install dependencies for the runtime environment
-RUN npm install --only=production
+RUN npm install -g serve
 
 # Expose port 4000
 EXPOSE 4000
