@@ -3,12 +3,12 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/tmgravin/nextjs-deployment.git'
+                git 'https://github.com/tmgravin/Frontend.git'
             }
         }
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t tmgchyngba/nextjs-app .'
+                sh 'docker build -t tmgchyngba/react-app .'
             }
         }
         stage('Push Docker Image') {
