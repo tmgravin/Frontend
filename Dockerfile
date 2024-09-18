@@ -32,7 +32,7 @@ COPY --from=build /app/node_modules /app/node_modules
 RUN npm install -g serve
 
 # Expose port 4000
-EXPOSE 4000
+EXPOSE 3000
 
 # Start the Next.js application
 CMD ["npm", "start"]
