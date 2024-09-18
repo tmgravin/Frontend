@@ -19,12 +19,7 @@ import { getUserFromCookies } from "@/components/cookie/oldtoken";
 const cookieuser = getUserFromCookies();
 
 const UserModal: React.FC = () => {
-  const { user, fetchData } = useUserData();
-
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
-
+  const { user } = useUserData();
   const router = useRouter();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const theme = useTheme();
@@ -40,9 +35,6 @@ const UserModal: React.FC = () => {
 
   const handleLogout = async () => {
     try {
-      // const response = await axios.post(
-      //   `${process.env.NEXT_PUBLIC_BASE_URL}/api/users/logout/${cookieuser?.id}`
-      // );
       removeCookie("token");
       toast.warning("Logging out");
     } catch (err) {

@@ -22,11 +22,12 @@ export function getUserFromCookies(): DecodedToken | null {
         ""
       ); // Remove extra quotes if present
 
-      console.log(cleanedTokenValue);
+      // console.log(cleanedTokenValue);
       try {
         // Decode the token without verifying it
         const decoded = jwtDecode<DecodedToken>(cleanedTokenValue);
-        console.log("Decoded payload:", decoded); // Log the decoded payload
+        // console.log("Decoded payload:", decoded);
+        // Log the decoded payload
 
         // Return the decoded payload
         return {
