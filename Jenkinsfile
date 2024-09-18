@@ -15,7 +15,7 @@ pipeline {
             steps {
                 withCredentials([usernamePassword(credentialsId: 'docker_credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                     sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
-                    sh 'docker push tmgchyngba/nextjs-app'
+                    sh 'docker push tmgchyngba/react-app'
                 }
             }
         }
