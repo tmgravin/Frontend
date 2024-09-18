@@ -60,7 +60,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
             "Content-Type": "application/json",
             Accept: "application/json",
           },
-          withCredentials: true, // If you are using cookies for authentication
+          withCredentials: true,
         }
       );
 
@@ -97,8 +97,7 @@ const LoginModal: React.FC<LoginModalProps> = ({
   const toggleResetModal = () => setIsResetModalOpen(!isResetModalOpen);
 
   const handleSubmit = (event: React.FormEvent) => {
-    event.preventDefault(); // Prevent the default form submission
-    // handleLogin(userRole || ''); // Call handleLogin with the userRole
+    event.preventDefault();
   };
 
   return (
@@ -228,7 +227,6 @@ const LoginModal: React.FC<LoginModalProps> = ({
         </div>
       </div>
 
-      {/* Include ResetPasswordModal component here */}
       {isResetModalOpen && (
         <ResetPasswordModal
           isOpen={isResetModalOpen}
