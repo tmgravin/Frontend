@@ -144,7 +144,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
         }
       );
       if (response.status === 200) {
-        const successMessage = response.data.message || "Signup successful! Please verify your email for log in";
+        const successMessage = response.data.message || "Signup successful! Please verify your email for log in.";
         toast.success(successMessage);
         clearForm();
         setTimeout(() => {
@@ -285,7 +285,7 @@ const SignupModal: React.FC<SignupModalProps> = ({
                       <img
                         src={defaultPictures[currentPictureIndex]}
                         alt={`Default ${currentPictureIndex + 1}`}
-                        className="w-24 h-24 justify-center items-center rounded-full cursor-pointer border-2"
+                        className="w-24 h-24 justify-center items-center rounded-full cursor-pointer border-2 border-orange-500"
                         onClick={() => handleDefaultPictureSelect(currentPictureIndex)}
                       />
                       <button
