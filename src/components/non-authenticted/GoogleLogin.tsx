@@ -27,7 +27,7 @@ const GoogleLoginButton: React.FC = () => {
     document.cookie = `token=${tokenValue}; expires=${expiryDate.toUTCString()}; path=/; SameSite=Strict`;
   }
   const handleSuccess = async (tokenResponse: any) => {
-    console.log("Token Response:", tokenResponse);
+    // console.log("Token Response:", tokenResponse);
 
     const formData = new FormData();
     formData.append("googleAccessToken", tokenResponse.access_token);
@@ -46,7 +46,7 @@ const GoogleLoginButton: React.FC = () => {
         setTokenCookie(response.data); // Set token data in cookie
         const user = getUserFromCookies();
         if (user) {
-          console.log("User from login:", user.userType, user.token);
+          // console.log("User from login:", user.userType, user.token);
           toast.success("Login successful!");
           if (user.userType === "ASSIGNMENT_CREATOR") {
             router.push(

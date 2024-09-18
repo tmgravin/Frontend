@@ -88,7 +88,8 @@ const LoginModal: React.FC<LoginModalProps> = ({
         "Login failed, Please check your email and password. Also, check if email is verified.",
         error
       );
-      const errorMessage = "Login failed. Please verify email and check your credentials.";
+      const errorMessage =
+        "Login failed. Please verify email and check your credentials.";
       toast.error(errorMessage);
     }
   };

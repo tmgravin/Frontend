@@ -85,7 +85,7 @@ const CompletedAssignments: React.FC = () => {
       if (Array.isArray(response.data)) {
         setData(response.data);
       } else {
-        console.error("Unexpected data format", response.data);
+        console.error("no data available", response.data);
       }
     } catch (error) {
       console.error("Error fetching data", error);
