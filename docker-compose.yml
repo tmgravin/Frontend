@@ -11,4 +11,4 @@ services:
     # Map port 4000 on the host to port 4000 in the container.
     # This allows you to access the app from your host's port 4000.
     ports:
-      - "4000:4000"
+      - "3000:3000"
