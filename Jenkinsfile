@@ -1,41 +1,57 @@
 pipeline {
-    agent any
-    stages {
-        stage('Checkout') {
+    
+    // Define the agent where the pipeline will run
+    agent any 
+
+stages {
+        stage("Cloning the code from a Git repository") {
             steps {
-                git 'https://github.com/tmgravin/Frontend.git'
+                // Clone the Git repository from the specified URL and branch
+                git url: "https://github.com/tmgravin/Frontend.git", branch: "master"
+                
+                // Print a message in the console
+                echo "Successfully cloned the code"
             }
         }
-        stage('Build Docker Image') {
+        stage("Building and testing the Docker image") {
             steps {
-                sh 'docker build -t tmgchyngba/react-app .'
+                // Build the Docker image 
+                sh "docker build -t tmgchyngba/react-app . "
+                // Print a message in the console
+                echo "Successfully build the image"
             }
         }
-        stage('Push Docker Image') {
+        
+        stage("Pushing to DockerHub") {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'docker_credentials', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
-                    sh 'docker push tmgchyngba/react-app'
+                // Extract credentials for DockerHub stored in Jenkins
+                withCredentials(
+                    [usernamePassword(
+                        credentialsId: "docker_credentials", // Jenkins credentials ID
+                        usernameVariable: "docker_hub_username",
+                        passwordVariable: "docker_hub_passsword", 
+                    )]
+                )
+                
+                {
+                    // Log in to DockerHub using the credentials
+                    sh "docker login -u ${env.docker_hub_username} -p ${env.docker_hub_passsword}"
+                    
+                    // Print a message in the console
+                    echo "Login to dockerhub sucess"
+                    // Push the Docker image to DockerHub
+                    sh "docker push tmgchyngba/react-app"
+                    // Print a message in the console
+                    echo "Succesfully pushed the image"
                 }
             }
         }
-        stage('Deploy using Docker Compose') {
+        
+        
+        stage("Deploying the application using Docker Compose") {
             steps {
-                script {
-                    // Stop and remove any existing containers
-                    sh 'docker-compose -f docker-compose.yml down'
-
-                    // Find and stop any running container using the same port (in case something else is holding it)
-                    sh '''
-                    RUNNING_CONTAINER=$(docker ps -q --filter ancestor=tmgchyngba/react-app)
-                    if [ ! -z "$RUNNING_CONTAINER" ]; then
-                        docker stop $RUNNING_CONTAINER && docker rm $RUNNING_CONTAINER
-                    fi
-                    '''
-
-                    // Deploy the new version of the app
-                    sh 'docker-compose -f docker-compose.yml up -d'
-                }
+                // Bring up the Docker Compose services in detached mode
+                sh "docker compose up -d"
             }
         }
     }
