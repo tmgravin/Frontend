@@ -47,7 +47,7 @@ function AboutUs() {
           <div className="w-full md:w-1/2 p-4 flex flex-col">
             <div className="text-3xl font-bold underline mb-4">About Us</div>
             <p>
-              Chyngba Chyngba Chyngba Chyngba
+              Gaurav Gaurav Gaurav Gaurav
             </p>
           </div>
 
